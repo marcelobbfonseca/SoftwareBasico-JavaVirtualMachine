@@ -1,108 +1,76 @@
-#include<stdio.h>
 #include<stdint.h>
-#include<stdlib.h>
 #include<vector>
 #include<string>
+#include"cp_info.hpp"
 
 using namespace std;
 
-enum cpInfoTags
-{
-	CONSTANT_Class=7,
-	CONSTANT_Fieldref=9,
-	CONSTANT_Methodref=10,
-	CONSTANT_InterfaceMethodref=11,
-	CONSTANT_String=8,
-	CONSTANT_Integer=3,
-	CONSTANT_Float=4,
-	CONSTANT_Long=5,
-	CONSTANT_Double=6,
-	CONSTANT_NameAndType=12,
-	CONSTANT_Utf8=1,
-	CONSTANT_MethodHandle=15,
-	CONSTANT_MethodType=16,
-	CONSTANT_InvokeDynamic=18
-};
 
-class cp_info
-{
-	uint8_t tag;
-	uint8_t *info;
-};
-
+//!  Classe que representa um .class
+/*!
+  Classe responsável por armazenar dados de um arquivo .class
+*/
 class JavaClass
 {
 	public:
+	//! Construtor vazio
+	/*!
+	  Um construtor vazio.
+	  \todo Verificar se o construtor será isso mesmo ou se o LerArquivo deve ser o construtor
+	*/
+		JavaClass(){};
+	//! Lê um arquivo .class
+	/*!
+	  Método responsável por ler um arquivo .class e inicializar essa classe.
+	  \todo Verificar se esse método deve se tornar o construtor
+	  \todo Implementar as estruturas que estão comentadas(field_info, method_info e attribute_info)
+	*/
+		void LerArquivo(string nomeArquivo);
+	private:
+		//!Assinatura do tipo de arquivo
+		/*!
+		Contém o número mágico que identifica o tipo do arquivo. Deve conter o valor 0xCAFEBABE.
+		*/
 		uint32_t magic;
 		uint16_t minor_version;
 		uint16_t major_version;
+		//!Indica o número de cpinfo-1
+		/*!
+		O valor dessa variável é igual ao número de entradas no vetor constant_pool mais um(1).
+		Um índice é válido se é maior que zero e menor que constant_pool_count. Com exceção de constantes do tipo long e double
+		*/
 		uint16_t constant_pool_count;
 		vector<cp_info> constant_pool;
+		//! Armazena flags sobre a classe
+		/*!
+		O valor é uma máscara usada para informar permissões de acesso para e propriedade dessa classe ou interface.
+		A interpretação da informação contida nessa classe pode ser vista na tabela abaixo:
+		Nome da flag  | Bit sinalizador | interpretação
+		:-------------|:---------------:|:-----------------------------------------------------------------------------------
+		ACC_PUBLIC    | 0x0001          | Declarada pública. Pode ser acessada de fora deste pacote
+		ACC_FINAL     | 0x0010          | Declarada final. Não pode ser herdada.
+		ACC_SUPER     | 0x0020          | Trata os métodos da superclasse de forma diferente quando chamados pela instrução invokespecial.
+		ACC_INTERFACE | 0x0200          | Isto é uma interface! Não é uma classe.
+		ACC_ABSTRACT  | 0x0400          | Declarada abstrata. Não pode ser instanciada.
+		ACC_SYNTHETIC | 0x1000          | Declarada sintética. Não existe no código fonte.
+		ACC_ANNOTATION| 0x2000          | Declarada como um tipo anotação.
+		ACC_ENUM      | 0x4000          | Declarada como uma enumeração.
+		Todos os bits não informados acima são reservados para uso futuro. Eles devem ser tornados zeros na durante a geração do .class e; se não tiverem devem ser ignorados silenciosamente 
+		*/
 		uint16_t access_flags;
+		//! Indica qual é a classe descrita este arquivo
+		/*!
+		O valor tem que ser uma entrada válida no vetor de constant_pool que deve ser uma constan class info.
+		*/
 		uint16_t this_class;
 		uint16_t super_class;
 		uint16_t interfaces_count;
 		uint16_t fieds_count;
-		vector<field_info> fields;
+//		vector<field_info> fields;
 		uint16_t methods_count;
-		vector<method_info> methods;
+//		vector<method_info> methods;
 		uint16_t attributes_count;
-		vector<attribute_info> attributes;
-		JavaClass(){};
-		///\Validacao abertura de arquivo 
-		/** Se nao conseguir abrir o arquivo da erro */
-		void LerArquivo(string nomeArquivo){
-			FILE *arq= fopen(nomeArquivo.c_str(), "rb");
-			if(arq == NULL)
-			{
-				printf("ai meu cu");
-				exit(1);
-			}
-			LerAtributo(&magic, 4, arq);
-			LerAtributo(&minor_version, 2, arq);
-			LerAtributo(&major_version, 2, arq);
-			LerAtributo(&constant_pool_count, 2, arq);
-			///que poha eh essa
-			/**saber como funciona esse constant_pool com monitor */
-			LerAtributo(&access_flags, 2, arq);
-			LerAtributo(&this_class, 2, arq);
-			LerAtributo(&super_class, 2, arq);
-			for(int cont =0; cont < constant_pool_count; cont++)
-			{
-				LerAtributo(&(constant_pool[cont].tag), 1, arq);
-				LerCpInfo(cont);
-			}
-			
-		}
-	private:
-		///\Validacao leitura Arquivo 
-		/** Se nao conseguir ler o arquivo da erro */
-		void LerAtributo(void *alvo, int size, FILE *arq)
-		{
-			if(!fread(alvo, size, 1, arq))
-			{
-				printf("Erro na leitura do arquivo");
-				exit(EXIT_FAILURE);
-			}
-		}
-		void LerCpInfo(int indiceVetor){
-			switch(constant_pool[indiceVetor].tag)
-			{
-				case 
-			}
-		}
+//		vector<attribute_info> attributes;
+		void LerAtributo(void *alvo, int size, FILE *arq);
 };
 
-/*void SetMagic(char *nomeArq){
-
-	FILE *fp
-    fp = fopen(nomeArq,fp);
-	uint32_t magic; 
-    fread(magic, sizeof(uint32_t),1,fp);
-	this.magic = magic; //manda pro construtor
-}
-
-JavaClass(uint32_t u4){
-	le issa parada
-
-*/
