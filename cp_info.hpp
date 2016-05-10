@@ -66,6 +66,7 @@ E deve referenciar um CONSTANT_Utf8_info, que representa uma classe binária ou 
 		uint16_t nameIndex;
 };
 
+//! Classe utilizada para representar um campo de uma classe ou interface
 class CONSTANT_Fieldred_info:public cp_info
 {
 	public:
@@ -75,6 +76,7 @@ class CONSTANT_Fieldred_info:public cp_info
 		uint16_t name_and_type_index;
 };
 
+//! Classe utilizada para representar um método de uma classe
 class CONSTANT_Methodref_info:public cp_info
 {
 	public:
@@ -84,6 +86,7 @@ class CONSTANT_Methodref_info:public cp_info
 		uint16_t name_and_type_index;
 };
 
+//! Classe utilizada para representar um método de uma interface
 class CONSTANT_InterfaceMethodref_info:public cp_info
 {
 	public:
@@ -92,3 +95,41 @@ class CONSTANT_InterfaceMethodref_info:public cp_info
 		uint16_t class_index;
 		uint16_t name_and_type_index;
 };
+
+//!Classe utilizada para armazenar referências para strings
+class CONSTANT_String_info:public cp_info
+{
+	public:
+		CONSTANT_String_info(uint16_t stringIndex);
+	private:
+//!inteiro sem sinal de 2 bytes
+/*!
+O valor de string tem que ser um valor válido no vetor de constant_pool.
+E deve referenciar um CONSTANT_Utf8_info, que representa em pontos unicode com o qual a string deve ser inicializada.
+*/
+		uint16_t stringIndex;
+};
+
+class CONSTANT_Integer_info: public cp_info
+{
+	public:
+		CONSTANT_Integer_info(uint32_t bytes);
+	private:
+	//!Armazena um inteiro de 32 bits.
+	/*!
+		Em processadores low-Endian os bytes da memória ficam invertidos.
+	*/
+		uint32_t bytes;
+}
+
+class CONSTANT_Float_info: public cp_info
+{
+	public:
+		CONSTANT_Float_info(uint32_t bytes);
+	private:
+	//!Armazena um número em ponto flutuante de 32 bits.
+	/*!
+		Em processadores low-Endian os bytes da memória ficam invertidos. Estou utilizando um int para armazenar para garantir que são 32 bits. Para manipular deve-se fazer o cast do ponteiro
+	*/
+		uint32_t bytes;
+}

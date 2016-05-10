@@ -63,8 +63,14 @@ class JavaClass
 		O valor tem que ser uma entrada válida no vetor de constant_pool que deve ser uma constan class info.
 		*/
 		uint16_t this_class;
+		//*! Referencia a classe pai
+		/*!
+		Numa classe, o valor da classe pai tem que ser zero ou um valor válido no constant_pool. Se o valor da super classe for diferente de zero, ele deve refenciar um CONSTANT_Class_info que representa o "pai" direto dessa classe. Nem o pai direto ou indireto deve ter a flag ACC_FINAL acionada.
+		*/
 		uint16_t super_class;
+		//!Informa o número de interfaces relevantes para essa classe.
 		uint16_t interfaces_count;
+		//! Vetor de interfaces indexado a partir de zero
 		uint16_t fieds_count;
 //		vector<field_info> fields;
 		uint16_t methods_count;
