@@ -29,6 +29,43 @@ CONSTANT_InterfaceMethodref_info::CONSTANT_InterfaceMethodref_info(uint16 classI
 	this.name_and_type_index= nameAndTypeIndex;
 }
 
+CONSTANT_String_info(uint16_t stringIndex)
+{
+	tag= cpInfoTags::CONSTANT_String;
+	this.string_index= stringIndex;
+}
+CONSTANT_Integer_info(uint32_t bytes)
+{
+	tag= cpInfoTags::CONSTANT_Integer;
+	this.bytes= bytes;
+}
+CONSTANT_Float_info(uint32_t bytes)
+{
+	tag= cpInfoTags::CONSTANT_Float;
+	this.bytes= bytes;
+}
+CONSTANT_NameAndType_info(uint16_t nameIndex, uint16_t descriptorIndex)
+{
+	tag= cpInfoTags::CONSTANT_NameAndType;
+	descriptor_index= descriptorIndex;
+}
+CONSTANT_MethodHandle_info(uint8_t referenceKind, uint16_t referenceIndex)
+{
+	tag= cpInfoTags::CONSTANT_MethodHandle;
+	reference_kind= referenceKind;
+	reference_index= referenceIndex;
+}
+CONSTANT_MethodType_info(uint16_t descriptorIndex)
+{
+	tag= cpInfoTags::CONSTANT_MethodType;
+	descriptor_index= descriptorIndex;
+}
+CONSTANT_InvokeDynamic_info(uint16_t bootstrapMethodAttrIndex, uint16_t nameAndTypeIndex)
+{
+	tag= cpInfoTags::CONSTANT_InvokeDynamic;
+	bootstrap_method_attr_index= bootstrapMethodAttrIndex;
+	name_and_type_index= nameAndTypeIndex;
+}
 
 static cp_info& cp_info::LerCpInfo(FILE *arq)
 {
