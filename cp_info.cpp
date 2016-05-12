@@ -1,7 +1,6 @@
 #include"cp_info.hpp"
 #include "Leitura.hpp"
 
-using namespace Leitura;
 
 CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 {
@@ -68,6 +67,9 @@ CONSTANT_InvokeDynamic_info::CONSTANT_InvokeDynamic_info(uint16_t bootstrapMetho
 
 cp_info* cp_info::LerCpInfo(FILE *arq)
 {
+using namespace Leitura;
+
+
 	uint8_t tag;
 	LerAtributo(&tag, 1, arq);
 	switch(tag)
