@@ -2,3 +2,4 @@
 documentacao/
 *.gch
 *~
+*.o

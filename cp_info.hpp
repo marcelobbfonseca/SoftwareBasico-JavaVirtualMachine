@@ -38,11 +38,6 @@ class cp_info
 	*/
 		static cp_info* LerCpInfo(FILE *arq);
 	private:
-	//! Construtor privado, na verdade essa classe é abstrata
-	/*!
-	Essa classe é privada, só que não contém nenhum método virtual para qualifiquar ela-la como tal. Para evitar instanciação, tornei seu construtor privado
-	*/
-//		cp_info();
 	protected:
 	//! Tag que indica de qual filho deve ser usado
 	/*!

@@ -8,19 +8,19 @@ CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 	name_index= nameIndex;
 }
 
-CONSTANT_Fieldref_info::CONSTANT_Fieldref_info(uint_16 classIndex, uint16_t nameAndTypeIndex)
+CONSTANT_Fieldref_info::CONSTANT_Fieldref_info(uint16_t classIndex, uint16_t nameAndTypeIndex)
 {
 	tag= CONSTANT_Fieldref;
 	this->class_index= classIndex;
 	this->name_and_type_index= nameAndTypeIndex;
 }
-CONSTANT_Methodref_info::CONSTANT_Methodref_info(uint_16 classIndex, uint16_t nameAndTypeIndex)
+CONSTANT_Methodref_info::CONSTANT_Methodref_info(uint16_t classIndex, uint16_t nameAndTypeIndex)
 {
 	tag= CONSTANT_Methodref;
 	this->class_index= classIndex;
 	this->name_and_type_index= nameAndTypeIndex;
 }
-CONSTANT_InterfaceMethodref_info::CONSTANT_InterfaceMethodref_info(uint_16 classIndex, uint16_t nameAndTypeIndex)
+CONSTANT_InterfaceMethodref_info::CONSTANT_InterfaceMethodref_info(uint16_t classIndex, uint16_t nameAndTypeIndex)
 {
 	tag= CONSTANT_InterfaceMethodref;
 	this->class_index= classIndex;
@@ -67,8 +67,7 @@ CONSTANT_InvokeDynamic_info::CONSTANT_InvokeDynamic_info(uint16_t bootstrapMetho
 
 cp_info* cp_info::LerCpInfo(FILE *arq)
 {
-using namespace Leitura;
-
+	using namespace Leitura;
 
 	uint8_t tag;
 	LerAtributo(&tag, 1, arq);
