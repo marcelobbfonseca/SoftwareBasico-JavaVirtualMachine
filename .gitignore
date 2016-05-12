@@ -1,2 +1,4 @@
 #ignorar os arquivos gerados pelo doxygen, pois eles não são modificados diretamente e são gerados facilmente
 documentacao/
+*.gch
+*~

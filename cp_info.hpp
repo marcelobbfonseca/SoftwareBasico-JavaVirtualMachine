@@ -1,4 +1,5 @@
 #include<stdint.h>
+#include<stdio.h>
 
 
 	//! Enumeração que indica os "tipos" de cpinfo
@@ -35,13 +36,14 @@ class cp_info
 	  \return Retorna um filho de cpinfo devidamente preenchido
 	  \todo O método não está completamente codificado
 	*/
-		static cp_info& LerCpInfo(FILE *arq);
+		static cp_info* LerCpInfo(FILE *arq);
 	private:
 	//! Construtor privado, na verdade essa classe é abstrata
 	/*!
 	Essa classe é privada, só que não contém nenhum método virtual para qualifiquar ela-la como tal. Para evitar instanciação, tornei seu construtor privado
 	*/
-		cp_info();
+//		cp_info();
+	protected:
 	//! Tag que indica de qual filho deve ser usado
 	/*!
 		Deve armazenar um cpInfoTags válido.
@@ -63,7 +65,7 @@ class CONSTANT_Class_info:public cp_info
 O valor de nameIndex tem que ser um valor válido no vetor de constant_pool.
 E deve referenciar um CONSTANT_Utf8_info, que representa uma classe binária ou interface com nome codificado na forma interna.
 */
-		uint16_t nameIndex;
+		uint16_t name_index;
 };
 
 //! Classe utilizada para representar um campo de uma classe ou interface
@@ -107,7 +109,7 @@ class CONSTANT_String_info:public cp_info
 O valor de string tem que ser um valor válido no vetor de constant_pool.
 E deve referenciar um CONSTANT_Utf8_info, que representa em pontos unicode com o qual a string deve ser inicializada.
 */
-		uint16_t stringIndex;
+		uint16_t string_index;
 };
 
 //!Classe usada para armazenar inteiros constantes de 32 bits com sinal.
@@ -121,7 +123,7 @@ class CONSTANT_Integer_info: public cp_info
 		Em processadores low-Endian os bytes da memória ficam invertidos.
 	*/
 		uint32_t bytes;
-}
+};
 
 //! Classe usada para armazenar números de ponto flutuante de 32 bits
 class CONSTANT_Float_info: public cp_info
@@ -134,7 +136,7 @@ class CONSTANT_Float_info: public cp_info
 		Em processadores low-Endian os bytes da memória ficam invertidos. Estou utilizando um int para armazenar para garantir que são 32 bits. Para manipular deve-se fazer o cast do ponteiro
 	*/
 		uint32_t bytes;
-}
+};
 
 //!Classe utilizada para representar um inteiro de 64 bits com sinnal
 /*!
@@ -149,7 +151,7 @@ class CONSTANT_Long_info:public cp_info
 		uint32_t high_bytes;
 //!Contém os 32 bytes de ordem mais baixa do inteiro de 64 bits
 		uint32_t low_bytes;
-}
+};
 
 //! Representa um número de ponto flutuante de 64 bits
 /*!
@@ -164,7 +166,7 @@ class CONSTANT_Double_info:public cp_info
 		uint32_t high_bytes;
 //!Contém os 32 bytes de ordem mais baixa do número em ponto flutuante de 64 bits
 		uint32_t low_bytes;
-}
+};
 
 /*!
 	Classe utilizada para representar um campo ou método sem indicar a qual classe ou interface este pertence
@@ -186,7 +188,7 @@ CONSTANT_Utf8_info (§4.4.7) structure representing a valid field descriptor
 (§4.3.2) or method descriptor 
 */
 		uint16_t descriptor_index;
-}
+};
 
 //! Classe utilizada para representar strings constantes.
 class CONSTANT_Utf8_info: public cp_info
@@ -202,7 +204,7 @@ O valo de lenght informa o número de bytes no vetor de bytes(e não o comprimen
 O vetor de bytes contém os bytes da string. Nenhum byte pode ter o valor zero ou estar no intervalo 0xf0 ~-xff
 */
 		void* bytes;
-}
+};
 
 //! Classe utilizada para representar um manipulador de método(chuto que é assim que traduz)
 class CONSTANT_MethodHandle_info: public cp_info
@@ -223,7 +225,7 @@ Se o valor de reference_kind for 5, 6, 7 ou 9 o nome do método representado pel
 Se o valor for 8(REF_newInvokeSpecial) o nome do método representado pelo CONSTANT_Methodref_info deve ser <init>
 */
 		uint16_t reference_index;
-}
+};
 
 //!Classe que armazena um descritor de métodos
 /*!
@@ -238,7 +240,7 @@ class CONSTANT_MethodType_info:public cp_info
 O Valor de descriptor_index tem que ser uma entrada válida na tabela constant_pool, que deve ser um CONSTANT_Utf8_info representando o descritor do método.
 */
 		uint16_t descriptor_index;
-}
+};
 
 //!Classe que representa a estrutura utiizada pela instrução invokedynamic.
 /*!
@@ -257,4 +259,4 @@ O valor de bootstrap_method_attr_index tem que ser uma entrada válida no vetor 
 O valro de name_and_type_index tem que ser uma entrada válida na tabela constant_pool, que deve ser um CONSTANT_NameAndType_info que representa o nome de um método e o seu descritor.
 */
 		uint16_t name_and_type_index;
-}
+};

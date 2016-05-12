@@ -1,6 +1,10 @@
+#include<string>
+
 #ifndef ERRO
 
 #define ERRO
+
+using namespace std;
 
 class Erro{
 	private:
