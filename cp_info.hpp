@@ -34,10 +34,11 @@ class cp_info
 	Método responsável pela leitura da tag, criação do cpinfo correspondente e preenchimento do mesmo.
 	  \param arq Arquivo cujo cp é o próximo elemento a ser lido.
 	  \return Retorna um filho de cpinfo devidamente preenchido
-	  \todo O método não está completamente codificado
 	*/
 		static cp_info* LerCpInfo(FILE *arq);
 	private:
+	//! Método inútil apenas para tornar a classe abstrata, ignore-o.
+		virtual void FazNada(){};
 	protected:
 	//! Tag que indica de qual filho deve ser usado
 	/*!
