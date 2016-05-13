@@ -2,6 +2,7 @@
 #include "Leitura.hpp"
 
 
+
 CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 {
 	tag= CONSTANT_Class;
@@ -42,6 +43,18 @@ CONSTANT_Float_info::CONSTANT_Float_info(uint32_t bytes)
 	tag= CONSTANT_Float;
 	this->bytes= bytes;
 }
+CONSTANT_Long_info::CONSTANT_Long_info(uint32_t highBytes, uint32_t lowBytes)
+{
+	tag= CONSTANT_Long;
+	high_bytes= highBytes;
+	low_bytes= lowBytes;
+}
+CONSTANT_Double_info::CONSTANT_Double_info(uint32_t highBytes, uint32_t lowBytes)
+{
+	tag= CONSTANT_Double;
+	high_bytes= highBytes;
+	low_bytes= lowBytes;
+}
 CONSTANT_NameAndType_info::CONSTANT_NameAndType_info(uint16_t nameIndex, uint16_t descriptorIndex)
 {
 	tag= CONSTANT_NameAndType;
@@ -63,6 +76,11 @@ CONSTANT_InvokeDynamic_info::CONSTANT_InvokeDynamic_info(uint16_t bootstrapMetho
 	tag= CONSTANT_InvokeDynamic;
 	bootstrap_method_attr_index= bootstrapMethodAttrIndex;
 	name_and_type_index= nameAndTypeIndex;
+}
+
+NaoUsavel::NaoUsavel(void)
+{
+	tag= TagNaoUsavel;
 }
 
 cp_info* cp_info::LerCpInfo(FILE *arq)
@@ -123,14 +141,14 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 			uint32_t highBytes, lowBytes;
 			LerAtributo(&highBytes, 4, arq);
 			LerAtributo(&lowBytes, 4, arq);
-			return new CONSTANT_Long_info(highBytes, lowBytes);
+			throw new CONSTANT_Long_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_Double):
 		{
 			uint32_t highBytes, lowBytes;
 			LerAtributo(&highBytes, 4, arq);
 			LerAtributo(&lowBytes, 4, arq);
-			return new CONSTANT_Double_info(highBytes, lowBytes);
+			throw new CONSTANT_Double_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_NameAndType):
 		{

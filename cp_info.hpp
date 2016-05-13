@@ -20,6 +20,7 @@ enum cpInfoTags
 	CONSTANT_MethodHandle=15,
 	CONSTANT_MethodType=16,
 	CONSTANT_InvokeDynamic=18
+	TagNaoUsavel= 50;
 };
 
 //!  Contém informações que serão usadas posteriormente
@@ -256,3 +257,9 @@ O valro de name_and_type_index tem que ser uma entrada válida na tabela constan
 */
 		uint16_t name_and_type_index;
 };
+
+class NaoUsavel:public cp_info
+{
+	public:
+		NaoUsavel(void);
+}

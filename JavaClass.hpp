@@ -40,7 +40,7 @@ class JavaClass
 		Um índice é válido se é maior que zero e menor que constant_pool_count. Com exceção de constantes do tipo long e double
 		*/
 		uint16_t constant_pool_count;
-		vector<cp_info> constant_pool;
+		vector<cp_info&> constant_pool;
 		//! Armazena flags sobre a classe
 		/*!
 		O valor é uma máscara usada para informar permissões de acesso para e propriedade dessa classe ou interface.
