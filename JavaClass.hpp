@@ -72,11 +72,11 @@ class JavaClass
 		uint16_t interfaces_count;
 		//! Vetor de interfaces indexado a partir de zero
 		uint16_t fieds_count;
-//		vector<field_info> fields;
+		vector<field_info> fields;
 		uint16_t methods_count;
-//		vector<method_info> methods;
+		vector<method_info> methods;
 		uint16_t attributes_count;
-//		vector<attribute_info> attributes;
+		vector<attribute_info> attributes;
 		void LerAtributo(void *alvo, int size, FILE *arq);
 };
 

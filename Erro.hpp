@@ -1,16 +1,19 @@
 #include<string>
 
 #ifndef ERRO
-
 #define ERRO
-
 using namespace std;
 
+
 class Erro{
+
 	private:
 		string mensagem;
 	public:
-		string GetMensagem();
+		string GetMensagem()
+		{
+			return mensagem;
+		}
 		Erro()
 		{
 			mensagem= "[ERRO]";
