@@ -40,4 +40,5 @@ void JavaClass::LerArquivo(string nomeArquivo)
 	LerAtributo(&access_flags, 2, arq);
 	LerAtributo(&this_class, 2, arq);
 	LerAtributo(&super_class, 2, arq);
+	LerAtributo(&interfaces_count. 2, arq);
 }
