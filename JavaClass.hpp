@@ -13,19 +13,12 @@ using namespace std;
 class JavaClass
 {
 	public:
-	//! Construtor vazio
-	/*!
-	  Um construtor vazio.
-	  \todo Verificar se o construtor será isso mesmo ou se o LerArquivo deve ser o construtor
-	*/
-		JavaClass(){};
-	//! Lê um arquivo .class
+	//! Lê um arquivo .class e inicializa a classe.
 	/*!
 	  Método responsável por ler um arquivo .class e inicializar essa classe.
-	  \todo Verificar se esse método deve se tornar o construtor
-	  \todo Implementar as estruturas que estão comentadas(field_info, method_info e attribute_info)
+	  \param nomeArquivo Nome do arquivo .class que será lido
 	*/
-		void LerArquivo(string nomeArquivo);
+		JavaClass(string nomeArquivo);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!

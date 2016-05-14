@@ -1,16 +1,16 @@
 #include<stdint.h>
-#include<vector>
+#include<stdio.h>
+//#include<vector>
 
-class attribute_info {
-
+class attribute_info
+{
 	private:
-
 	uint16_t attribute_name_index;
 	uint32_t attribute_length;
-	uint8_t info[attribute_length];
+	uint8_t *info;
 
 	public:
 	
-	attribute_info(uint16_t attribute_name_index,uint32_t attribute_length,uint8_t info[attribute_length]);
-
-}
+	attribute_info(FILE *arq);
+	~attribute_info();
+};

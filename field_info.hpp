@@ -1,5 +1,6 @@
 #include "attributes_info.hpp"
 #include <stdint.h>
+#include<vector>
 
 class field_info {
 

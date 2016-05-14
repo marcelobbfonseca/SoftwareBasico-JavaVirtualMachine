@@ -1,14 +1,19 @@
 #include<stdint.h>
 #include "attributes_info.hpp"
+#include"Leitura.hpp"
 
-attribute_info::attribute_info(uint16_t attribute_name_index,uint32_t attribute_length,uint8_t info[attribute_length)
-
+attribute_info::attribute_info(FILE *arq)
 {
+	using namespace Leitura;
+	LerAtributo(&attribute_name_index, 2, arq);
+	LerAtributo(&attribute_length, 4, arq);
+	info = new uint8_t[attribute_length];
+	LerAtributo(info, attribute_length, arq);
+}
 
-	this.attribute_name_index = attribute_name_index;
-	this.attribute_length = attribute_length;
-	this.info = info;
-
+attribute_info::~attribute_info()
+{
+	delete info;
 }
 
 

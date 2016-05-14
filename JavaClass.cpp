@@ -5,7 +5,7 @@
 using namespace std;
 using namespace Leitura;
 
-void JavaClass::LerArquivo(string nomeArquivo)
+void JavaClass::JavaClass(string nomeArquivo)
 {
 	FILE *arq= fopen(nomeArquivo.c_str(), "rb");
 	if(arq == NULL)
