@@ -77,6 +77,15 @@ CONSTANT_InvokeDynamic_info::CONSTANT_InvokeDynamic_info(uint16_t bootstrapMetho
 	bootstrap_method_attr_index= bootstrapMethodAttrIndex;
 	name_and_type_index= nameAndTypeIndex;
 }
+CONSTANT_Utf8_info::CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes)
+{
+	lenght= comprimento;
+	bytes= arrayBytes;
+}
+CONSTANT_Utf8_info::~CONSTANT_Utf8_info()
+{
+	delete bytes;
+}
 
 NaoUsavel::NaoUsavel(void)
 {
@@ -161,7 +170,7 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		{
 			uint16_t comprimento;
 			LerAtributo(&comprimento, 2, arq);
-			void *bytes= new uint8_t[comprimento];
+			uint8_t *bytes= new uint8_t[comprimento];
 			LerAtributo(bytes, comprimento, arq);
 			return new CONSTANT_Utf8_info(comprimento, bytes);
 		}

@@ -1,15 +1,17 @@
-#include<stdint.h>
 #include "method_info.hpp"
-#include "attribites_indo.hpp"
+#include"Leitura.hpp"
 
-method_info::method_info(uint16_t access_flags,uint16_t name_index,uint16_t descriptor_index,
-			uint16_t attributes_count,attribute_info attributes[attributes_count])
+method_info::method_info(FILE *arq)
 {
-
-	this.access_flags = access_flags;
-	this.name_index = name_index;
-	this.descriptor_index = descriptor_index;
-	this.attributes_count = attributes_count;
-        this.attributes = attributes;
-
+	using namespace Leitura;
+	
+	LerAtributo(&access_flags, 2, arq);
+	LerAtributo(&name_index, 2, arq);
+	LerAtributo(&descriptor_index, 2, arq);
+	LerAtributo(&attributes_count, 2, arq);
+	for(int cont =0; cont < attributes_count; cont++)
+	{
+		attribute_info *p= new attribute_info(arq);
+		attributes.push_back(p);
+	}
 }

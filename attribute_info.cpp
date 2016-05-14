@@ -1,5 +1,5 @@
 #include<stdint.h>
-#include "attributes_info.hpp"
+#include "attribute_info.hpp"
 #include"Leitura.hpp"
 
 attribute_info::attribute_info(FILE *arq)

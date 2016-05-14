@@ -2,8 +2,14 @@
 #include<vector>
 #include<string>
 #include"cp_info.hpp"
+#include"field_info.hpp"
+#include"method_info.hpp"
+#include"attribute_info.hpp"
 
 using namespace std;
+
+#ifndef JAVA_CLASS_HPP
+#define JAVA_CLASS_HPP
 
 
 //!  Classe que representa um .class
@@ -33,7 +39,7 @@ class JavaClass
 		Um índice é válido se é maior que zero e menor que constant_pool_count. Com exceção de constantes do tipo long e double
 		*/
 		uint16_t constant_pool_count;
-		vector<cp_info&> constant_pool;
+		vector<cp_info> constant_pool;
 		//! Armazena flags sobre a classe
 		/*!
 		O valor é uma máscara usada para informar permissões de acesso para e propriedade dessa classe ou interface.
@@ -64,7 +70,8 @@ class JavaClass
 		//!Informa o número de interfaces relevantes para essa classe.
 		uint16_t interfaces_count;
 		//! Vetor de interfaces indexado a partir de zero
-		uint16_t fieds_count;
+		vector<uint16_t> interfaces;
+		uint16_t fields_count;
 		vector<field_info> fields;
 		uint16_t methods_count;
 		vector<method_info> methods;
@@ -72,4 +79,6 @@ class JavaClass
 		vector<attribute_info> attributes;
 		void LerAtributo(void *alvo, int size, FILE *arq);
 };
+
+#endif
 

@@ -2,6 +2,9 @@
 #include<stdio.h>
 //#include<vector>
 
+#ifndef ATTRIBUTE_INFO_HPP
+#define ATTRIBUTE_INFO_HPP
+
 class attribute_info
 {
 	private:
@@ -14,3 +17,5 @@ class attribute_info
 	attribute_info(FILE *arq);
 	~attribute_info();
 };
+
+#endif

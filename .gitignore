@@ -3,3 +3,4 @@ documentacao/
 *.gch
 *~
 *.o
+a.out

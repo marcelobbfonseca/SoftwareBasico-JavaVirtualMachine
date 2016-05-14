@@ -1,6 +1,8 @@
 #include<stdint.h>
 #include<stdio.h>
 
+#ifndef CP_INFO_HPP
+#define CP_INFO_HPP
 
 	//! Enumeração que indica os "tipos" de cpinfo
 	/*! Enumeração que indica os valores que a tag do cpinfo pode assumir */
@@ -19,8 +21,8 @@ enum cpInfoTags
 	CONSTANT_Utf8=1,
 	CONSTANT_MethodHandle=15,
 	CONSTANT_MethodType=16,
-	CONSTANT_InvokeDynamic=18
-	TagNaoUsavel= 50;
+	CONSTANT_InvokeDynamic=18,
+	TagNaoUsavel= 50
 };
 
 //!  Contém informações que serão usadas posteriormente
@@ -191,7 +193,8 @@ CONSTANT_Utf8_info (§4.4.7) structure representing a valid field descriptor
 class CONSTANT_Utf8_info: public cp_info
 {
 	public:
-		CONSTANT_Utf8_info(uint16_t comprimento, void *arrayBytes);
+		CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes);
+		~CONSTANT_Utf8_info();
 	private:
 /*!
 O valo de lenght informa o número de bytes no vetor de bytes(e não o comprimento da string resultante). As strings contidas nessa estrutura NÃO terminam com '\0'(NULL)
@@ -200,7 +203,7 @@ O valo de lenght informa o número de bytes no vetor de bytes(e não o comprimen
 /*!
 O vetor de bytes contém os bytes da string. Nenhum byte pode ter o valor zero ou estar no intervalo 0xf0 ~-xff
 */
-		void* bytes;
+		uint8_t* bytes;
 };
 
 //! Classe utilizada para representar um manipulador de método(chuto que é assim que traduz)
@@ -262,4 +265,6 @@ class NaoUsavel:public cp_info
 {
 	public:
 		NaoUsavel(void);
-}
+};
+
+#endif
