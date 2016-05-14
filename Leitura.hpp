@@ -4,6 +4,8 @@
 #ifndef LEITURA_HPP
 #define LEITURA_HPP
 
+#define EH_NUMERO true
+
 //!  Namespcae com funções gerais de leitura
 /*!
   Esse namespace contém funções gerais usadas na leituras dos arquivos
@@ -18,7 +20,8 @@ namespace Leitura
 	  \param size Quantidade de bytes a ser lido
 	  \param arq Arquivo de onde se deve ler
 	*/
-	void LerAtributo(void *alvo, int size, FILE *arq);
+//	void LerAtributo(void *alvo, int size, FILE *arq);
+	void LerAtributo(void *alvo, int size, FILE *arq, bool ehNumero=false);
 }
 
 #endif
