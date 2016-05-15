@@ -17,7 +17,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	Leitura::LerAtributo(&minor_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&major_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&constant_pool_count, 2, arq, EH_NUMERO);
-	for(int cont=0; cont < constant_pool_count; cont++)
+	for(int cont=0; cont < constant_pool_count-1; cont++)
 	{
 		try
 		{
