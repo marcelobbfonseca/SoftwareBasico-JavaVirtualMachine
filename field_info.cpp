@@ -13,7 +13,7 @@ field_info::field_info(FILE *arq)
 	for(int cont =0; cont < attributes_count; cont++)
 	{
 		attribute_info *att= new attribute_info(arq);
-		attributes.push_back(att);
+		attributes.push_back(*att);
 	}
 	
 

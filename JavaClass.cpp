@@ -24,16 +24,16 @@ JavaClass::JavaClass(string nomeArquivo)
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
 			constant_pool.push_back(*cpInfo);
 		}
-		catch(CONSTANT_Long_info longInfo)
+		catch(CONSTANT_Long_info *longInfo)
 		{
-			constant_pool.push_back(longInfo);
+			constant_pool.push_back(*longInfo);
 			NaoUsavel *naoUsavel= new NaoUsavel();
 			constant_pool.push_back(*naoUsavel);
 			cont++;
 		}
-		catch(CONSTANT_Double_info doubleInfo)
+		catch(CONSTANT_Double_info *doubleInfo)
 		{
-			constant_pool.push_back(doubleInfo);
+			constant_pool.push_back(*doubleInfo);
 			NaoUsavel *naoUsavel= new NaoUsavel();
 			constant_pool.push_back(*naoUsavel);
 			cont++;

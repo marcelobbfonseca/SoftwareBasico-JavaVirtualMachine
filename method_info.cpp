@@ -12,6 +12,6 @@ method_info::method_info(FILE *arq)
 	for(int cont =0; cont < attributes_count; cont++)
 	{
 		attribute_info *p= new attribute_info(arq);
-		attributes.push_back(p);
+		attributes.push_back(*p);
 	}
 }
