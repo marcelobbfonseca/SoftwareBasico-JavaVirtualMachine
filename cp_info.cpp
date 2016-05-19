@@ -152,7 +152,7 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		case (CONSTANT_Float):
 		{
 			uint32_t bytes;
-			LerAtributo(&bytes, 4, arq, EH_NUMERO);
+			LerAtributo(&bytes, 4, arq);
 			return new CONSTANT_Float_info(bytes);
 		}
 		case (CONSTANT_Long):
@@ -165,8 +165,8 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		case (CONSTANT_Double):
 		{
 			uint32_t highBytes, lowBytes;
-			LerAtributo(&highBytes, 4, arq, EH_NUMERO);
-			LerAtributo(&lowBytes, 4, arq, EH_NUMERO);
+			LerAtributo(&highBytes, 4, arq);
+			LerAtributo(&lowBytes, 4, arq);
 			throw new CONSTANT_Double_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_NameAndType):
@@ -214,3 +214,69 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 	}
 }
 
+void CONSTANT_Class_info::ExibirInformacoes(void)
+{
+	cout << "Class\n\t\tname_index = " << name_index << endl;
+}
+
+void CONSTANT_Fieldref_info::ExibirInformacoes(void)
+{
+	cout << "Fieldred" << endl;
+	cout <<"\t\tclass_index = " << class_index << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+}
+
+void CONSTANT_Methodref_info::ExibirInformacoes(void)
+{
+	cout << "Methodred" << endl;
+	cout <<"\t\tclass_index = " << class_index << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+}
+
+void CONSTANT_InterfaceMethodref_info::ExibirInformacoes(void)
+{
+	cout << "InterfaceMethodref" << endl;
+	cout <<"\t\tclass_index = " << class_index << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+}
+
+void CONSTANT_String_info::ExibirInformacoes(void)
+{
+	cout << "String" << endl;
+	cout << "\t\tstring_index = " << string_index << endl;
+}
+
+void CONSTANT_Integer_info::ExibirInformacoes(void)
+{
+	cout << "Integer" << endl;
+	cout << "\t\t bytes = " << bytes << endl;
+}
+
+void CONSTANT_Float_info::ExibirInformacoes(void)
+{
+	cout << "Float" <<endl;
+	cout << "\t\tbytes = 0x";
+	uint8_t *ptr= (uint8_t *)bytes ;
+	for(int cont =0;  cont < 4 ; cont++)
+	{
+		cout<< hex << ptr[cont] << dec;
+	}
+
+	if(EhLittleEndian())
+	{
+		uint32_t numeroInvertido= InverterEndianess<uint32_t>(bytes);
+		float *fl= (float *) numeroInvertido;
+		cout << "\t\t//"<< (*fl) << endl;
+	}
+	else
+	{
+		float *aux = (float *) &bytes;
+		cout << "\t\t// " << (*aux) << endl;
+	}
+}
+
+void CONSTANT_Long_info:: ExibirInformacoes(void)
+{
+	cout << "Long" << endl;
+	cout << "\t\thigh_bytes = 0x" << hex
+}

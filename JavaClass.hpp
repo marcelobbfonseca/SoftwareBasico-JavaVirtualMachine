@@ -25,6 +25,7 @@ class JavaClass
 	  \param nomeArquivo Nome do arquivo .class que será lido
 	*/
 		JavaClass(string nomeArquivo);
+		void ExibirInformacoes(void);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!

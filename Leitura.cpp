@@ -16,6 +16,9 @@ namespace Leitura
 		}
 		if(ehNumero)
 		{
+			uint32_t verificadorEndian =1;
+			uint8_t *teste= (uint32_t *) &verificadorEndian;
+			if(*teste == 0) return;
 			if(size == 2)
 			{
 				uint16_t temp;

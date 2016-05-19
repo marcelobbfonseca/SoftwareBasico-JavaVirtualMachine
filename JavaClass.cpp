@@ -1,6 +1,7 @@
 #include"JavaClass.hpp"
 #include "Erro.hpp"
 #include "Leitura.hpp"
+#include<iostream>
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
 using namespace std;
@@ -72,4 +73,23 @@ JavaClass::JavaClass(string nomeArquivo)
 		attributes.push_back(*attributesInfo);
 	}
 	fclose(arq);
+}
+
+void JavaClass::ExibirInformacoes(void)
+{
+	uint8_t aux*;
+	aux= &magic;
+	cout <<"Magic:\t\t\t"<< hex << aux[0] << aux[1] << aux[2] << aux[3] <<  endl << dec;
+//	cout.unsetf(ios::hex);
+	cout << "Minor version:\t\t\t" << minor_version << endl;
+	cout << "Major version:\t\t\t" << major_version << endl;
+	cout << "Versão do .class: " << major_version << "." << minor_version << endl;
+	cout << "constant_pool_count:\t" << constant_pool_count <<endl;
+	cout << "Constant pool:" << endl;
+	for(int cont= 0; cont < constant_pool.size() ; cont++)
+	{
+		cout << " \t#" << cont+1 << " = ";
+		constant_pool[cont].ExibirInformacoes();
+	}
+
 }
