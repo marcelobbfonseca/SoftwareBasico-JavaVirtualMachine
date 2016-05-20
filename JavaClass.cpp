@@ -14,7 +14,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	if(arq == NULL)
 	{
 		throw(new Erro("Falha na abertura do arquivo!"));
-	}
+	} 					//enderecos de atributos do java class
 	Leitura::LerAtributo(&magic, 4, arq);
 	Leitura::LerAtributo(&minor_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&major_version, 2, arq, EH_NUMERO);
@@ -24,20 +24,20 @@ JavaClass::JavaClass(string nomeArquivo)
 		try
 		{
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
-			constant_pool.push_back(*cpInfo);
+			constant_pool.push_back(cpInfo);
 		}
 		catch(CONSTANT_Long_info *longInfo)
 		{
-			constant_pool.push_back(*longInfo);
+			constant_pool.push_back(longInfo);
 			NaoUsavel *naoUsavel= new NaoUsavel();
-			constant_pool.push_back(*naoUsavel);
+			constant_pool.push_back(naoUsavel);
 			cont++;
 		}
 		catch(CONSTANT_Double_info *doubleInfo)
 		{
-			constant_pool.push_back(*doubleInfo);
+			constant_pool.push_back(doubleInfo);
 			NaoUsavel *naoUsavel= new NaoUsavel();
-			constant_pool.push_back(*naoUsavel);
+			constant_pool.push_back(naoUsavel);
 			cont++;
 		}
 	}
@@ -75,7 +75,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	}
 	fclose(arq);
 }
-
+//pega as informacoes do javaclass arquivo 
 void JavaClass::ExibirInformacoes(void)
 {
 //	uint8_t *aux;
@@ -90,7 +90,7 @@ void JavaClass::ExibirInformacoes(void)
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
 		cout << " \t#" << cont+1 << " = ";
-		constant_pool[cont].ExibirInformacoes();
+		(*(constant_pool[cont])).ExibirInformacoes();
         cout<< endl;
 	}
 

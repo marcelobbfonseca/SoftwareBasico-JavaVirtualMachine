@@ -55,7 +55,7 @@ class cp_info
 	  \return Retorna um filho de cpinfo devidamente preenchido
 	*/
 		static cp_info* LerCpInfo(FILE *arq);
-		virtual void ExibirInformacoes(void){};
+		virtual void ExibirInformacoes(void) = 0;
 	private:
 	//! Método inútil apenas para tornar a classe abstrata, ignore-o.
 		virtual void FazNada(){};

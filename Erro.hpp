@@ -14,6 +14,7 @@ class Erro{
 		{
 			return mensagem;
 		}
+		
 		Erro()
 		{
 			mensagem= "[ERRO]";

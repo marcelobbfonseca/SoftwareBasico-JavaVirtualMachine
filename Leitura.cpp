@@ -8,7 +8,7 @@ namespace Leitura
 /*	void LerAtributo(void *alvo, int size, FILE *arq)
 	{
 		LerAtributo(alvo, size, arq, false);
-	}*/
+	}*/ 												//se for pra inverter endian ou nao
 	void LerAtributo(void *alvo, int size, FILE *arq, bool ehNumero)
 	{
 		if(!fread(alvo, size, 1, arq))
