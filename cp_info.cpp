@@ -1,6 +1,8 @@
 #include"cp_info.hpp"
 #include "Leitura.hpp"
+#include"Endian.hpp"
 #include<string.h>
+#include<iostream>
 
 #define DEBUG
 #ifdef DEBUG
@@ -256,7 +258,7 @@ void CONSTANT_Float_info::ExibirInformacoes(void)
 {
 	cout << "Float" <<endl;
 	cout << "\t\tbytes = 0x";
-	uint8_t *ptr= (uint8_t *)bytes ;
+	uint8_t *ptr= (uint8_t *) &bytes ;
 	for(int cont =0;  cont < 4 ; cont++)
 	{
 		cout<< hex << ptr[cont] << dec;
@@ -265,7 +267,7 @@ void CONSTANT_Float_info::ExibirInformacoes(void)
 	if(EhLittleEndian())
 	{
 		uint32_t numeroInvertido= InverterEndianess<uint32_t>(bytes);
-		float *fl= (float *) numeroInvertido;
+		float *fl= (float *) &numeroInvertido;
 		cout << "\t\t//"<< (*fl) << endl;
 	}
 	else
@@ -278,5 +280,124 @@ void CONSTANT_Float_info::ExibirInformacoes(void)
 void CONSTANT_Long_info:: ExibirInformacoes(void)
 {
 	cout << "Long" << endl;
-	cout << "\t\thigh_bytes = 0x" << hex
+	cout << "\t\thigh_bytes = 0x";
+	uint32_t invertido = InverterEndianess<uint32_t>(high_bytes);
+	cout << hex << invertido << dec << endl;
+	cout << "\t\tlow_bytes = 0x";
+	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
+	cout << hex << invertido2 << dec << endl;
+	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << endl;
+}
+
+void CONSTANT_Double_info:: ExibirInformacoes(void)
+{
+	cout << "Double" << endl;
+	cout << "\t\thigh_bytes = 0x";
+	uint32_t invertido = InverterEndianess<uint32_t>(high_bytes);
+	cout << hex << invertido << dec << endl;
+	cout << "\t\tlow_bytes = 0x";
+	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
+	cout << hex << invertido2 << dec << endl;
+	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << endl;
+}
+
+void CONSTANT_NameAndType_info::ExibirInformacoes(void)
+{
+	cout << "NameAndType" << endl;
+	cout <<"\t\tname_index = " << name_index << endl;
+	cout <<"\t\tdescriptor_index = " << descriptor_index << endl;
+}
+
+void CONSTANT_Utf8_info::ExibirInformacoes(void)
+{
+	cout << "UTF8" << endl;
+	cout << "\t\tlenght = " << lenght << endl;
+	cout << "bytes = 0x";
+	int widthAnterior = cout.width(2);
+	char fillAnterior = cout.fill('0');
+	for(int cont = 0; cont < lenght; cont++)
+	{
+		cout << hex << bytes[cont] << dec;
+	}
+	cout.width(widthAnterior);
+	cout.fill(fillAnterior);
+	cout<<endl;
+}
+
+void CONSTANT_MethodHandle_info::ExibirInformacoes(void)
+{
+	cout << "MethodHandle" << endl;
+	cout << "\t\treference_kind = " << reference_kind;
+	switch(reference_kind)
+	{
+		case (REF_getField):
+		{
+			cout << "\t\t//getField" << endl;
+			break;
+		}
+		case (REF_getStatic):
+		{
+			cout << "\t\t//getStatic" << endl;
+			break;
+		}
+		case (REF_putField):
+		{
+			cout << "\t\t//putField" << endl;
+			break;
+		}
+		case (REF_putStatic):
+		{
+			cout << "\t\t//putStatic" << endl;
+			break;
+		}
+		case (REF_invokeVirtual):
+		{
+			cout << "\t\t//invokeVirtual" << endl;
+			break;
+		}
+		case (REF_invokeStatic):
+		{
+			cout << "\t\t//invokeStatic" << endl;
+			break;
+		}
+		case (REF_invokeSpecial):
+		{
+			cout << "\t\t//invokeSpecial" << endl;
+			break;
+		}
+		case (REF_newInvokeSpecial):
+		{
+			cout << "\t\t//newInvokeSpecial" << endl;
+			break;
+		}
+		case (REF_invokeInterface):
+		{
+			cout << "\t\t//invokeInterface" << endl;
+			break;
+		}
+		default:
+		{
+			cout << "[ERRO] reference_kind inválido. \treference_kind = " << reference_kind << endl;
+			break;
+		}
+	}
+	cout << "\t\treference_index = " << reference_index;
+}
+
+void CONSTANT_MethodType_info::ExibirInformacoes(void)
+{
+	cout << "MethodType" << endl;
+	cout <<"\t\tdescriptor_index = " << descriptor_index << endl;
+}
+
+void CONSTANT_InvokeDynamic_info::ExibirInformacoes(void)
+{
+	cout << "InvokeDynamic" << endl;
+	cout <<"\t\tbootstrap_method_attr_index = " << bootstrap_method_attr_index << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+}
+
+void NaoUsavel::ExibirInformacoes(void)
+{
+	cout << "\t//Nao usavel" << endl;
 }

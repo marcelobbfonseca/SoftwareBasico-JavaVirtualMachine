@@ -1,11 +1,13 @@
 #include<stdint.h>
 #include<stdio.h>
+#include<string>
 
 #ifndef CP_INFO_HPP
 #define CP_INFO_HPP
 
 	//! Enumeração que indica os "tipos" de cpinfo
 	/*! Enumeração que indica os valores que a tag do cpinfo pode assumir */
+	//!\todo Verificar se vale a pena isolar enumerações em namespaces
 enum cpInfoTags
 {
 	CONSTANT_Class=7,
@@ -25,6 +27,20 @@ enum cpInfoTags
 	TagNaoUsavel= 50
 };
 
+	//!\todo Verificar se vale a pena isolar enumerações em namespaces
+enum referenceKinds
+{
+	REF_getField = 1,			//getfield C.f:T
+	REF_getStatic = 2,			//getstatic C.f:T
+	REF_putField = 3,			//putfield C.f:T
+	REF_putStatic = 4,			//putstatic C.f:T
+	REF_invokeVirtual = 5,		//invokevirtual C.m:(A*)T
+	REF_invokeStatic = 6,		//invokestatic C.m:(A*)T
+	REF_invokeSpecial = 7,		//invokespecial C.m:(A*)T
+	REF_newInvokeSpecial = 8,	//new C; dup; invokespecial C.<init>:(A*)void
+	REF_invokeInterface = 9		//invokeinterface C.m:(A*)T
+};
+
 //!  Contém informações que serão usadas posteriormente
 /*!
   Contém informações simbólicas de classes, interfaces, arrays e instâncias
@@ -39,7 +55,7 @@ class cp_info
 	  \return Retorna um filho de cpinfo devidamente preenchido
 	*/
 		static cp_info* LerCpInfo(FILE *arq);
-		virtual void ExibirInformacoes(void) = 0;
+		virtual void ExibirInformacoes(void){};
 	private:
 	//! Método inútil apenas para tornar a classe abstrata, ignore-o.
 		virtual void FazNada(){};
@@ -59,6 +75,7 @@ class CONSTANT_Class_info:public cp_info
 {
 	public:
 		CONSTANT_Class_info(uint16_t nameIndex);
+		void ExibirInformacoes(void);
 	private:
 //!inteiro sem sinal de 2 bytes
 /*!
@@ -73,6 +90,7 @@ class CONSTANT_Fieldref_info:public cp_info
 {
 	public:
 		CONSTANT_Fieldref_info(uint16_t classIndex, uint16_t nameAndTypeIndex);
+		void ExibirInformacoes(void);
 	private:
 		uint16_t class_index;
 		uint16_t name_and_type_index;
@@ -83,6 +101,7 @@ class CONSTANT_Methodref_info:public cp_info
 {
 	public:
 		CONSTANT_Methodref_info(uint16_t classIndex, uint16_t nameAndTypeIndex);
+		void ExibirInformacoes(void);
 	private:
 		uint16_t class_index;
 		uint16_t name_and_type_index;
@@ -93,6 +112,7 @@ class CONSTANT_InterfaceMethodref_info:public cp_info
 {
 	public:
 		CONSTANT_InterfaceMethodref_info(uint16_t classIndex, uint16_t nameAndTypeIndex);
+		void ExibirInformacoes(void);
 	private:
 		uint16_t class_index;
 		uint16_t name_and_type_index;
@@ -103,6 +123,7 @@ class CONSTANT_String_info:public cp_info
 {
 	public:
 		CONSTANT_String_info(uint16_t stringIndex);
+		void ExibirInformacoes(void);
 	private:
 //!inteiro sem sinal de 2 bytes
 /*!
@@ -117,6 +138,7 @@ class CONSTANT_Integer_info: public cp_info
 {
 	public:
 		CONSTANT_Integer_info(uint32_t bytes);
+		void ExibirInformacoes(void);
 	private:
 	//!Armazena um inteiro de 32 bits.
 	/*!
@@ -130,6 +152,7 @@ class CONSTANT_Float_info: public cp_info
 {
 	public:
 		CONSTANT_Float_info(uint32_t bytes);
+		void ExibirInformacoes(void);
 	private:
 	//!Armazena um número em ponto flutuante de 32 bits.
 	/*!
@@ -146,6 +169,16 @@ class CONSTANT_Long_info:public cp_info
 {
 	public:
 		CONSTANT_Long_info(uint32_t highBytes, uint32_t lowBytes);
+		void ExibirInformacoes(void);
+
+#ifdef IMPLEMENTADO_IMPRESSAO_NUMEROS_BASE_10
+
+		//!Retorna em uma string o número na base 10
+		/*!
+			\todo:Implementar. Quando estiver implementado usá-lo no ExibirInformacoes(void)
+		*/
+		std::string ObterNumeroBase10();
+#endif
 	private:
 //!Contém os 32 bytes de mais alta ordem do número inteiro de 64 bits
 		uint32_t high_bytes;
@@ -161,6 +194,14 @@ class CONSTANT_Double_info:public cp_info
 {
 	public:
 		CONSTANT_Double_info(uint32_t highBytes, uint32_t lowBytes);
+		void ExibirInformacoes(void);
+#ifdef IMPLEMENTADO_IMPRESSAO_NUMEROS_BASE_10
+		//!Retorna em uma string o número na base 10
+		/*!
+			\todo:Implementar. Quando estiver implementado usá-lo no ExibirInformacoes(void)
+		*/
+		std::string ObterNumeroBase10();
+#endif
 	private:
 //!Contém os 32 bytes de mais alta ordem do número em ponto flutuante de 64 bits
 		uint32_t high_bytes;
@@ -175,6 +216,7 @@ class CONSTANT_NameAndType_info: public cp_info
 {
 	public:
 		CONSTANT_NameAndType_info(uint16_t nameIndex, uint16_t descriptorIndex);
+		void ExibirInformacoes(void);
 	private:
 /*!
 O valor de name_index tem que ser uma entrada válida na tabela constant_pool, que deve referenciar um CONSTANT_Utf8_info que representa tanto o nome do método especial <init> ou um nome não qualificado que denota um campo ou método.
@@ -191,11 +233,15 @@ CONSTANT_Utf8_info (§4.4.7) structure representing a valid field descriptor
 };
 
 //! Classe utilizada para representar strings constantes.
+/*!
+	\todo: verificar a viabilidade de usar o Internation omponents for Unicode(ICU) para mostrar UTF-8
+*/
 class CONSTANT_Utf8_info: public cp_info
 {
 	public:
 		CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes);
 		~CONSTANT_Utf8_info();
+		void ExibirInformacoes(void);
 	private:
 /*!
 O valo de lenght informa o número de bytes no vetor de bytes(e não o comprimento da string resultante). As strings contidas nessa estrutura NÃO terminam com '\0'(NULL)
@@ -212,6 +258,7 @@ class CONSTANT_MethodHandle_info: public cp_info
 {
 	public:
 		CONSTANT_MethodHandle_info(uint8_t referenceKind, uint16_t referenceIndex);
+		void ExibirInformacoes(void);
 	private:
 /*!
 O valor de reference_knid tem q estar entre 1 e 9. O valor denota o tipo de manipulador de método, o qual caracteriza o comportamento do bytecode.
@@ -236,6 +283,7 @@ class CONSTANT_MethodType_info:public cp_info
 {
 	public:
 		CONSTANT_MethodType_info(uint16_t descriptorIndex);
+		void ExibirInformacoes(void);
 	private:
 /*!
 O Valor de descriptor_index tem que ser uma entrada válida na tabela constant_pool, que deve ser um CONSTANT_Utf8_info representando o descritor do método.
@@ -251,6 +299,7 @@ class CONSTANT_InvokeDynamic_info:public cp_info
 {
 	public:
 		CONSTANT_InvokeDynamic_info(uint16_t bootstrapMethodAttrIndex, uint16_t nameAndTypeIndex);
+		void ExibirInformacoes(void);
 	private:
 /*!
 O valor de bootstrap_method_attr_index tem que ser uma entrada válida no vetor de métodos "bootstrap" da tabela de métodos "bootstrap" da classe do arquivo atual.
@@ -266,6 +315,7 @@ class NaoUsavel:public cp_info
 {
 	public:
 		NaoUsavel(void);
+		void ExibirInformacoes(void);
 };
 
 #endif
