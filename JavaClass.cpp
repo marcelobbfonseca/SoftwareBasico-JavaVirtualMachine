@@ -163,6 +163,7 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(unsigned int cont= 0; cont < fields.size() ; cont++)
 		{
+			cout << "\t\t\tField[" << cont << "]:" << endl;;
 			fields[cont].ExibirInformacoes();
 			if(cont != fields.size()-1)
 			{
@@ -178,6 +179,7 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(int cont= 0; cont < methods_count ; cont++)
 		{
+			cout << "\t\t\tMethod[" << cont << "]:" << endl;;
 			methods[cont].ExibirInformacoes();
 			if(cont != methods_count-1)
 			{
@@ -193,6 +195,7 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
 		{
+			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
 			attributes[cont].ExibirInformacoes();
 			if(cont != attributes.size()-1)
 			{

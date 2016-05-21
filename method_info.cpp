@@ -22,51 +22,51 @@ void method_info::ExibirInformacoes(void)
 	cout << "\t\t\taccess_flags =\t\t" << access_flags << endl;
 	if(access_flags & 0x0001)
 	{
-		cout << "\t\t\tACC_PUBLIC" << endl;
+		cout << "\t\t\t\tACC_PUBLIC" << endl;
 	}
 	if(access_flags & 0x0002)
 	{
-		cout << "\t\t\tACC_PRIVATE" << endl;
+		cout << "\t\t\t\tACC_PRIVATE" << endl;
 	}
 	if(access_flags & 0x0004)
 	{
-		cout << "\t\t\tACC_PROTECTED" << endl;
+		cout << "\t\t\t\tACC_PROTECTED" << endl;
 	}
 	if(access_flags & 0x0008)
 	{
-		cout << "\t\t\tACC_STATIC" << endl;
+		cout << "\t\t\t\tACC_STATIC" << endl;
 	}
 	if(access_flags & 0x0010)
 	{
-		cout << "\t\t\tACC_FINAL" << endl;
+		cout << "\t\t\t\tACC_FINAL" << endl;
 	}
 	if(access_flags & 0x0020)
 	{
-		cout << "\t\t\tACC_SYNCHRONIZED" << endl;
+		cout << "\t\t\t\tACC_SYNCHRONIZED" << endl;
 	}
 	if(access_flags & 0x0040)
 	{
-		cout << "\t\t\tACC_BRIDGE" << endl;
+		cout << "\t\t\t\tACC_BRIDGE" << endl;
 	}
 	if(access_flags & 0x0080)
 	{
-		cout << "\t\t\tACC_VARARGS" << endl;
+		cout << "\t\t\t\tACC_VARARGS" << endl;
 	}
 	if(access_flags & 0x0100)
 	{
-		cout << "\t\t\tACC_NATIVE" << endl;
+		cout << "\t\t\t\tACC_NATIVE" << endl;
 	}
 	if(access_flags & 0x0400)
 	{
-		cout << "\t\t\tACC_ABSTRACT" << endl;
+		cout << "\t\t\t\tACC_ABSTRACT" << endl;
 	}
 	if(access_flags & 0x0800)
 	{
-		cout << "\t\t\tACC_STRICT" << endl;
+		cout << "\t\t\t\tACC_STRICT" << endl;
 	}
 	if(access_flags & 0x1000)
 	{
-		cout << "\t\t\tACC_SYNTHETIC" << endl;
+		cout << "\t\t\t\tACC_SYNTHETIC" << endl;
 	}
 	cout << "\t\t\tname_index =\t\t" << name_index << endl;
 	cout << "\t\t\tdescriptor_index =\t" << descriptor_index << endl;
@@ -77,6 +77,7 @@ void method_info::ExibirInformacoes(void)
 		cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
 		for(int cont =0; cont < attributes_count; cont++)
 		{
+			cout << "\t\t\t\tAttributes[" << cont << "]:" << endl;;
 			attributes[cont].ExibirInformacoes();
 			if(cont < attributes_count -1)
 			{
