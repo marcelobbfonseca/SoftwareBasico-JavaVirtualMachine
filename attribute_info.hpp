@@ -16,6 +16,7 @@ class attribute_info
 	
 	attribute_info(FILE *arq);
 	~attribute_info();
+	void ExibirInformacoes(void);
 };
 
 #endif
