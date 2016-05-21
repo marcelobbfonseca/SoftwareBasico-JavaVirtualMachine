@@ -70,6 +70,7 @@ printf("Double lido!");
 CONSTANT_NameAndType_info::CONSTANT_NameAndType_info(uint16_t nameIndex, uint16_t descriptorIndex)
 {
 	tag= CONSTANT_NameAndType;
+	name_index =  nameIndex;
 	descriptor_index= descriptorIndex;
 }
 CONSTANT_MethodHandle_info::CONSTANT_MethodHandle_info(uint8_t referenceKind, uint16_t referenceIndex)
@@ -96,7 +97,7 @@ CONSTANT_Utf8_info::CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes
 }
 CONSTANT_Utf8_info::~CONSTANT_Utf8_info()
 {
-	delete bytes;
+	delete[] bytes;
 }
 
 NaoUsavel::NaoUsavel(void)

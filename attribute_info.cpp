@@ -14,7 +14,7 @@ attribute_info::attribute_info(FILE *arq)
 
 attribute_info::~attribute_info()
 {
-	delete info;
+//	delete[] info;
 }
 
 void attribute_info::ExibirInformacoes(void)
@@ -28,7 +28,7 @@ void attribute_info::ExibirInformacoes(void)
 	{
 	int widthAnterior = cout.width(2);
 	char fillAnterior = cout.fill('0');
-		cout << hex <<( (int) (info[cont] ) ) << dec; 
+		cout << hex <<( (int) (info[cont] ) ) << dec;
 	cout.width(widthAnterior);
 	cout.fill(fillAnterior);
 	}
