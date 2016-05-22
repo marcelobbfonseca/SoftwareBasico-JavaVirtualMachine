@@ -44,12 +44,8 @@ JavaClass::JavaClass(string nomeArquivo)
 			cont++;
 		}
 	}
-<<<<<<< HEAD
-	Leitura::LerAtributo(&access_flags, 2, arq);
 
-=======
 	Leitura::LerAtributo(&access_flags, 2, arq, EH_NUMERO);
->>>>>>> 409fbe0c39af6101105804c00e646c066f694c1a
 	Leitura::LerAtributo(&this_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&super_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&interfaces_count, 2, arq, EH_NUMERO);
@@ -95,19 +91,11 @@ JavaClass::~JavaClass(void)
 //pega as informacoes do javaclass arquivo 
 void JavaClass::ExibirInformacoes(void)
 {
-<<<<<<< HEAD
+
 //	uint16_t *aux;
 //	aux= (uint8_t *) &magic;	
 //	Access_flag::validarFlag(access_flags);
 
-    cout <<"Magic:\t\t\t0x"<< hex << InverterEndianess<uint32_t>(magic) <<  endl << dec;
-//	cout.unsetf(ios::hex);
-	cout << "Minor version:\t\t\t" << minor_version << endl;
-	cout << "Major version:\t\t\t" << major_version << endl;
-	cout << "Versao do .class: " << major_version << "." << minor_version << endl;
-	cout << "constant_pool_count:\t" << constant_pool_count <<endl;
-	cout << "Constant pool:" << endl;
-=======
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << endl;
 	cout << "-----------------------------------------------------------------" << endl;
