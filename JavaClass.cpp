@@ -2,7 +2,6 @@
 #include "Erro.hpp"
 #include "Leitura.hpp"
 #include "Endian.hpp"
-#include "Access_flag.hpp"
 #include <iostream>
 
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
