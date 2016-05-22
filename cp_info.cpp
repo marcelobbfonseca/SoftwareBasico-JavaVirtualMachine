@@ -70,6 +70,7 @@ printf("Double lido!");
 CONSTANT_NameAndType_info::CONSTANT_NameAndType_info(uint16_t nameIndex, uint16_t descriptorIndex)
 {
 	tag= CONSTANT_NameAndType;
+	name_index =  nameIndex;
 	descriptor_index= descriptorIndex;
 }
 CONSTANT_MethodHandle_info::CONSTANT_MethodHandle_info(uint8_t referenceKind, uint16_t referenceIndex)
@@ -96,7 +97,7 @@ CONSTANT_Utf8_info::CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes
 }
 CONSTANT_Utf8_info::~CONSTANT_Utf8_info()
 {
-	delete bytes;
+	delete[] bytes;
 }
 
 NaoUsavel::NaoUsavel(void)
@@ -223,14 +224,14 @@ void CONSTANT_Class_info::ExibirInformacoes(void)
 
 void CONSTANT_Fieldref_info::ExibirInformacoes(void)
 {
-	cout << "Fieldred" << endl;
+	cout << "Fieldref" << endl;
 	cout <<"\t\tclass_index = " << class_index << endl;
 	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
 }
 
 void CONSTANT_Methodref_info::ExibirInformacoes(void)
 {
-	cout << "Methodred" << endl;
+	cout << "Methodref" << endl;
 	cout <<"\t\tclass_index = " << class_index << endl;
 	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
 }
@@ -251,7 +252,7 @@ void CONSTANT_String_info::ExibirInformacoes(void)
 void CONSTANT_Integer_info::ExibirInformacoes(void)
 {
 	cout << "Integer" << endl;
-	cout << "\t\t bytes = " << bytes << endl;
+	cout << "\t\tbytes = " << bytes << endl;
 }
 
 void CONSTANT_Float_info::ExibirInformacoes(void)
@@ -312,15 +313,15 @@ void CONSTANT_Utf8_info::ExibirInformacoes(void)
 {
 	cout << "UTF8" << endl;
 	cout << "\t\tlenght = " << lenght << endl;
-	cout << "bytes = 0x";
-	int widthAnterior = cout.width(2);
-	char fillAnterior = cout.fill('0');
+	cout << "\t\tbytes = ";
+//	int widthAnterior = cout.width(2);
+//	char fillAnterior = cout.fill('0');
 	for(int cont = 0; cont < lenght; cont++)
 	{
 		cout << hex << bytes[cont] << dec;
 	}
-	cout.width(widthAnterior);
-	cout.fill(fillAnterior);
+//	cout.width(widthAnterior);
+//	cout.fill(fillAnterior);
 	cout<<endl;
 }
 

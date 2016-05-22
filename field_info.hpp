@@ -21,6 +21,7 @@ class field_info {
 	public:
 	
 	field_info(FILE *arq);
+	void ExibirInformacoes(void);
 };
 
 #endif

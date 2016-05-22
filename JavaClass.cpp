@@ -44,8 +44,12 @@ JavaClass::JavaClass(string nomeArquivo)
 			cont++;
 		}
 	}
+<<<<<<< HEAD
 	Leitura::LerAtributo(&access_flags, 2, arq);
 
+=======
+	Leitura::LerAtributo(&access_flags, 2, arq, EH_NUMERO);
+>>>>>>> 409fbe0c39af6101105804c00e646c066f694c1a
 	Leitura::LerAtributo(&this_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&super_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&interfaces_count, 2, arq, EH_NUMERO);
@@ -79,9 +83,19 @@ JavaClass::JavaClass(string nomeArquivo)
 	}
 	fclose(arq);
 }
+
+JavaClass::~JavaClass(void)
+{
+	for(unsigned int cont  = 0 ; cont < constant_pool.size(); cont++)
+	{
+		delete constant_pool[cont];
+	}
+}
+
 //pega as informacoes do javaclass arquivo 
 void JavaClass::ExibirInformacoes(void)
 {
+<<<<<<< HEAD
 //	uint16_t *aux;
 //	aux= (uint8_t *) &magic;	
 //	Access_flag::validarFlag(access_flags);
@@ -93,14 +107,126 @@ void JavaClass::ExibirInformacoes(void)
 	cout << "Versao do .class: " << major_version << "." << minor_version << endl;
 	cout << "constant_pool_count:\t" << constant_pool_count <<endl;
 	cout << "Constant pool:" << endl;
+=======
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << endl;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout <<"Magic:\t\t\t0x"<< hex << InverterEndianess<uint32_t>(magic) <<  endl << dec;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Minor version:\t\t\t" << minor_version << endl;
+	cout << "Major version:\t\t\t" << major_version << endl;
+	cout << "Versão do .class: \t\t" << major_version << "." << minor_version << endl;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "constant_pool_count:\t\t" << constant_pool_count <<endl;
+	cout << "Constant pool:\t" << endl;
+	cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
 		cout << " \t#" << cont+1 << " = ";
 		(*(constant_pool[cont])).ExibirInformacoes();
-        cout<< endl;
+		if(cont != constant_pool.size()-1)
+		{
+			cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+		}
 	}
-	cout << "access_flags: 0x" << hex << access_flags << endl;
-	cout << "this_class:" << this_class << endl;
-	cout << "super_class:" << super_class << endl;
-
+	cout << "-----------------------------------------------------------------" << endl;
+//passar essa parte pro access_flag.cpp!
+	cout<< "access_flags:\t\t\t" << hex << InverterEndianess<uint16_t>(access_flags) << dec << endl;
+	if(access_flags & 0x0001)
+	{
+		cout << "\t\tACC_PUBLIC" << endl;
+	}
+	if(access_flags & 0x0010)
+	{
+		cout << "\t\tACC_FINAL" << endl;
+	}
+	if(access_flags & 0x0020)
+	{
+		cout << "\t\tACC_SUPER" << endl;
+	}
+	if(access_flags & 0x0200)
+	{
+		cout << "\t\tACC_INTERFACE" << endl;
+	}
+	if(access_flags & 0x0400)
+	{
+		cout << "\t\tACC_ABSTRACT" << endl;
+	}
+	if(access_flags & 0x1000)
+	{
+		cout << "\t\tACC_SYNTHETIC" << endl;
+	}
+	if(access_flags & 0x2000)
+	{
+		cout << "\t\tACC_ANNOTATION" << endl;
+	}
+	if(access_flags & 0x4000)
+	{
+		cout << "\t\tACC_ENUM" << endl;
+	}
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "This class =\t\t" << this_class << endl;
+	cout << "Super class =\t\t" << super_class << endl;
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Interfaces count =\t" << interfaces_count << endl;
+	if(interfaces_count > 0)
+	{
+		cout << "Interfaces:" << endl;
+		for(unsigned int cont= 0; cont < interfaces.size() ; cont++)
+		{
+			cout << "\t\t#" << cont << "\t" << interfaces[cont] << endl;
+		}
+	}
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Fields count =\t\t" << fields_count << endl;
+	if(fields_count > 0)
+	{
+		cout << "Fields:" << endl;
+		cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+		for(unsigned int cont= 0; cont < fields.size() ; cont++)
+		{
+			cout << "\t\t\tField[" << cont << "]:" << endl;;
+			fields[cont].ExibirInformacoes();
+			if(cont != fields.size()-1)
+			{
+				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+			}
+		}
+	}
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Methods count =\t\t" << methods_count << endl;
+	if(methods_count > 0)
+	{
+		cout << "Methods:" << endl;
+		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+		for(int cont= 0; cont < methods_count ; cont++)
+		{
+			cout << "\t\t\tMethod[" << cont << "]:" << endl;;
+			methods[cont].ExibirInformacoes();
+			if(cont != methods_count-1)
+			{
+				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+			}
+		}
+	}
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Attributes count =\t\t" << attributes_count << endl;
+	if(attributes_count > 0)
+	{
+		cout << "Attributes:" << endl;
+		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
+		{
+			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
+			attributes[cont].ExibirInformacoes();
+			if(cont != attributes.size()-1)
+			{
+				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+			}
+		}
+	}
+	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Isso é tudo q tem no arquivo xD" << endl;
+	cout << "-----------------------------------------------------------------" << endl;
 }

@@ -5,7 +5,7 @@
 
 int main()
 {
-	std::string caminho= "Exemplos/HelloWorld.class";
+	std::string caminho= "Exemplos/Factorial.class";
 	try{
 		JavaClass *j1= new JavaClass(caminho);
 	j1->ExibirInformacoes();

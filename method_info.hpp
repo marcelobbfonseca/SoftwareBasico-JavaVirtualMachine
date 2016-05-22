@@ -21,6 +21,7 @@ class method_info {
 	public:
 
 	method_info(FILE *arq);
+	void ExibirInformacoes(void);
 
 };
 

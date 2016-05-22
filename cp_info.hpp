@@ -56,9 +56,8 @@ class cp_info
 	*/
 		static cp_info* LerCpInfo(FILE *arq);
 		virtual void ExibirInformacoes(void) = 0;
+		virtual ~cp_info(void){}
 	private:
-	//! Método inútil apenas para tornar a classe abstrata, ignore-o.
-		virtual void FazNada(){};
 	protected:
 	//! Tag que indica de qual filho deve ser usado
 	/*!

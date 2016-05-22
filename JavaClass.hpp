@@ -25,6 +25,7 @@ class JavaClass
 	  \param nomeArquivo Nome do arquivo .class que será lido
 	*/
 		JavaClass(string nomeArquivo);
+		~JavaClass(void);
 		void ExibirInformacoes(void);
 	private:
 		//!Assinatura do tipo de arquivo
@@ -78,7 +79,6 @@ class JavaClass
 		vector<method_info> methods;
 		uint16_t attributes_count;
 		vector<attribute_info> attributes;
-		void LerAtributo(void *alvo, int size, FILE *arq);
 };
 
 #endif
