@@ -1,8 +1,10 @@
-#include"JavaClass.hpp"
+#include "JavaClass.hpp"
 #include "Erro.hpp"
 #include "Leitura.hpp"
-#include"Endian.hpp"
-#include<iostream>
+#include "Endian.hpp"
+#include "Access_flag.hpp"
+#include <iostream>
+
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
 using namespace std;
@@ -19,6 +21,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	Leitura::LerAtributo(&minor_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&major_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&constant_pool_count, 2, arq, EH_NUMERO);
+
 	for(int cont=0; cont < constant_pool_count-1; cont++)
 	{
 		try
@@ -42,6 +45,7 @@ JavaClass::JavaClass(string nomeArquivo)
 		}
 	}
 	Leitura::LerAtributo(&access_flags, 2, arq);
+
 	Leitura::LerAtributo(&this_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&super_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&interfaces_count, 2, arq, EH_NUMERO);
@@ -78,13 +82,15 @@ JavaClass::JavaClass(string nomeArquivo)
 //pega as informacoes do javaclass arquivo 
 void JavaClass::ExibirInformacoes(void)
 {
-//	uint8_t *aux;
-//	aux= (uint8_t *) &magic;
+//	uint16_t *aux;
+//	aux= (uint8_t *) &magic;	
+//	Access_flag::validarFlag(access_flags);
+
     cout <<"Magic:\t\t\t0x"<< hex << InverterEndianess<uint32_t>(magic) <<  endl << dec;
 //	cout.unsetf(ios::hex);
 	cout << "Minor version:\t\t\t" << minor_version << endl;
 	cout << "Major version:\t\t\t" << major_version << endl;
-	cout << "Versão do .class: " << major_version << "." << minor_version << endl;
+	cout << "Versao do .class: " << major_version << "." << minor_version << endl;
 	cout << "constant_pool_count:\t" << constant_pool_count <<endl;
 	cout << "Constant pool:" << endl;
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
@@ -93,5 +99,8 @@ void JavaClass::ExibirInformacoes(void)
 		(*(constant_pool[cont])).ExibirInformacoes();
         cout<< endl;
 	}
+	cout << "access_flags: 0x" << hex << access_flags << endl;
+	cout << "this_class:" << this_class << endl;
+	cout << "super_class:" << super_class << endl;
 
 }
