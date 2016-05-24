@@ -1,8 +1,9 @@
-#include"JavaClass.hpp"
+#include "JavaClass.hpp"
 #include "Erro.hpp"
 #include "Leitura.hpp"
-#include"Endian.hpp"
-#include<iostream>
+#include "Endian.hpp"
+#include <iostream>
+
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
 using namespace std;
@@ -19,6 +20,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	Leitura::LerAtributo(&minor_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&major_version, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&constant_pool_count, 2, arq, EH_NUMERO);
+
 	for(int cont=0; cont < constant_pool_count-1; cont++)
 	{
 		try
@@ -41,6 +43,7 @@ JavaClass::JavaClass(string nomeArquivo)
 			cont++;
 		}
 	}
+
 	Leitura::LerAtributo(&access_flags, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&this_class, 2, arq, EH_NUMERO);
 	Leitura::LerAtributo(&super_class, 2, arq, EH_NUMERO);
@@ -87,6 +90,11 @@ JavaClass::~JavaClass(void)
 //pega as informacoes do javaclass arquivo 
 void JavaClass::ExibirInformacoes(void)
 {
+
+//	uint16_t *aux;
+//	aux= (uint8_t *) &magic;	
+//	Access_flag::validarFlag(access_flags);
+
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << endl;
 	cout << "-----------------------------------------------------------------" << endl;
@@ -98,7 +106,8 @@ void JavaClass::ExibirInformacoes(void)
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "constant_pool_count:\t\t" << constant_pool_count <<endl;
 	cout << "Constant pool:\t" << endl;
-		cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+	cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
+
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
 		cout << " \t#" << cont+1 << " = ";
@@ -109,6 +118,7 @@ void JavaClass::ExibirInformacoes(void)
 		}
 	}
 	cout << "-----------------------------------------------------------------" << endl;
+//passar essa parte pro access_flag.cpp!
 	cout<< "access_flags:\t\t\t" << hex << InverterEndianess<uint16_t>(access_flags) << dec << endl;
 	if(access_flags & 0x0001)
 	{
