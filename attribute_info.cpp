@@ -129,4 +129,52 @@ namespace Atributos
 		}
 	}
 
+	Elemento_local_variable::Elemento_local_variable(FILE *arq)
+	{
+		LerAtributo(&start_pc, 2, arq);
+		LerAtributo(&length, 2, arq);
+		LerAtributo(&name_index, 2, arq);
+		LerAtributo(&descriptor_index, 2, arq);
+		LerAtributo(&index, 2, arq);
+	}
+
+	LocalVariableTable_attribute::LocalVariableTable_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		LerAtributo(&local_variable_table_length, 2, arq);
+		for(int cont =0; cont < local_variable_table_length; cont++)
+		{
+			Elemento_local_variable *temp= new Elemento_local_variable(arq);
+			local_variable_table.push_back(*temp);
+		}
+	}
+
+	Elemento_LocalVariableType::Elemento_LocalVariableType(FILE *arq)
+	{
+		LerAtributo(&start_pc, 2, arq);
+		LerAtributo(&length, 2, arq);
+		LerAtributo(&name_index, 2, arq);
+		LerAtributo(&signature_index, 2, arq);
+		LerAtributo(&index, 2, arq);
+	}
+
+	LocalVariableTypeTable_attribute::LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		LerAtributo(&local_variable_type_table_length, 2, arq);
+		for(int cont=0; cont< local_variable_type_table_length; cont++)
+		{
+			Elemento_LocalVariableType *temp= new Elemento_LocalVariableType(arq);
+			local_variable_type_table.push_back(*temp);
+		}
+	}
+
+	Deprecated_attribute::Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+	}
+
 }

@@ -165,7 +165,68 @@ namespace Atributos
 			void ExibirInformacoes(void);
 	};
 
+	class Elemento_local_variable
+	{
+		private:
+			uint16_t start_pc;
+			uint16_t length;
+			uint16_t name_index;
+			uint16_t descriptor_index;
+			uint16_t index;
+		public:
+			Elemento_local_variable(FILE *arq);
+			void ExibirInformacoes(void);
+	};
+
+	class LocalVariableTable_attribute : public attribute_info
+	{
+		private:
+			uint16_t local_variable_table_length;
+			vector<Elemento_local_variable> local_variable_table;
+		public:
+			LocalVariableTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+
+	class Elemento_LocalVariableType
+	{
+		private:
+			uint16_t start_pc;
+			uint16_t length;
+			uint16_t name_index;
+			uint16_t signature_index;
+			uint16_t index;
+		public:
+			Elemento_LocalVariableType(FILE *arq);
+	};
+
+	class LocalVariableTypeTable_attribute : public attribute_info
+	{
+		private:
+			uint16_t local_variable_type_table_length;
+			vector<Elemento_LocalVariableType>local_variable_type_table;
+		public:
+			LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
 
 
+	class Deprecated_attribute : public attribute_info
+	{
+		public:
+		private:
+			Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+
+//	class 
+/*
+	class annotation
+	{
+		u2 type_index;
+		u2 num_element_value_pairs;
+ element_value_pairs[num_element_value_pairs];
+	}
+*/
 }
 #endif

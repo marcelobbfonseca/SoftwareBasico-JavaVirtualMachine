@@ -180,29 +180,9 @@ class stackMapTable_attribute {
 
 
 
-class local_variable_table{
 
-	uint16_t start_pc;
-	uint16_t length;
-	uint16_t name_index;
-	uint16_t descriptor_index;
-	uint16_t index;
-}
 
-class localVariableTable_attribute {
 
-	uint16_t attribute_name_index;
-	uint32_t attribute_length;
-	uint16_t local_variable_table_length;
-	vector<local_variable_table> elements_local_variable_table;
-}
-
-class deprecated_attribute {
-
-	uint16_t attribute_name_index;
-	uint32_t attribute_length;
-
-}
 
 class runtimeVisibleAnnotations_attribute {
 
