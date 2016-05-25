@@ -110,81 +110,81 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 	using namespace Leitura;
 
 	uint8_t tag;
-	LerAtributo(&tag, 1, arq);
+	LerAtributo(&tag, 1, arq, IGNORAR_ENDIAN);
 	switch(tag)
 	{
 		case (CONSTANT_Class):
 		{
 			uint16_t nameIndex;
-			LerAtributo(&nameIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&nameIndex, 2, arq);
 			return new CONSTANT_Class_info(nameIndex);
 		}
 		case (CONSTANT_Fieldref):
 		{
 			uint16_t classIndex, nameAndTypeIndex;
-			LerAtributo(&classIndex, 2, arq, EH_NUMERO);
-			LerAtributo(&nameAndTypeIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&classIndex, 2, arq);
+			LerAtributo(&nameAndTypeIndex, 2, arq);
 			return new CONSTANT_Fieldref_info(classIndex, nameAndTypeIndex);
 		}
 		case (CONSTANT_Methodref):
 		{
 			uint16_t classIndex, nameAndTypeIndex;
-			LerAtributo(&classIndex, 2, arq, EH_NUMERO);
-			LerAtributo(&nameAndTypeIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&classIndex, 2, arq);
+			LerAtributo(&nameAndTypeIndex, 2, arq);
 			return new CONSTANT_Methodref_info(classIndex, nameAndTypeIndex);
 		}
 		case (CONSTANT_InterfaceMethodref):
 		{
 			uint16_t classIndex, nameAndTypeIndex;
-			LerAtributo(&classIndex, 2, arq, EH_NUMERO);
-			LerAtributo(&nameAndTypeIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&classIndex, 2, arq);
+			LerAtributo(&nameAndTypeIndex, 2, arq);
 			return new CONSTANT_InterfaceMethodref_info(classIndex, nameAndTypeIndex);
 		}
 		case (CONSTANT_String):
 		{
 			uint16_t stringIndex;
-			LerAtributo(&stringIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&stringIndex, 2, arq);
 			return new CONSTANT_String_info(stringIndex);
 		}
 		case (CONSTANT_Integer):
 		{
 			uint32_t bytes;
-			LerAtributo(&bytes, 4, arq, EH_NUMERO);
+			LerAtributo(&bytes, 4, arq);
 			return new CONSTANT_Integer_info(bytes);
 		}
 		case (CONSTANT_Float):
 		{
 			uint32_t bytes;
-			LerAtributo(&bytes, 4, arq);
+			LerAtributo(&bytes, 4, arq, IGNORAR_ENDIAN);
 			return new CONSTANT_Float_info(bytes);
 		}
 		case (CONSTANT_Long):
 		{
 			uint32_t highBytes, lowBytes;
-			LerAtributo(&highBytes, 4, arq, EH_NUMERO);
-			LerAtributo(&lowBytes, 4, arq, EH_NUMERO);
+			LerAtributo(&highBytes, 4, arq);
+			LerAtributo(&lowBytes, 4, arq);
 			throw new CONSTANT_Long_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_Double):
 		{
 			uint32_t highBytes, lowBytes;
-			LerAtributo(&highBytes, 4, arq);
-			LerAtributo(&lowBytes, 4, arq);
+			LerAtributo(&highBytes, 4, arq, IGNORAR_ENDIAN);
+			LerAtributo(&lowBytes, 4, arq, IGNORAR_ENDIAN);
 			throw new CONSTANT_Double_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_NameAndType):
 		{
 			uint16_t nameIndex, descriptorIndex;
-			LerAtributo(&nameIndex, 2, arq, EH_NUMERO);
-			LerAtributo(&descriptorIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&nameIndex, 2, arq);
+			LerAtributo(&descriptorIndex, 2, arq);
 			return new CONSTANT_NameAndType_info(nameIndex, descriptorIndex);
 		}
 		case (CONSTANT_Utf8):
 		{
 			uint16_t comprimento;
-			LerAtributo(&comprimento, 2, arq, EH_NUMERO);
+			LerAtributo(&comprimento, 2, arq);
 			uint8_t *bytes= new uint8_t[comprimento];
-			LerAtributo(bytes, comprimento, arq);
+			LerAtributo(bytes, comprimento, arq, IGNORAR_ENDIAN);
 			return new CONSTANT_Utf8_info(comprimento, bytes);
 		}
 		case (CONSTANT_MethodHandle):
@@ -192,20 +192,20 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 			uint8_t referenceKind;
 			uint16_t referenceIndex;
 			LerAtributo(&referenceKind, 1, arq);
-			LerAtributo(&referenceIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&referenceIndex, 2, arq);
 			return new CONSTANT_MethodHandle_info(referenceKind, referenceIndex);
 		}
 		case (CONSTANT_MethodType):
 		{
 			uint16_t descriptorIndex;
-			LerAtributo(&descriptorIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&descriptorIndex, 2, arq);
 			return new CONSTANT_MethodType_info(descriptorIndex);
 		}
 		case (CONSTANT_InvokeDynamic):
 		{
 			uint16_t bootstrapMethodAttrIndex, nameAndTypeIndex;
-			LerAtributo(&bootstrapMethodAttrIndex, 2, arq, EH_NUMERO);
-			LerAtributo(&nameAndTypeIndex, 2, arq, EH_NUMERO);
+			LerAtributo(&bootstrapMethodAttrIndex, 2, arq);
+			LerAtributo(&nameAndTypeIndex, 2, arq);
 			return new CONSTANT_InvokeDynamic_info(bootstrapMethodAttrIndex, nameAndTypeIndex);
 		}
 		default:

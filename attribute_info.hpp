@@ -145,5 +145,27 @@ namespace Atributos
 			void ExibirInformacoes(void);
 	};
 
+	class Elemento_LineNumber
+	{
+		private:
+			uint16_t start_pc;
+			uint16_t line_number;
+		public:
+			Elemento_LineNumber(FILE *arq);
+			void ExibirInformacoes(void);
+	};
+
+	class LineNumberTable_attribute: public attribute_info
+	{
+		private:
+			uint16_t line_number_table_length;
+			vector<Elemento_LineNumber> elements_number_table;
+		public:
+			LineNumberTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+
+
+
 }
 #endif
