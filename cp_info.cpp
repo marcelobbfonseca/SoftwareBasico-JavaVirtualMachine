@@ -210,7 +210,7 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		}
 		default:
 		{
-			char erro[150]= "Método LerCpInfo leu um tag inválido!\n\t\tTag lido: ";
+			char erro[150];
 			sprintf(erro, "Método LerCpInfo leu um tag inválido!\n\t\tTag lido: %hu\n", tag);
 			throw new Erro(erro);
 		}

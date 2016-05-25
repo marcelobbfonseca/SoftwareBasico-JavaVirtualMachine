@@ -78,7 +78,7 @@ class JavaClass
 		uint16_t methods_count;
 		vector<method_info> methods;
 		uint16_t attributes_count;
-		vector<attribute_info> attributes;
+		vector<attribute_info *> attributes;
 };
 
 #endif

@@ -176,78 +176,7 @@ class stackMapTable_attribute {
 }
 
 
-class exceptions_attribute {
 
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    uint16_t number_of_exceptions;
-    vector<uint16_t> exception_index_table;
-
-public:
-
-	exceptions_attribute (FILE *arq);
-	~exceptions_attribute ();
-	void ExibirInformacoes(void);
-}
-
-
-class classes{
-
-    uint16_t inner_class_info_index;
-    uint16_t outer_class_info_index;
-    uint16_t inner_name_index;
-    uint16_t inner_class_access_flags;
-
-}
-
-class innerClasses_attribute {
-
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    uint16_t number_of_classes;
-    vector<classes> elementos_classes;
-
-}
-
-class enclosingMethod_attribute {
-
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    uint16_t class_index;
-    uint16_t method_index;
-
-}
-
-class synthetic_attribute {
-
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-
-}
-
-class signature_attribute {
-
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    uint16_t signature_index;
-
-}
-
-class sourceFile_attribute {
-
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    uint16_t sourcefile_index;
-
-}
-
-class SourceDebugExtension_attribute {
-
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    uint8_t debug_extension[attribute_length];
-
-}
 
 class line_number_table{
 
