@@ -5,10 +5,6 @@
 
 namespace Leitura
 {
-/*	void LerAtributo(void *alvo, int size, FILE *arq)
-	{
-		LerAtributo(alvo, size, arq, false);
-	}*/ 												//se for pra inverter endian ou nao
 	void LerAtributo(void *alvo, int size, FILE *arq, bool ehNumero)
 	{
 		if(!fread(alvo, size, 1, arq))
@@ -18,31 +14,19 @@ namespace Leitura
 		if(ehNumero)
 		{
 			if(!EhLittleEndian()) return;
-			if(size == 2)
+			if(size == 2 )
 			{
-				uint16_t temp;
-				uint8_t *aux= (uint8_t*) &temp;
-				uint8_t *aux2= (uint8_t*)alvo;
-				aux[0]= aux2[1];
-				aux[1]= aux2[0];
-				
-				aux2[0]= aux[0];
-				aux2[1]= aux[1];
+				uint16_t *auxPtr= (uint16_t *) alvo;
+				uint16_t aux= InverterEndianess<uint16_t>( *auxPtr );
+				*auxPtr= aux;
+				return;
 			}
-			else if(size == 4)
+			if(size == 4)
 			{
-				uint32_t temp;
-				uint8_t *aux=(uint8_t*)&temp;
-				uint8_t *aux2= (uint8_t*)alvo;
-				aux[0]= aux2[3];
-				aux[1]= aux2[2];
-				aux[2]= aux2[1];
-				aux[3]= aux2[0];
-				
-				aux2[0]= aux[0];
-				aux2[1]= aux[1];
-				aux2[2]= aux[2];
-				aux2[3]= aux[3];
+				uint32_t *auxPtr= (uint32_t *) alvo;
+				uint32_t aux= InverterEndianess<uint32_t>( *auxPtr );
+				*auxPtr= aux;
+				return;
 			}
 		}
 	}
