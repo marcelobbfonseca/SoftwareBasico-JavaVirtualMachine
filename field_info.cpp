@@ -13,8 +13,8 @@ field_info::field_info(FILE *arq)
 	LerAtributo(&attributes_count, 2, arq, EH_NUMERO);
 	for(int cont =0; cont < attributes_count; cont++)
 	{
-		attribute_info *att= new attribute_info(arq);
-		attributes.push_back(*att);
+		attribute_info *att= attribute_info::LerAtributeInfo(arq);
+		attributes.push_back(att);
 	}
 	
 
@@ -68,7 +68,7 @@ void field_info::ExibirInformacoes(void)
 		cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
 		for(int cont =0; cont < attributes_count; cont++)
 		{
-			attributes[cont].ExibirInformacoes();
+			attributes[cont]->ExibirInformacoes();
 			if(cont != attributes_count-1)
 			{
 				cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;

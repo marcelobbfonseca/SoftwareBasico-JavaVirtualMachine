@@ -73,8 +73,8 @@ JavaClass::JavaClass(string nomeArquivo)
 	Leitura::LerAtributo(&attributes_count, 2, arq, EH_NUMERO);
 	for(int cont=0; cont < attributes_count; cont++)
 	{
-		attribute_info *attributesInfo = new attribute_info(arq);
-		attributes.push_back(*attributesInfo);
+		attribute_info *attributesInfo = attribute_info::LerAtributeInfo(arq);
+		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);
 }
@@ -206,7 +206,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
 		{
 			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
-			attributes[cont].ExibirInformacoes();
+			attributes[cont]->ExibirInformacoes();
 			if(cont != attributes.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
