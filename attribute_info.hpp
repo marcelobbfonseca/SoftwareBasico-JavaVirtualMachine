@@ -218,13 +218,34 @@ namespace Atributos
 			Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex);
 			void ExibirInformacoes(void);
 	};
+	
+	class Elemento_Metodo_Bootstrap
+	{
+		private:
+			uint16_t bootstrap_method_ref;
+			uint16_t num_bootstrap_arguments;
+			vector<uint16_t> bootstrap_arguments;
+		public:
+			Elemento_Metodo_Bootstrap(FILE *arq);
+			void ExibirInformacoes(void);
+	}
+	
+	class BootstrapMethods_attribute: public attribute_info
+	{
+		private:
+			uint16_t num_bootstrap_methods;
+			vector<Elemento_Metodo_Bootstrap>bootstrap_methods;
+		public:
+			BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+}
 
 //	class 
 /*
 	class annotation
 	{
-		u2 type_index;
-		u2 num_element_value_pairs;
+		uint16_t type_index;
+		uint16_t num_element_value_pairs;
  element_value_pairs[num_element_value_pairs];
 	}
 */

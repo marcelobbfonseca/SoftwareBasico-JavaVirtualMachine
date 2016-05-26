@@ -177,4 +177,28 @@ namespace Atributos
 		LerAtributo(&attribute_length, 4, arq);
 	}
 
+	Elemento_Metodo_Bootstrap::Elemento_Metodo_Bootstrap(FILE *arq)
+	{
+		LerAtributo(&bootstrap_method_ref, 2, arq);
+		LerAtributo(&num_bootstrap_arguments, 2, arq);
+		for(int cont=0; cont < num_bootstrap_arguments; cont++)
+		{
+			int16_t temp;
+			LerAtributo(&temp, 2, arq)
+			bootstrap_methods.push_back(temp);
+		}
+	}
+
+	BootstrapMethods_attribute::BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		LerAtributo(&num_bootstrap_methods, 2, arq);
+		for(int cont =0; cont < num_bootstrap_methods; cont++)
+		{
+			Elemento_Metodo_Bootstrap *aux= new Elemento_Metodo_Bootstrap(arq);
+			bootstrap_methods.push_back(*aux);
+		}
+	}
+
 }
