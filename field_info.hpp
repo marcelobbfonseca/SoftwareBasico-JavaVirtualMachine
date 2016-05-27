@@ -21,7 +21,7 @@ class field_info {
 	public:
 	
 	field_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
-	void ExibirInformacoes(void);
+	void ExibirInformacoes(string tabs);
 };
 
 #endif

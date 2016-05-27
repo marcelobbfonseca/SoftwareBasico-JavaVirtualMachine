@@ -90,10 +90,7 @@ JavaClass::~JavaClass(void)
 //pega as informacoes do javaclass arquivo 
 void JavaClass::ExibirInformacoes(void)
 {
-
-//	uint16_t *aux;
-//	aux= (uint8_t *) &magic;	
-//	Access_flag::validarFlag(access_flags);
+	string tabs = "\t";
 
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << endl;
@@ -110,7 +107,7 @@ void JavaClass::ExibirInformacoes(void)
 
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
-		cout << " \t#" << cont+1 << " = ";
+		cout  << tabs << "#" << cont+1 << " = ";
 		(*(constant_pool[cont])).ExibirInformacoes();
 		if(cont != constant_pool.size()-1)
 		{
@@ -119,7 +116,7 @@ void JavaClass::ExibirInformacoes(void)
 	}
 	cout << "-----------------------------------------------------------------" << endl;
 //passar essa parte pro access_flag.cpp!
-	cout<< "access_flags:\t\t\t" << hex << InverterEndianess<uint16_t>(access_flags) << dec << endl;
+	cout<< "access_flags:\t\t\t" << hex << access_flags << dec << endl;
 	if(access_flags & 0x0001)
 	{
 		cout << "\t\tACC_PUBLIC" << endl;
@@ -173,8 +170,8 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(unsigned int cont= 0; cont < fields.size() ; cont++)
 		{
-			cout << "\t\t\tField[" << cont << "]:" << endl;;
-			fields[cont].ExibirInformacoes();
+			cout << "\tField[" << cont << "]:" << endl;;
+			fields[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
 			if(cont != fields.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -189,8 +186,8 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(int cont= 0; cont < methods_count ; cont++)
 		{
-			cout << "\t\t\tMethod[" << cont << "]:" << endl;;
-			methods[cont].ExibirInformacoes();
+			cout << "\tMethod[" << cont << "]:" << endl;;
+			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
 			if(cont != methods_count-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -206,7 +203,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
 		{
 			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
-			attributes[cont]->ExibirInformacoes();
+			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
 			if(cont != attributes.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
