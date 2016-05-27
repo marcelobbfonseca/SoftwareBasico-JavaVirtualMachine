@@ -13,13 +13,26 @@ class attribute_info
 //	uint8_t *info;
 
 	public:
-	static attribute_info * LerAtributeInfo(FILE *arq);
+	static attribute_info* LerAtributeInfo(FILE *arq);
 	virtual void ExibirInformacoes(void)=0;
 };
 
 namespace Atributos
 {
 	using namespace std;
+
+	enum Tags_verification_type_info
+	{
+		ITEM_Top =0,
+		ITEM_Integer = 1,
+		ITEM_Float = 2,
+		ITEM_Double = 3,
+		ITEM_Long =4,
+		ITEM_Null = 5,
+		ITEM_UninitializedThis = 6,
+		ITEM_Object = 7,
+		ITEM_Uninitialized = 8
+	};
 
 	class ConstantValue_attribute: public attribute_info
 	{
@@ -57,13 +70,6 @@ namespace Atributos
 			Code_attribute(FILE *arq, uint16_t attributeNameIndex);
 			~Code_attribute(void);
 			void ExibirInformacoes(void);
-	};
-
-	class StackMapTable_attribute: public attribute_info
-	{
-		public:
-			uint16_t number_of_entries;
-	//			vector<stack_map_frame> entries;
 	};
 
 	class Exceptions_attribute : public attribute_info
@@ -228,7 +234,7 @@ namespace Atributos
 		public:
 			Elemento_Metodo_Bootstrap(FILE *arq);
 			void ExibirInformacoes(void);
-	}
+	};
 	
 	class BootstrapMethods_attribute: public attribute_info
 	{
@@ -238,16 +244,86 @@ namespace Atributos
 		public:
 			BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex);
 			void ExibirInformacoes(void);
-}
-
-//	class 
-/*
-	class annotation
+	};
+	
+	class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 	{
-		uint16_t type_index;
-		uint16_t num_element_value_pairs;
- element_value_pairs[num_element_value_pairs];
-	}
-*/
+		private:
+			void *info;
+		public:
+			RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+	
+	class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
+	{
+		private:
+			void *info;
+		public:
+			RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+			~RuntimeInvisibleAnnotations_attribute();
+			void ExibirInformacoes(void);
+	};
+	
+	class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível. Fazendo um attribute_info genérico.
+	{
+		private:
+			void *info;
+		public:
+			RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+	
+	class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
+	{
+		private:
+			void *info;
+		public:
+			RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+	
+	class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
+	{
+		private:
+			void *info;
+		public:
+			AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
+
+	class verification_type_info
+	{
+		private:
+			uint8_t tag;
+			uint16_t cpoolOuOffset;
+		public:
+			verification_type_info(FILE *arq);
+			void ExibirInformacoes(void);
+	};
+
+	class stack_map_frame
+	{
+		private:
+			int8_t frame_type;
+			uint16_t offset_delta;
+			uint16_t number_of_locals;
+			vector<verification_type_info> locals;
+			uint16_t number_of_stack_items;
+			vector<verification_type_info> stack;
+		public:
+			stack_map_frame(FILE *arq);
+			void ExibirInformacoes(void);
+	};
+
+	class StackMapTable_attribute : public attribute_info
+	{
+		private:
+			uint16_t number_of_entries;
+			vector<stack_map_frame> entries;
+		public:
+			StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+			void ExibirInformacoes(void);
+	};
 }
 #endif

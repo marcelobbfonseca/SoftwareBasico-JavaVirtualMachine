@@ -110,7 +110,7 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 	using namespace Leitura;
 
 	uint8_t tag;
-	LerAtributo(&tag, 1, arq, IGNORAR_ENDIAN);
+	LerAtributo(&tag, 1, arq);
 	switch(tag)
 	{
 		case (CONSTANT_Class):

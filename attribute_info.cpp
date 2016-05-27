@@ -2,7 +2,13 @@
 #include "attribute_info.hpp"
 #include"Leitura.hpp"
 //#include<iostream>
-
+/*
+attribute_info* attribute_info::LerAtributeInfo(FILE *arq)
+{
+	LerAtributo(&attribute_name_index, 2, arq);
+	
+}
+*/
 namespace Atributos
 {
 	using namespace Leitura;
@@ -184,8 +190,8 @@ namespace Atributos
 		for(int cont=0; cont < num_bootstrap_arguments; cont++)
 		{
 			int16_t temp;
-			LerAtributo(&temp, 2, arq)
-			bootstrap_methods.push_back(temp);
+			LerAtributo(&temp, 2, arq);
+			bootstrap_arguments.push_back(temp);
 		}
 	}
 
@@ -200,5 +206,104 @@ namespace Atributos
 			bootstrap_methods.push_back(*aux);
 		}
 	}
+	
+	RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		info= new uint8_t[attribute_length];
+		LerAtributo(info, attribute_length, arq);
+	}
+	
+	RuntimeInvisibleAnnotations_attribute::RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		info= new uint8_t[attribute_length];
+		LerAtributo(info, attribute_length, arq);
+	}
+	
+	RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		info= new uint8_t[attribute_length];
+		LerAtributo(info, attribute_length, arq);
+	}
+	
+	RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		info= new uint8_t[attribute_length];
+		LerAtributo(info, attribute_length, arq);
+	}
+	
+	AnnotationDefault_attribute::AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		info= new uint8_t[attribute_length];
+		LerAtributo(info, attribute_length, arq);
+	}
 
+	verification_type_info::verification_type_info(FILE *arq)
+	{
+		LerAtributo(&tag, 1, arq);
+		if(tag==ITEM_Object || tag ==ITEM_Uninitialized)
+		{
+			LerAtributo(&cpoolOuOffset, 2, arq);
+		}
+	}
+
+	stack_map_frame::stack_map_frame(FILE *arq)
+	{
+		LerAtributo(&frame_type, 1, arq);
+		if(frame_type >= 247)
+		{
+			LerAtributo(&offset_delta, 2, arq);
+		}
+		if( ( 64 <= frame_type && frame_type <= 127 ) || frame_type == 247)
+		{
+			verification_type_info *temp= new verification_type_info(arq);
+			this->stack.push_back(*temp);
+		}
+		if(252 <= frame_type && frame_type <= 254)
+		{
+			for(int cont=0 ; cont < frame_type-251 ; cont++)
+			{
+				verification_type_info *temp= new verification_type_info(arq);
+				this->locals.push_back(*temp);
+			}
+		}
+		if(frame_type == 255)
+		{
+			LerAtributo(&number_of_locals, 2, arq);
+			for(int cont =0; cont < number_of_locals; cont++)
+			{
+				verification_type_info *temp= new verification_type_info(arq);
+				this->locals.push_back(*temp);
+			}
+			LerAtributo(&number_of_stack_items, 2, arq);
+			for(int cont =0; cont < number_of_stack_items; cont++)
+			{
+				verification_type_info *temp= new verification_type_info(arq);
+				this->stack.push_back(*temp);
+			}
+		}
+	}
+
+	StackMapTable_attribute::StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex)
+	{
+		this->attribute_name_index= attributeNameIndex;
+		LerAtributo(&attribute_length, 4, arq);
+		LerAtributo(&number_of_entries, 2, arq);
+		for(int cont=0; cont < number_of_entries; cont++)
+		{
+			stack_map_frame *temp= new stack_map_frame(arq);
+			entries.push_back(*temp);
+		}
+	}
+	
+	
 }
