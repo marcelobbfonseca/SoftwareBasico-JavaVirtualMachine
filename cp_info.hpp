@@ -241,6 +241,8 @@ class CONSTANT_Utf8_info: public cp_info
 		CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes);
 		~CONSTANT_Utf8_info();
 		void ExibirInformacoes(void);
+		bool operator==(std::string teste);
+		bool operator==(char const *teste);
 	private:
 /*!
 O valo de lenght informa o número de bytes no vetor de bytes(e não o comprimento da string resultante). As strings contidas nessa estrutura NÃO terminam com '\0'(NULL)

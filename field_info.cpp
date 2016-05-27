@@ -3,7 +3,7 @@
 #include "field_info.hpp"
 #include"Leitura.hpp"
 
-field_info::field_info(FILE *arq)
+field_info::field_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
 	using namespace Leitura;
 
@@ -13,7 +13,7 @@ field_info::field_info(FILE *arq)
 	LerAtributo(&attributes_count, 2, arq);
 	for(int cont =0; cont < attributes_count; cont++)
 	{
-		attribute_info *att= attribute_info::LerAtributeInfo(arq);
+		attribute_info *att= attribute_info::LerAtributeInfo(arq, constant_pool);
 		attributes.push_back(att);
 	}
 	

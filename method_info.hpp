@@ -20,7 +20,7 @@ class method_info {
 
 	public:
 
-	method_info(FILE *arq);
+	method_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
 	void ExibirInformacoes(void);
 
 };

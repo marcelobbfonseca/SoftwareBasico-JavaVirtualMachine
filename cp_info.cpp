@@ -402,3 +402,20 @@ void NaoUsavel::ExibirInformacoes(void)
 {
 	cout << "\t//Nao usavel" << endl;
 }
+
+bool CONSTANT_Utf8_info::operator==(string teste)
+{
+	if( (uint16_t) teste.size() > lenght+1)
+	{
+		return false;
+	}
+	return ( ( strncmp((const char*)bytes, (const char*)teste.c_str(), lenght) ) == 0 );
+}
+bool CONSTANT_Utf8_info::operator==(char const *teste)
+{
+	if(strlen(teste) > this->lenght)
+	{
+		return false;
+	}
+	return ( ( strncmp((const char*)bytes, teste, lenght) ) == 0 );
+}

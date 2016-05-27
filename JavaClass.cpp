@@ -59,21 +59,21 @@ JavaClass::JavaClass(string nomeArquivo)
 	Leitura::LerAtributo(&fields_count, 2, arq);
 	for(int cont=0; cont < fields_count; cont++)
 	{
-		field_info *fieldInfo = new field_info(arq);
+		field_info *fieldInfo = new field_info(arq, constant_pool);
 		fields.push_back(*fieldInfo);
 	}
 	
 	Leitura::LerAtributo(&methods_count, 2, arq);
 	for(int cont=0; cont < methods_count; cont++)
 	{
-		method_info *methodInfo = new method_info(arq);
+		method_info *methodInfo = new method_info(arq, constant_pool);
 		methods.push_back(*methodInfo);
 	}
 	
 	Leitura::LerAtributo(&attributes_count, 2, arq);
 	for(int cont=0; cont < attributes_count; cont++)
 	{
-		attribute_info *attributesInfo = attribute_info::LerAtributeInfo(arq);
+		attribute_info *attributesInfo = attribute_info::LerAtributeInfo(arq, constant_pool);
 		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);

@@ -1,6 +1,7 @@
 #include<stdint.h>
 #include<stdio.h>
 #include<vector>
+#include"cp_info.hpp"
 
 #ifndef ATTRIBUTE_INFO_HPP
 #define ATTRIBUTE_INFO_HPP
@@ -13,12 +14,12 @@ class attribute_info
 //	uint8_t *info;
 
 	public:
-	static attribute_info* LerAtributeInfo(FILE *arq);
+	static attribute_info* LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool);
 	virtual void ExibirInformacoes(void)=0;
 };
 
-namespace Atributos
-{
+//namespace Atributos
+//{
 	using namespace std;
 
 	enum Tags_verification_type_info
@@ -67,7 +68,7 @@ namespace Atributos
 			uint16_t attributes_count;
 			vector<attribute_info *> attributes;
 		public:
-			Code_attribute(FILE *arq, uint16_t attributeNameIndex);
+			Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 			~Code_attribute(void);
 			void ExibirInformacoes(void);
 	};
@@ -219,8 +220,8 @@ namespace Atributos
 
 	class Deprecated_attribute : public attribute_info
 	{
-		public:
 		private:
+		public:
 			Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex);
 			void ExibirInformacoes(void);
 	};
@@ -325,5 +326,5 @@ namespace Atributos
 			StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex);
 			void ExibirInformacoes(void);
 	};
-}
+//}
 #endif

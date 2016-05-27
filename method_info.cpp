@@ -2,7 +2,7 @@
 #include"Leitura.hpp"
 #include<iostream>
 
-method_info::method_info(FILE *arq)
+method_info::method_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
 	using namespace Leitura;
 	
@@ -12,7 +12,7 @@ method_info::method_info(FILE *arq)
 	LerAtributo(&attributes_count, 2, arq);
 	for(int cont =0; cont < attributes_count; cont++)
 	{
-		attribute_info *p= attribute_info::LerAtributeInfo(arq);
+		attribute_info *p= attribute_info::LerAtributeInfo(arq, constant_pool);
 		attributes.push_back(p);
 	}
 }

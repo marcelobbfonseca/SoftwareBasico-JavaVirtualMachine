@@ -2,16 +2,124 @@
 #include "attribute_info.hpp"
 #include"Leitura.hpp"
 //#include<iostream>
+
+//using namespace Atributos;
+using namespace Leitura;
+
+
 /*
-attribute_info* attribute_info::LerAtributeInfo(FILE *arq)
-{
-	LerAtributo(&attribute_name_index, 2, arq);
-	
-}
+Então pessoal, Como tem muito C++ no método abaixo vou explicar:
+
+	O objetivo desse método é simples: Ler o attribute_name_index do attribute_info, identificar que tipo de attribute_info é e chamar o construtor correto.
+
+	Como lemos o attribute_name_index antes de criar o objeto, armazenamos o valor lido em uma variável temporára e seu valor será enviado ao construtor da classe correta.
+
+	Após a leitura, precisamos verificar qual subclasse de attribute_info é indicada entreda no constant_pool na posição informado pelo attribute_name_index.
+	OBS: Por isso esse método precisa ter acesso ao constant_pool
+	OBS2: A especificação da JVM garante que essa nessa posição do constant_pool haverá um CONSTANT_Utf8_info(por isso faço o cast sem verificar)
+
+	Aí fazemos o seguinte:
+		-acessamos o constant_pool na posição lida;
+		-fazemos um cast da posição lida de ponteiro de cp_info para ponteiro de CONSTANT_Utf8_info
+		-acessamos o CONSTANT_Utf8_info indicado pelo ponteiro(olha o '*' pouco depois do if)
+		-Usando a sobrecarga do operador == existente no CONSTANT_Utf8_info, verificamos se lá contem a 'string' testada.
+		-chamados o construtor adequado passado o arquivo a ser lido e o attributeNameIndex.
 */
-namespace Atributos
+attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
-	using namespace Leitura;
+	uint16_t attributeNameIndex;
+	LerAtributo(&attributeNameIndex, 2, arq);
+	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "ConstantValue")
+	{
+		return new ConstantValue_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Code")
+	{
+		return new Code_attribute(arq, attributeNameIndex, constant_pool);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "StackMapTable")
+	{
+		return new StackMapTable_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Exceptions")
+	{
+		return new Exceptions_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "InnerClasses")
+	{
+		return new InnerClasses_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "EnclosingMethod")
+	{
+		return new EnclosingMethod_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Synthetic")
+	{
+		return new Synthetic_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Signature")
+	{
+		return new Signature_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceFile")
+	{
+		return new SourceFile_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceDebugExtension")
+	{
+		return new SourceDebugExtension_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LineNumberTable")
+	{
+		return new LineNumberTable_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTable")
+	{
+		return new LocalVariableTable_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTypeTable")
+	{
+		return new LocalVariableTypeTable_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Deprecated")
+	{
+		return new Deprecated_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleAnnotations")
+	{
+		return new RuntimeVisibleAnnotations_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleAnnotations")
+	{
+		return new RuntimeInvisibleAnnotations_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleParameterAnnotations")
+	{
+		return new RuntimeVisibleParameterAnnotations_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleParameterAnnotations")
+	{
+		return new RuntimeInvisibleParameterAnnotations_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "AnnotationDefault")
+	{
+		return new AnnotationDefault_attribute(arq, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "BootstrapMethods")
+	{
+		return new BootstrapMethods_attribute(arq, attributeNameIndex);
+	}
+	else
+	{
+		char msgErro[200];
+		sprintf(msgErro, "LerAtributeInfo leu um atributo desconhecido.\n\tattribute_name_index= %d\n", attributeNameIndex);
+		throw new Erro(msgErro);
+	}
+}
+
+//namespace Atributos
+//{
+//	using namespace Leitura;
 	ConstantValue_attribute::ConstantValue_attribute(FILE *arq, uint16_t attributeNameIndex)
 	{
 		this->attribute_name_index = attributeNameIndex;
@@ -25,7 +133,8 @@ namespace Atributos
 		LerAtributo(&handler_pc, 2, arq);
 		LerAtributo(&catch_type, 2, arq);
 	}
-	Code_attribute::Code_attribute(FILE *arq, uint16_t attributeNameIndex)
+	
+	Code_attribute::Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool)
 	{
 		this->attribute_name_index = attributeNameIndex;
 		LerAtributo(&attribute_length, 4, arq);
@@ -43,7 +152,7 @@ namespace Atributos
 		LerAtributo(&attributes_count, 2, arq);
 		for(int cont=0; cont < attributes_count; cont++)
 		{
-			attribute_info *aux= LerAtributeInfo(arq);
+			attribute_info *aux= LerAtributeInfo(arq, constant_pool);
 			attributes.push_back(aux);
 		}
 	}
@@ -306,4 +415,4 @@ namespace Atributos
 	}
 	
 	
-}
+//}
