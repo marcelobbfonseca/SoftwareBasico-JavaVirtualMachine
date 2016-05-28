@@ -10,9 +10,11 @@ method_info::method_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 	LerAtributo(&name_index, 2, arq);
 	LerAtributo(&descriptor_index, 2, arq);
 	LerAtributo(&attributes_count, 2, arq);
+cout<< "Lerei "<< attributes_count << "  attribute_infos" << endl;
 	for(int cont =0; cont < attributes_count; cont++)
 	{
 		attribute_info *p= attribute_info::LerAtributeInfo(arq, constant_pool);
+cout<< "criado elemento attribute_info" << endl;
 		attributes.push_back(p);
 	}
 }

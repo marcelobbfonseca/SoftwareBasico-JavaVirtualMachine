@@ -183,8 +183,10 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		{
 			uint16_t comprimento;
 			LerAtributo(&comprimento, 2, arq);
-			uint8_t *bytes= new uint8_t[comprimento];
+			uint8_t *bytes= new uint8_t[comprimento+1];
+//			uint8_t *bytes= (uint8_t*) operator new (comprimento+1);
 			LerAtributo(bytes, comprimento, arq, IGNORAR_ENDIAN);
+			bytes[comprimento] = '\0';
 			return new CONSTANT_Utf8_info(comprimento, bytes);
 		}
 		case (CONSTANT_MethodHandle):
@@ -313,16 +315,16 @@ void CONSTANT_Utf8_info::ExibirInformacoes(void)
 {
 	cout << "UTF8" << endl;
 	cout << "\t\tlenght = " << lenght << endl;
-	cout << "\t\tbytes = ";
+	cout << "\t\tbytes = " << hex;
 //	int widthAnterior = cout.width(2);
 //	char fillAnterior = cout.fill('0');
 	for(int cont = 0; cont < lenght; cont++)
 	{
-		cout << hex << bytes[cont] << dec;
+		cout << bytes[cont];
 	}
 //	cout.width(widthAnterior);
 //	cout.fill(fillAnterior);
-	cout<<endl;
+	cout << dec <<endl;
 }
 
 void CONSTANT_MethodHandle_info::ExibirInformacoes(void)
@@ -405,17 +407,49 @@ void NaoUsavel::ExibirInformacoes(void)
 
 bool CONSTANT_Utf8_info::operator==(string teste)
 {
-	if( (uint16_t) teste.size() > lenght+1)
-	{
-		return false;
-	}
-	return ( ( strncmp((const char*)bytes, (const char*)teste.c_str(), lenght) ) == 0 );
+//	char *temp= new char[lenght+1];
+//	memcpy(temp, bytes, lenght-1);
+//	temp[lenght]= '\0';
+	bool res= strcmp((char *)bytes, teste.c_str())==0;
+//	delete []temp;
+	return (res);
+
 }
 bool CONSTANT_Utf8_info::operator==(char const *teste)
 {
-	if(strlen(teste) > this->lenght)
+	cout << endl;
+	char const *aux1= (char*)bytes, *aux2= teste;
+	while(1)
 	{
-		return false;
+		cout<< *aux1 << "\t" << *aux2 << endl;
+		if(*aux1 == *aux2)
+		{
+			if(*aux1 == '\0')
+			{
+				return true;
+			}
+			aux1++;
+			aux2++;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	return ( ( strncmp((const char*)bytes, teste, lenght) ) == 0 );
+/*
+	cout << " lenght = " << lenght << endl;
+	return strncmp((char *)strcmp((char *)bytes, teste.c_str())==0, teste, lenght)==0;
+
+	char *temp= new char[lenght+1];
+	memcpy(temp, bytes, sizeof(bytes));
+	if(sizeof(bytes) != lenght)
+	{
+		cout << "Ue???" << sizeof(bytes) << "---" << lenght << endl;
+	}
+//	temp[lenght-1]= bytes[lenght-1];
+//	temp[lenght-1]= '\0';
+	temp[lenght]= '\0';
+	bool res= strcmp(temp, teste)==0;
+	delete []temp;
+	return (res);*/
 }

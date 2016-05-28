@@ -147,6 +147,7 @@ class SourceDebugExtension_attribute: public attribute_info
 		uint8_t *debug_extension;
 	public:
 		SourceDebugExtension_attribute(FILE *arq, uint16_t attributeNameIndex);
+		~SourceDebugExtension_attribute();
 		void ExibirInformacoes(string tabs);
 };
 
@@ -251,6 +252,7 @@ class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa c
 		uint8_t *info;
 	public:
 		RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+		~RuntimeVisibleAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
 
@@ -270,6 +272,7 @@ class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-
 		uint8_t *info;
 	public:
 		RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
+		~RuntimeVisibleParameterAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
 
@@ -279,6 +282,7 @@ class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Fod
 		uint8_t *info;
 	public:
 		RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
+		~RuntimeInvisibleParameterAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
 
@@ -288,6 +292,7 @@ class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. M
 		uint8_t *info;
 	public:
 		AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex);
+		~AnnotationDefault_attribute();
 		void ExibirInformacoes(string tabs);
 };
 
@@ -332,6 +337,7 @@ class AtributoDesconhecido : public attribute_info
 		uint8_t *info;
 	public:
 		AtributoDesconhecido(FILE *arq, uint16_t ttributeNameIndex);
+		~AtributoDesconhecido();
 		void ExibirInformacoes(string tabs);
 };
 #endif

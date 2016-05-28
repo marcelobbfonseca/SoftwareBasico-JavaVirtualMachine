@@ -57,17 +57,21 @@ JavaClass::JavaClass(string nomeArquivo)
 	}
 	
 	Leitura::LerAtributo(&fields_count, 2, arq);
+cout<< "Começando a ler os " << fields_count <<" fields." << endl;
 	for(int cont=0; cont < fields_count; cont++)
 	{
 		field_info *fieldInfo = new field_info(arq, constant_pool);
 		fields.push_back(*fieldInfo);
+cout<< "Lido field" << endl;
 	}
 	
 	Leitura::LerAtributo(&methods_count, 2, arq);
+cout<< "Começando a ler os " << methods_count <<" methods." << endl;
 	for(int cont=0; cont < methods_count; cont++)
 	{
 		method_info *methodInfo = new method_info(arq, constant_pool);
 		methods.push_back(*methodInfo);
+cout<< "Lido method" << endl;
 	}
 	
 	Leitura::LerAtributo(&attributes_count, 2, arq);

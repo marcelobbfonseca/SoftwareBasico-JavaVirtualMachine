@@ -152,6 +152,11 @@ Code_attribute::Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vect
 	}
 }
 
+Code_attribute::~Code_attribute()
+{
+	delete []code;
+}
+
 Exceptions_attribute::Exceptions_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
@@ -219,6 +224,11 @@ SourceDebugExtension_attribute::SourceDebugExtension_attribute(FILE *arq, uint16
 	LerAtributo(&attribute_length, 4, arq);
 	debug_extension= new uint8_t[attribute_length];
 	LerAtributo(debug_extension, attribute_length, arq, IGNORAR_ENDIAN);
+}
+
+SourceDebugExtension_attribute::~SourceDebugExtension_attribute()
+{
+	delete []debug_extension;
 }
 
 Elemento_LineNumber::Elemento_LineNumber(FILE *arq)
@@ -319,12 +329,22 @@ RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(FILE *a
 	LerAtributo(info, attribute_length, arq);
 }
 
+RuntimeVisibleAnnotations_attribute::~RuntimeVisibleAnnotations_attribute()
+{
+	delete []info;
+}
+
 RuntimeInvisibleAnnotations_attribute::RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+RuntimeInvisibleAnnotations_attribute::~RuntimeInvisibleAnnotations_attribute()
+{
+	delete []info;
 }
 
 RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
@@ -335,6 +355,11 @@ RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations
 	LerAtributo(info, attribute_length, arq);
 }
 
+RuntimeVisibleParameterAnnotations_attribute::~RuntimeVisibleParameterAnnotations_attribute()
+{
+	delete []info;
+}
+
 RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
@@ -343,12 +368,22 @@ RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotat
 	LerAtributo(info, attribute_length, arq);
 }
 
+RuntimeInvisibleParameterAnnotations_attribute::~RuntimeInvisibleParameterAnnotations_attribute()
+{
+	delete []info;
+}
+
 AnnotationDefault_attribute::AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+AnnotationDefault_attribute::~AnnotationDefault_attribute()
+{
+	delete []info;
 }
 
 verification_type_info::verification_type_info(FILE *arq)
@@ -415,6 +450,11 @@ AtributoDesconhecido::AtributoDesconhecido(FILE *arq, uint16_t attributeNameInde
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+AtributoDesconhecido::~AtributoDesconhecido()
+{
+	delete []info;
 }
 
 void ConstantValue_attribute::ExibirInformacoes(string tabs)
@@ -745,11 +785,12 @@ void StackMapTable_attribute::ExibirInformacoes(string tabs)
 void AtributoDesconhecido::ExibirInformacoes(string tabs)
 {
 	cout << tabs << "attribute_info do tipo AtributoDesconhecido." <<endl;
+	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= 0x" << hex;
+	cout << tabs << "\tinfo= |" << hex;
 	for(unsigned int cont = 0; cont < attribute_length; cont++)
 	{
-		cout << info[cont];
+		cout << (void *)info[cont] << "|";
 	}
 	cout << dec <<endl;
 }
