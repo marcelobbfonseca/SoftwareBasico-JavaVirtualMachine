@@ -1,10 +1,9 @@
-#include<stdint.h>
 #include "attribute_info.hpp"
 #include"Leitura.hpp"
 #include"Opcodes.hpp"
-//#include<iostream>
+#include<iostream>
 
-//using namespace Atributos;
+using namespace std;
 using namespace Leitura;
 
 
@@ -112,9 +111,7 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	}
 	else
 	{
-		char msgErro[200];
-		sprintf(msgErro, "LerAtributeInfo leu um atributo desconhecido.\n\tattribute_name_index= %d\n", attributeNameIndex);
-		throw new Erro(msgErro);
+		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
 }
 
@@ -139,7 +136,7 @@ Code_attribute::Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vect
 	LerAtributo(&max_stack, 2, arq);
 	LerAtributo(&max_locals, 2, arq);
 	LerAtributo(&code_length, 4, arq);
-	code = new uint8_t[code_length]; 
+	code = new uint8_t[code_length];
 	LerAtributo(code, code_length, arq, IGNORAR_ENDIAN);
 	LerAtributo(&exception_table_length, 2, arq);
 	for(int cont=0 ; cont < exception_table_length; cont++)
@@ -412,15 +409,23 @@ StackMapTable_attribute::StackMapTable_attribute(FILE *arq, uint16_t attributeNa
 	}
 }
 
-void ConstantValue_attribute::void ExibirInformacoes(string tabs)
+AtributoDesconhecido::AtributoDesconhecido(FILE *arq, uint16_t attributeNameIndex)
 {
-	cout << tabs << "attribute_info do tipo ConstantValue_attribute." <<endl;
+	this->attribute_name_index= attributeNameIndex;
+	LerAtributo(&attribute_length, 4, arq);
+	info= new uint8_t[attribute_length];
+	LerAtributo(info, attribute_length, arq);
+}
+
+void ConstantValue_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo ConstantValue." <<endl;
 	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
 	cout << tabs << "\tattribute_length = " << attribute_length << endl;
 	cout << tabs << "\tconstantvalue_index = " << constantvalue_index << endl;
 }
 
-void Excecao::void ExibirInformacoes(string tabs)
+void Excecao::ExibirInformacoes(string tabs)
 {
 	cout << tabs << "elemento do exception_table" <<endl;
 	cout << tabs << "\tstart_pc = " << start_pc << endl;
@@ -429,21 +434,21 @@ void Excecao::void ExibirInformacoes(string tabs)
 	cout << tabs << "\tcatch_type = " << catch_type << endl;
 }
 
-void Code_attribute::void ExibirInformacoes(string tabs)
+void Code_attribute::ExibirInformacoes(string tabs)
 {
-	cout << tabs << "attribute_info do tipo Code_attribute." <<endl;
+	cout << tabs << "attribute_info do tipo Code." <<endl;
 	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
 	cout << tabs << "\tattribute_length = " << attribute_length << endl;
 	cout << tabs << "\tmax_stack = " << max_stack << endl;
 	cout << tabs << "\tmax_locals = " << max_locals << endl;
 	cout << tabs << "\tcode_length = " << code_length << endl;
-	for(int cont=0; cont < code_length; cont++)
+	for(unsigned int cont=0; cont < code_length; cont++)
 	{
 		cout << tabs << "\t\t" << hex << code[cont] << dec << "\t" << ObterMinemonicoOpcode(code[cont]) << endl;
 	}
 	cout << tabs << "\tattributes_count = " << attributes_count << endl;
 	cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
-	for(int cont =0; cont < attributes_count; cont++)
+	for(unsigned int cont =0; cont < attributes_count; cont++)
 	{
 		cout << tabs << "\tAttribute[" << cont << "]:" << endl;;
 		attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
@@ -456,7 +461,7 @@ void Code_attribute::void ExibirInformacoes(string tabs)
 
 void Exceptions_attribute::ExibirInformacoes(string tabs)
 {
-	cout << tabs << "attribute_info do tipo Exceptions_attribute." <<endl;
+	cout << tabs << "attribute_info do tipo Exceptions." <<endl;
 	cout << tabs << "\tnumber_of_exceptions = " << number_of_exceptions << endl;
 	for(int cont=0 ; cont < number_of_exceptions ; cont++)
 	{
@@ -514,13 +519,241 @@ void InfoDaClasse::ExibirInformacoes(string tabs)
 
 void InnerClasses_attribute::ExibirInformacoes(string tabs)
 {
-	cout << tabs << "attribute_info do tipo InnerClasses_attribute." <<endl;
-	cout << tabs << "number_of_classes = " << number_of_classes << endl;
-	for(int cont =0 < cont < number_of_classes ; cont++)
+	cout << tabs << "attribute_info do tipo InnerClasses." <<endl;
+	cout << tabs << "\tnumber_of_classes = " << number_of_classes << endl;
+	for(unsigned int cont =0 ; cont < number_of_classes ; cont++)
 	{
-		cout << tabs << "classes[" << cont << "]:" << endl;
-		classes[cont].ExibirInformacoes(tabs + "\t");
+		cout << tabs << "\tclasses[" << cont << "]:" << endl;
+		classes[cont].ExibirInformacoes( (tabs + "\t") +"\t");
 	}
 }
+
+void EnclosingMethod_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo EnclosingMethod." <<endl;
+	cout << tabs << "\tclass_index = " << class_index << endl;
+	cout << tabs << "\tmethod_index = " << method_index << endl;
+}
+
+void Synthetic_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo Synthetic." << endl << endl;
+}
+
+void Signature_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo Signature." <<endl;
+	cout << tabs << "\tsignature_index = " << signature_index << endl;
+}
+
+void SourceFile_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo SourceFile." <<endl;
+	cout << tabs << "\tsourcefile_index = " << sourcefile_index << endl;
+}
+
+void SourceDebugExtension_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo SourceDebugExtension." <<endl;
+	for(unsigned int cont =0; cont < attribute_length; cont++)
+	{
+		cout << tabs << "\tdebug_extension[ " << cont << "] = " << debug_extension[cont] << endl;
+	}
+}
+
+void Elemento_LineNumber::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "start_pc = " << start_pc << endl;
+	cout << tabs << "line_number = " << start_pc << endl;
+}
+
+void LineNumberTable_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo LineNumberTable." <<endl;
+	cout << tabs << "\tline_number_table_length = " << line_number_table_length <<endl;
+	for(int cont=0; cont < line_number_table_length ; cont++)
+	{
+		cout << tabs << "\telements_number_table[ " << cont << "]:" << endl;
+		elements_number_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+	}
+}
+
+void Elemento_local_variable::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "start_pc = " << start_pc <<endl;
+	cout << tabs << "length = " << length <<endl;
+	cout << tabs << "name_index = " << name_index <<endl;
+	cout << tabs << "descriptor_index = " << descriptor_index <<endl;
+	cout << tabs << "index = " << index <<endl;
+}
+
+void LocalVariableTable_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo LocalVariableTable." <<endl;
+	cout << tabs << "\tlocal_variable_table_length = " << local_variable_table_length <<endl;
+	for(int cont=0; cont < local_variable_table_length ; cont++)
+	{
+		cout << tabs << "\tlocal_variable_table[ " << cont << "]:" << endl;
+		local_variable_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+	}
+}
+
+void Elemento_LocalVariableType::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "start_pc = " << start_pc <<endl;
+	cout << tabs << "length = " << length <<endl;
+	cout << tabs << "name_index = " << name_index <<endl;
+	cout << tabs << "signature_index = " << signature_index <<endl;
+	cout << tabs << "index = " << index <<endl;
+}
+
+void LocalVariableTypeTable_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo LocalVariableTypeTable." <<endl;
+	cout << tabs << "\tlocal_variable_type_table_length = " << local_variable_type_table_length <<endl;
+	for(int cont=0; cont < local_variable_type_table_length ; cont++)
+	{
+		cout << tabs << "\tlocal_variable_type_table_length[ " << cont << "]:" << endl;
+		local_variable_type_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+	}
+}
+
+void Deprecated_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo Deprecated." << endl << endl;
+}
+
+void Elemento_Metodo_Bootstrap::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "bootstrap_method_ref = " << bootstrap_method_ref << endl;
+	cout << tabs << "num_bootstrap_arguments = " << num_bootstrap_arguments << endl;
+	for(int cont=0; cont < num_bootstrap_arguments ; cont++)
+	{
+		cout << tabs << "bootstrap_arguments[" << cont << "] = " << bootstrap_arguments[cont] << endl;
+	}
+}
+
+void BootstrapMethods_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo BootstrapMethods." <<endl;
+	cout << tabs << "\tnum_bootstrap_methods = " << num_bootstrap_methods <<endl;
+	for(int cont=0; cont < num_bootstrap_methods ; cont++)
+	{
+		cout << tabs << "\tbootstrap_methods[ " << cont << "]:" << endl;
+		bootstrap_methods[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+	}
+}
+
+void RuntimeVisibleAnnotations_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo RuntimeVisibleAnnotations." <<endl;
+	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
+	cout << tabs << "\tinfo= 0x" << hex;
+	for(unsigned int cont = 0; cont < attribute_length; cont++)
+	{
+		cout << info[cont];
+	}
+	cout << dec <<endl;
+}
+
+void RuntimeInvisibleAnnotations_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo RuntimeInvisibleAnnotations." <<endl;
+	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
+	cout << tabs << "\tinfo= 0x" << hex;
+	for(unsigned int cont = 0; cont < attribute_length; cont++)
+	{
+		cout << info[cont];
+	}
+	cout << dec <<endl;
+}
+
+void RuntimeVisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo RuntimeVisibleParameterAnnotations." <<endl;
+	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
+	cout << tabs << "\tinfo= 0x" << hex;
+	for(unsigned int cont = 0; cont < attribute_length; cont++)
+	{
+		cout << info[cont];
+	}
+	cout << dec <<endl;
+}
+
+void RuntimeInvisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo RuntimeInvisibleParameterAnnotations." <<endl;
+	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
+	cout << tabs << "\tinfo= 0x" << hex;
+	for(unsigned int cont = 0; cont < attribute_length; cont++)
+	{
+		cout << info[cont];
+	}
+	cout << dec <<endl;
+}
+
+void AnnotationDefault_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo AnnotationDefault." <<endl;
+	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
+	cout << tabs << "\tinfo= 0x" << hex;
+	for(unsigned int cont = 0; cont < attribute_length; cont++)
+	{
+		cout << info[cont];
+	}
+	cout << dec <<endl;
+}
+
+void verification_type_info::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "tag = " << tag << "\t\t";
+	if(tag==ITEM_Object)
+	{
+		cout << "//ITEM_Object" << endl;
+		cout << tabs << "cpool_index = " << cpoolOuOffset << endl;
+	}
+	if(tag == ITEM_Uninitialized)
+	{
+		cout << "//ITEM_Uninitialized" << endl;
+		cout << tabs << "offset = " << cpoolOuOffset << endl;
+	}
+}
+
+void stack_map_frame::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "frame_type = " << frame_type << endl;
+	cout << tabs << "offset_delta = " << offset_delta << endl;
+	cout << tabs << "number_of_locals = " << number_of_locals << endl;
+	for(int cont =0; cont < number_of_locals ; cont++)
+	{
+		cout << tabs << "locals[" << cont << "]:" << endl;
+		locals[cont].ExibirInformacoes(tabs + "\t");
+	}
+}
+
+void StackMapTable_attribute::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo StackMapTable." <<endl;
+	cout << tabs << "\tnumber_of_entries = " << number_of_entries <<endl;
+	for(int cont=0; cont < number_of_entries ; cont++)
+	{
+		cout << tabs << "\tentries[ " << cont << "]:" << endl;
+		entries[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+	}
+}
+
+void AtributoDesconhecido::ExibirInformacoes(string tabs)
+{
+	cout << tabs << "attribute_info do tipo AtributoDesconhecido." <<endl;
+	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
+	cout << tabs << "\tinfo= 0x" << hex;
+	for(unsigned int cont = 0; cont < attribute_length; cont++)
+	{
+		cout << info[cont];
+	}
+	cout << dec <<endl;
+}
+
+
 
 

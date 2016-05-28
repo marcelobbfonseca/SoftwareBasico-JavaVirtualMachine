@@ -1,6 +1,7 @@
 #include<stdint.h>
 #include<stdio.h>
 #include<vector>
+#include<string>
 #include"cp_info.hpp"
 
 #ifndef ATTRIBUTE_INFO_HPP
@@ -14,7 +15,7 @@ class attribute_info
 
 	public:
 		static attribute_info* LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool);
-		virtual void ExibirInformacoes(string tabs)=0;
+		virtual void ExibirInformacoes(std::string tabs)=0;
 };
 
 using namespace std;
@@ -111,7 +112,7 @@ class EnclosingMethod_attribute:public attribute_info
 		uint16_t method_index;
 	public:
 		EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex);
-		void ExibirInformacoes();
+		void ExibirInformacoes(string tabs);
 };
 
 class Synthetic_attribute: public attribute_info
@@ -202,6 +203,7 @@ class Elemento_LocalVariableType
 		uint16_t index;
 	public:
 		Elemento_LocalVariableType(FILE *arq);
+		void ExibirInformacoes(string tabs);
 };
 
 class LocalVariableTypeTable_attribute : public attribute_info
@@ -246,7 +248,7 @@ class BootstrapMethods_attribute: public attribute_info
 class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 {
 	private:
-		void *info;
+		uint8_t *info;
 	public:
 		RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
@@ -255,7 +257,7 @@ class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa c
 class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 {
 	private:
-		void *info;
+		uint8_t *info;
 	public:
 		RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
 		~RuntimeInvisibleAnnotations_attribute();
@@ -265,7 +267,7 @@ class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa
 class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível. Fazendo um attribute_info genérico.
 {
 	private:
-		void *info;
+		uint8_t *info;
 	public:
 		RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
 		void ExibirInformacoes(string tabs);
@@ -274,7 +276,7 @@ class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-
 class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 {
 	private:
-		void *info;
+		uint8_t *info;
 	public:
 		RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
 		void ExibirInformacoes(string tabs);
@@ -283,7 +285,7 @@ class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Fod
 class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. Muito incompreensível.Fazendo um attribute_info genérico.
 {
 	private:
-		void *info;
+		uint8_t *info;
 	public:
 		AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
@@ -320,6 +322,16 @@ class StackMapTable_attribute : public attribute_info
 		vector<stack_map_frame> entries;
 	public:
 		StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+		void ExibirInformacoes(string tabs);
+};
+
+//A especificação da JVM diz que não deve dar erro ler um atributo desconhecido, basta ignorá-lo. Essa classe apenas armazena o atributo desconecido na forma de um attribute info genérico.
+class AtributoDesconhecido : public attribute_info
+{
+	private:
+		uint8_t *info;
+	public:
+		AtributoDesconhecido(FILE *arq, uint16_t ttributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 #endif

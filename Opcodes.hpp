@@ -241,11 +241,6 @@ string Code_attribute::ObterMinemonicoOpcode(uint8_t bytecode)
 			retorno = "ILOAD_3";
 			return retorno;
 		}
-		case(JAVA_OPCODE_ILOAD_3):
-		{
-			retorno = "ILOAD_3";
-			return retorno;
-		}
 		case(JAVA_OPCODE_LLOAD_0):
 		{
 			retorno = "LLOAD_0";
@@ -533,7 +528,7 @@ string Code_attribute::ObterMinemonicoOpcode(uint8_t bytecode)
 		}
 		default:
 		{
-			retorno= "OPCODE DESCONHECIDO"
+			retorno= "OPCODE DESCONHECIDO";
 			return retorno;
 		}
 	}

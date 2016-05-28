@@ -3,7 +3,7 @@ documentacao/
 *.gch
 *~
 *.o
-a.out
+*.out
 *.pro
 *.pro.user
 
