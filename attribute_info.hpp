@@ -3,6 +3,7 @@
 #include<vector>
 #include<string>
 #include"cp_info.hpp"
+#include"Buffer.hpp"
 
 #ifndef ATTRIBUTE_INFO_HPP
 #define ATTRIBUTE_INFO_HPP
@@ -91,7 +92,7 @@ class InfoDaClasse
 		uint16_t inner_name_index;
 		uint16_t inner_class_access_flags;
 	public:
-		InfoDaClasse(FILE *arq);
+		InfoDaClasse(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -157,7 +158,7 @@ class Elemento_LineNumber
 		uint16_t start_pc;
 		uint16_t line_number;
 	public:
-		Elemento_LineNumber(FILE *arq);
+		Elemento_LineNumber(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -180,7 +181,7 @@ class Elemento_local_variable
 		uint16_t descriptor_index;
 		uint16_t index;
 	public:
-		Elemento_local_variable(FILE *arq);
+		Elemento_local_variable(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -203,7 +204,7 @@ class Elemento_LocalVariableType
 		uint16_t signature_index;
 		uint16_t index;
 	public:
-		Elemento_LocalVariableType(FILE *arq);
+		Elemento_LocalVariableType(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -302,7 +303,8 @@ class verification_type_info
 		uint8_t tag;
 		uint16_t cpoolOuOffset;
 	public:
-		verification_type_info(FILE *arq);
+//		verification_type_info(FILE *arq);
+		verification_type_info(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -316,7 +318,8 @@ class stack_map_frame
 		uint16_t number_of_stack_items;
 		vector<verification_type_info> stack;
 	public:
-		stack_map_frame(FILE *arq);
+//		stack_map_frame(FILE *arq);
+		stack_map_frame(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 

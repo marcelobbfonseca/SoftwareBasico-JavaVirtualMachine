@@ -119,7 +119,9 @@ ConstantValue_attribute::ConstantValue_attribute(FILE *arq, uint16_t attributeNa
 {
 	this->attribute_name_index = attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&constantvalue_index, 2, arq);
+	Buffer *buffer = new Buffer(arq, attribute_length);
+	buffer->Ler(&constantvalue_index, 2);
+	delete buffer;
 }
 Excecao::Excecao(FILE *arq)
 {
@@ -161,41 +163,47 @@ Exceptions_attribute::Exceptions_attribute(FILE *arq, uint16_t attributeNameInde
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&number_of_exceptions, 2, arq);
+	Buffer *buffer = new Buffer(arq, attribute_length);
+	buffer->Ler(&number_of_exceptions, 2);
 	for(int cont = 0; cont < number_of_exceptions; cont++)
 	{
 		uint16_t temp;
-		LerAtributo(&temp, 2, arq);
+		buffer->Ler(&temp, 2);
 		exception_index_table.push_back(temp);
 	}
+	delete buffer;
 }
 
-InfoDaClasse::InfoDaClasse(FILE *arq)
+InfoDaClasse::InfoDaClasse(Buffer &buffer)
 {
-	LerAtributo(&inner_class_info_index, 2, arq);
-	LerAtributo(&outer_class_info_index, 2, arq);
-	LerAtributo(&inner_name_index, 2, arq);
-	LerAtributo(&inner_class_access_flags, 2, arq);
+	buffer.Ler(&inner_class_info_index, 2);
+	buffer.Ler(&outer_class_info_index, 2);
+	buffer.Ler(&inner_name_index, 2);
+	buffer.Ler(&inner_class_access_flags, 2);
 }
 
 InnerClasses_attribute::InnerClasses_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&number_of_classes, 2, arq);
+	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&number_of_classes, 2, arq);
 	for(int cont=0; cont < number_of_classes; cont++)
 	{
-		InfoDaClasse *temp= new InfoDaClasse(arq);
+		InfoDaClasse *temp= new InfoDaClasse(*buffer);
 		classes.push_back(*temp);
 	}
+	delete buffer;
 }
 
 EnclosingMethod_attribute::EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&class_index, 2, arq);
-	LerAtributo(&method_index, 2, arq);
+	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&class_index, 2);
+	buffer->Ler(&method_index, 2);
+	delete buffer;
 }
 
 Synthetic_attribute::Synthetic_attribute(FILE *arq, uint16_t attributeNameIndex)
@@ -231,64 +239,70 @@ SourceDebugExtension_attribute::~SourceDebugExtension_attribute()
 	delete []debug_extension;
 }
 
-Elemento_LineNumber::Elemento_LineNumber(FILE *arq)
+Elemento_LineNumber::Elemento_LineNumber(Buffer &buffer)
 {
-	LerAtributo(&start_pc, 2, arq);
-	LerAtributo(&line_number, 2, arq);
+	buffer.Ler(&start_pc, 2);
+	buffer.Ler(&line_number, 2);
 }
 
 LineNumberTable_attribute::LineNumberTable_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&line_number_table_length, 2, arq);
+	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&line_number_table_length, 2);
 	for(int cont=0; cont < line_number_table_length; cont++)
 	{
-		Elemento_LineNumber *temp= new Elemento_LineNumber(arq);
+		Elemento_LineNumber *temp= new Elemento_LineNumber(*buffer);
 		elements_number_table.push_back(*temp);
 	}
+	delete buffer;
 }
 
-Elemento_local_variable::Elemento_local_variable(FILE *arq)
+Elemento_local_variable::Elemento_local_variable(Buffer &buffer)
 {
-	LerAtributo(&start_pc, 2, arq);
-	LerAtributo(&length, 2, arq);
-	LerAtributo(&name_index, 2, arq);
-	LerAtributo(&descriptor_index, 2, arq);
-	LerAtributo(&index, 2, arq);
+	buffer.Ler(&start_pc, 2);
+	buffer.Ler(&length, 2);
+	buffer.Ler(&name_index, 2);
+	buffer.Ler(&descriptor_index, 2);
+	buffer.Ler(&index, 2);
 }
 
 LocalVariableTable_attribute::LocalVariableTable_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&local_variable_table_length, 2, arq);
+	Buffer *buffer = new Buffer(arq, attribute_length);
+	buffer->Ler(&local_variable_table_length, 2);
 	for(int cont =0; cont < local_variable_table_length; cont++)
 	{
-		Elemento_local_variable *temp= new Elemento_local_variable(arq);
+		Elemento_local_variable *temp= new Elemento_local_variable(*buffer);
 		local_variable_table.push_back(*temp);
 	}
+	delete buffer;
 }
 
-Elemento_LocalVariableType::Elemento_LocalVariableType(FILE *arq)
+Elemento_LocalVariableType::Elemento_LocalVariableType(Buffer &buffer)
 {
-	LerAtributo(&start_pc, 2, arq);
-	LerAtributo(&length, 2, arq);
-	LerAtributo(&name_index, 2, arq);
-	LerAtributo(&signature_index, 2, arq);
-	LerAtributo(&index, 2, arq);
+	buffer.Ler(&start_pc, 2);
+	buffer.Ler(&length, 2);
+	buffer.Ler(&name_index, 2);
+	buffer.Ler(&signature_index, 2);
+	buffer.Ler(&index, 2);
 }
 
 LocalVariableTypeTable_attribute::LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&local_variable_type_table_length, 2, arq);
+	Buffer *buffer = new Buffer (arq, attribute_length);
+	buffer->Ler(&local_variable_type_table_length, 2);
 	for(int cont=0; cont< local_variable_type_table_length; cont++)
 	{
-		Elemento_LocalVariableType *temp= new Elemento_LocalVariableType(arq);
+		Elemento_LocalVariableType *temp= new Elemento_LocalVariableType(*buffer);
 		local_variable_type_table.push_back(*temp);
 	}
+	delete buffer;
 }
 
 Deprecated_attribute::Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex)
@@ -386,47 +400,47 @@ AnnotationDefault_attribute::~AnnotationDefault_attribute()
 	delete []info;
 }
 
-verification_type_info::verification_type_info(FILE *arq)
+verification_type_info::verification_type_info(Buffer &buffer)
 {
-	LerAtributo(&tag, 1, arq);
+	buffer.Ler(&tag, 1);
 	if(tag==ITEM_Object || tag ==ITEM_Uninitialized)
 	{
-		LerAtributo(&cpoolOuOffset, 2, arq);
+		buffer.Ler(&cpoolOuOffset, 2);
 	}
 }
 
-stack_map_frame::stack_map_frame(FILE *arq)
+stack_map_frame::stack_map_frame(Buffer &buffer)
 {
-	LerAtributo(&frame_type, 1, arq);
+	buffer.Ler(&frame_type, 1);
 	if(frame_type >= 247)
 	{
-		LerAtributo(&offset_delta, 2, arq);
+		buffer.Ler(&offset_delta, 2);
 	}
 	if( ( 64 <= frame_type && frame_type <= 127 ) || frame_type == 247)
 	{
-		verification_type_info *temp= new verification_type_info(arq);
+		verification_type_info *temp= new verification_type_info(buffer);
 		this->stack.push_back(*temp);
 	}
 	if(252 <= frame_type && frame_type <= 254)
 	{
 		for(int cont=0 ; cont < frame_type-251 ; cont++)
 		{
-			verification_type_info *temp= new verification_type_info(arq);
+			verification_type_info *temp= new verification_type_info(buffer);
 			this->locals.push_back(*temp);
 		}
 	}
 	if(frame_type == 255)
 	{
-		LerAtributo(&number_of_locals, 2, arq);
+		buffer.Ler(&number_of_locals, 2);
 		for(int cont =0; cont < number_of_locals; cont++)
 		{
-			verification_type_info *temp= new verification_type_info(arq);
+			verification_type_info *temp= new verification_type_info(buffer);
 			this->locals.push_back(*temp);
 		}
-		LerAtributo(&number_of_stack_items, 2, arq);
+		buffer.Ler(&number_of_stack_items, 2);
 		for(int cont =0; cont < number_of_stack_items; cont++)
 		{
-			verification_type_info *temp= new verification_type_info(arq);
+			verification_type_info *temp= new verification_type_info(buffer);
 			this->stack.push_back(*temp);
 		}
 	}
@@ -436,12 +450,15 @@ StackMapTable_attribute::StackMapTable_attribute(FILE *arq, uint16_t attributeNa
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&number_of_entries, 2, arq);
+	
+	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&number_of_entries, 2);
 	for(int cont=0; cont < number_of_entries; cont++)
 	{
-		stack_map_frame *temp= new stack_map_frame(arq);
+		stack_map_frame *temp= new stack_map_frame(*buffer);
 		entries.push_back(*temp);
 	}
+	delete buffer;
 }
 
 AtributoDesconhecido::AtributoDesconhecido(FILE *arq, uint16_t attributeNameIndex)
@@ -613,7 +630,7 @@ void LineNumberTable_attribute::ExibirInformacoes(string tabs)
 	cout << tabs << "\tline_number_table_length = " << line_number_table_length <<endl;
 	for(int cont=0; cont < line_number_table_length ; cont++)
 	{
-		cout << tabs << "\telements_number_table[ " << cont << "]:" << endl;
+		cout << tabs << "\telements_number_table[" << cont << "]:" << endl;
 		elements_number_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
 	}
 }
@@ -792,8 +809,7 @@ void AtributoDesconhecido::ExibirInformacoes(string tabs)
 	char fillAnterior = cout.fill('0');
 	for(unsigned int cont = 0; cont < attribute_length; cont++)
 	{
-//		printf("%.2hhx");
-		cout << hex << (int)info[cont] << dec;
+		printf("%.2hhx", info[cont]);
 	}
 	cout.width(widthAnterior);
 	cout.fill(fillAnterior);

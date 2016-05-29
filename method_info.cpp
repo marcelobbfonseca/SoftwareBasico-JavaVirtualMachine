@@ -7,8 +7,11 @@ method_info::method_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 	using namespace Leitura;
 	
 	LerAtributo(&access_flags, 2, arq);
+cout<< "method access_flags = " << hex << access_flags << dec << endl;
 	LerAtributo(&name_index, 2, arq);
+cout<< "method name_index = " << name_index << endl;
 	LerAtributo(&descriptor_index, 2, arq);
+cout<< "method descriptor_index = " << descriptor_index << endl;
 	LerAtributo(&attributes_count, 2, arq);
 cout<< "Lerei "<< attributes_count << "  attribute_infos" << endl;
 	for(int cont =0; cont < attributes_count; cont++)

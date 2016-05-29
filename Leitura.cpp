@@ -2,6 +2,7 @@
 #include"Endian.hpp"
 #include<stdint.h>
 #include<stdio.h>
+#include<string.h>
 
 namespace Leitura
 {

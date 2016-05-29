@@ -21,7 +21,7 @@ namespace Leitura
 	  \param size Quantidade de bytes a ser lido
 	  \param arq Arquivo de onde se deve ler
 	*/
-    void LerAtributo(void *alvo, int size, FILE *arq, bool ehNumero=true);
+	void LerAtributo(void *alvo, int size, FILE *arq, bool ehNumero=true);
 }
 
 #endif
