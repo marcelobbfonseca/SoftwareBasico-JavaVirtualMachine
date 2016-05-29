@@ -115,6 +115,97 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	}
 }
 
+attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_info*> const &constant_pool)
+{
+	uint16_t attributeNameIndex;
+	buffer.Ler(&attributeNameIndex, 2);
+	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "ConstantValue")
+	{
+		return new ConstantValue_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Code")
+	{
+		return new Code_attribute(buffer, attributeNameIndex, constant_pool);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "StackMapTable")
+	{
+		return new StackMapTable_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Exceptions")
+	{
+		return new Exceptions_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "InnerClasses")
+	{
+		return new InnerClasses_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "EnclosingMethod")
+	{
+		return new EnclosingMethod_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Synthetic")
+	{
+		return new Synthetic_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Signature")
+	{
+		return new Signature_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceFile")
+	{
+		return new SourceFile_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceDebugExtension")
+	{
+		return new SourceDebugExtension_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LineNumberTable")
+	{
+		return new LineNumberTable_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTable")
+	{
+		return new LocalVariableTable_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTypeTable")
+	{
+		return new LocalVariableTypeTable_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Deprecated")
+	{
+		return new Deprecated_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleAnnotations")
+	{
+		return new RuntimeVisibleAnnotations_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleAnnotations")
+	{
+		return new RuntimeInvisibleAnnotations_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleParameterAnnotations")
+	{
+		return new RuntimeVisibleParameterAnnotations_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleParameterAnnotations")
+	{
+		return new RuntimeInvisibleParameterAnnotations_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "AnnotationDefault")
+	{
+		return new AnnotationDefault_attribute(buffer, attributeNameIndex);
+	}
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "BootstrapMethods")
+	{
+		return new BootstrapMethods_attribute(buffer, attributeNameIndex);
+	}
+	else
+	{
+		return new AtributoDesconhecido(buffer, attributeNameIndex);
+	}
+}
+
+
 ConstantValue_attribute::ConstantValue_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index = attributeNameIndex;
@@ -123,6 +214,16 @@ ConstantValue_attribute::ConstantValue_attribute(FILE *arq, uint16_t attributeNa
 	buffer->Ler(&constantvalue_index, 2);
 	delete buffer;
 }
+
+ConstantValue_attribute::ConstantValue_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index = attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer = new Buffer(buff, attribute_length);
+	buffer->Ler(&constantvalue_index, 2);
+	delete buffer;
+}
+/*
 Excecao::Excecao(FILE *arq)
 {
 	LerAtributo(&start_pc, 2, arq);
@@ -130,29 +231,65 @@ Excecao::Excecao(FILE *arq)
 	LerAtributo(&handler_pc, 2, arq);
 	LerAtributo(&catch_type, 2, arq);
 }
+*/
+Excecao::Excecao(Buffer &buffer)
+{
+	buffer.Ler(&start_pc, 2);
+	buffer.Ler(&end_pc, 2);
+	buffer.Ler(&handler_pc, 2);
+	buffer.Ler(&catch_type, 2);
+}
 
 Code_attribute::Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool)
 {
 	this->attribute_name_index = attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&max_stack, 2, arq);
-	LerAtributo(&max_locals, 2, arq);
-	LerAtributo(&code_length, 4, arq);
+	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&max_stack, 2);
+	buffer->Ler(&max_locals, 2);
+	buffer->Ler(&code_length, 4);
 	code = new uint8_t[code_length];
-	LerAtributo(code, code_length, arq, IGNORAR_ENDIAN);
-	LerAtributo(&exception_table_length, 2, arq);
+	buffer->Ler(code, code_length, IGNORAR_ENDIAN);
+	buffer->Ler(&exception_table_length, 2);
 	for(int cont=0 ; cont < exception_table_length; cont++)
 	{
-		Excecao *aux = new Excecao(arq);
+		Excecao *aux = new Excecao(*buffer);
 		exception_table.push_back(*aux);
 	}
-	LerAtributo(&attributes_count, 2, arq);
+	buffer->Ler(&attributes_count, 2);
 	for(int cont=0; cont < attributes_count; cont++)
 	{
-		attribute_info *aux= LerAtributeInfo(arq, constant_pool);
+		attribute_info *aux= LerAtributeInfo(*buffer, constant_pool);
 		attributes.push_back(aux);
 	}
+	delete buffer;
 }
+
+Code_attribute::Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool)
+{
+	this->attribute_name_index = attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer = new Buffer(buff, attribute_length);
+	buffer->Ler(&max_stack, 2);
+	buffer->Ler(&max_locals, 2);
+	buffer->Ler(&code_length, 4);
+	code = new uint8_t[code_length];
+	buffer->Ler(code, code_length, IGNORAR_ENDIAN);
+	buffer->Ler(&exception_table_length, 2);
+	for(int cont=0 ; cont < exception_table_length; cont++)
+	{
+		Excecao *aux = new Excecao(*buffer);
+		exception_table.push_back(*aux);
+	}
+	buffer->Ler(&attributes_count, 2);
+	for(int cont=0; cont < attributes_count; cont++)
+	{
+		attribute_info *aux= LerAtributeInfo(*buffer, constant_pool);
+		attributes.push_back(aux);
+	}
+	delete buffer;
+}
+
 
 Code_attribute::~Code_attribute()
 {
@@ -164,6 +301,21 @@ Exceptions_attribute::Exceptions_attribute(FILE *arq, uint16_t attributeNameInde
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	Buffer *buffer = new Buffer(arq, attribute_length);
+	buffer->Ler(&number_of_exceptions, 2);
+	for(int cont = 0; cont < number_of_exceptions; cont++)
+	{
+		uint16_t temp;
+		buffer->Ler(&temp, 2);
+		exception_index_table.push_back(temp);
+	}
+	delete buffer;
+}
+
+Exceptions_attribute::Exceptions_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer = new Buffer(buff, attribute_length);
 	buffer->Ler(&number_of_exceptions, 2);
 	for(int cont = 0; cont < number_of_exceptions; cont++)
 	{
@@ -196,11 +348,35 @@ InnerClasses_attribute::InnerClasses_attribute(FILE *arq, uint16_t attributeName
 	delete buffer;
 }
 
+InnerClasses_attribute::InnerClasses_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer= new Buffer(buff, attribute_length);
+	buffer->Ler(&number_of_classes, 2);
+	for(int cont=0; cont < number_of_classes; cont++)
+	{
+		InfoDaClasse *temp= new InfoDaClasse(*buffer);
+		classes.push_back(*temp);
+	}
+	delete buffer;
+}
+
 EnclosingMethod_attribute::EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&class_index, 2);
+	buffer->Ler(&method_index, 2);
+	delete buffer;
+}
+
+EnclosingMethod_attribute::EnclosingMethod_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer= new Buffer(buff, attribute_length);
 	buffer->Ler(&class_index, 2);
 	buffer->Ler(&method_index, 2);
 	delete buffer;
@@ -212,11 +388,24 @@ Synthetic_attribute::Synthetic_attribute(FILE *arq, uint16_t attributeNameIndex)
 	LerAtributo(&attribute_length, 4, arq);
 }
 
+Synthetic_attribute::Synthetic_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+}
+
 Signature_attribute::Signature_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	LerAtributo(&signature_index, 2, arq);
+}
+
+Signature_attribute::Signature_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	buff.Ler(&signature_index, 2);
 }
 
 SourceFile_attribute::SourceFile_attribute(FILE *arq, uint16_t attributeNameIndex)
@@ -226,12 +415,27 @@ SourceFile_attribute::SourceFile_attribute(FILE *arq, uint16_t attributeNameInde
 	LerAtributo(&sourcefile_index, 2, arq);
 }
 
+SourceFile_attribute::SourceFile_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	buff.Ler(&sourcefile_index, 2);
+}
+
 SourceDebugExtension_attribute::SourceDebugExtension_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	debug_extension= new uint8_t[attribute_length];
 	LerAtributo(debug_extension, attribute_length, arq, IGNORAR_ENDIAN);
+}
+
+SourceDebugExtension_attribute::SourceDebugExtension_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	debug_extension= new uint8_t[attribute_length];
+	buff.Ler(debug_extension, attribute_length, IGNORAR_ENDIAN);
 }
 
 SourceDebugExtension_attribute::~SourceDebugExtension_attribute()
@@ -250,6 +454,20 @@ LineNumberTable_attribute::LineNumberTable_attribute(FILE *arq, uint16_t attribu
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&line_number_table_length, 2);
+	for(int cont=0; cont < line_number_table_length; cont++)
+	{
+		Elemento_LineNumber *temp= new Elemento_LineNumber(*buffer);
+		elements_number_table.push_back(*temp);
+	}
+	delete buffer;
+}
+
+LineNumberTable_attribute::LineNumberTable_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer= new Buffer(buff, attribute_length);
 	buffer->Ler(&line_number_table_length, 2);
 	for(int cont=0; cont < line_number_table_length; cont++)
 	{
@@ -282,6 +500,20 @@ LocalVariableTable_attribute::LocalVariableTable_attribute(FILE *arq, uint16_t a
 	delete buffer;
 }
 
+LocalVariableTable_attribute::LocalVariableTable_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer = new Buffer(buff, attribute_length);
+	buffer->Ler(&local_variable_table_length, 2);
+	for(int cont =0; cont < local_variable_table_length; cont++)
+	{
+		Elemento_local_variable *temp= new Elemento_local_variable(*buffer);
+		local_variable_table.push_back(*temp);
+	}
+	delete buffer;
+}
+
 Elemento_LocalVariableType::Elemento_LocalVariableType(Buffer &buffer)
 {
 	buffer.Ler(&start_pc, 2);
@@ -305,20 +537,40 @@ LocalVariableTypeTable_attribute::LocalVariableTypeTable_attribute(FILE *arq, ui
 	delete buffer;
 }
 
+LocalVariableTypeTable_attribute::LocalVariableTypeTable_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer = new Buffer (buff, attribute_length);
+	buffer->Ler(&local_variable_type_table_length, 2);
+	for(int cont=0; cont< local_variable_type_table_length; cont++)
+	{
+		Elemento_LocalVariableType *temp= new Elemento_LocalVariableType(*buffer);
+		local_variable_type_table.push_back(*temp);
+	}
+	delete buffer;
+}
+
 Deprecated_attribute::Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 }
 
-Elemento_Metodo_Bootstrap::Elemento_Metodo_Bootstrap(FILE *arq)
+Deprecated_attribute::Deprecated_attribute(Buffer &buff, uint16_t attributeNameIndex)
 {
-	LerAtributo(&bootstrap_method_ref, 2, arq);
-	LerAtributo(&num_bootstrap_arguments, 2, arq);
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+}
+
+Elemento_Metodo_Bootstrap::Elemento_Metodo_Bootstrap(Buffer &buffer)
+{
+	buffer.Ler(&bootstrap_method_ref, 2);
+	buffer.Ler(&num_bootstrap_arguments, 2);
 	for(int cont=0; cont < num_bootstrap_arguments; cont++)
 	{
 		int16_t temp;
-		LerAtributo(&temp, 2, arq);
+		buffer.Ler(&temp, 2);
 		bootstrap_arguments.push_back(temp);
 	}
 }
@@ -327,12 +579,28 @@ BootstrapMethods_attribute::BootstrapMethods_attribute(FILE *arq, uint16_t attri
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&num_bootstrap_methods, 2, arq);
+	Buffer *buffer= new Buffer(arq, attribute_length);
+	buffer->Ler(&num_bootstrap_methods, 2);
 	for(int cont =0; cont < num_bootstrap_methods; cont++)
 	{
-		Elemento_Metodo_Bootstrap *aux= new Elemento_Metodo_Bootstrap(arq);
+		Elemento_Metodo_Bootstrap *aux= new Elemento_Metodo_Bootstrap(*buffer);
 		bootstrap_methods.push_back(*aux);
 	}
+	delete buffer;
+}
+
+BootstrapMethods_attribute::BootstrapMethods_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	Buffer *buffer= new Buffer(buff, attribute_length);
+	buffer->Ler(&num_bootstrap_methods, 2);
+	for(int cont =0; cont < num_bootstrap_methods; cont++)
+	{
+		Elemento_Metodo_Bootstrap *aux= new Elemento_Metodo_Bootstrap(*buffer);
+		bootstrap_methods.push_back(*aux);
+	}
+	delete buffer;
 }
 
 RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
@@ -341,6 +609,14 @@ RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(FILE *a
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	info= new uint8_t[attribute_length];
+	buff.Ler(info, attribute_length);
 }
 
 RuntimeVisibleAnnotations_attribute::~RuntimeVisibleAnnotations_attribute()
@@ -356,6 +632,14 @@ RuntimeInvisibleAnnotations_attribute::RuntimeInvisibleAnnotations_attribute(FIL
 	LerAtributo(info, attribute_length, arq);
 }
 
+RuntimeInvisibleAnnotations_attribute::RuntimeInvisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	info= new uint8_t[attribute_length];
+	buff.Ler(info, attribute_length);
+}
+
 RuntimeInvisibleAnnotations_attribute::~RuntimeInvisibleAnnotations_attribute()
 {
 	delete []info;
@@ -367,6 +651,14 @@ RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	info= new uint8_t[attribute_length];
+	buff.Ler(info, attribute_length);
 }
 
 RuntimeVisibleParameterAnnotations_attribute::~RuntimeVisibleParameterAnnotations_attribute()
@@ -382,6 +674,14 @@ RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotat
 	LerAtributo(info, attribute_length, arq);
 }
 
+RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	info= new uint8_t[attribute_length];
+	buff.Ler(info, attribute_length);
+}
+
 RuntimeInvisibleParameterAnnotations_attribute::~RuntimeInvisibleParameterAnnotations_attribute()
 {
 	delete []info;
@@ -393,6 +693,14 @@ AnnotationDefault_attribute::AnnotationDefault_attribute(FILE *arq, uint16_t att
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+AnnotationDefault_attribute::AnnotationDefault_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	info= new uint8_t[attribute_length];
+	buff.Ler(info, attribute_length);
 }
 
 AnnotationDefault_attribute::~AnnotationDefault_attribute()
@@ -461,12 +769,35 @@ StackMapTable_attribute::StackMapTable_attribute(FILE *arq, uint16_t attributeNa
 	delete buffer;
 }
 
+StackMapTable_attribute::StackMapTable_attribute(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	
+	Buffer *buffer= new Buffer(buff, attribute_length);
+	buffer->Ler(&number_of_entries, 2);
+	for(int cont=0; cont < number_of_entries; cont++)
+	{
+		stack_map_frame *temp= new stack_map_frame(*buffer);
+		entries.push_back(*temp);
+	}
+	delete buffer;
+}
+
 AtributoDesconhecido::AtributoDesconhecido(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
 	LerAtributo(info, attribute_length, arq);
+}
+
+AtributoDesconhecido::AtributoDesconhecido(Buffer &buff, uint16_t attributeNameIndex)
+{
+	this->attribute_name_index= attributeNameIndex;
+	buff.Ler(&attribute_length, 4);
+	info= new uint8_t[attribute_length];
+	buff.Ler(info, attribute_length);
 }
 
 AtributoDesconhecido::~AtributoDesconhecido()

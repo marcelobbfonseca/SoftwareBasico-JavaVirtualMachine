@@ -16,6 +16,7 @@ class attribute_info
 
 	public:
 		static attribute_info* LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool);
+		static attribute_info* LerAtributeInfo(Buffer &buff, std::vector<cp_info*> const &constant_pool);
 		virtual void ExibirInformacoes(std::string tabs)=0;
 };
 
@@ -40,6 +41,7 @@ class ConstantValue_attribute: public attribute_info
 		uint16_t constantvalue_index;
 	public:
 		ConstantValue_attribute(FILE *arq, uint16_t attributeNameIndex);
+		ConstantValue_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -51,7 +53,8 @@ class Excecao
 		uint16_t handler_pc;
 		uint16_t catch_type;
 	public:
-		Excecao(FILE *arq);
+//		Excecao(FILE *arq);
+		Excecao(Buffer &buffer);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -69,6 +72,7 @@ class Code_attribute: public attribute_info
 		string ObterMinemonicoOpcode(uint8_t bytecode);
 	public:
 		Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
+		Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		~Code_attribute(void);
 		void ExibirInformacoes(string tabs);
 };
@@ -81,6 +85,7 @@ class Exceptions_attribute : public attribute_info
 
 	public:
 		Exceptions_attribute (FILE *arq, uint16_t attributeNameIndex);
+		Exceptions_attribute (Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -103,6 +108,7 @@ class InnerClasses_attribute: public attribute_info
 		vector<InfoDaClasse> classes;
 	public:
 		InnerClasses_attribute(FILE *arq, uint16_t attributeNameIndex);
+		InnerClasses_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -113,6 +119,7 @@ class EnclosingMethod_attribute:public attribute_info
 		uint16_t method_index;
 	public:
 		EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex);
+		EnclosingMethod_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -121,6 +128,7 @@ class Synthetic_attribute: public attribute_info
 	private:
 	public:
 		Synthetic_attribute(FILE *arq, uint16_t attributeNameIndex);
+		Synthetic_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -130,6 +138,7 @@ class Signature_attribute:public attribute_info
 		uint16_t signature_index;
 	public:
 		Signature_attribute(FILE *arq, uint16_t attributeNameIndex);
+		Signature_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -139,6 +148,7 @@ class SourceFile_attribute: public attribute_info
 		uint16_t sourcefile_index;
 	public:
 		SourceFile_attribute(FILE *arq, uint16_t attributeNameIndex);
+		SourceFile_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -148,6 +158,7 @@ class SourceDebugExtension_attribute: public attribute_info
 		uint8_t *debug_extension;
 	public:
 		SourceDebugExtension_attribute(FILE *arq, uint16_t attributeNameIndex);
+		SourceDebugExtension_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~SourceDebugExtension_attribute();
 		void ExibirInformacoes(string tabs);
 };
@@ -169,6 +180,7 @@ class LineNumberTable_attribute: public attribute_info
 		vector<Elemento_LineNumber> elements_number_table;
 	public:
 		LineNumberTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+		LineNumberTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -192,6 +204,7 @@ class LocalVariableTable_attribute : public attribute_info
 		vector<Elemento_local_variable> local_variable_table;
 	public:
 		LocalVariableTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+		LocalVariableTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -215,6 +228,7 @@ class LocalVariableTypeTable_attribute : public attribute_info
 		vector<Elemento_LocalVariableType>local_variable_type_table;
 	public:
 		LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+		LocalVariableTypeTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -223,6 +237,7 @@ class Deprecated_attribute : public attribute_info
 	private:
 	public:
 		Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex);
+		Deprecated_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -233,7 +248,7 @@ class Elemento_Metodo_Bootstrap
 		uint16_t num_bootstrap_arguments;
 		vector<uint16_t> bootstrap_arguments;
 	public:
-		Elemento_Metodo_Bootstrap(FILE *arq);
+		Elemento_Metodo_Bootstrap(Buffer &buff);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -244,6 +259,7 @@ class BootstrapMethods_attribute: public attribute_info
 		vector<Elemento_Metodo_Bootstrap>bootstrap_methods;
 	public:
 		BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex);
+		BootstrapMethods_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -253,6 +269,7 @@ class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa c
 		uint8_t *info;
 	public:
 		RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+		RuntimeVisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~RuntimeVisibleAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
@@ -263,6 +280,7 @@ class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa
 		uint8_t *info;
 	public:
 		RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
+		RuntimeInvisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~RuntimeInvisibleAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
@@ -273,6 +291,7 @@ class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-
 		uint8_t *info;
 	public:
 		RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
+		RuntimeVisibleParameterAnnotations_attribute(Buffer &buff, uint16_t ttributeNameIndex);
 		~RuntimeVisibleParameterAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
@@ -283,6 +302,7 @@ class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Fod
 		uint8_t *info;
 	public:
 		RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
+		RuntimeInvisibleParameterAnnotations_attribute(Buffer &buff, uint16_t ttributeNameIndex);
 		~RuntimeInvisibleParameterAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
@@ -293,6 +313,7 @@ class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. M
 		uint8_t *info;
 	public:
 		AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex);
+		AnnotationDefault_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~AnnotationDefault_attribute();
 		void ExibirInformacoes(string tabs);
 };
@@ -330,6 +351,7 @@ class StackMapTable_attribute : public attribute_info
 		vector<stack_map_frame> entries;
 	public:
 		StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex);
+		StackMapTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
 
@@ -340,6 +362,7 @@ class AtributoDesconhecido : public attribute_info
 		uint8_t *info;
 	public:
 		AtributoDesconhecido(FILE *arq, uint16_t ttributeNameIndex);
+		AtributoDesconhecido(Buffer &buff, uint16_t ttributeNameIndex);
 		~AtributoDesconhecido();
 		void ExibirInformacoes(string tabs);
 };

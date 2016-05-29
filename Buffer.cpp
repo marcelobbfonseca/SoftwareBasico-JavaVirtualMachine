@@ -13,6 +13,15 @@ Buffer::Buffer(FILE *arq, int tamanho)
 	this->tamanhoBuffer= tamanho;
 }
 
+Buffer::Buffer(Buffer &buff, int tamanho)
+{
+	buffer= new uint8_t[tamanho];
+	buff.Ler(buffer, tamanho, IGNORAR_ENDIAN);
+	this->proximaPosicaoParaLer=0;
+	this->tamanhoBuffer= tamanho;
+}
+
+
 void Buffer::Ler(void *alvo, int tamanho, bool ehNumero)
 {
 	if( tamanhoBuffer < proximaPosicaoParaLer + tamanho)
