@@ -787,14 +787,16 @@ void AtributoDesconhecido::ExibirInformacoes(string tabs)
 	cout << tabs << "attribute_info do tipo AtributoDesconhecido." <<endl;
 	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= |" << hex;
+	cout << tabs << "\tinfo= 0x" << hex;
+	int widthAnterior = cout.width(2);
+	char fillAnterior = cout.fill('0');
 	for(unsigned int cont = 0; cont < attribute_length; cont++)
 	{
-		cout << (void *)info[cont] << "|";
+//		printf("%.2hhx");
+		cout << hex << (int)info[cont] << dec;
 	}
-	cout << dec <<endl;
+	cout.width(widthAnterior);
+	cout.fill(fillAnterior);
+	cout <<endl;
 }
-
-
-
 
