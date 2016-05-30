@@ -8,7 +8,7 @@ namespace Leitura
 {
 	void LerAtributo(void *alvo, int size, FILE *arq, bool ehNumero)
 	{
-		if(!fread(alvo, size, 1, arq))
+		if(fread(alvo, size, 1, arq) == 0)
 		{
 			throw(new Erro("Erro na leitura do arquivo!") );
 		}
