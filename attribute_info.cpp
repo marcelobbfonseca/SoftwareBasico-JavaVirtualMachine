@@ -29,88 +29,89 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 {
 	uint16_t attributeNameIndex;
 	LerAtributo(&attributeNameIndex, 2, arq);
-	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "ConstantValue")
+	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
 	{
 		return new ConstantValue_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Code")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Code")
 	{
 		return new Code_attribute(arq, attributeNameIndex, constant_pool);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "StackMapTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "StackMapTable")
 	{
 		return new StackMapTable_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Exceptions")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Exceptions")
 	{
 		return new Exceptions_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "InnerClasses")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "InnerClasses")
 	{
 		return new InnerClasses_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "EnclosingMethod")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "EnclosingMethod")
 	{
 		return new EnclosingMethod_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Synthetic")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Synthetic")
 	{
 		return new Synthetic_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Signature")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Signature")
 	{
 		return new Signature_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceFile")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "SourceFile")
 	{
 		return new SourceFile_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceDebugExtension")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "SourceDebugExtension")
 	{
 		return new SourceDebugExtension_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LineNumberTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LineNumberTable")
 	{
 		return new LineNumberTable_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LocalVariableTable")
 	{
 		return new LocalVariableTable_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTypeTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LocalVariableTypeTable")
 	{
 		return new LocalVariableTypeTable_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Deprecated")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Deprecated")
 	{
 		return new Deprecated_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeVisibleAnnotations")
 	{
 		return new RuntimeVisibleAnnotations_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeInvisibleAnnotations")
 	{
 		return new RuntimeInvisibleAnnotations_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleParameterAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeVisibleParameterAnnotations")
 	{
 		return new RuntimeVisibleParameterAnnotations_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleParameterAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeInvisibleParameterAnnotations")
 	{
 		return new RuntimeInvisibleParameterAnnotations_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "AnnotationDefault")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "AnnotationDefault")
 	{
 		return new AnnotationDefault_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "BootstrapMethods")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "BootstrapMethods")
 	{
 		return new BootstrapMethods_attribute(arq, attributeNameIndex);
 	}
 	else
 	{
+        printf("atributoLixo %d",attributeNameIndex);
 		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
 }
@@ -119,83 +120,83 @@ attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_i
 {
 	uint16_t attributeNameIndex;
 	buffer.Ler(&attributeNameIndex, 2);
-	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "ConstantValue")
+	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
 	{
 		return new ConstantValue_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Code")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Code")
 	{
 		return new Code_attribute(buffer, attributeNameIndex, constant_pool);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "StackMapTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "StackMapTable")
 	{
 		return new StackMapTable_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Exceptions")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Exceptions")
 	{
 		return new Exceptions_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "InnerClasses")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "InnerClasses")
 	{
 		return new InnerClasses_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "EnclosingMethod")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "EnclosingMethod")
 	{
 		return new EnclosingMethod_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Synthetic")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Synthetic")
 	{
 		return new Synthetic_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Signature")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Signature")
 	{
 		return new Signature_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceFile")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "SourceFile")
 	{
 		return new SourceFile_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "SourceDebugExtension")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "SourceDebugExtension")
 	{
 		return new SourceDebugExtension_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LineNumberTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "LineNumberTable")
 	{
 		return new LineNumberTable_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "LocalVariableTable")
 	{
 		return new LocalVariableTable_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LocalVariableTypeTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "LocalVariableTypeTable")
 	{
 		return new LocalVariableTypeTable_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "Deprecated")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Deprecated")
 	{
 		return new Deprecated_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeVisibleAnnotations")
 	{
 		return new RuntimeVisibleAnnotations_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeInvisibleAnnotations")
 	{
 		return new RuntimeInvisibleAnnotations_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeVisibleParameterAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeVisibleParameterAnnotations")
 	{
 		return new RuntimeVisibleParameterAnnotations_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "RuntimeInvisibleParameterAnnotations")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeInvisibleParameterAnnotations")
 	{
 		return new RuntimeInvisibleParameterAnnotations_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "AnnotationDefault")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "AnnotationDefault")
 	{
 		return new AnnotationDefault_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "BootstrapMethods")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "BootstrapMethods")
 	{
 		return new BootstrapMethods_attribute(buffer, attributeNameIndex);
 	}
@@ -758,7 +759,7 @@ StackMapTable_attribute::StackMapTable_attribute(FILE *arq, uint16_t attributeNa
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
-	
+
 	Buffer *buffer= new Buffer(arq, attribute_length);
 	buffer->Ler(&number_of_entries, 2);
 	for(int cont=0; cont < number_of_entries; cont++)
@@ -773,7 +774,7 @@ StackMapTable_attribute::StackMapTable_attribute(Buffer &buff, uint16_t attribut
 {
 	this->attribute_name_index= attributeNameIndex;
 	buff.Ler(&attribute_length, 4);
-	
+
 	Buffer *buffer= new Buffer(buff, attribute_length);
 	buffer->Ler(&number_of_entries, 2);
 	for(int cont=0; cont < number_of_entries; cont++)
