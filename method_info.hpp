@@ -21,6 +21,7 @@ class method_info {
 	public:
 
 	method_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
+	~method_info();
 	void ExibirInformacoes(string tabs);
 
 };

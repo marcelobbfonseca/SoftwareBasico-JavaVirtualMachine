@@ -2,23 +2,46 @@
 #include"Leitura.hpp"
 #include<iostream>
 
+#define DEBUG
+
 method_info::method_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
 	using namespace Leitura;
 	
 	LerAtributo(&access_flags, 2, arq);
+#ifdef DEBUG
 cout<< "method access_flags = " << hex << access_flags << dec << endl;
+#endif
 	LerAtributo(&name_index, 2, arq);
+#ifdef DEBUG
 cout<< "method name_index = " << name_index << endl;
+#endif
 	LerAtributo(&descriptor_index, 2, arq);
+#ifdef DEBUG
 cout<< "method descriptor_index = " << descriptor_index << endl;
+#endif
 	LerAtributo(&attributes_count, 2, arq);
+#ifdef DEBUG
 cout<< "Lerei "<< attributes_count << "  attribute_infos" << endl;
+#endif
 	for(int cont =0; cont < attributes_count; cont++)
 	{
 		attribute_info *p= attribute_info::LerAtributeInfo(arq, constant_pool);
+#ifdef DEBUG
 cout<< "criado elemento attribute_info" << endl;
+#endif
 		attributes.push_back(p);
+	}
+}
+
+method_info::~method_info()
+{
+#ifdef DEBUG
+	cout<< "destrutor de method_info chamado!" << endl;
+#endif
+	for(unsigned int cont  = 0 ; cont < attributes.size(); cont++)
+	{
+//		delete attributes[cont];
 	}
 }
 

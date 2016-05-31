@@ -15,5 +15,9 @@ int main()
 	{
 		std::cout<<err->GetMensagem()<<"\n";
 	}
+	catch(...)
+	{
+		std::cout << "[ERRO] Exceção desconhecida lançada!" << std::endl;
+	}
 	return 0;
 }

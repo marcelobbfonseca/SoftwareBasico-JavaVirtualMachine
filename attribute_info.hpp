@@ -17,6 +17,7 @@ class attribute_info
 	public:
 		static attribute_info* LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool);
 		static attribute_info* LerAtributeInfo(Buffer &buff, std::vector<cp_info*> const &constant_pool);
+		virtual ~attribute_info(){}
 		virtual void ExibirInformacoes(std::string tabs)=0;
 };
 

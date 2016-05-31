@@ -421,13 +421,17 @@ bool CONSTANT_Utf8_info::operator==(char const *teste)
 	char const *aux1= (char*)bytes, *aux2= teste;
 	while(1)
 	{
-		cout<< aux1 << "\t" << aux2 << endl;
-		cout<< *aux1 << "\t" << *aux2 << endl;
+#ifdef DEBUG
+cout<< aux1 << "\t" << aux2 << endl;
+cout<< *aux1 << "\t" << *aux2 << endl;
+#endif
 		if(*aux1 == *aux2)
 		{
 			if(*aux1 == '\0')
 			{
-				cout << "Match!" << endl;
+#ifdef DEBUG
+cout << "Match!" << endl;
+#endif
 				return true;
 			}
 			aux1++;
