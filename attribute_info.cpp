@@ -1,6 +1,6 @@
 #include "attribute_info.hpp"
 #include"Leitura.hpp"
-#include"Opcodes.hpp"
+#include"Opcode.hpp"
 #include<iostream>
 
 using namespace std;
@@ -224,15 +224,7 @@ ConstantValue_attribute::ConstantValue_attribute(Buffer &buff, uint16_t attribut
 	buffer->Ler(&constantvalue_index, 2);
 	delete buffer;
 }
-/*
-Excecao::Excecao(FILE *arq)
-{
-	LerAtributo(&start_pc, 2, arq);
-	LerAtributo(&end_pc, 2, arq);
-	LerAtributo(&handler_pc, 2, arq);
-	LerAtributo(&catch_type, 2, arq);
-}
-*/
+
 Excecao::Excecao(Buffer &buffer)
 {
 	buffer.Ler(&start_pc, 2);
@@ -833,7 +825,7 @@ void Code_attribute::ExibirInformacoes(string tabs)
 	cout << tabs << "\tcode_length = " << code_length << endl;
 	for(unsigned int cont=0; cont < code_length; cont++)
 	{
-		cout << tabs << "\t\t" << hex << code[cont] << dec << "\t" << ObterMinemonicoOpcode(code[cont]) << endl;
+		cout << tabs << "\t\t" << hex << (unsigned int)code[cont] << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]) << endl;
 	}
 	cout << tabs << "\tattributes_count = " << attributes_count << endl;
 	cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
@@ -1137,14 +1129,14 @@ void AtributoDesconhecido::ExibirInformacoes(string tabs)
 	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
 	cout << tabs << "\tinfo= 0x" << hex;
-	int widthAnterior = cout.width(2);
-	char fillAnterior = cout.fill('0');
 	for(unsigned int cont = 0; cont < attribute_length; cont++)
 	{
-		printf("%.2hhx", info[cont]);
+		if(info[cont]< 16)
+		{
+			cout << 0;
+		}
+		cout << (int) info[cont];
 	}
-	cout.width(widthAnterior);
-	cout.fill(fillAnterior);
-	cout <<endl;
+	cout << dec <<endl;
 }
 
