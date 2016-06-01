@@ -28,7 +28,7 @@ Então pessoal, Como tem muito C++ no método abaixo vou explicar:
 */
 attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
-	char *teste = (char*) malloc(sizeof("LineNumberTable"+1));//73
+	
 	strcpy(teste, "LineNumberTable");
 	uint16_t attributeNameIndex;
 	LerAtributo(&attributeNameIndex, 2, arq);
@@ -126,8 +126,8 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 
 attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_info*> const &constant_pool)
 {
-	char *teste = (char*) malloc(sizeof("LineNumberTable"+1));//73
-	strcpy(teste, "LineNumberTable");
+	
+	
 	uint16_t attributeNameIndex;
 	buffer.Ler(&attributeNameIndex, 2);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
