@@ -2,7 +2,7 @@
 #include"Leitura.hpp"
 #include<iostream>
 
-#define DEBUG
+//#define DEBUG
 
 method_info::method_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {

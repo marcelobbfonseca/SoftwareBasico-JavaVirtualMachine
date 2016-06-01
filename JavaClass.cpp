@@ -5,7 +5,7 @@
 #include <iostream>
 
 //o define IGNORAR_ENDIAN informa que os bytes lidos NÃO devem ser invertidos. Caso contrário  serão pois devem ser numeros que devem ser armazenados em little endian
-#define DEBUG
+//#define DEBUG
 
 using namespace std;
 

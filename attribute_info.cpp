@@ -1160,7 +1160,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		case(JAVA_OPCODE_LLOAD):
 		case(JAVA_OPCODE_LSTORE):
 		{
-			cout << "\tindex = " << code[++(*cont)];
+			cout << "\tindex = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_ANEWARRAY):
@@ -1177,13 +1177,13 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		case(JAVA_OPCODE_PUTFIELD):
 		case(JAVA_OPCODE_NEW):
 		{
-			cout << "\tindexbyte1 = " << code[++(*cont)];
-			cout << "\tindexbyte2 = " << code[++(*cont)];
+			cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_BIPUSH):
 		{
-			cout << "\tbyte = " << (int8_t)code[++(*cont)];
+			cout << "\tbyte = " << (int32_t)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_GOTO):
@@ -1205,45 +1205,45 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		case(JAVA_OPCODE_IFNULL):
 		case(JAVA_OPCODE_JSR):
 		{
-			cout << "\tbranchbyte1 = " << code[++(*cont)];
-			cout << "\tbranchbyte2 = " << code[++(*cont)];
+			cout << "\tbranchbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\tbranchbyte2 = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_GOTO_W):
 		case(JAVA_OPCODE_JSR_W):
 		{
-			cout << "\tbranchbyte1 = " << code[++(*cont)];
-			cout << "\tbranchbyte2 = " << code[++(*cont)];
-			cout << "\tbranchbyte3 = " << code[++(*cont)];
-			cout << "\tbranchbyte4 = " << code[++(*cont)];
+			cout << "\tbranchbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\tbranchbyte2 = " << (unsigned int)code[++(*cont)];
+			cout << "\tbranchbyte3 = " << (unsigned int)code[++(*cont)];
+			cout << "\tbranchbyte4 = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_IINC):
 		{
-			cout << "\tindex = " << code[++(*cont)];
-			cout << "\tconst = " << code[++(*cont)];
+			cout << "\tindex = " << (unsigned int)code[++(*cont)];
+			cout << "\tconst = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_INVOKEDYNAMIC):
 		{
-			cout << "\tindexbyte1 = " << code[++(*cont)];
-			cout << "\tindexbyte2 = " << code[++(*cont)];
+			cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
 			(*cont)= (*cont)+2;
 			break;
 		}
 		case(JAVA_OPCODE_INVOKEINTERFACE):
 		{
-			cout << "\tindexbyte1 = " << code[++(*cont)];
-			cout << "\tindexbyte2 = " << code[++(*cont)];
-			cout << "\tcount = " << code[++(*cont)];
+			cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
+			cout << "\tcount = " << (unsigned int)code[++(*cont)];
 			(*cont)++;
 			break;
 		}
 
 		case(JAVA_OPCODE_SIPUSH):
 		{
-			cout << "\t byte1 = " << code[++(*cont)];
-			cout << "\t byte2 = " << code[++(*cont)];
+			cout << "\t byte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\t byte2 = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_RET):
@@ -1264,14 +1264,14 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 			T_SHORT	  9
 			T_INT		10
 			T_LONG	   11*/
-			cout << "\t atype = " << code[++(*cont)];
+			cout << "\t atype = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_MULTIANEWARRAY):
 		{
-			cout << "\t indexbyte1 = " << code[++(*cont)];
-			cout << "\t indexbyte2 = " << code[++(*cont)];
-			cout << "\t dimension = " << code[++(*cont)];
+			cout << "\t indexbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\t indexbyte2 = " << (unsigned int)code[++(*cont)];
+			cout << "\t dimension = " << (unsigned int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_LOOKUPSWITCH):
@@ -1281,15 +1281,15 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 				unsigned int temp= *cont;
 				(*cont) = temp + (4 - ( temp % 4));
 			}
-			cout << "\t defaultbyte1 = " << code[++(*cont)];
-			cout << "\t defaultbyte2 = " << code[++(*cont)];
-			cout << "\t defaultbyte3 = " << code[++(*cont)];
-			cout << "\t defaultbyte4 = " << code[++(*cont)];
+			cout << "\t defaultbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\t defaultbyte2 = " << (unsigned int)code[++(*cont)];
+			cout << "\t defaultbyte3 = " << (unsigned int)code[++(*cont)];
+			cout << "\t defaultbyte4 = " << (unsigned int)code[++(*cont)];
 
-			cout << "\t npair1 = " << code[++(*cont)];
-			cout << "\t npair2 = " << code[++(*cont)];
-			cout << "\t npair3 = " << code[++(*cont)];
-			cout << "\t npair4 = " << code[++(*cont)];
+			cout << "\t npair1 = " << (unsigned int)code[++(*cont)];
+			cout << "\t npair2 = " << (unsigned int)code[++(*cont)];
+			cout << "\t npair3 = " << (unsigned int)code[++(*cont)];
+			cout << "\t npair4 = " << (unsigned int)code[++(*cont)];
 
 			for(int i = 0; i < 4 ;i++){
 				(*cont)++;
@@ -1300,6 +1300,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 //				cont+= 8;
 
 			}
+			(*cont)--;//o ponteiro não deve parar no próximo bytecode, mas no último byte lido
 			break;
 		}
 	}
