@@ -1276,12 +1276,13 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		}
 		case(JAVA_OPCODE_LOOKUPSWITCH):
 		{
-			if(*cont % 4 != 0)
+            (*cont)++;
+			if((*cont) % 4 != 0)
 			{
 				unsigned int temp= *cont;
 				(*cont) = temp + (4 - ( temp % 4));
 			}
-			cout << "\t defaultbyte1 = " << (unsigned int)code[++(*cont)];
+			cout << "\t defaultbyte1 = " << (unsigned int)code[*cont];
 			cout << "\t defaultbyte2 = " << (unsigned int)code[++(*cont)];
 			cout << "\t defaultbyte3 = " << (unsigned int)code[++(*cont)];
 			cout << "\t defaultbyte4 = " << (unsigned int)code[++(*cont)];
@@ -1297,11 +1298,37 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 				(*cont) += 4;
 				uint32_t *offset= (uint32_t*) ( &(code[*cont]) );
 				cout << "\t npair " << i << ":" << *npair << "\t offset: " << offset;
-//				cont+= 8;
+				cont+= 4;
 
 			}
 			(*cont)--;//o ponteiro não deve parar no próximo bytecode, mas no último byte lido
 			break;
+		}
+
+		case(JAVA_OPCODE_TABLESWITCH):
+		{
+            (*cont)++;
+
+			if(*cont % 4 != 0)
+			{
+				unsigned int temp= *cont;
+				(*cont) = temp + (4 - ( temp % 4));
+			}
+
+			int32_t *defaultbytes =  (int32_t*) ( &(code[*cont]));
+			cout << "\t defaultbyte = " << defaultbytes;
+
+			int32_t *lowbytes =  (int32_t*) ( &(code[*cont]));
+			cout << "\t lowbytes = " << lowbytes;
+
+			int32_t *highbytes =  (int32_t*) ( &(code[*cont]));
+			cout << "\t highbytes = " << highbytes;
+
+			int32_t *high_minus_low_more_one_bytes =  (int32_t*) ( &(code[*cont]));
+			cout << "\t jump_offsets = " << high_minus_low_more_one_bytes;
+
+            (*cont)--;//o ponteiro não deve parar no próximo bytecode, mas no último byte lido
+            break;
 		}
 	}
 }
