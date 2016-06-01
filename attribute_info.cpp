@@ -29,7 +29,6 @@ Então pessoal, Como tem muito C++ no método abaixo vou explicar:
 attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
 	
-	strcpy(teste, "LineNumberTable");
 	uint16_t attributeNameIndex;
 	LerAtributo(&attributeNameIndex, 2, arq);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
@@ -72,11 +71,8 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new SourceDebugExtension_attribute(arq, attributeNameIndex);
 	}
-<<<<<<< HEAD
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== teste)
-=======
+
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LineNumberTable")
->>>>>>> 5cb9269039170fe2dde40e2bc670ccbccd35588a
 	{
 		return new LineNumberTable_attribute(arq, attributeNameIndex);
 	}
