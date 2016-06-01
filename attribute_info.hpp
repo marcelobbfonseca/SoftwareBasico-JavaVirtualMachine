@@ -17,6 +17,7 @@ class attribute_info
 	public:
 		static attribute_info* LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool);
 		static attribute_info* LerAtributeInfo(Buffer &buff, std::vector<cp_info*> const &constant_pool);
+		virtual ~attribute_info(){}
 		virtual void ExibirInformacoes(std::string tabs)=0;
 };
 
@@ -70,6 +71,7 @@ class Code_attribute: public attribute_info
 		uint16_t attributes_count;
 		vector<attribute_info *> attributes;
 		string ObterMinemonicoOpcode(uint8_t bytecode);
+		void ExibirInfoOpCode(unsigned int *cont);
 	public:
 		Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
