@@ -1155,6 +1155,73 @@ void Code_attribute::ExibirInfoOpCode(int const *cont)
 		{
 			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)];
 		}
-	
+
+		case(JAVA_OPCODE_SIPUSH)
+		{
+			cout << "\t byte1 = " << code[++(*cont)] << "\t byte2 = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODDE_RET)
+		{
+			uint32_t *aux=  ( &(code[cont])+1 );
+            cout << "\t index = " << *aux;
+            cont+= 4;
+            break;
+		}
+		case(JAVA_OPCODE_PUTSTATIC)
+		{
+			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)];
+		}
+		case(JAVA_OPCODE_PUTFIELD)
+		{
+			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)];
+		}
+		case(JAVA_OPCODE_NEWARRAY)
+		{
+            /*Array Type atype
+            T_BOOLEAN    4
+            T_CHAR       5
+            T_FLOAT      6
+            T_DOUBLE     7
+            T_BYTE       8
+            T_SHORT      9
+            T_INT        10
+            T_LONG       11*/
+			cout << "\t atype = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_NEW)
+		{
+			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)];
+		}
+		case(JAVA_OPCODE_MULTIANEWARRAY)
+		{
+			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)]<< "\t dimension = " << code[++(*cont)];
+		}
+		case(JAVA_OPCODE_LSTORE)
+		{
+			cout << "\t index = " << code[++(*cont)];
+		}
+		case(JAVA_OPCODE_LOOKUPSWITCH)
+		{
+		    *cont = cont + (4 - (cont % 4));
+			cout << "\t defaultbyte1 = " << code[++(*cont)] << "\t defaultbyte2 = " << code[++(*cont)];
+			cout << "\t defaultbyte3 = " << code[++(*cont)] << "\t defaultbyte4 = " << code[++(*cont)];
+
+			cout << "\t npair1 = " << code[++(*cont)] << "\t npair2 = " << code[++(*cont)];
+			cout << "\t npair3 = " << code[++(*cont)] << "\t npair4 = " << code[++(*cont)];
+
+			for(int i = 0; i < 4 ;i++){
+
+                uint32_t *npair=  ( &(code[cont])+ 1 );
+                uint32_t *offset=  ( &(code[cont]) + 2);
+                cout << "\t npair " << i << ":" << *aux << "\t offset: " << i << ":" << *aux;;
+                cont+= 8;
+
+			}
+
+		}
+
+
 	}
 }
