@@ -105,7 +105,7 @@ void method_info::ExibirInformacoes(string tabs)
 		cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
 		for(int cont =0; cont < attributes_count; cont++)
 		{
-			cout << tabs << "\tAttributes[" << cont << "]:" << endl;;
+			cout << tabs << "\tAttributes[" << cont << "]:" << endl;
 			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
 			if(cont < attributes_count -1)
 			{

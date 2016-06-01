@@ -1146,15 +1146,92 @@ void Code_attribute::ExibirInfoOpCode(int const *cont)
 {
 	switch(code[*cont])
 	{
-		case(JAVA_OPCODE_ALOAD)
+		case(JAVA_OPCODE_ALOAD):
+		case(JAVA_OPCODE_ASTORE):
+		case(JAVA_OPCODE_DLOAD):
+		case(JAVA_OPCODE_DSTORE):
+		case(JAVA_OPCODE_FLOAD):
+		case(JAVA_OPCODE_FSTORE):
+		case(JAVA_OPCODE_ILOAD):
+		case(JAVA_OPCODE_ISTORE):
+		case(JAVA_OPCODE_LDC):
+		case(JAVA_OPCODE_LLOAD):
 		{
-			cout << "\t index = " << code[++(*cont)];
+			cout << "\tindex = " << code[++(*cont)];
 			break;
 		}
-		case(JAVA_OPCODDE_ANEWARRAY)
+		case(JAVA_OPCODDE_ANEWARRAY):
+		case(JAVA_OPCODE_CHECKCAST):
+		case(JAVA_OPCODE_GETFIELD):
+		case(JAVA_OPCODE_GETSTATIC):
+		case(JAVA_OPCODE_INSTANCEOF):
+		case(JAVA_OPCODE_INVOKESPECIAL):
+		case(JAVA_OPCODE_INVOKESTATIC):
+		case(JAVA_OPCODE_INVOKEVIRTUAL):
+		case(JAVA_OPCODE_LDC_W):
+		case(JAVA_OPCODE_LDC2_W):
 		{
-			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)];
+			cout << "\tindexbyte1 = " << code[++(*cont)];
+			cout << "\tindexbyte2 = " << code[++(*cont)];
+			break;
 		}
-	
+		case(JAVA_OPCODE_BIPUSH):
+		{
+			cout << "\tbyte = " << (int8_t)code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_GOTO):
+		case(JAVA_OPCODE_IF_ACMPEQ):
+		case(JAVA_OPCODE_IF_ACMPNE):
+		case(JAVA_OPCODE_IF_ICMPEQ):
+		case(JAVA_OPCODE_IF_ICMPNE):
+		case(JAVA_OPCODE_IF_ICMPLT):
+		case(JAVA_OPCODE_IF_ICMPGE):
+		case(JAVA_OPCODE_IF_ICMPGT):
+		case(JAVA_OPCODE_IF_ICMPLE):
+		case(JAVA_OPCODE_IFEQ):
+		case(JAVA_OPCODE_IFNE):
+		case(JAVA_OPCODE_IFLT):
+		case(JAVA_OPCODE_IFGE):
+		case(JAVA_OPCODE_IFGT):
+		case(JAVA_OPCODE_IFLE):
+		case(JAVA_OPCODE_IFNONNULL):
+		case(JAVA_OPCODE_IFNULL):
+		case(JAVA_OPCODE_JSR):
+		{
+			cout << "\tbranchbyte1 = " << code[++(*cont)];
+			cout << "\tbranchbyte2 = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_GOTO_W):
+		case(JAVA_OPCODE_JSR_W):
+		{
+			cout << "\tbranchbyte1 = " << code[++(*cont)];
+			cout << "\tbranchbyte2 = " << code[++(*cont)];
+			cout << "\tbranchbyte3 = " << code[++(*cont)];
+			cout << "\tbranchbyte4 = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_IINC):
+		{
+			cout << "\tindex = " << code[++(*cont)];
+			cout << "\tconst = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_INVOKEDYNAMIC):
+		{
+			cout << "\tindexbyte1 = " << code[++(*cont)];
+			cout << "\tindexbyte2 = " << code[++(*cont)];
+			(*cont)= (*cont)+2;
+			break;
+		}
+		case(JAVA_OPCODE_INVOKEINTERFACE):
+		{
+			cout << "\tindexbyte1 = " << code[++(*cont)];
+			cout << "\tindexbyte2 = " << code[++(*cont)];
+			cout << "\tcount = " << code[++(*cont)];
+			(*cont)++;
+			break;
+		}
 	}
 }
