@@ -2,7 +2,8 @@
 #include"Leitura.hpp"
 #include"Opcode.hpp"
 #include<iostream>
-
+#include <cstdlib>
+#include <cstring>
 using namespace std;
 using namespace Leitura;
 
@@ -27,6 +28,7 @@ Então pessoal, Como tem muito C++ no método abaixo vou explicar:
 */
 attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
+	
 	uint16_t attributeNameIndex;
 	LerAtributo(&attributeNameIndex, 2, arq);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
@@ -69,6 +71,7 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new SourceDebugExtension_attribute(arq, attributeNameIndex);
 	}
+
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LineNumberTable")
 	{
 		return new LineNumberTable_attribute(arq, attributeNameIndex);
@@ -114,10 +117,13 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 		printf("atributoLixo %d",attributeNameIndex);
 		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
+	
 }
 
 attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_info*> const &constant_pool)
 {
+	
+	
 	uint16_t attributeNameIndex;
 	buffer.Ler(&attributeNameIndex, 2);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
@@ -160,6 +166,7 @@ attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_i
 	{
 		return new SourceDebugExtension_attribute(buffer, attributeNameIndex);
 	}
+
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "LineNumberTable")
 	{
 		return new LineNumberTable_attribute(buffer, attributeNameIndex);
