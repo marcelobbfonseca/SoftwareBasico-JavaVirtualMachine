@@ -1283,7 +1283,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		}
 		case(JAVA_OPCODE_LOOKUPSWITCH):
 		{
-            (*cont)++;
+			(*cont)++;
 			if((*cont) % 4 != 0)
 			{
 				unsigned int temp= *cont;
@@ -1311,10 +1311,39 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 			(*cont)--;//o ponteiro não deve parar no próximo bytecode, mas no último byte lido
 			break;
 		}
+		case(JAVA_OPCODE_WIDE):
+		{
+			cout << " " << OpCode::GetReferencia()->GetMinemonico(code[++(*cont)]);
+			switch(code[(*cont)])
+			{
+				case(JAVA_OPCODE_ILOAD):
+				case(JAVA_OPCODE_FLOAD):
+				case(JAVA_OPCODE_ALOAD):
+				case(JAVA_OPCODE_LLOAD):
+				case(JAVA_OPCODE_DLOAD):
+				case(JAVA_OPCODE_ISTORE):
+				case(JAVA_OPCODE_FSTORE):
+				case(JAVA_OPCODE_ASTORE):
+				case(JAVA_OPCODE_LSTORE):
+				case(JAVA_OPCODE_DSTORE):
+				case(JAVA_OPCODE_RET):
+				{
+					cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
+					cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
+				}
+				case(JAVA_OPCODE_IINC):
+				{
+					cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
+					cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
 
+					cout << "\tconstbyte1 = " << (unsigned int)code[++(*cont)];
+					cout << "\tconstbyte2 = " << (unsigned int)code[++(*cont)];
+				}
+			}
+		}
 		case(JAVA_OPCODE_TABLESWITCH):
 		{
-            (*cont)++;
+			(*cont)++;
 
 			if(*cont % 4 != 0)
 			{
@@ -1334,8 +1363,8 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 			int32_t *high_minus_low_more_one_bytes =  (int32_t*) ( &(code[*cont]));
 			cout << "\t jump_offsets = " << high_minus_low_more_one_bytes;
 
-            (*cont)--;//o ponteiro não deve parar no próximo bytecode, mas no último byte lido
-            break;
+			(*cont)--;//o ponteiro não deve parar no próximo bytecode, mas no último byte lido
+			break;
 		}
 	}
 }
