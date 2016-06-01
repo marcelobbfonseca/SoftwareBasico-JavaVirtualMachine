@@ -2,6 +2,7 @@
 documentacao/
 *.gch
 *~
+*.exe
 *.o
 *.out
 *.pro
