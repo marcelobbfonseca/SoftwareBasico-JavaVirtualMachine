@@ -71,6 +71,7 @@ class Code_attribute: public attribute_info
 		uint16_t attributes_count;
 		vector<attribute_info *> attributes;
 		string ObterMinemonicoOpcode(uint8_t bytecode);
+		void ExibirInfoOpCode(int const *cont);
 	public:
 		Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);

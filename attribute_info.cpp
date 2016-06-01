@@ -823,9 +823,10 @@ void Code_attribute::ExibirInformacoes(string tabs)
 	cout << tabs << "\tmax_stack = " << max_stack << endl;
 	cout << tabs << "\tmax_locals = " << max_locals << endl;
 	cout << tabs << "\tcode_length = " << code_length << endl;
+//	int aux=0;
 	for(unsigned int cont=0; cont < code_length; cont++)
 	{
-		cout << tabs << "\t\t" << hex << (unsigned int)code[cont] << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]) << endl;
+		cout << tabs << "\t\t" << hex << (unsigned int)code[cont] << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]) << ExibirInfoOpCode(&cont) << endl;
 	}
 	cout << tabs << "\tattributes_count = " << attributes_count << endl;
 	cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
@@ -1140,3 +1141,20 @@ void AtributoDesconhecido::ExibirInformacoes(string tabs)
 	cout << dec <<endl;
 }
 
+
+void Code_attribute::ExibirInfoOpCode(int const *cont)
+{
+	switch(code[*cont])
+	{
+		case(JAVA_OPCODE_ALOAD)
+		{
+			cout << "\t index = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODDE_ANEWARRAY)
+		{
+			cout << "\t indexbyte1 = " << code[++(*cont)] << "\t indexbyte2 = " << code[++(*cont)];
+		}
+	
+	}
+}
