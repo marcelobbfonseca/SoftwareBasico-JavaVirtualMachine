@@ -4,7 +4,7 @@
 #include<string.h>
 #include<iostream>
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #include<stdio.h>
 #endif
@@ -417,7 +417,9 @@ bool CONSTANT_Utf8_info::operator==(string teste)
 }
 bool CONSTANT_Utf8_info::operator==(char const *teste)
 {
+#ifdef DEBUG
 	cout << endl;
+#endif
 	char const *aux1= (char*)bytes, *aux2= teste;
 	while(1)
 	{
