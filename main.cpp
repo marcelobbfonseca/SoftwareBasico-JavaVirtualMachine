@@ -1,7 +1,9 @@
+#include <stdlib.h>
 #include<string>
 #include<iostream>
 #include"JavaClass.hpp"
 #include"Erro.hpp"
+
 
 int main()
 {
