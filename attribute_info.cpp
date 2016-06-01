@@ -111,7 +111,7 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	}
 	else
 	{
-        printf("atributoLixo %d",attributeNameIndex);
+		printf("atributoLixo %d",attributeNameIndex);
 		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
 }
@@ -826,7 +826,9 @@ void Code_attribute::ExibirInformacoes(string tabs)
 //	int aux=0;
 	for(unsigned int cont=0; cont < code_length; cont++)
 	{
-		cout << tabs << "\t\t" << hex << (unsigned int)code[cont] << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]) << ExibirInfoOpCode(&cont) << endl;
+		cout << tabs << "\t\t" << hex << (unsigned int)code[cont] << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]);
+		ExibirInfoOpCode(&cont);
+		cout << endl;
 	}
 	cout << tabs << "\tattributes_count = " << attributes_count << endl;
 	cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
@@ -1142,7 +1144,7 @@ void AtributoDesconhecido::ExibirInformacoes(string tabs)
 }
 
 
-void Code_attribute::ExibirInfoOpCode(int const *cont)
+void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 {
 	switch(code[*cont])
 	{
@@ -1156,11 +1158,12 @@ void Code_attribute::ExibirInfoOpCode(int const *cont)
 		case(JAVA_OPCODE_ISTORE):
 		case(JAVA_OPCODE_LDC):
 		case(JAVA_OPCODE_LLOAD):
+		case(JAVA_OPCODE_LSTORE):
 		{
 			cout << "\tindex = " << code[++(*cont)];
 			break;
 		}
-		case(JAVA_OPCODDE_ANEWARRAY):
+		case(JAVA_OPCODE_ANEWARRAY):
 		case(JAVA_OPCODE_CHECKCAST):
 		case(JAVA_OPCODE_GETFIELD):
 		case(JAVA_OPCODE_GETSTATIC):
@@ -1170,6 +1173,9 @@ void Code_attribute::ExibirInfoOpCode(int const *cont)
 		case(JAVA_OPCODE_INVOKEVIRTUAL):
 		case(JAVA_OPCODE_LDC_W):
 		case(JAVA_OPCODE_LDC2_W):
+		case(JAVA_OPCODE_PUTSTATIC):
+		case(JAVA_OPCODE_PUTFIELD):
+		case(JAVA_OPCODE_NEW):
 		{
 			cout << "\tindexbyte1 = " << code[++(*cont)];
 			cout << "\tindexbyte2 = " << code[++(*cont)];
@@ -1231,6 +1237,69 @@ void Code_attribute::ExibirInfoOpCode(int const *cont)
 			cout << "\tindexbyte2 = " << code[++(*cont)];
 			cout << "\tcount = " << code[++(*cont)];
 			(*cont)++;
+			break;
+		}
+
+		case(JAVA_OPCODE_SIPUSH):
+		{
+			cout << "\t byte1 = " << code[++(*cont)];
+			cout << "\t byte2 = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_RET):
+		{
+			uint32_t *aux= (uint32_t*) ( &(code[ (*cont)+1 ] ) );
+			cout << "\t index = " << *aux;
+			cont+= 4;
+			break;
+		}
+		case(JAVA_OPCODE_NEWARRAY):
+		{
+			/*Array Type atype
+			T_BOOLEAN	4
+			T_CHAR	   5
+			T_FLOAT	  6
+			T_DOUBLE	 7
+			T_BYTE	   8
+			T_SHORT	  9
+			T_INT		10
+			T_LONG	   11*/
+			cout << "\t atype = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_MULTIANEWARRAY):
+		{
+			cout << "\t indexbyte1 = " << code[++(*cont)];
+			cout << "\t indexbyte2 = " << code[++(*cont)];
+			cout << "\t dimension = " << code[++(*cont)];
+			break;
+		}
+		case(JAVA_OPCODE_LOOKUPSWITCH):
+		{
+			if(*cont % 4 != 0)
+			{
+				unsigned int temp= *cont;
+				(*cont) = temp + (4 - ( temp % 4));
+			}
+			cout << "\t defaultbyte1 = " << code[++(*cont)];
+			cout << "\t defaultbyte2 = " << code[++(*cont)];
+			cout << "\t defaultbyte3 = " << code[++(*cont)];
+			cout << "\t defaultbyte4 = " << code[++(*cont)];
+
+			cout << "\t npair1 = " << code[++(*cont)];
+			cout << "\t npair2 = " << code[++(*cont)];
+			cout << "\t npair3 = " << code[++(*cont)];
+			cout << "\t npair4 = " << code[++(*cont)];
+
+			for(int i = 0; i < 4 ;i++){
+				(*cont)++;
+				uint32_t *npair=  (uint32_t*) ( &(code[*cont]) );
+				(*cont) += 4;
+				uint32_t *offset= (uint32_t*) ( &(code[*cont]) );
+				cout << "\t npair " << i << ":" << *npair << "\t offset: " << offset;
+//				cont+= 8;
+
+			}
 			break;
 		}
 	}
