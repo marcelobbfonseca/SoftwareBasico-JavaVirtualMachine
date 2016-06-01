@@ -2,7 +2,8 @@
 #include"Leitura.hpp"
 #include"Opcodes.hpp"
 #include<iostream>
-
+#include <cstdlib>
+#include <cstring>
 using namespace std;
 using namespace Leitura;
 
@@ -27,6 +28,8 @@ Então pessoal, Como tem muito C++ no método abaixo vou explicar:
 */
 attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
+	char *teste = (char*) malloc(sizeof("LineNumberTable"+1));//73
+	strcpy(teste, "LineNumberTable");
 	uint16_t attributeNameIndex;
 	LerAtributo(&attributeNameIndex, 2, arq);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "ConstantValue")
@@ -69,7 +72,7 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new SourceDebugExtension_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LineNumberTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== teste)
 	{
 		return new LineNumberTable_attribute(arq, attributeNameIndex);
 	}
@@ -113,10 +116,13 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
+	
 }
 
 attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_info*> const &constant_pool)
 {
+	char *teste = (char*) malloc(sizeof("LineNumberTable"+1));//73
+	strcpy(teste, "LineNumberTable");
 	uint16_t attributeNameIndex;
 	buffer.Ler(&attributeNameIndex, 2);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "ConstantValue")
@@ -159,7 +165,7 @@ attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_i
 	{
 		return new SourceDebugExtension_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== "LineNumberTable")
+	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex] ) )== teste)
 	{
 		return new LineNumberTable_attribute(buffer, attributeNameIndex);
 	}
