@@ -6,6 +6,7 @@ class ExecutionEngine
 	private:
 		
 	public:
+		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 		
 }
 

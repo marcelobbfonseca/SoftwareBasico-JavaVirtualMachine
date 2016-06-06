@@ -11,7 +11,8 @@ class JVM
 		RuntimeDataArea runtimeDataArea;
 		ExecutionEngine executionEngine;
 	public:
-		JVM(std::string ClassComMain, int arg, char** argv);
+		JVM(std::string ClassComMain, int argc, char** argv);
+		JVM(std::string ClassComMain);
 		
 		//a descobrir
 }
