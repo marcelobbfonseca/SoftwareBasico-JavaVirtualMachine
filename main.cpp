@@ -17,6 +17,7 @@ int main(int argc, char **argv)
 //Chamando apenas o exibidor
 	else if(AnalisadorArgumentos::EncontrarArgumento("--exibir-informacoes", argc, argv) != -1)
 	{
+		std::string caminho = argv[1];
 		try{
 			JavaClass *j1= new JavaClass(caminho);
 			j1->ExibirInformacoes();

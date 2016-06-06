@@ -6,6 +6,7 @@
 #define BUSCA_FALHOU (-1)
 
 namespace AnalisadorArgumentos
+{
 	//função responsável por procurar por um argumento no 
 	int EncontrarArgumento(char const * argumentoEsperado, int argc, char **argv)
 	{
