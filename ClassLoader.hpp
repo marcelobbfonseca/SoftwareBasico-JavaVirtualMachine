@@ -1,4 +1,5 @@
 #include<string>
+#include
 #include"JavaClass.hpp"
 
 #ifndef CLASSLOADER_HPP
@@ -10,6 +11,7 @@ class ClassLoader
 		std::map<std::string, JavaClass>
 	public:
 		ClassLoader();
+//		GetMetodos(string nomeDaClasse);
 		//a descobrir
 }
 
