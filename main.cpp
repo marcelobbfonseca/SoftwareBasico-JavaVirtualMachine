@@ -34,25 +34,9 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-//caso queira rodar a JVM
-#ifdef JVM_NAO_FEITA
-		std::string caminho = argv[1];
-		try{
-			JavaClass *j1= new JavaClass(caminho);
-			j1->ExibirInformacoes();
-			delete j1;
-		}
-		catch(Erro* err)
-		{
-			std::cout<<err->GetMensagem()<<"\n";
-		}
-		catch(...)
-		{
-			std::cout << "[ERRO] Exceção desconhecida lançada!" << std::endl;
-		}
-#else
-//falta codar aqui
-#endif
+		JVM *jvm = new JVM(string nomeClasse);
+		//faz o q quiser
+		delete jvm;
 	}
 	return 0;
 }

@@ -1,5 +1,5 @@
-#include<string>
-#include"ClassLoader.hpp"
+#include <string>
+#include "ClassLoader.hpp"
 
 #ifndef JVM_HPP
 #define JVM_HPP

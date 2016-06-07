@@ -7,6 +7,7 @@ class ExecutionEngine
 		
 	public:
 		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
+		void Play(string classComMain);
 		
 }
 
