@@ -1,8 +1,11 @@
 compilador = g++
 flags = -Wall -pedantic -g
 arquivoSaida = -o JVM.out
+classesAuxiliares = ClassesAuxiliares/Leitura.cpp ClassesAuxiliares/Endian.cpp ClassesAuxiliares/Buffer.cpp ClassesAuxiliares/Opcode.cpp
+classLoader = ClassLoader/JavaClass.cpp ClassLoader/field_info.cpp ClassLoader/cp_info.cpp ClassLoader/method_info.cpp ClassLoader/attribute_info.cpp
+INC_HPP = -IClassesAuxiliares -IClassLoader
 executavel:
-	$(compilador) JavaClass.cpp field_info.cpp cp_info.cpp method_info.cpp attribute_info.cpp main.cpp Leitura.cpp Endian.cpp Buffer.cpp Opcode.cpp $(flags) $(arquivoSaida)
+	$(compilador)  main.cpp $(classesAuxiliares) $(classLoader) $(flags) $(arquivoSaida) $(INC_HPP)
 .PHONY: gcc
 gcc:
 	$(eval compilador = gcc)

@@ -1368,3 +1368,9 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		}
 	}
 }
+
+uint16_t attribute_info::GetNameIndex()
+{
+	return attribute_name_index;
+}
+

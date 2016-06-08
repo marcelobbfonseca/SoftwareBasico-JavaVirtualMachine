@@ -19,6 +19,7 @@ class attribute_info
 		static attribute_info* LerAtributeInfo(Buffer &buff, std::vector<cp_info*> const &constant_pool);
 		virtual ~attribute_info(){}
 		virtual void ExibirInformacoes(std::string tabs)=0;
+		uint16_t GetNameIndex();
 };
 
 using namespace std;
@@ -152,6 +153,8 @@ class SourceFile_attribute: public attribute_info
 		SourceFile_attribute(FILE *arq, uint16_t attributeNameIndex);
 		SourceFile_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
+		//para implementar
+		uint16_t GetSouceFileIndex(void);
 };
 
 class SourceDebugExtension_attribute: public attribute_info

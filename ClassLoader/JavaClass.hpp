@@ -27,6 +27,7 @@ class JavaClass
 		JavaClass(string nomeArquivo);
 		~JavaClass(void);
 		void ExibirInformacoes(void);
+		string NomeDaClasse(void);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!
