@@ -4,8 +4,7 @@
 #include "Endian.hpp"
 #include <iostream>
 
-//o define IGNORAR_ENDIAN informa que os bytes lidos NÃO devem ser invertidos. Caso contrário  serão pois devem ser numeros que devem ser armazenados em little endian
-//#define DEBUG
+//o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
 using namespace std;
 
@@ -27,10 +26,8 @@ JavaClass::JavaClass(string nomeArquivo)
 		try
 		{
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
-#ifdef DEBUG
 string tabs = "\t";
 cpInfo->ExibirInformacoes();
-#endif
 			constant_pool.push_back(cpInfo);
 		}
 		catch(CONSTANT_Long_info *longInfo)
@@ -62,37 +59,27 @@ cpInfo->ExibirInformacoes();
 	}
 	
 	Leitura::LerAtributo(&fields_count, 2, arq);
-#ifdef DEBUG
-cout<< "Começando a ler os " << fields_count <<" fields." << endl;
-#endif
+//cout<< "Começando a ler os " << fields_count <<" fields." << endl;
 	for(int cont=0; cont < fields_count; cont++)
 	{
 		field_info *fieldInfo = new field_info(arq, constant_pool);
 		fields.push_back(*fieldInfo);
-#ifdef DEBUG
-cout<< "Lido field" << endl;
-#endif
+//cout<< "Lido field" << endl;
 	}
 	
 	Leitura::LerAtributo(&methods_count, 2, arq);
-#ifdef DEBUG
 cout<< "Começando a ler os " << methods_count <<" methods." << endl;
-#endif
 	for(int cont=0; cont < methods_count; cont++)
 	{
 		method_info *methodInfo = new method_info(arq, constant_pool);
-		methods.push_back(*methodInfo);
-#ifdef DEBUG
 string tabs = "\t";
 methodInfo->ExibirInformacoes(tabs);
+		methods.push_back(*methodInfo);
 cout<< "Lido method" << endl;
-#endif
 	}
 	
 	Leitura::LerAtributo(&attributes_count, 2, arq);
-#ifdef DEBUG
 cout << "Attributes count = " << attributes_count << endl;
-#endif
 	for(int cont=0; cont < attributes_count; cont++)
 	{
 		attribute_info *attributesInfo = attribute_info::LerAtributeInfo(arq, constant_pool);
@@ -106,10 +93,6 @@ JavaClass::~JavaClass(void)
 	for(unsigned int cont  = 0 ; cont < constant_pool.size(); cont++)
 	{
 		delete constant_pool[cont];
-	}
-	for(unsigned int cont  = 0 ; cont < attributes.size(); cont++)
-	{
-		delete attributes[cont];
 	}
 }
 
@@ -190,7 +173,7 @@ void JavaClass::ExibirInformacoes(void)
 	}
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Fields count =\t\t" << fields_count << endl;
-	if(fields.size() > 0)
+	if(fields_count > 0)
 	{
 		cout << "Fields:" << endl;
 		cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -206,15 +189,15 @@ void JavaClass::ExibirInformacoes(void)
 	}
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Methods count =\t\t" << methods_count << endl;
-	if(methods.size() > 0)
+	if(methods_count > 0)
 	{
 		cout << "Methods:" << endl;
 		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
-		for(unsigned int cont= 0; cont < methods.size() ; cont++)
+		for(int cont= 0; cont < methods_count ; cont++)
 		{
 			cout << "\tMethod[" << cont << "]:" << endl;;
 			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
-			if(cont != (unsigned int)methods_count-1)
+			if(cont != methods_count-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 			}
@@ -222,7 +205,7 @@ void JavaClass::ExibirInformacoes(void)
 	}
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Attributes count =\t\t" << attributes_count << endl;
-	if(attributes.size() > 0)
+	if(attributes_count > 0)
 	{
 		cout << "Attributes:" << endl;
 		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
