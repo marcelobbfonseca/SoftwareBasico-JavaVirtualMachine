@@ -12,6 +12,7 @@ class RuntimeDataArea
 		RuntimeDataArea();
 		SetClassLoader(ClassLoader *classLoader);
 		SetExecutionEngine(ExecutionEngine *executionEngine);
+		 ObterInstrucao(string nomeDaClasse, char * nomeMetodo, offset);
 		//a descobrir
 }
 
@@ -25,6 +26,6 @@ Class Frame
 		ObjetoTratado *obj;
 		vector<excecao> TabelaDeExcecoes;
 	public:
-		
+		Frame();
 }
 #endif
