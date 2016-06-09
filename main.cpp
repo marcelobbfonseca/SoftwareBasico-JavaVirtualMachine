@@ -4,15 +4,26 @@
 #include"JavaClass.hpp"
 #include"Erro.hpp"
 #include"AnalisadorArgumentos.hpp"
+#include"Easter.hpp"
 
 #define JVM_NAO_FEITA
+
+void ExibirMensagemDeAjuda(void);
 
 int main(int argc, char **argv)
 {
 //pedido de ajuda
 	if(AnalisadorArgumentos::EncontrarArgumento("--help", argc, argv) != -1)
 	{
-//		ExibirMensagemDeAjuda();
+		ExibirMensagemDeAjuda();
+	}
+	else if(AnalisadorArgumentos::EncontrarArgumento("--goku", argc, argv) != -1)
+	{
+		MostrarGoku();
+	}
+	else if(AnalisadorArgumentos::EncontrarArgumento("--goku-na-capivara", argc, argv) != -1)
+	{
+		MostrarGokuNaCapivara();
 	}
 //Chamando apenas o exibidor
 	else if(AnalisadorArgumentos::EncontrarArgumento("--exibir-informacoes", argc, argv) != -1)
@@ -34,9 +45,20 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		JVM *jvm = new JVM(string nomeClasse);
+//		JVM *jvm = new JVM(string nomeClasse);
 		//faz o q quiser
-		delete jvm;
+//		delete jvm;
 	}
 	return 0;
 }
+
+void ExibirMensagemDeAjuda(void)
+{
+	std::cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << std::endl;
+	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classeComMain.class] *[argumentosParaMain]\t\tpara rodar um arquivo .class" << std::endl;
+	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] --exibir-informacoes\t\tpara ver as informacoes do .class informado" << std::endl;
+	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] --help\t\t\tpara ver essa mensagem de erro" << std::endl;
+	std::cout << "Este programa tem os poderes do goku na capivara." << std::endl;
+}
+
+
