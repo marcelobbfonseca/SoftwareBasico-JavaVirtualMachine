@@ -45,6 +45,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
+		int indiceArquivo= AnalisadorArgumentos::EncontrarArgumento("--run", argc, argv) + 1;
 //		JVM *jvm = new JVM(string nomeClasse);
 		//faz o q quiser
 //		delete jvm;

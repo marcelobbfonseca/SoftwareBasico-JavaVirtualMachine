@@ -23,6 +23,7 @@ void MostrarGoku(void)
 	std::cout << "   〈＿／  ＼＿〉" << std::endl;
 	std::cout << "   ／ )     ( ＼" << std::endl;
 	std::cout << "   ￣        ￣" << std::endl;
+	std::cout << "Isso nao e tudo." << std::endl;
 }
 
 
@@ -52,7 +53,6 @@ void MostrarGokuNaCapivara(void)
 	std::cout << " ｜       🐽  | " << std::endl;
 	std::cout << " ｜              ノ  " << std::endl;
 	std::cout << "  U￣U￣￣U￣📝￣" << std::endl;
-	std::cout << "SB Turma uniao 1/2016! Gogo passar!" << std::endl;
 }
 
 #endif

@@ -6,6 +6,8 @@
 
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
+//#define DEBUG
+
 using namespace std;
 
 JavaClass::JavaClass(string nomeArquivo)
@@ -17,8 +19,18 @@ JavaClass::JavaClass(string nomeArquivo)
 		throw(new Erro("Falha na abertura do arquivo!"));
 	} 					//enderecos de atributos do java class
 	Leitura::LerAtributo(&magic, 4, arq, IGNORAR_ENDIAN);
+	if(magic != 0xcafebabe)
+	{
+		throw new Erro("Magic invalido", "JavaClass", "JavaClass");
+	}
 	Leitura::LerAtributo(&minor_version, 2, arq);
 	Leitura::LerAtributo(&major_version, 2, arq);
+	if(major_version <46)
+	{
+		char errMsg[100];
+		sprintf(errMsg, "Versao .class invalido.\tVersao informada: %d.%d", major_version, minor_version);
+		throw new Erro(errMsg, "JavaClass", "JavaClass");
+	}
 	Leitura::LerAtributo(&constant_pool_count, 2, arq);
 
 	for(int cont=0; cont < constant_pool_count-1; cont++)
@@ -26,8 +38,10 @@ JavaClass::JavaClass(string nomeArquivo)
 		try
 		{
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
+#ifdef DEBUG
 string tabs = "\t";
 cpInfo->ExibirInformacoes();
+#endif
 			constant_pool.push_back(cpInfo);
 		}
 		catch(CONSTANT_Long_info *longInfo)
@@ -59,27 +73,39 @@ cpInfo->ExibirInformacoes();
 	}
 	
 	Leitura::LerAtributo(&fields_count, 2, arq);
-//cout<< "Começando a ler os " << fields_count <<" fields." << endl;
+#ifdef DEBUG
+cout<< "Começando a ler os " << fields_count <<" fields." << endl;
+#endif
 	for(int cont=0; cont < fields_count; cont++)
 	{
 		field_info *fieldInfo = new field_info(arq, constant_pool);
 		fields.push_back(*fieldInfo);
-//cout<< "Lido field" << endl;
+#ifdef DEBUG
+cout<< "Lido field" << endl;
+#endif
 	}
 	
 	Leitura::LerAtributo(&methods_count, 2, arq);
+#ifdef DEBUG
 cout<< "Começando a ler os " << methods_count <<" methods." << endl;
+#endif
 	for(int cont=0; cont < methods_count; cont++)
 	{
 		method_info *methodInfo = new method_info(arq, constant_pool);
+#ifdef DEBUG
 string tabs = "\t";
 methodInfo->ExibirInformacoes(tabs);
+#endif
 		methods.push_back(*methodInfo);
+#ifdef DEBUG
 cout<< "Lido method" << endl;
+#endif
 	}
 	
 	Leitura::LerAtributo(&attributes_count, 2, arq);
+#ifdef DEBUG
 cout << "Attributes count = " << attributes_count << endl;
+#endif
 	for(int cont=0; cont < attributes_count; cont++)
 	{
 		attribute_info *attributesInfo = attribute_info::LerAtributeInfo(arq, constant_pool);
@@ -124,7 +150,6 @@ void JavaClass::ExibirInformacoes(void)
 		}
 	}
 	cout << "-----------------------------------------------------------------" << endl;
-//passar essa parte pro access_flag.cpp!
 	cout<< "access_flags:\t\t\t" << hex << access_flags << dec << endl;
 	if(access_flags & 0x0001)
 	{
