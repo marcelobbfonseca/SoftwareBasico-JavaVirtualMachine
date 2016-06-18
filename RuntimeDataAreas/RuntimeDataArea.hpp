@@ -4,9 +4,10 @@
 class RuntimeDataArea
 {
 	private:
-		map<string, DadosDaClasse> InformacoesDeClasses;
+//		map<string, DadosDaClasse> InformacoesDeClasses;
 		map<DadosDaClasse*, Objeto*> listaDeObjetos;
 		stack<Frame> frames;
+		MethodArea methodArea;
 		//a descobrir
 	public:
 		RuntimeDataArea();
