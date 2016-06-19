@@ -18,7 +18,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	{
 		throw(new Erro("Falha na abertura do arquivo!"));
 	} 					//enderecos de atributos do java class
-	Leitura::LerAtributo(&magic, 4, arq, IGNORAR_ENDIAN);
+	Leitura::LerAtributo(&magic, 4, arq);
 	if(magic != 0xcafebabe)
 	{
 		throw new Erro("Magic invalido", "JavaClass", "JavaClass");
@@ -130,7 +130,7 @@ void JavaClass::ExibirInformacoes(void)
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << endl;
 	cout << "-----------------------------------------------------------------" << endl;
-	cout <<"Magic:\t\t\t0x"<< hex << InverterEndianess<uint32_t>(magic) <<  endl << dec;
+	cout <<"Magic:\t\t\t0x"<< hex << magic <<  endl << dec;
 	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Minor version:\t\t\t" << minor_version << endl;
 	cout << "Major version:\t\t\t" << major_version << endl;

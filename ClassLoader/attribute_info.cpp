@@ -833,7 +833,7 @@ void Code_attribute::ExibirInformacoes(string tabs)
 //	int aux=0;
 	for(unsigned int cont=0; cont < code_length; cont++)
 	{
-		cout << tabs << "\t\t" << hex << (unsigned int)code[cont] << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]);
+		cout << tabs << "\t\t" << hex << cont << dec << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]);
 		ExibirInfoOpCode(&cont);
 		cout << endl;
 	}
