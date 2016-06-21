@@ -9,7 +9,8 @@ class DadosDaClasse
 		vector<metodo> metodos;
 		vector<cp_info> constant_pool;
 	public:
-		
+		bool MetodoExiste(string nomeDoMetodo, string descritor);
+		DadosDaClasse(JavaClass *);
 }
 
 class Metodo
@@ -17,11 +18,12 @@ class Metodo
 	private:
 		string nomeMetodo;
 		vector<uint8_t> bytecode;
-		vector<atributo> variaveisLocais;
-		TipoDeRetorno tipoDeRetorno;
-		vector<atributo> argumentos;
+		vector<Tipo> variaveisLocais;
+//		Tipo tipoDeRetorno;
+//		vector<Tipo> argumentos;
+		string descritor;
 	public:
-		
+		bool MetodoExiste(string nomeDoMetodo, string descritor);
 }
 
 #endif

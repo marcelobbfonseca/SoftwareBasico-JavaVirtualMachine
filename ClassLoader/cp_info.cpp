@@ -461,3 +461,10 @@ cout << "Match!" << endl;
 	delete []temp;
 	return (res);*/
 }
+
+string CONSTANT_Utf8_info::GetString(void)
+{
+	string retorno= (char *)bytes;
+	return retorno;
+}
+

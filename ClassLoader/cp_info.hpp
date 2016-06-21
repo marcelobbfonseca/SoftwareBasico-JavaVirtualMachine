@@ -241,6 +241,7 @@ class CONSTANT_Utf8_info: public cp_info
 		CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes);
 		~CONSTANT_Utf8_info();
 		void ExibirInformacoes(void);
+		std::string GetString(void);
 		bool operator==(std::string teste);
 		bool operator==(char const *teste);
 	private:

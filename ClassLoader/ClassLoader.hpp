@@ -8,7 +8,7 @@
 class ClassLoader
 {
 	private:
-		std::map<std::string, JavaClass> classesCarregadas;
+		std::map<std::string, JavaClass *> classesCarregadas;
 	public:
 		DadosDaClasse* CarregarClasse(string nomeClasse);
 		ClassLoader();

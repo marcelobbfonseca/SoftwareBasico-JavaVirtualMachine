@@ -49,3 +49,17 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 {
 	this.executionEngine =executionEngine;
 }
+
+bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string descritor)
+{
+	string nomeSemExtensao= nomeDaClasse;
+	if(StringUtilidadesTerminaCom(nomeClasse, ".class")
+	{
+		nomeSemExtensao= RemoverNoFinal(nomeSemExtensao, ".class");
+	}
+	if(classes.count(nomeSemExtensao) >0)
+	{
+		return (classes[nomeSemExtensao])->MetodoExiste(nomeMetodo, descritor);
+	}
+	return false;
+}
