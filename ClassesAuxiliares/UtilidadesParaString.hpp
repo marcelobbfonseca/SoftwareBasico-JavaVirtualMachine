@@ -12,7 +12,7 @@ namespace StringUtilidades
 	bool TerminaCom(const string &str, char const *final)
 	{
 		int tamanhoFinal= strlen(final);
-		int tamanhoString= str.lenght();
+		int tamanhoString= str.length();
 		if(tamanhoString < tamanhoFinal || tamanhoFinal < 1)
 		{
 			return false;
@@ -21,7 +21,7 @@ namespace StringUtilidades
 		{
 			tamanhoFinal--;
 			tamanhoString--;
-			if(string[tamanhoString] != final[tamanhoFinal])
+			if(str[tamanhoString] != final[tamanhoFinal])
 			{
 				return false;
 			}
@@ -39,13 +39,13 @@ namespace StringUtilidades
 			string msgErro = "'";
 			msgErro+= str;
 			msgErro+= "'";
-			msgErro+= " nao termina com "
+			msgErro+= " nao termina com ";
 			msgErro+= "'";
 			msgErro+= final;
 			msgErro+= "'";
 			throw new Erro(msgErro, "StringUtilidades", "RemoverNoFinal");
 		}
-		string retorno= str.substr(0, str.len()-strlen(final));
+		string retorno= str.substr(0, str.length()-strlen(final));
 		return retorno;
 	}
 }
