@@ -112,6 +112,10 @@ cout << "Attributes count = " << attributes_count << endl;
 		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);
+	if(this->NomeDaClasse()!= StringUtilidades::RemoverNoFinal(nomeArquivo, ".class")
+	{
+		throw new Erro("Nome da classe diferente do nome do arquivo!", "JavaClass", "JavaClass");
+	}
 }
 
 JavaClass::~JavaClass(void)
