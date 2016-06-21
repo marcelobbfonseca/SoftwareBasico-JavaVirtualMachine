@@ -78,6 +78,9 @@ class Code_attribute: public attribute_info
 		Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		~Code_attribute(void);
 		void ExibirInformacoes(string tabs);
+
+		Code_attribute& operator=(Code_attribute );
+		Code_attribute(Code_attribute&);
 };
 
 class Exceptions_attribute : public attribute_info
@@ -156,7 +159,7 @@ class SourceFile_attribute: public attribute_info
 		//para implementar
 		uint16_t GetSouceFileIndex(void);
 };
-
+//nao utilizar
 class SourceDebugExtension_attribute: public attribute_info
 {
 	private:
@@ -245,7 +248,7 @@ class Deprecated_attribute : public attribute_info
 		Deprecated_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class Elemento_Metodo_Bootstrap
 {
 	private:
@@ -256,7 +259,7 @@ class Elemento_Metodo_Bootstrap
 		Elemento_Metodo_Bootstrap(Buffer &buff);
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class BootstrapMethods_attribute: public attribute_info
 {
 	private:
@@ -267,7 +270,7 @@ class BootstrapMethods_attribute: public attribute_info
 		BootstrapMethods_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 {
 	private:
@@ -278,7 +281,7 @@ class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa c
 		~RuntimeVisibleAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 {
 	private:
@@ -289,7 +292,7 @@ class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa
 		~RuntimeInvisibleAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível. Fazendo um attribute_info genérico.
 {
 	private:
@@ -300,7 +303,7 @@ class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-
 		~RuntimeVisibleParameterAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
 {
 	private:
@@ -311,7 +314,7 @@ class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Fod
 		~RuntimeInvisibleParameterAnnotations_attribute();
 		void ExibirInformacoes(string tabs);
 };
-
+//nao utilizar
 class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. Muito incompreensível.Fazendo um attribute_info genérico.
 {
 	private:

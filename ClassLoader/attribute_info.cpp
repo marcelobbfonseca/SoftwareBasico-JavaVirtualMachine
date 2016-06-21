@@ -1374,3 +1374,7 @@ uint16_t attribute_info::GetNameIndex()
 	return attribute_name_index;
 }
 
+uint16_t SourceFile_attribute::GetSouceFileIndex(void)
+{
+	return sourcefile_index;
+}

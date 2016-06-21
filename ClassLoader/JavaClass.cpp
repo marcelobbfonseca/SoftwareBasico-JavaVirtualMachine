@@ -249,22 +249,18 @@ void JavaClass::ExibirInformacoes(void)
 	cout << "-----------------------------------------------------------------" << endl;
 }
 
-uint16_t SourceFile_attribute::GetSouceFileIndex(void)
-{
-	return sourcefile_index;
-}
-
-/*
 string JavaClass::NomeDaClasse(void)
 {
 	string retorno;
-	for(int cont =0 ; cont < attributes.count(); cont++)
+	for(unsigned int cont =0 ; cont < attributes.size(); cont++)
 	{
-		if( ( *( (CONSTANT_Utf8_info *)constant_pool[attributes[cont].GetNameIndex()-1] ) )== "SourceFile" )
+		if( ( *( (CONSTANT_Utf8_info *)constant_pool[attributes[cont]->GetNameIndex()-1] ) )== "SourceFile" )
 		{
-			uint16_t índiceNomeArquivo= ((SourceFile_attribute *)attributes[cont])->GetSouceFileIndex();
-			retorno = constant_pool[índiceNomeArquivo-1]
+			uint16_t indiceNomeArquivo= ((SourceFile_attribute *)attributes[cont])->GetSouceFileIndex();
+			retorno = ( (CONSTANT_Utf8_info *)(constant_pool[indiceNomeArquivo-1]) )->GetString();
+			return retorno;
 		}
 	}
+	throw new Erro("Classe nao possui nome armazenado internamente.", "JavaClass", "NomeDaClasse");
 }
-*/
+
