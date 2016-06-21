@@ -1,16 +1,3 @@
-void EmpilharFrame(Frame frame){
-
-    this->pilhaFrames.push(frame);
-
-}
-
-Frame topoPilha(){
-
-    return this->pilhaFrames.top();
-
-}
-
-
 
 DadosDaClasse *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 {
@@ -49,3 +36,16 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 {
 	this.executionEngine =executionEngine;
 }
+
+void EmpilharFrame(Frame frame){
+
+    this->pilhaFrames.push(frame);
+
+}
+
+Frame topoPilha(){
+
+    return this->pilhaFrames.top();
+
+}
+
