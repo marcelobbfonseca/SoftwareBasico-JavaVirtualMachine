@@ -11,6 +11,6 @@ class ExecutionEngine
 		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 		void Play(string classComMain);
 
-}
+};
 
 #endif

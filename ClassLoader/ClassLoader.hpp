@@ -15,7 +15,7 @@ class ClassLoader
 		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 //		GetMetodos(string nomeDaClasse);
 		//a descobrir
-}
+};
 	
 
 #endif
