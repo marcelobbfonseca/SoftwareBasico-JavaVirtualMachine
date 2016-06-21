@@ -58,6 +58,11 @@ class Erro{
 			mensagem= temp + errMsg;
 			AdicionarContexto(classeOuNameSpaceQueLancou, metodoOuFucaoQueLancou);
 		}
+		Erro(string const &errMsg, char const * classeOuNameSpaceQueLancou, char const * metodoOuFucaoQueLancou)
+		{
+			mensagem= errMsg;
+			AdicionarContexto(classeOuNameSpaceQueLancou, metodoOuFucaoQueLancou);
+		}
 };
 
 #endif
