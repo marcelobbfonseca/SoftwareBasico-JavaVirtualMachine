@@ -1,13 +1,24 @@
 void ExecutionEngine::Play(string classComMain)
 {
-	int offset=0;
-	int proximaInstrucao = runtimeDataArea.ObterInstrucao(classComMain, "<init>", offset);
+    uint8_t *instruction
+
+    runtimeDataArea->empilharFrame(new Frame(classComMain, "main", "([Ljava/lang/String;)V"));
+    runtimeDataArea->empilharFrame(new Frame(classComMain, "<init>"),"()V");
+
 	do
 	{
-		vetorDePonteirosParaFuncao[proximaInstrucao];
-		offset++;
-		proximaInstrucao = runtimeDataArea.ObterInstrucao(classComMain, "main", offset);
+
+        instruction = runtimeDataArea.topoPilha().pc;
+		vetorDePonteirosParaFuncao[instrucao];
+
 	}
-	while(indiceDaProximaInstrucao == "return");
+	while(runtimeDataArea.frameStack.size > 0);
 }
+
+
+
+
+
+
+
 

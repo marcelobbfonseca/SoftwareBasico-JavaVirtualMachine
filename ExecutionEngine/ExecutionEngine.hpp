@@ -4,11 +4,13 @@
 class ExecutionEngine
 {
 	private:
-		
+
+        void vetorDePonteirosParaFuncao[250];
+
 	public:
 		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 		void Play(string classComMain);
-		
+
 }
 
 #endif
