@@ -28,7 +28,7 @@ class JavaClass
 		~JavaClass(void);
 		void ExibirInformacoes(void);
 		string NomeDaClasse(void);
-		field_info* getFieldInfo(void);
+		const vector<field_info> getFieldInfo(void);
 		uint16_t getAccessFlags(void);
 		uint16_t getFieldsCount(void);
 		string getUTF8(uint16_t posicao);

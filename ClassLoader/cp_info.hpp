@@ -57,6 +57,7 @@ class cp_info
 		static cp_info* LerCpInfo(FILE *arq);
 		virtual void ExibirInformacoes(void) = 0;
 		virtual ~cp_info(void){}
+		uint8_t GetTag(void);
 	private:
 	protected:
 	//! Tag que indica de qual filho deve ser usado
@@ -75,6 +76,7 @@ class CONSTANT_Class_info:public cp_info
 	public:
 		CONSTANT_Class_info(uint16_t nameIndex);
 		void ExibirInformacoes(void);
+		uint16_t GetNameIndex(void);
 	private:
 //!inteiro sem sinal de 2 bytes
 /*!
@@ -90,6 +92,8 @@ class CONSTANT_Fieldref_info:public cp_info
 	public:
 		CONSTANT_Fieldref_info(uint16_t classIndex, uint16_t nameAndTypeIndex);
 		void ExibirInformacoes(void);
+		uint16_t GetClassIndex(void);
+		uint16_t GetNameAndTypeIndex(void);
 	private:
 		uint16_t class_index;
 		uint16_t name_and_type_index;
@@ -101,6 +105,8 @@ class CONSTANT_Methodref_info:public cp_info
 	public:
 		CONSTANT_Methodref_info(uint16_t classIndex, uint16_t nameAndTypeIndex);
 		void ExibirInformacoes(void);
+		uint16_t GetClassIndex(void);
+		uint16_t GetNameAndTypeIndex(void);
 	private:
 		uint16_t class_index;
 		uint16_t name_and_type_index;
@@ -112,6 +118,8 @@ class CONSTANT_InterfaceMethodref_info:public cp_info
 	public:
 		CONSTANT_InterfaceMethodref_info(uint16_t classIndex, uint16_t nameAndTypeIndex);
 		void ExibirInformacoes(void);
+		uint16_t GetClassIndex(void);
+		uint16_t GetNameAndTypeIndex(void);
 	private:
 		uint16_t class_index;
 		uint16_t name_and_type_index;
@@ -123,7 +131,8 @@ class CONSTANT_String_info:public cp_info
 	public:
 		CONSTANT_String_info(uint16_t stringIndex);
 		void ExibirInformacoes(void);
-	private:
+		uint16_t GetStringIndex(void);
+	private:CONSTANT_String_info
 //!inteiro sem sinal de 2 bytes
 /*!
 O valor de string tem que ser um valor válido no vetor de constant_pool.
@@ -138,12 +147,13 @@ class CONSTANT_Integer_info: public cp_info
 	public:
 		CONSTANT_Integer_info(uint32_t bytes);
 		void ExibirInformacoes(void);
+		int32_t GetNumero(void);
 	private:
 	//!Armazena um inteiro de 32 bits.
 	/*!
 		Em processadores low-Endian os bytes da memória ficam invertidos.
 	*/
-		uint32_t bytes;
+		int32_t bytes;
 };
 
 //! Classe usada para armazenar números de ponto flutuante de 32 bits
@@ -152,6 +162,7 @@ class CONSTANT_Float_info: public cp_info
 	public:
 		CONSTANT_Float_info(uint32_t bytes);
 		void ExibirInformacoes(void);
+		float GetNumero(void);
 	private:
 	//!Armazena um número em ponto flutuante de 32 bits.
 	/*!
@@ -169,6 +180,7 @@ class CONSTANT_Long_info:public cp_info
 	public:
 		CONSTANT_Long_info(uint32_t highBytes, uint32_t lowBytes);
 		void ExibirInformacoes(void);
+		uint64_t GetNumero(void);
 
 #ifdef IMPLEMENTADO_IMPRESSAO_NUMEROS_BASE_10
 
@@ -194,6 +206,7 @@ class CONSTANT_Double_info:public cp_info
 	public:
 		CONSTANT_Double_info(uint32_t highBytes, uint32_t lowBytes);
 		void ExibirInformacoes(void);
+		double GetNumero(void);
 #ifdef IMPLEMENTADO_IMPRESSAO_NUMEROS_BASE_10
 		//!Retorna em uma string o número na base 10
 		/*!
@@ -216,6 +229,8 @@ class CONSTANT_NameAndType_info: public cp_info
 	public:
 		CONSTANT_NameAndType_info(uint16_t nameIndex, uint16_t descriptorIndex);
 		void ExibirInformacoes(void);
+		uint16_t GetNameIndex(void);
+		uint16_t GetDescriptorIndex(void);
 	private:
 /*!
 O valor de name_index tem que ser uma entrada válida na tabela constant_pool, que deve referenciar um CONSTANT_Utf8_info que representa tanto o nome do método especial <init> ou um nome não qualificado que denota um campo ou método.
