@@ -28,6 +28,11 @@ class JavaClass
 		~JavaClass(void);
 		void ExibirInformacoes(void);
 		string NomeDaClasse(void);
+		field_info getFieldInfo();
+		uint16_t getAccessFlags();
+		uint16_t getFieldsCount();
+		string getUTF8(uint16_t name_index);
+        string getUTF8(uint16_t descriptor_index);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!
@@ -57,7 +62,7 @@ class JavaClass
 		ACC_SYNTHETIC | 0x1000          | Declarada sintética. Não existe no código fonte.
 		ACC_ANNOTATION| 0x2000          | Declarada como um tipo anotação.
 		ACC_ENUM      | 0x4000          | Declarada como uma enumeração.
-		Todos os bits não informados acima são reservados para uso futuro. Eles devem ser tornados zeros na durante a geração do .class e; se não tiverem devem ser ignorados silenciosamente 
+		Todos os bits não informados acima são reservados para uso futuro. Eles devem ser tornados zeros na durante a geração do .class e; se não tiverem devem ser ignorados silenciosamente
 		*/
 		uint16_t access_flags;
 		//! Indica qual é a classe descrita este arquivo

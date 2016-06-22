@@ -14,7 +14,7 @@ Class Frame
 class Objeto {
 
     DadosDaInstancia *instancia;
-    DadosDaClasse *classe;
+    JavaClass *classe;
 
 };
 
