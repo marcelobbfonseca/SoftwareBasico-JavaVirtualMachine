@@ -269,3 +269,91 @@ string JavaClass::NomeDaClasse(void)
 	throw new Erro("Classe nao possui nome armazenado internamente.", "JavaClass", "NomeDaClasse");
 }
 
+field_info* JavaClass::getFieldInfo(void)
+{
+	return &(fields[0]);
+}
+
+uint16_t JavaClass::getFieldsCount(void)
+{
+	return fields_count;
+}
+
+uint16_t JavaClass::getAccessFlags(void)
+{
+	return access_flags;
+}
+
+const string JavaClass::getUTF8(uint16_t posicao)
+{
+	cp_info* constante = constant_pool[posicao-1];
+	switch(constante->tag)
+	{
+		case(CONSTANT_Class):
+		{
+			CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constante;
+			return getUTF8(classInfo->nameIndex);
+		}
+		case(CONSTANT_Fieldref):
+		{
+			CONSTANT_Fieldref_info *fieldRefInfo= (CONSTANT_Fieldref_info*) constante;
+			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[fieldRefInfo->name_and_type_index-1];
+			const string nomeClasse = getUTF8(fieldRefInfo->class_index);
+			const string nomeField= getUTF8(nameAndTypeInfo->name_index);
+			return nomeClasse + "." + nomeField;
+		}
+		case(CONSTANT_Methodref):
+		{
+			CONSTANT_Methodref_info *methodRefInfo= (CONSTANT_Methodref_info*) constante;
+			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[methodrefRefInfo->name_and_type_index-1];
+			const string nomeClasse = getUTF8(methodRefInfo->class_index);
+			const string nomeMethod= getUTF8(nameAndTypeInfo->name_index);
+			return nomeClasse + "." + nomeField;
+		}
+		case(CONSTANT_InterfaceMethodref):
+		{
+			CONSTANT_InterfaceMethodref_info *interfaceMethodRefInfo= (CONSTANT_InterfaceMethodref_info*) constante;
+			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[interfaceMethodrefRefInfo->name_and_type_index-1];
+			const string nomeClasse = getUTF8(interfaceMethodRefInfo->class_index);
+			const string nomeMethod= getUTF8(nameAndTypeInfo->name_index);
+			return nomeClasse + "." + nomeField;
+		}
+		case(CONSTANT_String):
+		{
+			CONSTANT_String_info *stringInfo = (CONSTANT_String_info*)constante;
+			return getUTF8(stringInfo->string_index);
+		}
+		case(CONSTANT_Integer):
+		{
+			CONSTANT_Integer_info *intInfo = (CONSTANT_Integer_info *)constante;
+			
+		}
+		case(CONSTANT_Float):
+		{
+			
+		}
+		case(CONSTANT_Long):
+		{
+			
+		}
+		case(CONSTANT_Double):
+		{
+			
+		}
+		case(CONSTANT_NameAndType):
+		{
+			
+		}
+		case(CONSTANT_Utf8):
+		{
+			CONSTANT_Utf8_info *utf8Info = (CONSTANT_Utf8_info*)constante;
+			return utf8Info->GetString();
+		}
+		default:
+		{
+			
+		}
+	}
+}
+
+
