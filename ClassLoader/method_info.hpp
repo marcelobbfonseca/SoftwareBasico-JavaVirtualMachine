@@ -23,6 +23,8 @@ class method_info {
 	method_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
 	~method_info();
 	void ExibirInformacoes(string tabs);
+	uint16_t getNameIndex(void);
+	uint16_t getDescriptorIndex(void);
 
 };
 
