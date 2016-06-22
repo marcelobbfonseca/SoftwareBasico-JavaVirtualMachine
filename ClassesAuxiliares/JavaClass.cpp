@@ -270,9 +270,9 @@ string JavaClass::NomeDaClasse(void)
 	throw new Erro("Classe nao possui nome armazenado internamente.", "JavaClass", "NomeDaClasse");
 }
 
-field_info* JavaClass::getFieldInfo(void)
+vector<field_info>& JavaClass::getFieldInfo(void)
 {
-	return &(fields[0]);
+	return fields;
 }
 
 uint16_t JavaClass::getFieldsCount(void)
@@ -378,4 +378,21 @@ const string JavaClass::getUTF8(uint16_t posicao)
 	throw new Erro(erro, "JavaClass", "getUTF8");
 }
 
+const vector<cp_info*>& getConstantPool(void)
+{
+	return constant_pool;
+}
+
+method_info const * const getMetodo(string nomeMetodo, string descritorMetodo)
+{
+	for(int cont =0; cont < methods.count(); cont++)
+	{
+		method_info &temp = methods[cont];
+		if(getUTF8(temp.GetNameIndex()) == nomeMetodo && getUTF8(temp.GetDescriptorIndex()) == descritorMetodo)
+		{
+			return &(methods[count]);
+		}
+	}
+	return NULL;
+}
 
