@@ -2,6 +2,7 @@
 #include "Erro.hpp"
 #include "Leitura.hpp"
 #include "Endian.hpp"
+#include "UtilidadesParaString.hpp"
 #include <iostream>
 
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
@@ -112,6 +113,10 @@ cout << "Attributes count = " << attributes_count << endl;
 		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);
+	if(this->NomeDaClasse()!= StringUtilidades::RemoverNoFinal(nomeArquivo, ".class"))
+	{
+		throw new Erro("Nome da classe diferente do nome do arquivo!", "JavaClass", "JavaClass");
+	}
 }
 
 JavaClass::~JavaClass(void)

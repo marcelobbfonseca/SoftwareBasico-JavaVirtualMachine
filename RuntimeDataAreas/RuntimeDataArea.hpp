@@ -5,12 +5,12 @@ class RuntimeDataArea
 {
 	private:
 //		map<string, DadosDaClasse> InformacoesDeClasses;
-		map<string, DadosDaClasse*> classes;
-		map<DadosDaClasse*, Objeto*> listaDeObjetos;
+		map<string, JavaClass*> classes;
+		map<JavaClass*, Objeto*> listaDeObjetos;
 		stack<Frame> pilhaFrames;
 
-		DadosDaClasse* CarregarClasse(const string &nomeDaClasse);
-		DadosDaClasse* ObterDadosDaClasse(const string &nomeDaClasse);
+		JavaClass* CarregarClasse(const string &nomeDaClasse);
+		JavaClass* ObterDadosDaClasse(const string &nomeDaClasse);
 		//a descobrir
 	public:
 		RuntimeDataArea();

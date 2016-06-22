@@ -15,6 +15,6 @@ class JVM
 		JVM(std::string ClassComMain);
 		
 		//a descobrir
-}
+};
 
 #endif

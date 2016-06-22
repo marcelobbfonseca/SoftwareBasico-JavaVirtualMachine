@@ -1,5 +1,5 @@
 
-DadosDaClasse *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
+JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 {
 	string nomeSemExtensao= nomeDaClasse;
 	if(StringUtilidadesTerminaCom(nomeClasse, ".class")

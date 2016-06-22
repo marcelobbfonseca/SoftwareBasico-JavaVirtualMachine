@@ -10,12 +10,12 @@ class ClassLoader
 	private:
 		std::map<std::string, JavaClass *> classesCarregadas;
 	public:
-		DadosDaClasse* CarregarClasse(string nomeClasse);
+		JavaClass* CarregarClasse(string nomeClasse);
 		ClassLoader();
 		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 //		GetMetodos(string nomeDaClasse);
 		//a descobrir
-}
+};
 	
 
 #endif
