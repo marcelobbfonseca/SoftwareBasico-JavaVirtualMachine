@@ -32,7 +32,9 @@ class JavaClass
 		uint16_t getAccessFlags(void);
 		uint16_t getFieldsCount(void);
 		string getUTF8(uint16_t name_index);
-                string getUTF8(uint16_t descriptor_index);
+        string getUTF8(uint16_t descriptor_index);
+        cp_info* getConstantPool(void);
+        method_info* getMetodoChamado(nomeMetodo, descritorMetodo);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!
