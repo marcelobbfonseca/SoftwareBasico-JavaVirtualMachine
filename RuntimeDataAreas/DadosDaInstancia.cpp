@@ -4,7 +4,7 @@ DadosDaInstancia(JavaClass *javaClass){
     field_info *fields = javaClass.getFieldInfo();
     uint16_t abstractFlag = 0x0400;
 
-    if ((javaClass.getAccessFlags() & javaClass.getAbstractFlag()) != 0) {
+    if ((javaClass.getAccessFlags() & abstractFlag) != 0) {
 
         // Não pode instanciar se for classe abstrata
         cerr << "Erro de intanciamento" << endl;
@@ -59,10 +59,11 @@ DadosDaInstancia(JavaClass *javaClass){
         }
     }
 
-    /* quando um objeto é criado, ele precisa ser armazenado na Heap?Precisamos de uma Heap?
+    // Quando um objeto é criado, ele precisa ser armazenado na Heap
     Heap &heap = Heap::getInstance();
-    heap.addObject(this);*/
+    heap.adcObjeto(this);
 }
+
 /*Pra que serve isso tudo ??
 ClassInstance::~ClassInstance() {
 

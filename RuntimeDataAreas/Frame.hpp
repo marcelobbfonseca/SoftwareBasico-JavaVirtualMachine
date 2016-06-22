@@ -1,12 +1,16 @@
 Class Frame
 {
 	private:
-		vector<atributo> VariaveisLocais;
-		Metodo *metodo;
-		int PC;
+		map<uint32_t,Valor> VariaveisLocais;
+		method_info *metodo;
+		uint32_t PC;
 		pilhaOperandos stack<Valor>;
-		ManejadorObj *manejador;
-		vector<Excecao> TabelaDeExcecoes;
+		Objeto *objeto;
+        //Ponteiro para o atributo Code referente ao método.
+        Code_attribute *_codeAttribute;
+        //Atributo Exceptions referente ao método.
+        Exceptions_attribute *_exceptionsAttribute;
+
 	public:
 		Frame();
 }
