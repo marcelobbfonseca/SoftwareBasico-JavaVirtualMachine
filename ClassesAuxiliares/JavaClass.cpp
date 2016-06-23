@@ -4,6 +4,7 @@
 #include "Endian.hpp"
 #include "UtilidadesParaString.hpp"
 #include <iostream>
+#include <stdio.h>
 
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
@@ -269,9 +270,9 @@ string JavaClass::NomeDaClasse(void)
 	throw new Erro("Classe nao possui nome armazenado internamente.", "JavaClass", "NomeDaClasse");
 }
 
-field_info* JavaClass::getFieldInfo(void)
+vector<field_info>& JavaClass::getFieldInfo(void)
 {
-	return &(fields[0]);
+	return fields;
 }
 
 uint16_t JavaClass::getFieldsCount(void)
@@ -287,73 +288,111 @@ uint16_t JavaClass::getAccessFlags(void)
 const string JavaClass::getUTF8(uint16_t posicao)
 {
 	cp_info* constante = constant_pool[posicao-1];
-	switch(constante->tag)
+	switch(constante->GetTag())
 	{
 		case(CONSTANT_Class):
 		{
 			CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constante;
-			return getUTF8(classInfo->nameIndex);
+			return getUTF8(classInfo->GetNameIndex());
 		}
 		case(CONSTANT_Fieldref):
 		{
 			CONSTANT_Fieldref_info *fieldRefInfo= (CONSTANT_Fieldref_info*) constante;
-			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[fieldRefInfo->name_and_type_index-1];
-			const string nomeClasse = getUTF8(fieldRefInfo->class_index);
-			const string nomeField= getUTF8(nameAndTypeInfo->name_index);
+			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[fieldRefInfo->GetNameAndTypeIndex()-1];
+			const string nomeClasse = getUTF8(fieldRefInfo->GetClassIndex());
+			const string nomeField= getUTF8(nameAndTypeInfo->GetNameIndex());
 			return nomeClasse + "." + nomeField;
 		}
 		case(CONSTANT_Methodref):
 		{
 			CONSTANT_Methodref_info *methodRefInfo= (CONSTANT_Methodref_info*) constante;
-			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[methodrefRefInfo->name_and_type_index-1];
-			const string nomeClasse = getUTF8(methodRefInfo->class_index);
-			const string nomeMethod= getUTF8(nameAndTypeInfo->name_index);
+			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[methodrefRefInfo->GetNameAndTypeIndex()-1];
+			const string nomeClasse = getUTF8(methodRefInfo->GetClassIndex());
+			const string nomeMethod= getUTF8(nameAndTypeInfo->GetNameIndex());
 			return nomeClasse + "." + nomeField;
 		}
 		case(CONSTANT_InterfaceMethodref):
 		{
 			CONSTANT_InterfaceMethodref_info *interfaceMethodRefInfo= (CONSTANT_InterfaceMethodref_info*) constante;
-			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[interfaceMethodrefRefInfo->name_and_type_index-1];
-			const string nomeClasse = getUTF8(interfaceMethodRefInfo->class_index);
-			const string nomeMethod= getUTF8(nameAndTypeInfo->name_index);
+			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[interfaceMethodrefRefInfo->GetNameAndTypeIndex()-1];
+			const string nomeClasse = getUTF8(interfaceMethodRefInfo->GetClassIndex());
+			const string nomeMethod= getUTF8(nameAndTypeInfo->GetNameIndex());
 			return nomeClasse + "." + nomeField;
 		}
 		case(CONSTANT_String):
 		{
 			CONSTANT_String_info *stringInfo = (CONSTANT_String_info*)constante;
-			return getUTF8(stringInfo->string_index);
+			return getUTF8(stringInfo->GetStringIndex());
 		}
 		case(CONSTANT_Integer):
 		{
 			CONSTANT_Integer_info *intInfo = (CONSTANT_Integer_info *)constante;
-			
+			int32_t numero = intInfo->GetNumero();
+			char stringNum[30];
+			sprintf(stringNum, "%d", numero);
+			string retorno= stringNum;
+			return retorno;
 		}
 		case(CONSTANT_Float):
 		{
-			
+			CONSTANT_Float_info *floatInfo = (CONSTANT_Float_info *)constante;
+			float numero= floatInfo->GetNumero();
+			char stringNum[30];
+			sprintf(stringNum, "%f", numero);
+			string retorno= stringNum;
+			return retorno;
 		}
 		case(CONSTANT_Long):
 		{
-			
+			CONSTANT_Long_info *longInfo = (CONSTANT_Long_info *)constante;
+			int64_t numero = longInfo->GetNumero();
+			char stringNum[30];
+			sprintf(stringNum, "%lld", numero);
+			string retorno= stringNum;
+			return retorno;
 		}
 		case(CONSTANT_Double):
 		{
-			
+			CONSTANT_Double_info *doubleInfo = (CONSTANT_Double_info *)constante;
+			double numero= doubleInfo->GetNumero();
+			char stringNum[30];
+			sprintf(stringNum, "%f", numero);
+			string retorno= stringNum;
+			return retorno;
 		}
 		case(CONSTANT_NameAndType):
 		{
-			
+			CONSTANT_NameAndType_info *nameAndTypeInfo = (CONSTANT_NameAndType_info *)constante;
+			string nome= getUTF8(nameAndTypeInfo->GetNameIndex());
+			string descritor= getUTF8(nameAndTypeInfo->GetDescriptorIndex());
+			return nome+descritor;
 		}
 		case(CONSTANT_Utf8):
 		{
 			CONSTANT_Utf8_info *utf8Info = (CONSTANT_Utf8_info*)constante;
 			return utf8Info->GetString();
 		}
-		default:
-		{
-			
-		}
 	}
+	char[200] erro;
+	sprintf(erro, "Arquivo .class possui uma tag %hhu invalida no pool de constantes.", constante->GetTag()); 
+	throw new Erro(erro, "JavaClass", "getUTF8");
 }
 
+const vector<cp_info*>& getConstantPool(void)
+{
+	return constant_pool;
+}
+
+method_info const * const getMetodo(string nomeMetodo, string descritorMetodo)
+{
+	for(int cont =0; cont < methods.count(); cont++)
+	{
+		method_info &temp = methods[cont];
+		if(getUTF8(temp.GetNameIndex()) == nomeMetodo && getUTF8(temp.GetDescriptorIndex()) == descritorMetodo)
+		{
+			return &(methods[count]);
+		}
+	}
+	return NULL;
+}
 

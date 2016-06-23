@@ -3,6 +3,7 @@
 #include"Endian.hpp"
 #include<string.h>
 #include<iostream>
+#include<math.h>
 
 //#define DEBUG
 #ifdef DEBUG
@@ -467,4 +468,89 @@ string CONSTANT_Utf8_info::GetString(void)
 	string retorno= (char *)bytes;
 	return retorno;
 }
+
+int32_t CONSTANT_Integer_info::GetNumero(void)
+{
+	return bytes;
+}
+
+float CONSTANT_Float_info::GetNumero(void)
+{
+	uint32_t temp = bytes;
+	int32_t sinal = ((temp >> 31) == 0) ? 1 : -1;
+	int32_t expoente = ((temp >> 23) & 0xff);
+	int32_t mantissa = (expoente == 0) ? (temp & 0x7fffff) << 1 : (temp & 0x7fffff) | 0x800000;
+	return sinal * mantissa * pow(2, expoente-150);
+}
+
+int64_t CONSTANT_Long_info::GetNumero(void)
+{
+	return ((int64_t)(high_bytes << 32) | ((int64_t)lowBytes);
+}
+
+double CONSTANT_Double_info::GetNumero(void)
+{
+	int32_t sinal = ((bytes >> 63) == 0) ? 1 : -1;
+	int32_t expoente = (int32_t)((bytes >> 52) & 0x7ffL);
+	int64_t mantissa = (expoente == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
+	return s * m * pow(2, e-1075);
+}
+
+uint8_t cp_info::GetTag(void)
+{
+	return tag;
+}
+
+uint16_t CONSTANT_Class_info::GetNameIndex(void)
+{
+	return name_index;
+}
+
+uint16_t CONSTANT_Fieldref_info::GetClassIndex(void)
+{
+	return class_index;
+}
+
+uint16_t CONSTANT_Fieldref_info::GetNameAndTypeIndex(void)
+{
+	return name_and_type_index;
+}
+
+uint16_t CONSTANT_Methodref_info::GetClassIndex(void)
+{
+	return class_index;
+}
+
+uint16_t CONSTANT_Methodref_info::GetNameAndTypeIndex(void)
+{
+	return name_and_type_index;
+}
+
+uint16_t CONSTANT_InterfaceMethodref_info::GetClassIndex(void)
+{
+	return class_index;
+}
+
+uint16_t CONSTANT_InterfaceMethodref_info::GetNameAndTypeIndex(void)
+{
+	return name_and_type_index;
+}
+
+uint16_t CONSTANT_String_info::GetStringIndex(void)
+{
+	return string_index;
+}
+
+uint16_t CONSTANT_NameAndType_info::GetNameIndex(void)
+{
+	return name_index;
+}
+
+int16_t CONSTANT_NameAndType_info::GetDescriptorIndex(void)
+{
+	return descriptor_index;
+}
+
+
+
 
