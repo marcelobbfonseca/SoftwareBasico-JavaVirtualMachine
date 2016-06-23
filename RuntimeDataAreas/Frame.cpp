@@ -114,9 +114,9 @@ void Frame::setaPilhaOperandos(stack<Valor> pilha){
 
 }
 
-uint8_t* Frame::getCode(uint32_t endereco) {
+uint8_t* Frame::getCode() {
 
-    return codeAttribute->code + endereco;
+    return codeAttribute->code + pc;
 
 }
 

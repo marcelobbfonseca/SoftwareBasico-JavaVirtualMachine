@@ -31,10 +31,9 @@ class JavaClass
 		const vector<field_info>& getFieldInfo(void);
 		uint16_t getAccessFlags(void);
 		uint16_t getFieldsCount(void);
-		string getUTF8(uint16_t posicao);
+		const string getUTF8(uint16_t posicao);
 		const vector<cp_info*>& getConstantPool(void);
 		method_info const * const getMetodo(string nomeMetodo, string descritorMetodo);
-		string getUTF8(uint16_t posicao);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!

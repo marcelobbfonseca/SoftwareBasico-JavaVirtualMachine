@@ -180,7 +180,7 @@ class CONSTANT_Long_info:public cp_info
 	public:
 		CONSTANT_Long_info(uint32_t highBytes, uint32_t lowBytes);
 		void ExibirInformacoes(void);
-		uint64_t GetNumero(void);
+		int64_t GetNumero(void);
 
 #ifdef IMPLEMENTADO_IMPRESSAO_NUMEROS_BASE_10
 

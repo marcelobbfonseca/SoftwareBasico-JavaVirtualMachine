@@ -1,10 +1,10 @@
 void ExecutionEngine::Play(string classComMain)
 {
 
-    uint8_t *instruction
-    new Objeto() obj;
+    uint8_t *instruction;
+    Objeto obj = new Objeto();
 
-    obj->classe = runtimeDataArea.ClassLoader.carregarClasse(classComMain);
+    obj->classe = runtimeDataArea->carregarClasse(classComMain);
     obj->instancia = NULL;
 
     runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
@@ -13,7 +13,7 @@ void ExecutionEngine::Play(string classComMain)
 	do
 	{
 
-        instruction = runtimeDataArea.topoPilha().getCode(pc)];
+        instruction = runtimeDataArea->topoPilha().getCode()];
 		vetorDePonteirosParaFuncao[instrucao];
 
 	}

@@ -485,15 +485,16 @@ float CONSTANT_Float_info::GetNumero(void)
 
 int64_t CONSTANT_Long_info::GetNumero(void)
 {
-	return ((int64_t)(high_bytes << 32) | ((int64_t)lowBytes);
+	return ( ((int64_t)high_bytes) << 32) | ((int64_t)low_bytes);
 }
 
 double CONSTANT_Double_info::GetNumero(void)
 {
+	int64_t bytes= ((int64_t)high_bytes<<32)|low_bytes; 
 	int32_t sinal = ((bytes >> 63) == 0) ? 1 : -1;
 	int32_t expoente = (int32_t)((bytes >> 52) & 0x7ffL);
 	int64_t mantissa = (expoente == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
-	return s * m * pow(2, e-1075);
+	return sinal * mantissa * pow(2, expoente-1075);
 }
 
 uint8_t cp_info::GetTag(void)
@@ -546,7 +547,7 @@ uint16_t CONSTANT_NameAndType_info::GetNameIndex(void)
 	return name_index;
 }
 
-int16_t CONSTANT_NameAndType_info::GetDescriptorIndex(void)
+uint16_t CONSTANT_NameAndType_info::GetDescriptorIndex(void)
 {
 	return descriptor_index;
 }

@@ -16,18 +16,18 @@ class Erro{
 	public:
 		string GetMensagem()
 		{
-			string saida = "----------------------------------------------------------ENDL";
+			string saida = "----------------------------------------------------------\r\n";
 			saida += "[ERRO]";
-			saida += "ENDL";
+			saida += "\r\n";
 			while(contexto.size()>0)
 //			for(int cont  =0; cont < contexto.size() ; cont++)
 			{
 				saida+= "\t";
 				saida+= contexto.front();
-				saida+= "ENDL";
+				saida+= "\r\n";
 				contexto.pop_front();
 			};
-			saida += "ENDL\t\t" + mensagem + "ENDL";
+			saida += "\r\n\t\t" + mensagem + "\r\n";
 			return saida;
 		}
 		void AdicionarContexto(char const * nomeClasse, char const * nomeMetodo)

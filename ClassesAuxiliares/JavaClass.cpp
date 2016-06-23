@@ -6,6 +6,24 @@
 #include <iostream>
 #include <stdio.h>
 
+// Check ruindos
+#if _WIN32 || _WIN64
+	#if _WIN64
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
+// Check GCC
+#if __GNUC__
+	#if __x86_64__ || __ppc64__
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
 //#define DEBUG
@@ -116,7 +134,9 @@ cout << "Attributes count = " << attributes_count << endl;
 	fclose(arq);
 	if(this->NomeDaClasse()!= StringUtilidades::RemoverNoFinal(nomeArquivo, ".class"))
 	{
-		throw new Erro("Nome da classe diferente do nome do arquivo!", "JavaClass", "JavaClass");
+		char erro[200];
+		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), StringUtilidades::RemoverNoFinal(nomeArquivo, ".class").c_str());
+		throw new Erro(erro, "JavaClass", "JavaClass");
 	}
 }
 
@@ -257,20 +277,22 @@ void JavaClass::ExibirInformacoes(void)
 
 string JavaClass::NomeDaClasse(void)
 {
-	string retorno;
+	string retorno= "";
 	for(unsigned int cont =0 ; cont < attributes.size(); cont++)
 	{
 		if( ( *( (CONSTANT_Utf8_info *)constant_pool[attributes[cont]->GetNameIndex()-1] ) )== "SourceFile" )
 		{
 			uint16_t indiceNomeArquivo= ((SourceFile_attribute *)attributes[cont])->GetSouceFileIndex();
 			retorno = ( (CONSTANT_Utf8_info *)(constant_pool[indiceNomeArquivo-1]) )->GetString();
+			retorno = StringUtilidades::RemoverNoFinal(retorno, ".java");
 			return retorno;
 		}
 	}
-	throw new Erro("Classe nao possui nome armazenado internamente.", "JavaClass", "NomeDaClasse");
+	return retorno;
+//	throw new Erro("Classe nao possui nome armazenado internamente.", "JavaClass", "NomeDaClasse");
 }
 
-vector<field_info>& JavaClass::getFieldInfo(void)
+const std::vector<field_info>& JavaClass::getFieldInfo(void)
 {
 	return fields;
 }
@@ -298,7 +320,7 @@ const string JavaClass::getUTF8(uint16_t posicao)
 		case(CONSTANT_Fieldref):
 		{
 			CONSTANT_Fieldref_info *fieldRefInfo= (CONSTANT_Fieldref_info*) constante;
-			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[fieldRefInfo->GetNameAndTypeIndex()-1];
+			CONSTANT_NameAndType_info *nameAndTypeInfo = (CONSTANT_NameAndType_info *)constant_pool[fieldRefInfo->GetNameAndTypeIndex()-1];
 			const string nomeClasse = getUTF8(fieldRefInfo->GetClassIndex());
 			const string nomeField= getUTF8(nameAndTypeInfo->GetNameIndex());
 			return nomeClasse + "." + nomeField;
@@ -306,18 +328,18 @@ const string JavaClass::getUTF8(uint16_t posicao)
 		case(CONSTANT_Methodref):
 		{
 			CONSTANT_Methodref_info *methodRefInfo= (CONSTANT_Methodref_info*) constante;
-			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[methodrefRefInfo->GetNameAndTypeIndex()-1];
+			CONSTANT_NameAndType_info *nameAndTypeInfo = (CONSTANT_NameAndType_info *)constant_pool[methodRefInfo->GetNameAndTypeIndex()-1];
 			const string nomeClasse = getUTF8(methodRefInfo->GetClassIndex());
 			const string nomeMethod= getUTF8(nameAndTypeInfo->GetNameIndex());
-			return nomeClasse + "." + nomeField;
+			return nomeClasse + "." + nomeMethod;
 		}
 		case(CONSTANT_InterfaceMethodref):
 		{
 			CONSTANT_InterfaceMethodref_info *interfaceMethodRefInfo= (CONSTANT_InterfaceMethodref_info*) constante;
-			CONSTANT_NameAndType_info *nameAndTypeInfo = constantPool[interfaceMethodrefRefInfo->GetNameAndTypeIndex()-1];
+			CONSTANT_NameAndType_info *nameAndTypeInfo = (CONSTANT_NameAndType_info *)constant_pool[interfaceMethodRefInfo->GetNameAndTypeIndex()-1];
 			const string nomeClasse = getUTF8(interfaceMethodRefInfo->GetClassIndex());
-			const string nomeMethod= getUTF8(nameAndTypeInfo->GetNameIndex());
-			return nomeClasse + "." + nomeField;
+			const string nomeInterfaceMethod= getUTF8(nameAndTypeInfo->GetNameIndex());
+			return nomeClasse + "." + nomeInterfaceMethod;
 		}
 		case(CONSTANT_String):
 		{
@@ -347,7 +369,11 @@ const string JavaClass::getUTF8(uint16_t posicao)
 			CONSTANT_Long_info *longInfo = (CONSTANT_Long_info *)constante;
 			int64_t numero = longInfo->GetNumero();
 			char stringNum[30];
+#ifdef ENVIRONMENT32
 			sprintf(stringNum, "%lld", numero);
+#else
+			sprintf(stringNum, "%ld", numero);
+#endif
 			string retorno= stringNum;
 			return retorno;
 		}
@@ -373,24 +399,24 @@ const string JavaClass::getUTF8(uint16_t posicao)
 			return utf8Info->GetString();
 		}
 	}
-	char[200] erro;
+	char erro[200];
 	sprintf(erro, "Arquivo .class possui uma tag %hhu invalida no pool de constantes.", constante->GetTag()); 
 	throw new Erro(erro, "JavaClass", "getUTF8");
 }
 
-const vector<cp_info*>& getConstantPool(void)
+const vector<cp_info*>& JavaClass::getConstantPool(void)
 {
 	return constant_pool;
 }
 
-method_info const * const getMetodo(string nomeMetodo, string descritorMetodo)
+method_info const * const JavaClass::getMetodo(string nomeMetodo, string descritorMetodo)
 {
-	for(int cont =0; cont < methods.count(); cont++)
+	for(unsigned int cont =0; cont < methods.size(); cont++)
 	{
 		method_info &temp = methods[cont];
 		if(getUTF8(temp.GetNameIndex()) == nomeMetodo && getUTF8(temp.GetDescriptorIndex()) == descritorMetodo)
 		{
-			return &(methods[count]);
+			return &(methods[cont]);
 		}
 	}
 	return NULL;

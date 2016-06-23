@@ -114,3 +114,13 @@ void method_info::ExibirInformacoes(string tabs)
 		}
 	}
 }
+
+uint16_t method_info::GetNameIndex(void)
+{
+	return name_index;
+}
+uint16_t method_info::GetDescriptorIndex(void)
+{
+	return descriptor_index;
+}
+
