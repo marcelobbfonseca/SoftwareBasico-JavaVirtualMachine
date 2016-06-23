@@ -132,7 +132,7 @@ class CONSTANT_String_info:public cp_info
 		CONSTANT_String_info(uint16_t stringIndex);
 		void ExibirInformacoes(void);
 		uint16_t GetStringIndex(void);
-	private:CONSTANT_String_info
+	private:
 //!inteiro sem sinal de 2 bytes
 /*!
 O valor de string tem que ser um valor válido no vetor de constant_pool.
