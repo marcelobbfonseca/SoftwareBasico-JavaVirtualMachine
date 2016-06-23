@@ -1,6 +1,6 @@
-#include<stdint.h>
-#include<stdio.h>
-#include<string>
+#include <stdint.h>
+#include <stdio.h>
+#include <string>
 
 #ifndef CP_INFO_HPP
 #define CP_INFO_HPP
