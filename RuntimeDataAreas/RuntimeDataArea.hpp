@@ -8,13 +8,22 @@
 #include"ClassLoader.hpp"
 #include "Heap.cpp"
 
+#ifndef CLASSLOADER
+class ClassLoader;
+#endif
+#ifndef EXECUTIONENGINE
+class ExecutionEngine;
+#endif
+
+#define RUNTIMEDATAAREA
 class RuntimeDataArea
 {
 	private:
 //		map<string, DadosDaClasse> InformacoesDeClasses;
 //Necessário?	map<string, JavaClass*> classes;/
-		JavaClass* CarregarClasse(const string &nomeDaClasse);
 		stack<Frame> PilhaJVM;
+		ClassLoader *classLoader;
+		ExecutionEngine *executionEngine;
 
 		//a descobrir
 	public:
@@ -23,12 +32,12 @@ class RuntimeDataArea
 		void SetExecutionEngine(ExecutionEngine *executionEngine);
 		bool MetodoExiste(string nomeClasse, string nomeMetodo, string descritor);
 		void empilharFrame(Frame frame);
+		JavaClass* CarregarClasse(const string &nomeDaClasse);
 		Frame topoPilha();
 		Frame desempilhaFrame();
 
-		ClassLoader classLoader;
-		ExecutionEngine executionEngine;
 		//a descobrir
 };
+
 
 #endif

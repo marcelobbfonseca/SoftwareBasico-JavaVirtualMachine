@@ -3,9 +3,9 @@ void ExecutionEngine::Play(string classComMain)
 {
 
     uint8_t *instruction;
-    Objeto obj = new Objeto();
+    Objeto *obj = new Objeto();
 
-    obj->classe = runtimeDataArea->carregarClasse(classComMain);
+    obj->classe = runtimeDataArea->CarregarClasse(classComMain);
     obj->instancia = NULL;
 
     runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));

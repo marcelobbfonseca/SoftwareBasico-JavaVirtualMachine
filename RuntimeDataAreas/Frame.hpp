@@ -8,9 +8,9 @@
 #include"DadosDaInstancia.hpp"
 
 class Objeto {
-
-    DadosDaInstancia *instancia;
-    JavaClass *classe;
+	public:
+		DadosDaInstancia *instancia;
+		JavaClass *classe;
 
 };
 
@@ -23,16 +23,16 @@ class Frame{
 		uint32_t PC;
 		stack<Valor> pilhaOperandos;
 		Objeto *objeto;
-        //Ponteiro para o atributo Code referente ao método.
-        Code_attribute *_codeAttribute;
-        //Atributo Exceptions referente ao método.
-        Exceptions_attribute *_exceptionsAttribute;
+		//Ponteiro para o atributo Code referente ao método.
+		Code_attribute *_codeAttribute;
+		//Atributo Exceptions referente ao método.
+		Exceptions_attribute *_exceptionsAttribute;
 
-        // Obter um ponteiro para a pool de constantes referente ao frame atual.
+		// Obter um ponteiro para a pool de constantes referente ao frame atual.
 		cp_info *cpInfo;
 
 
-        void pegarAtributos();
+		void pegarAtributos();
 
 	public:
 		//Construtor
@@ -46,9 +46,9 @@ class Frame{
 		stack<Valor> retornaPilhaOperandos();
 		void setaPilhaOperandos(stack<Valor> pilha);
 		uint8_t* getCode(uint32_t endereco);
-        uint16_t tamanhoVetorVariaveis();
-        uint32_t tamanhoCode() ;
-        ~Frame();
+		uint16_t tamanhoVetorVariaveis();
+		uint32_t tamanhoCode() ;
+		~Frame();
 };
 
 #endif
