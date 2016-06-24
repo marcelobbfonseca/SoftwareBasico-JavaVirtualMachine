@@ -1,4 +1,4 @@
-#include"ExecutionEngine.hpp"
+#include "ExecutionEngine.hpp"
 void ExecutionEngine::Play(string classComMain)
 {
 
@@ -20,9 +20,16 @@ void ExecutionEngine::Play(string classComMain)
 	}
 	while(runtimeDataArea.PilhaJVM.size > 0);
 }
+norvasc trilostano
 
-
-void ExecutionEngine::i_nop(){}
+void ExecutionEngine::i_nop(){
+    //anda uma posição e faz nada
+    //incrementa pc + 1
+    
+    //VMStack &stackFrame = VMStack::getInstance();
+    //Frame *topFrame = stackFrame.getTopFrame();
+    //topFrame->pc += 1;
+}
 void ExecutionEngine::i_aconst_null(){}
 void ExecutionEngine::i_iconst_m1(){}
 void ExecutionEngine::i_iconst_0(){}
