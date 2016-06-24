@@ -12,10 +12,10 @@ class ClassLoader
 	public:
 		JavaClass* CarregarClasse(string nomeClasse);
 		ClassLoader();
-		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
+		void SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 //		GetMetodos(string nomeDaClasse);
 		//a descobrir
 };
-	
+
 
 #endif

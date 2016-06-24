@@ -1,9 +1,3 @@
-struct Valor {
-    TipoDado tipo;
-    uint32_t dado;
-};
-typedef struct Valor Valor;
-
 enum TipoDado {
     BOOLEAN,
     BYTE,
@@ -21,3 +15,9 @@ enum TipoDado {
     LOWDOUBLE
 };
 typedef enum TipoDado TipoDado;
+
+struct Valor {
+    TipoDado tipo;
+    uint32_t dado;
+};
+typedef struct Valor Valor;

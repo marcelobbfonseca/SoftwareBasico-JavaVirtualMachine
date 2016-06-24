@@ -1,14 +1,23 @@
 #ifndef EXECUTIONENGINE_HPP
 #define EXECUTIONENGINE_HPP
+#include<vector>
+#include"RuntimeDataArea.hpp"
+
+class Instrucao{
+
+Instrucao();
+
+};
 
 class ExecutionEngine
 {
 	private:
 
-        void vetorDePonteirosParaFuncao[250];
+        vector<Instrucao*> vetorDePonteirosParaFuncao;
+        RuntimeDataArea *runtimeDataArea;
 
 	public:
-		SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
+		void SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 		void Play(string classComMain);
 
 };

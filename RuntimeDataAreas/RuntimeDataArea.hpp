@@ -6,14 +6,13 @@
 #include"Frame.hpp"
 #include"ExecutionEngine.hpp"
 #include"ClassLoader.hpp"
-#include"Tipos.h"
+#include "Heap.cpp"
 
 class RuntimeDataArea
 {
 	private:
 //		map<string, DadosDaClasse> InformacoesDeClasses;
-		map<string, JavaClass*> classes;//Necessário?
-		map<JavaClass*, vector<Objeto*>  listaDeObjetos;//Necessário?
+//Necessário?	map<string, JavaClass*> classes;/
 		JavaClass* CarregarClasse(const string &nomeDaClasse);
 		stack<Frame> PilhaJVM;
 
@@ -28,28 +27,8 @@ class RuntimeDataArea
 		Frame desempilhaFrame();
 
 		ClassLoader classLoader;
-		ExecutionEngine ExecutionEngine;
+		ExecutionEngine executionEngine;
 		//a descobrir
-}
-
-class Heap {
-
-
-private:
-
-    Heap(Heap const&); //não permite implementação cópia
-    void operator=(Heap const&); // não permite atribuição
-
-    vector<Objeto*> vetorObjetos;
-
-public:
-
-    Heap();
-
-    void Heap::adcObjeto(Objeto *objeto) {
-        vetorObjetos.push_back(objeto);
-    }
 };
-
 
 #endif

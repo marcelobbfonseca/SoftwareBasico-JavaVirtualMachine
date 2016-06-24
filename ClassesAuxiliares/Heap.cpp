@@ -1,3 +1,6 @@
+#include<vector>
+#include"Frame.hpp"
+
 class Heap {
 
 
@@ -12,7 +15,7 @@ public:
 
     Heap();
 
-    void Heap::adcObjeto(Objeto *objeto) {
+    void adcObjeto(Objeto *objeto) {
         vetorObjetos.push_back(objeto);
     }
 };

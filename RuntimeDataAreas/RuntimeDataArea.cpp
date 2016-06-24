@@ -1,4 +1,4 @@
-
+#include"RuntimeDataArea.hpp"
 JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 {
 	string nomeSemExtensao= nomeDaClasse;

@@ -1,4 +1,4 @@
-
+#include"DadosDaInstancia.hpp"
 DadosDaInstancia(JavaClass *javaClass){
 
     field_info *fields = javaClass.getFieldInfo();
