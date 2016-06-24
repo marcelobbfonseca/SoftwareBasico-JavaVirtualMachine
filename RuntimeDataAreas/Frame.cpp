@@ -1,11 +1,11 @@
 #include"Frame.hpp"
 //Construtor para métodos não estáticos
-Frame::Frame(Objeto objeto, string nomeMetodo, string descritorMetodo, vector<Value> argumentos){
+Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo){
 {
 
-    for (int i = 0; i < arguments.size(); i++) {
-        variaveisLocais[i] = arguments[i];
-    }
+   /* for (int i = 0; i < arguments.size(); i++) {
+        variaveisLocais[i] = argumentos[i];
+    }*/
 
     pc = 0;
 
@@ -114,7 +114,7 @@ void Frame::setaPilhaOperandos(stack<Valor> pilha){
 
 }
 
-uint8_t* Frame::getCode() {
+uint8_t Frame::getCode() {
 
     return codeAttribute->code + pc;
 

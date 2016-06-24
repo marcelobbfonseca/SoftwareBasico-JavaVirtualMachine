@@ -21,17 +21,17 @@ class RuntimeDataArea
 	private:
 //		map<string, DadosDaClasse> InformacoesDeClasses;
 //Necessário?	map<string, JavaClass*> classes;/
-		stack<Frame> PilhaJVM;
 		ClassLoader *classLoader;
 		ExecutionEngine *executionEngine;
 
 		//a descobrir
 	public:
+	    stack<Frame> PilhaJVM;
 		RuntimeDataArea();
 		void SetClassLoader(ClassLoader *classLoader);
 		void SetExecutionEngine(ExecutionEngine *executionEngine);
 		bool MetodoExiste(string nomeClasse, string nomeMetodo, string descritor);
-		void empilharFrame(Frame frame);
+		void empilharFrame(Frame *frame);
 		JavaClass* CarregarClasse(const string &nomeDaClasse);
 		Frame topoPilha();
 		Frame desempilhaFrame();
