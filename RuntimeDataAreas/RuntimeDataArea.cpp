@@ -37,7 +37,7 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 	this.executionEngine =executionEngine;
 }
 
-void RuntimeDataArea::EmpilharFrame(Frame frame){
+void RuntimeDataArea::EmpilharFrame(Frame *frame){
 
     this->pilhaFrames.push(frame);
 

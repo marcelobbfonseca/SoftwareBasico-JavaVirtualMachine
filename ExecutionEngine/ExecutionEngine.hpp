@@ -3,12 +3,6 @@
 #include<vector>
 #include"RuntimeDataArea.hpp"
 
-class Instrucao{
-
-Instrucao();
-
-};
-
 #ifndef RUNTIMEDATAAREA
 class RuntimeDataArea;
 #endif
@@ -18,7 +12,7 @@ class ExecutionEngine
 {
 	private:
 
-		vector<Instrucao*> vetorDePonteirosParaFuncao;
+		void (*vetorDePonteirosParaFuncao[250])();
 		RuntimeDataArea *runtimeDataArea;
   	
 		//Implementacao das funcionalidades de cada uma das 250 instrucoes

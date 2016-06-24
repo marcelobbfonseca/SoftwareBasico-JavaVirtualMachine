@@ -36,7 +36,7 @@ class Frame{
 
 	public:
 		//Construtor
-		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo, vector<Valor> argumentos);
+		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
 
 
 		Valor getValorVariavelLocal(uint32_t indice);
@@ -45,7 +45,7 @@ class Frame{
 		Valor desempilhaOperando();
 		stack<Valor> retornaPilhaOperandos();
 		void setaPilhaOperandos(stack<Valor> pilha);
-		uint8_t* getCode(uint32_t endereco);
+		uint8_t getCode();
 		uint16_t tamanhoVetorVariaveis();
 		uint32_t tamanhoCode() ;
 		~Frame();
