@@ -1,4 +1,4 @@
-#include "JVM.hpp"
+ #include "JVM.hpp"
 JVM::JVM(std::string classComMain)
 {
 	this->classLoader.SetRuntimeDataArea(&runtimeDataArea);
