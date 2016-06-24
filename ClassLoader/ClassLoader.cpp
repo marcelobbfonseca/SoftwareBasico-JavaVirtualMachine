@@ -1,8 +1,9 @@
+#include"ClassLoader.hpp"
 
 JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 {
 	//Se não tiver.class no nome da classe .class é adicionado
-	if(!nomeClasse.substr(nomeClasse.length() - 6)== ".class")
+	if(!(nomeClasse.substr(nomeClasse.length() - 6)== ".class" ))
 	{
 		nomeClasse+= ".class";
 	}

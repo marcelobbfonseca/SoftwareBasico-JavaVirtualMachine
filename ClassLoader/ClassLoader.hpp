@@ -1,9 +1,9 @@
-#include<string>
-#include
-#include"JavaClass.hpp"
-
 #ifndef CLASSLOADER_HPP
 #define CLASSLOADER_HPP
+#include<string>
+#include<map>
+#include"JavaClass.hpp"
+#include"RuntimeDataArea.hpp"
 
 class ClassLoader
 {

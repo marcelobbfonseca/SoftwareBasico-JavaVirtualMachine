@@ -1,6 +1,13 @@
 #ifndef RUNTIMEDATAAREA_HPP
 #define RUNTIMEDATAAREA_HPP
 
+#include<stack>
+#include<map>
+#include"Frame.hpp"
+#include"ExecutionEngine.hpp"
+#include"ClassLoader.hpp"
+#include"Tipos.h"
+
 class RuntimeDataArea
 {
 	private:
