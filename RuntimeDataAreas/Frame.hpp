@@ -1,11 +1,11 @@
 #ifndef FRAME_H
 #define FRAME_H
-#include<map>
-#include<stack>
-#include"Tipos.h"
-#include"method_info.hpp"
-#include"JavaClass.hpp"
-#include"DadosDaInstancia.hpp"
+#include <map>
+#include <stack>
+#include "Tipos.h"
+#include "method_info.hpp"
+#include "JavaClass.hpp"
+#include "DadosDaInstancia.hpp"
 
 class Objeto {
 	public:
