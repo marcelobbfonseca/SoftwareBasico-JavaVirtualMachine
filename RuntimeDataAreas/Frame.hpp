@@ -38,8 +38,7 @@ class Frame{
 		//Construtor
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
 
-
-		Valor getValorVariavelLocal(uint32_t indice);
+        Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
 		void empilharOperando(Valor operando);
 		Valor desempilhaOperando();
@@ -48,6 +47,7 @@ class Frame{
 		uint8_t getCode();
 		uint16_t tamanhoVetorVariaveis();
 		uint32_t tamanhoCode() ;
+		void incrementaPC();
 		~Frame();
 };
 

@@ -131,3 +131,7 @@ uint32_t Frame::tamanhoCode() {
 	return codeAttribute->code_length;
 
 }
+
+void Frame::incrementaPC(){
+    pc = pc + 1;
+}
