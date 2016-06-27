@@ -1,3 +1,6 @@
+#ifndef TIPOS_H
+#define TIPOS_H
+
 enum TipoDado {
     BOOLEAN,
     BYTE,
@@ -21,3 +24,5 @@ struct Valor {
     uint32_t dado;
 };
 typedef struct Valor Valor;
+
+#endif
