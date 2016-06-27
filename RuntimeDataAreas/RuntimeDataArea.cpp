@@ -25,6 +25,7 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 		Frame *novoFrame= new Frame(classes[nomeSemExtensao], "<clinit>", "()V");
 		EmpilharFrame(novoFrame);
 
+    }
 }
 
 void RuntimeDataArea::SetClassLoader(ClassLoader *classLoader)

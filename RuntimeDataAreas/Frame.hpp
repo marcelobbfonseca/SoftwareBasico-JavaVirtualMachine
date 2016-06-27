@@ -1,16 +1,16 @@
 #ifndef FRAME_H
 #define FRAME_H
 #include <map>
+#include<cassert>
 #include <stack>
 #include "Tipos.h"
 #include "method_info.hpp"
 #include "JavaClass.hpp"
-#include "DadosDaInstancia.hpp"
 
 class Objeto {
 	public:
 		DadosDaInstancia *instancia;
-		JavaClass *classe;
+		JavaClass *javaClass;
 
 };
 
@@ -20,19 +20,18 @@ class Frame{
 
 		map<uint32_t,Valor> variaveisLocais;
 		method_info *metodos;
-		uint32_t PC;
+		uint32_t pc;
 		stack<Valor> pilhaOperandos;
 		Objeto *objeto;
 		//Ponteiro para o atributo Code referente ao método.
-		Code_attribute *_codeAttribute;
+		Code_attribute *codeAttribute;
 		//Atributo Exceptions referente ao método.
-		Exceptions_attribute *_exceptionsAttribute;
+		Exceptions_attribute *exceptionsAttribute;
 
 		// Obter um ponteiro para a pool de constantes referente ao frame atual.
 		cp_info *cpInfo;
 
-
-		void pegarAtributos();
+        void pegarAtributos();
 
 	public:
 		//Construtor
@@ -48,7 +47,6 @@ class Frame{
 		uint16_t tamanhoVetorVariaveis();
 		uint32_t tamanhoCode() ;
 		void incrementaPC();
-		~Frame();
 };
 
 #endif

@@ -84,14 +84,14 @@ cpInfo->ExibirInformacoes();
 	Leitura::LerAtributo(&this_class, 2, arq);
 	Leitura::LerAtributo(&super_class, 2, arq);
 	Leitura::LerAtributo(&interfaces_count, 2, arq);
-	
+
 	uint16_t aux_interface;
 	for(int cont=0; cont < interfaces_count; cont++)
 	{
 		Leitura::LerAtributo(&aux_interface, 2, arq);
 		interfaces.push_back(aux_interface);
 	}
-	
+
 	Leitura::LerAtributo(&fields_count, 2, arq);
 #ifdef DEBUG
 cout<< "Começando a ler os " << fields_count <<" fields." << endl;
@@ -104,7 +104,7 @@ cout<< "Começando a ler os " << fields_count <<" fields." << endl;
 cout<< "Lido field" << endl;
 #endif
 	}
-	
+
 	Leitura::LerAtributo(&methods_count, 2, arq);
 #ifdef DEBUG
 cout<< "Começando a ler os " << methods_count <<" methods." << endl;
@@ -121,7 +121,7 @@ methodInfo->ExibirInformacoes(tabs);
 cout<< "Lido method" << endl;
 #endif
 	}
-	
+
 	Leitura::LerAtributo(&attributes_count, 2, arq);
 #ifdef DEBUG
 cout << "Attributes count = " << attributes_count << endl;
@@ -148,7 +148,7 @@ JavaClass::~JavaClass(void)
 	}
 }
 
-//pega as informacoes do javaclass arquivo 
+//pega as informacoes do javaclass arquivo
 void JavaClass::ExibirInformacoes(void)
 {
 	string tabs = "\t";
@@ -400,7 +400,7 @@ const string JavaClass::getUTF8(uint16_t posicao)
 		}
 	}
 	char erro[200];
-	sprintf(erro, "Arquivo .class possui uma tag %hhu invalida no pool de constantes.", constante->GetTag()); 
+	sprintf(erro, "Arquivo .class possui uma tag %hhu invalida no pool de constantes.", constante->GetTag());
 	throw new Erro(erro, "JavaClass", "getUTF8");
 }
 
@@ -414,7 +414,7 @@ method_info const * const JavaClass::getMetodo(string nomeMetodo, string descrit
 	for(unsigned int cont =0; cont < methods.size(); cont++)
 	{
 		method_info &temp = methods[cont];
-		if(getUTF8(temp.GetNameIndex()) == nomeMetodo && getUTF8(temp.GetDescriptorIndex()) == descritorMetodo)
+		if(getUTF8(temp.getNameIndex()) == nomeMetodo && getUTF8(temp.getDescriptorIndex()) == descritorMetodo)
 		{
 			return &(methods[cont]);
 		}

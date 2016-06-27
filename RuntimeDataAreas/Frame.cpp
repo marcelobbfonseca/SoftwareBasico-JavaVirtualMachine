@@ -9,21 +9,17 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo){
 
     pc = 0;
 
-    method_info *metodoAux = objeto->javaClass.getMetodoChamado(nomeMetodo, descritorMetodo);
-    assert(method != NULL);
-    metodo = *metodoAux;
-    if(objeto.instancia != NULL){
-        assert((metodo.access_flags & 0x0008) == 0); // o método não pode ser estático
+    const method_info *metodoAux = objeto->javaClass->getMetodo(nomeMetodo, descritorMetodo);
+    assert(metodoAux != NULL);
+
+    if(objeto->instancia != NULL){
+        assert((metodoAux->getAccessFlags() & 0x0008) == 0); // o método não pode ser estático
         }
     else{
-        assert((_method.access_flags & 0x0008) != 0); // o método precisa ser estático
+        assert((metodoAux->getAccessFlags() & 0x0008) != 0); // o método precisa ser estático
     }
 
     pegarAtributos();
-}
-
-Frame::~Frame() {
-
 }
 
 void Frame::pegarAtributos() {

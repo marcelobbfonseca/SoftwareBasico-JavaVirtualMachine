@@ -7,7 +7,7 @@
 method_info::method_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
 	using namespace Leitura;
-	
+
 	LerAtributo(&access_flags, 2, arq);
 #ifdef DEBUG
 cout<< "method access_flags = " << hex << access_flags << dec << endl;
@@ -115,12 +115,18 @@ void method_info::ExibirInformacoes(string tabs)
 	}
 }
 
-uint16_t method_info::GetNameIndex(void)
+uint16_t method_info::getNameIndex(void)
 {
 	return name_index;
 }
-uint16_t method_info::GetDescriptorIndex(void)
+
+uint16_t method_info::getDescriptorIndex(void)
 {
 	return descriptor_index;
+}
+
+uint16_t method_info::getAccessFlags(void)
+{
+	return access_flags;
 }
 

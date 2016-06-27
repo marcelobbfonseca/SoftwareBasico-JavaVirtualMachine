@@ -6,7 +6,6 @@
 #include"Frame.hpp"
 #include"ExecutionEngine.hpp"
 #include"ClassLoader.hpp"
-#include "Heap.cpp"
 
 #ifndef CLASSLOADER
 class ClassLoader;

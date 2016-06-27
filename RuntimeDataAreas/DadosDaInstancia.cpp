@@ -2,26 +2,26 @@
 
 DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass){
 
-	field_info *fields = javaClass->getFieldInfo();
+	vector<field_info> fields = javaClass->getFieldInfo();
 	uint16_t abstractFlag = 0x0400;
 
-	if ((javaClass.getAccessFlags() & abstractFlag) != 0) {
+	if ((javaClass->getAccessFlags() & abstractFlag) != 0) {
 
 		// Não pode instanciar se for classe abstrata
-		cerr << "Erro de intanciamento" << endl;
+		cerr << "Erro de instanciamento" << endl;
 		exit(1);
 
 	}
 
-	for (int i = 0; i < JavaClass.getFieldsCount(); i++) {
+	for (int i = 0; i < javaClass->getFieldsCount(); i++) {
 
 		field_info field = fields[i];
 		uint16_t staticAndFinalFlag = 0x0008 | 0x0010;
 
-		if ((field.access_flags & staticAndFinalFlag) == 0) { // não estática e não final
+		if ((field.getAccessFlags() & staticAndFinalFlag) == 0) { // não estática e não final
 
-			string nomeField = JavaClass.getUTF8(field.name_index);
-			string descritorField = JavaClass.getUTF8(field.descriptor_index);
+			string nomeField = javaClass->getUTF8(field.getNameIndex());
+			string descritorField = javaClass->getUTF8(field.getDescriptorIndex());
 
 			char tipoField = descritorField[0];
 			Valor valor;
@@ -59,10 +59,6 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass){
 			fieldsInstancia[nomeField] = valor;
 		}
 	}
-
-	// Quando um objeto é criado, ele precisa ser armazenado na Heap
-	Heap &heap = Heap::getInstance();
-	heap.adcObjeto(this);
 }
 
 /*Pra que serve isso tudo ??

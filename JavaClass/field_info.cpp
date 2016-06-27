@@ -16,7 +16,7 @@ field_info::field_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 		attribute_info *att= attribute_info::LerAtributeInfo(arq, constant_pool);
 		attributes.push_back(att);
 	}
-	
+
 
 }
 
@@ -75,4 +75,22 @@ void field_info::ExibirInformacoes(string tabs)
 			}
 		}
 	}
+}
+
+uint16_t field_info::getAccessFlags(void){
+
+    return access_flags;
+
+}
+
+uint16_t field_info::getNameIndex(void){
+
+    return name_index;
+
+}
+
+uint16_t field_info::getDescriptorIndex(void){
+
+        return descriptor_index;
+
 }

@@ -19,9 +19,12 @@ class field_info {
 	vector<attribute_info *> attributes;
 
 	public:
-	
+
 	field_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
 	void ExibirInformacoes(string tabs);
+	uint16_t getAccessFlags(void);
+	uint16_t getNameIndex(void);
+	uint16_t getDescriptorIndex(void);
 };
 
 #endif
