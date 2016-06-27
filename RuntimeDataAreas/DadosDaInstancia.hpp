@@ -1,5 +1,6 @@
 #include<map>
 #include"JavaClass.hpp"
+#include"Tipos.h"
 
 class DadosDaInstancia{
 

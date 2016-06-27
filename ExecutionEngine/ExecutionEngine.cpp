@@ -21,12 +21,11 @@ void ExecutionEngine::Play(string classComMain)
 	}
 	while(runtimeDataArea->PilhaJVM.size() > 0);
 }
-norvasc trilostano
 
 void ExecutionEngine::i_nop(){
     //anda uma posição e faz nada
     //incrementa pc + 1
-    
+
     //VMStack &stackFrame = VMStack::getInstance();
     //Frame *topFrame = stackFrame.getTopFrame();
     //topFrame->pc += 1;
@@ -36,7 +35,7 @@ void ExecutionEngine::i_iconst_m1(){}
 void ExecutionEngine::i_iconst_0(){}
 void ExecutionEngine::i_iconst_1(){}
 void ExecutionEngine::i_iconst_2(){}
-void ExecutionEngine::i_iconst_3(){}  
+void ExecutionEngine::i_iconst_3(){}
 void ExecutionEngine::i_iconst_4(){}
 void ExecutionEngine::i_iconst_5(){}
 void ExecutionEngine::i_lconst_0(){}
