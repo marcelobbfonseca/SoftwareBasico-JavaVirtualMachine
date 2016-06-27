@@ -25,10 +25,12 @@ void ExecutionEngine::Play(string classComMain)
 void ExecutionEngine::i_nop(){
     //anda uma posição e faz nada
     //incrementa pc + 1
-
+    Frame *pc = PC;
+    pc++;
     //VMStack &stackFrame = VMStack::getInstance();
     //Frame *topFrame = stackFrame.getTopFrame();
     //topFrame->pc += 1;
+
 }
 void ExecutionEngine::i_aconst_null(){}
 void ExecutionEngine::i_iconst_m1(){}
