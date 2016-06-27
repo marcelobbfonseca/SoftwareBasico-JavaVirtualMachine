@@ -12,9 +12,11 @@ class ExecutionEngine
 {
 	private:
 
-		void (*vetorDePonteirosParaFuncao[250])();
+		void (ExecutionEngine::*vetorDePonteirosParaFuncao[250])();
 		RuntimeDataArea *runtimeDataArea;
-  	
+
+  	    void inicializaInstrucoes();
+
 		//Implementacao das funcionalidades de cada uma das 250 instrucoes
 	  	void i_nop();
 	    void i_aconst_null();
@@ -22,7 +24,7 @@ class ExecutionEngine
 	    void i_iconst_0();
 	    void i_iconst_1();
 	    void i_iconst_2();
-	    void i_iconst_3();	
+	    void i_iconst_3();
 		void i_iconst_4();
 	    void i_iconst_5();
 	    void i_lconst_0();
@@ -217,7 +219,6 @@ class ExecutionEngine
 	    void i_ifnonnull();
 	    void i_goto_w();
 	    void i_jsr_w();
-	    void initInstructions();
 
 	public:
 		void SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
