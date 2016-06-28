@@ -20,7 +20,7 @@ class Frame{
 	private:
 
 		map<uint32_t,Valor> variaveisLocais;
-		method_info metodo;
+		method_info *metodo;
 		uint32_t pc;
 		stack<Valor> pilhaOperandos;
 		Objeto *objeto;

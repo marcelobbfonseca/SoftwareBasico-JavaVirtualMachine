@@ -42,9 +42,9 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 	this->pilhaJVM.push(*frame);
 }
 
-Frame* RuntimeDataArea::topoPilha()
+Frame RuntimeDataArea::topoPilha()
 {
-	return &(this->pilhaJVM.top());
+	return this->pilhaJVM.top();
 }
 
 Frame RuntimeDataArea::desempilharFrame()
@@ -54,7 +54,7 @@ Frame RuntimeDataArea::desempilharFrame()
 		cerr << "IndexOutOfBoundsException" << endl;
 		exit(1);
 	}
-	Frame topo = *(pilhaJVM.top());
+	Frame topo = pilhaJVM.top();
 	pilhaJVM.pop();
 	return topo;
 }
