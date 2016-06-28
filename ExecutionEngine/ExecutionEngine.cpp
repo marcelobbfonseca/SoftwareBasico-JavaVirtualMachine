@@ -19,7 +19,7 @@ void ExecutionEngine::Play(string classComMain)
 		vetorDePonteirosParaFuncao[instrucao];
 
 	}
-	while(runtimeDataArea->PilhaJVM.size() > 0);
+	while(runtimeDataArea->pilhaJVM.size() > 0);
 }
 
 void ExecutionEngine::inicializaInstrucoes() {
@@ -242,78 +242,78 @@ void ExecutionEngine::i_aconst_null(){
     toppilha->empilharOperando(valor);
 }
 void ExecutionEngine::i_iconst_m1(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)-1;
     //falta uma parada de print do bastos
 
-    toppilha->empilharOperando(valor);   
+    toppilha->empilharOperando(valor);
 
     runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_iconst_0(){
 
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)0;
     //falta uma parada de print do bastos
-    toppilha->empilharOperando(valor); 
+    toppilha->empilharOperando(valor);
     runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_iconst_1(){
 
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)1;
     //falta uma parada de print do bastos
-    toppilha->empilharOperando(valor); 
+    toppilha->empilharOperando(valor);
     toppilha->runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_iconst_2(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)2;
     //falta uma parada de print do bastos
-    toppilha->empilharOperando(valor); 
+    toppilha->empilharOperando(valor);
     runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_iconst_3(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)3;
     //falta uma parada de print do bastos
-    toppilha->empilharOperando(valor); 
+    toppilha->empilharOperando(valor);
     runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_iconst_4(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)4;
     //falta uma parada de print do bastos
-    toppilha->empilharOperando(valor); 
+    toppilha->empilharOperando(valor);
     runtimeDataArea->topoPilha()->incrementaPC();
 
 }
 void ExecutionEngine::i_iconst_5(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
-    
+    Frame *toppilha = runtimeDataArea->topoPilha();
+
     Valor valor;
     valor.tipo = TipoDado::INT;
     valor.dado = (uint32_t)5;
     //falta uma parada de print do bastos
-    toppilha->empilharOperando(valor); 
+    toppilha->empilharOperando(valor);
     runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_lconst_0(){}
