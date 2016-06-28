@@ -16,7 +16,7 @@ void ExecutionEngine::Play(string classComMain)
 	{
 
         instrucao = runtimeDataArea->topoPilha()->getCode();
-		vetorDePonteirosParaFuncao[instrucao];
+		(this->*vetorDePonteirosParaFuncao[instrucao])();
 
 	}
 	while(runtimeDataArea->pilhaJVM.size() > 0);
@@ -234,6 +234,7 @@ void ExecutionEngine::i_nop(){
     runtimeDataArea->topoPilha()->incrementaPC();
 
 }
+
 void ExecutionEngine::i_aconst_null(){
     Frame *toppilha = runtimeDataArea->topoPilha();
     Valor valor;
