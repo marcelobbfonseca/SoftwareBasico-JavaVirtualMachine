@@ -6,7 +6,7 @@ void ExecutionEngine::Play(string classComMain)
     uint8_t instrucao;
     Objeto *obj = new Objeto();
 
-    obj->classe = runtimeDataArea->CarregarClasse(classComMain);
+    obj->javaClass = runtimeDataArea->CarregarClasse(classComMain);
     obj->instancia = NULL;
 
     runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
