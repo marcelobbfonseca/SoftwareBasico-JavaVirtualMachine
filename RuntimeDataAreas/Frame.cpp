@@ -18,14 +18,14 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 	{
 		assert((metodoAux->getAccessFlags() & 0x0008) != 0); // o método precisa ser estático
 	}
-	metodo = *metodoAux;
+	metodo = metodoAux;
 	pegarAtributos();
 }
 
 void Frame::pegarAtributos()
 {
 	vector<cp_info*> constantPool = objeto->javaClass->getConstantPool();
-    vector<attribute_info *> attributesAux = metodo.getAttributes();
+	vector<attribute_info *> attributesAux = metodo.getAttributes();
 
 	codeAttribute = NULL;
 	exceptionsAttribute = NULL;

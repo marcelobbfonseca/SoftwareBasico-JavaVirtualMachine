@@ -20,7 +20,7 @@ class Frame{
 	private:
 
 		map<uint32_t,Valor> variaveisLocais;
-		method_info metodo;
+		method_info *metodo;
 		uint32_t pc;
 		stack<Valor> pilhaOperandos;
 		Objeto *objeto;
@@ -32,13 +32,13 @@ class Frame{
 		// Obter um ponteiro para a pool de constantes referente ao frame atual.
 		cp_info *cpInfo;
 
-        void pegarAtributos();
+		void pegarAtributos();
 
 	public:
 		//Construtor
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
 
-        Valor getValorVariavelLocal(uint32_t indice);
+		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
 		void empilharOperando(Valor operando);
 		Valor desempilhaOperando();
