@@ -239,11 +239,11 @@ void ExecutionEngine::i_aconst_null(){
     Frame *toppilha = runtimeDataArea->topoPilha();
     Valor valor;
     valor.tipo = TipoDado::REFERENCE;
-    valor.dado = NULL;
+    valor.dado = (uint32_t)NULL;
     toppilha->empilharOperando(valor);
 }
 void ExecutionEngine::i_iconst_m1(){
-    
+
 }
 void ExecutionEngine::i_iconst_0(){}
 void ExecutionEngine::i_iconst_1(){}
