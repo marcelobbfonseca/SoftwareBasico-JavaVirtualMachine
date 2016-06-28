@@ -1,32 +1,31 @@
 #include"DadosDaInstancia.hpp"
 
-DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass){
-
+DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
+{
 	vector<field_info> fields = javaClass->getFieldInfo();
 	uint16_t abstractFlag = 0x0400;
 
-	if ((javaClass->getAccessFlags() & abstractFlag) != 0) {
-
+	if ((javaClass->getAccessFlags() & abstractFlag) != 0)
+	{
 		// Não pode instanciar se for classe abstrata
 		cerr << "Erro de instanciamento" << endl;
 		exit(1);
-
 	}
 
-	for (int i = 0; i < javaClass->getFieldsCount(); i++) {
-
+	for (int i = 0; i < javaClass->getFieldsCount(); i++)
+	{
 		field_info field = fields[i];
 		uint16_t staticAndFinalFlag = 0x0008 | 0x0010;
-
-		if ((field.getAccessFlags() & staticAndFinalFlag) == 0) { // não estática e não final
-
+		if ((field.getAccessFlags() & staticAndFinalFlag) == 0)// não estática e não final
+		{
 			string nomeField = javaClass->getUTF8(field.getNameIndex());
 			string descritorField = javaClass->getUTF8(field.getDescriptorIndex());
 
 			char tipoField = descritorField[0];
 			Valor valor;
 
-			switch (tipoField) {
+			switch (tipoField)
+			{
 				case 'B':
 					valor.tipo = TipoDado::BYTE;
 					break;

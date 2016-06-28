@@ -19,7 +19,7 @@ class RuntimeDataArea
 {
 	private:
 //		map<string, DadosDaClasse> InformacoesDeClasses;
-//Necessário?	map<string, JavaClass*> classes;/
+		map<string, JavaClass*> classes;
 		ClassLoader *classLoader;
 		ExecutionEngine *executionEngine;
 
