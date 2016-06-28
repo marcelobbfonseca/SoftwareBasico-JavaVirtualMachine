@@ -19,7 +19,7 @@ void ExecutionEngine::Play(string classComMain)
 		vetorDePonteirosParaFuncao[instrucao];
 
 	}
-	while(runtimeDataArea->PilhaJVM.size() > 0);
+	while(runtimeDataArea->pilhaJVM.size() > 0);
 }
 
 void ExecutionEngine::inicializaInstrucoes() {
@@ -273,7 +273,7 @@ void ExecutionEngine::i_iconst_1(){
     valor.dado = (uint32_t)1;
     //falta uma parada de print do bastos
     toppilha->empilharOperando(valor); 
-    toppilha->runtimeDataArea->topoPilha()->incrementaPC();
+    runtimeDataArea->topoPilha()->incrementaPC();
 }
 void ExecutionEngine::i_iconst_2(){
     Frame *toppilha = runtimeDataArea->topoPilha();   
@@ -316,11 +316,68 @@ void ExecutionEngine::i_iconst_5(){
     toppilha->empilharOperando(valor); 
     runtimeDataArea->topoPilha()->incrementaPC();
 }
-void ExecutionEngine::i_lconst_0(){}
-void ExecutionEngine::i_lconst_1(){}
-void ExecutionEngine::i_fconst_0(){}
-void ExecutionEngine::i_fconst_1(){}
-void ExecutionEngine::i_fconst_2(){}
+void ExecutionEngine::i_lconst_0(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor padding;
+    padding.tipo = TipoDado::HIGHLONG;
+    padding.dado = (uint32_t)0;
+
+    Valor valor;
+    valor.tipo = TipoDado::LOWLONG;
+    valor.dado = (uint32_t)0;
+
+    toppilha->empilharOperando(padding);
+    toppilha->empilharOperando(valor); 
+    runtimeDataArea->topoPilha()->incrementaPC();
+
+
+}
+void ExecutionEngine::i_lconst_1(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor padding;
+    padding.tipo = TipoDado::HIGHLONG;
+    padding.dado = (uint32_t)0;
+
+    Valor valor;
+    valor.tipo = TipoDado::LOWLONG;
+    valor.dado = (uint32_t)1;
+
+    toppilha->empilharOperando(padding);
+    toppilha->empilharOperando(valor); 
+    runtimeDataArea->topoPilha()->incrementaPC();    
+}
+void ExecutionEngine::i_fconst_0(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor valor;
+    valor.tipo = TipoDado::FLOAT;
+    valor.dado = (uint32_t)0;
+
+    toppilha->empilharOperando(valor); 
+    runtimeDataArea->topoPilha()->incrementaPC();    
+}
+void ExecutionEngine::i_fconst_1(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor valor;
+    valor.tipo = TipoDado::FLOAT;
+    valor.dado = (uint32_t)1;
+
+    toppilha->empilharOperando(valor); 
+    runtimeDataArea->topoPilha()->incrementaPC();
+}
+void ExecutionEngine::i_fconst_2(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor valor;
+    valor.tipo = TipoDado::FLOAT;
+    valor.dado = (uint32_t)2;
+
+    toppilha->empilharOperando(valor); 
+    runtimeDataArea->topoPilha()->incrementaPC();  
+}
 void ExecutionEngine::i_dconst_0(){}
 void ExecutionEngine::i_dconst_1(){}
 void ExecutionEngine::i_bipush(){}
