@@ -50,9 +50,9 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 	this->pilhaJVM.push(*frame);
 }
 
-Frame RuntimeDataArea::topoPilha()
+Frame *RuntimeDataArea::topoPilha()
 {
-	return this->pilhaJVM.top();
+	return &(this->pilhaJVM.top());
 }
 
 Frame RuntimeDataArea::desempilharFrame()
