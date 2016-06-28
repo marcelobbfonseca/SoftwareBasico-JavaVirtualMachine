@@ -1,3 +1,6 @@
+#ifndef DADOS_DA_INSTANCIA_HPP
+#define DADOS_DA_INSTANCIA_HPP
+
 #include<iostream>
 #include<map>
 #include"JavaClass.hpp"
@@ -9,3 +12,5 @@ class DadosDaInstancia{
 	private:
 		map<string, Valor> fieldsInstancia;
 };
+
+#endif

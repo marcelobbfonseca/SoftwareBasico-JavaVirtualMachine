@@ -24,8 +24,7 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 		//pseudocodigo:
 		Frame *novoFrame= new Frame(classes[nomeSemExtensao], "<clinit>", "()V");
 		EmpilharFrame(novoFrame);
-
-    }
+	}
 }
 
 void RuntimeDataArea::SetClassLoader(ClassLoader *classLoader)
@@ -38,32 +37,26 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 	this.executionEngine =executionEngine;
 }
 
-void RuntimeDataArea::EmpilharFrame(Frame *frame){
-
-    this->pilhaFrames.push(frame);
-
+void RuntimeDataArea::EmpilharFrame(Frame *frame)
+{
+	this->pilhaFrames.push(frame);
 }
 
-Frame RuntimeDataArea::topoPilha(){
-
-    return this->pilhaFrames.top();
-
+Frame RuntimeDataArea::topoPilha()
+{
+	return this->pilhaFrames.top();
 }
 
-Frame RuntimeDataArea::desempilhaFrame() {
-
-    if (pilhaJVM.size() == 0) {
-
-        cerr << "IndexOutOfBoundsException" << endl;
-        exit(1);
-
-    }
-
-    Frame topo = pilhaJVM.top();
-
-    pilhaJVM.pop();
-
-    return top;
+Frame RuntimeDataArea::desempilhaFrame()
+{
+	if (pilhaJVM.size() == 0)
+	{
+		cerr << "IndexOutOfBoundsException" << endl;
+		exit(1);
+	}
+	Frame topo = pilhaJVM.top();
+	pilhaJVM.pop();
+	return top;
 }
 
 bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string descritor)

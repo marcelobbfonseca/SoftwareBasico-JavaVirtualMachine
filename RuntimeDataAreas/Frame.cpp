@@ -1,118 +1,119 @@
 #include "Frame.hpp"
 //Construtor para métodos não estáticos
-Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo){
+Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 {
 
    /* for (int i = 0; i < arguments.size(); i++) {
-        variaveisLocais[i] = argumentos[i];
-    }*/
+		variaveisLocais[i] = argumentos[i];
+	}*/
 
-    pc = 0;
-
-    const method_info *metodoAux = objeto->javaClass->getMetodo(nomeMetodo, descritorMetodo);
-    assert(metodoAux != NULL);
-
-    if(objeto->instancia != NULL){
-        assert((metodoAux->getAccessFlags() & 0x0008) == 0); // o método não pode ser estático
-        }
-    else{
-        assert((metodoAux->getAccessFlags() & 0x0008) != 0); // o método precisa ser estático
-    }
-
-    pegarAtributos();
+	pc = 0;
+	method_info *metodoAux = (method_info *)objeto->javaClass->getMetodo(nomeMetodo, descritorMetodo);
+	assert(metodoAux != NULL);
+	if(objeto->instancia != NULL)
+	{
+		assert((metodoAux->getAccessFlags() & 0x0008) == 0); // o método não pode ser estático
+	}
+	else
+	{
+		assert((metodoAux->getAccessFlags() & 0x0008) != 0); // o método precisa ser estático
+	}
+	pegarAtributos();
 }
 
-void Frame::pegarAtributos() {
-    vector<cp_info*> constantPool = objeto->javaClass.getConstantPool();
+void Frame::pegarAtributos()
+{
+	vector<cp_info*> constantPool = objeto->javaClass.getConstantPool();
 
-    codeAttribute = NULL;
-    exceptionsAttribute = NULL;
+	codeAttribute = NULL;
+	exceptionsAttribute = NULL;
 
-    for (int i = 0; i < _method.attributes_count; i++) {
+	for (int i = 0; i < _method.attributes_count; i++) {
 
-        attribute_info *attribute_aux = &(method.attributes[i]);
-        CONSTANT_Utf8_info *attributeName = (CONSTANT_Utf8_info*)(constantPool[attribute_aux->GetAttributeNameIndex()-1]);
+		attribute_info *attribute_aux = &(method.attributes[i]);
+		CONSTANT_Utf8_info *attributeName = (CONSTANT_Utf8_info*)(constantPool[attribute_aux->GetAttributeNameIndex()-1]);
 
-        if ((*attributeName) == "Code") {
+		if ((*attributeName) == "Code") {
 
-            codeAttribute = &(attributeAux->info.code_info);
+			codeAttribute = &(attributeAux->info.code_info);
 
-            if (exceptionsAttribute != NULL) break;
+			if (exceptionsAttribute != NULL) break;
 
-        }
+		}
 
-        else if (attrName == "Exceptions")) {
+		else if (attrName == "Exceptions")) {
 
-            exceptionsAttribute = &(attribute_aux->info.exceptions_info);
+			exceptionsAttribute = &(attribute_aux->info.exceptions_info);
 
-            if (codeAttribute != NULL) break;
-        }
-    }
+			if (codeAttribute != NULL) break;
+		}
+	}
 }
 
 Valor Frame::getValorVariavelLocal(uint32_t indice) {
 
-    if (indice >= codeAttribute->max_locals) {
+	if (indice >= codeAttribute->max_locals) {
 
-        cerr <<"Tentativa de acesso a variavel local inexistente" << endl;
-        exit(1);
+		cerr <<"Tentativa de acesso a variavel local inexistente" << endl;
+		exit(1);
 
-    }
+	}
 
-    return variaveisLocais[indice];
+	return variaveisLocais[indice];
 }
 
 void Frame::mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice) {
 
-    if (indice >= _codeAttribute->max_locals) {
+	if (indice >= _codeAttribute->max_locals) {
 
-        cerr << "Tentativa de alteração de variavel local inexistente" << endl;
-        exit(1);
+		cerr << "Tentativa de alteração de variavel local inexistente" << endl;
+		exit(1);
 
-    }
+	}
 
-    variaveisLocais[indice] = valorDaVariavel;
+	variaveisLocais[indice] = valorDaVariavel;
 
 }
 
 void Frame::empilharOperando(Valor operando) {
 
-    pilhaOperandos.push(operando);
+	pilhaOperandos.push(operando);
 
 }
 
 Valor Frame::desempilhaOperando() {
 
-    if (pilhaOperandos.size() == 0) {
+	if (pilhaOperandos.size() == 0) {
 
-        cerr << "IndexOutOfBoundsException" << endl;
-        exit(1);
+		cerr << "IndexOutOfBoundsException" << endl;
+		exit(1);
 
-    }
+	}
 
-    Valor topo = pilhaOperandos.top();
+	Valor topo = pilhaOperandos.top();
 
-    pilhaOperandos.pop();
+	pilhaOperandos.pop();
 
-    return top;
+	return top;
 }
 
-stack<Valor> Frame::retornaPilhaOperandos(){}
+stack<Valor> Frame::retornaPilhaOperandos()
+{
 
-    return pilhaOperandos;
+	return pilhaOperandos;
 
 }
 
 
 void Frame::setaPilhaOperandos(stack<Valor> pilha){
 
-    pilhaOperandos = pilha;
+	pilhaOperandos = pilha;
 
 }
 
 uint8_t Frame::getCode() {
 
-    return codeAttribute->code + pc;
+	return codeAttribute->code + pc;
 
 }
 
@@ -129,5 +130,5 @@ uint32_t Frame::tamanhoCode() {
 }
 
 void Frame::incrementaPC(){
-    pc = pc + 1;
+	pc = pc + 1;
 }

@@ -25,7 +25,7 @@ class RuntimeDataArea
 
 		//a descobrir
 	public:
-	    stack<Frame> PilhaJVM;
+		stack<Frame> PilhaJVM;
 		RuntimeDataArea();
 		void SetClassLoader(ClassLoader *classLoader);
 		void SetExecutionEngine(ExecutionEngine *executionEngine);
