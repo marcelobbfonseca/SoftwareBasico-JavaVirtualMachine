@@ -23,18 +23,18 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	{
 		//pseudocodigo:
 		Frame *novoFrame= new Frame(classes[nomeSemExtensao], "<clinit>", "()V");
-		EmpilharFrame(novoFrame);
+		empilharFrame(novoFrame);
 	}
 }
 
 void RuntimeDataArea::SetClassLoader(ClassLoader *classLoader)
 {
-	this.classLoader =classLoader;
+	this->classLoader =classLoader;
 }
 
 void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 {
-	this.executionEngine =executionEngine;
+	this->executionEngine = executionEngine;
 }
 
 void RuntimeDataArea::empilharFrame(Frame *frame)
