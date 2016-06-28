@@ -15,7 +15,7 @@ void ExecutionEngine::Play(string classComMain)
 	do
 	{
 
-        instrucao = runtimeDataArea->topoPilha().getCode();
+        instrucao = runtimeDataArea->topoPilha()->getCode();
 		vetorDePonteirosParaFuncao[instrucao];
 
 	}
@@ -244,10 +244,17 @@ void ExecutionEngine::i_aconst_null(){
 }
 void ExecutionEngine::i_iconst_m1(){
     Frame *toppilha = runtimeDataArea->topoPilha();   
+
 }
-void ExecutionEngine::i_iconst_0(){}
-void ExecutionEngine::i_iconst_1(){}
-void ExecutionEngine::i_iconst_2(){}
+void ExecutionEngine::i_iconst_0(){
+
+}
+void ExecutionEngine::i_iconst_1(){
+
+}
+void ExecutionEngine::i_iconst_2(){
+    
+}
 void ExecutionEngine::i_iconst_3(){}
 void ExecutionEngine::i_iconst_4(){}
 void ExecutionEngine::i_iconst_5(){}
