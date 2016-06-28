@@ -6,6 +6,7 @@
 #include "Tipos.h"
 #include "method_info.hpp"
 #include "JavaClass.hpp"
+#include "DadosDaInstancia.hpp"
 
 class Objeto {
 	public:
