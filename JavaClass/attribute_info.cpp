@@ -28,7 +28,7 @@ Então pessoal, Como tem muito C++ no método abaixo vou explicar:
 */
 attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool)
 {
-	
+
 	uint16_t attributeNameIndex;
 	LerAtributo(&attributeNameIndex, 2, arq);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
@@ -117,13 +117,13 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 		printf("atributoLixo %d",attributeNameIndex);
 		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
-	
+
 }
 
 attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_info*> const &constant_pool)
 {
-	
-	
+
+
 	uint16_t attributeNameIndex;
 	buffer.Ler(&attributeNameIndex, 2);
 	if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "ConstantValue")
@@ -1369,7 +1369,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 	}
 }
 
-uint16_t attribute_info::GetNameIndex()
+uint16_t attribute_info::getAttributeNameIndex()
 {
 	return attribute_name_index;
 }
@@ -1377,4 +1377,19 @@ uint16_t attribute_info::GetNameIndex()
 uint16_t SourceFile_attribute::GetSouceFileIndex(void)
 {
 	return sourcefile_index;
+}
+
+uint16_t Code_attribute::getMaxLocals(void)
+{
+    return max_locals;
+}
+
+uint8_t Code_attribute::getCode(void)
+{
+    return *code;
+}
+
+uint32_t Code_attribute::getCodeLength(void)
+{
+    return code_length;
 }

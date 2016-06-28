@@ -280,7 +280,7 @@ string JavaClass::NomeDaClasse(void)
 	string retorno= "";
 	for(unsigned int cont =0 ; cont < attributes.size(); cont++)
 	{
-		if( ( *( (CONSTANT_Utf8_info *)constant_pool[attributes[cont]->GetNameIndex()-1] ) )== "SourceFile" )
+		if( ( *( (CONSTANT_Utf8_info *)constant_pool[attributes[cont]->getAttributeNameIndex()-1] ) )== "SourceFile" )
 		{
 			uint16_t indiceNomeArquivo= ((SourceFile_attribute *)attributes[cont])->GetSouceFileIndex();
 			retorno = ( (CONSTANT_Utf8_info *)(constant_pool[indiceNomeArquivo-1]) )->GetString();

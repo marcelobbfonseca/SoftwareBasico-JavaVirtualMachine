@@ -18,32 +18,33 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 	{
 		assert((metodoAux->getAccessFlags() & 0x0008) != 0); // o método precisa ser estático
 	}
+	metodo = *metodoAux;
 	pegarAtributos();
 }
 
 void Frame::pegarAtributos()
 {
-	vector<cp_info*> constantPool = objeto->javaClass.getConstantPool();
+	vector<cp_info*> constantPool = objeto->javaClass->getConstantPool();
+    vector<attribute_info *> attributesAux = metodo.getAttributes();
 
 	codeAttribute = NULL;
 	exceptionsAttribute = NULL;
 
-	for (int i = 0; i < _method.attributes_count; i++) {
+	for (int i = 0; i < metodo.getAttributesCount(); i++) {
 
-		attribute_info *attribute_aux = &(method.attributes[i]);
-		CONSTANT_Utf8_info *attributeName = (CONSTANT_Utf8_info*)(constantPool[attribute_aux->GetAttributeNameIndex()-1]);
+		CONSTANT_Utf8_info *attributeName = (CONSTANT_Utf8_info*)(constantPool[attributesAux[i]->getAttributeNameIndex()-1]);
 
 		if ((*attributeName) == "Code") {
 
-			codeAttribute = &(attributeAux->info.code_info);
+			codeAttribute = (Code_attribute*)(attributesAux[i]);
 
 			if (exceptionsAttribute != NULL) break;
 
 		}
 
-		else if (attrName == "Exceptions")) {
+		else if (*attributeName == "Exceptions") {
 
-			exceptionsAttribute = &(attribute_aux->info.exceptions_info);
+			exceptionsAttribute = (Exceptions_attribute*)(attributesAux[i]);
 
 			if (codeAttribute != NULL) break;
 		}
@@ -52,7 +53,7 @@ void Frame::pegarAtributos()
 
 Valor Frame::getValorVariavelLocal(uint32_t indice) {
 
-	if (indice >= codeAttribute->max_locals) {
+	if (indice >= codeAttribute->getMaxLocals()) {
 
 		cerr <<"Tentativa de acesso a variavel local inexistente" << endl;
 		exit(1);
@@ -64,7 +65,7 @@ Valor Frame::getValorVariavelLocal(uint32_t indice) {
 
 void Frame::mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice) {
 
-	if (indice >= _codeAttribute->max_locals) {
+	if (indice >= codeAttribute->getMaxLocals()) {
 
 		cerr << "Tentativa de alteração de variavel local inexistente" << endl;
 		exit(1);
@@ -94,7 +95,7 @@ Valor Frame::desempilhaOperando() {
 
 	pilhaOperandos.pop();
 
-	return top;
+	return topo;
 }
 
 stack<Valor> Frame::retornaPilhaOperandos()
@@ -113,19 +114,19 @@ void Frame::setaPilhaOperandos(stack<Valor> pilha){
 
 uint8_t Frame::getCode() {
 
-	return codeAttribute->code + pc;
+	return codeAttribute->getCode() + pc;
 
 }
 
 uint16_t Frame::tamanhoVetorVariaveis() {
 
-	return codeAttribute->max_locals;
+	return codeAttribute->getMaxLocals();
 
 }
 
 uint32_t Frame::tamanhoCode() {
 
-	return codeAttribute->code_length;
+	return codeAttribute->getCodeLength();
 
 }
 

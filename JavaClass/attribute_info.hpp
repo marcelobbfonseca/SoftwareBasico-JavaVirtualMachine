@@ -19,7 +19,7 @@ class attribute_info
 		static attribute_info* LerAtributeInfo(Buffer &buff, std::vector<cp_info*> const &constant_pool);
 		virtual ~attribute_info(){}
 		virtual void ExibirInformacoes(std::string tabs)=0;
-		uint16_t GetNameIndex();
+		uint16_t getAttributeNameIndex();
 };
 
 using namespace std;
@@ -81,6 +81,9 @@ class Code_attribute: public attribute_info
 
 		Code_attribute& operator=(Code_attribute );
 		Code_attribute(Code_attribute&);
+		uint16_t getMaxLocals(void);
+		uint8_t getCode(void);
+		uint32_t getCodeLength();
 };
 
 class Exceptions_attribute : public attribute_info

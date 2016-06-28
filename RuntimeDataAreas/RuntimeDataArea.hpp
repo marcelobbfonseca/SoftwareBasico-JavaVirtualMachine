@@ -25,7 +25,7 @@ class RuntimeDataArea
 
 		//a descobrir
 	public:
-		stack<Frame> PilhaJVM;
+		stack<Frame> pilhaJVM;
 		RuntimeDataArea();
 		void SetClassLoader(ClassLoader *classLoader);
 		void SetExecutionEngine(ExecutionEngine *executionEngine);
@@ -33,7 +33,7 @@ class RuntimeDataArea
 		void empilharFrame(Frame *frame);
 		JavaClass* CarregarClasse(const string &nomeDaClasse);
 		Frame topoPilha();
-		Frame desempilhaFrame();
+		Frame desempilharFrame();
 
 		//a descobrir
 };
