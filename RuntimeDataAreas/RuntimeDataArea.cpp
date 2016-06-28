@@ -1,17 +1,19 @@
+#include"UtilidadesParaString.hpp"
 #include"RuntimeDataArea.hpp"
+
 JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 {
 	string nomeSemExtensao= nomeDaClasse;
-	if(StringUtilidadesTerminaCom(nomeClasse, ".class")
+	if(StringUtilidades::TerminaCom(nomeDaClasse, ".class") )
 	{
-		nomeSemExtensao= RemoverNoFinal(nomeSemExtensao, ".class");
+		nomeSemExtensao= StringUtilidades::RemoverNoFinal(nomeSemExtensao, ".class");
 	}
 	if(classes.count(nomeSemExtensao) >0)
 	{
 		return classes[nomeSemExtensao];
 	}
 	string nomeComExtensao= nomeDaClasse;
-	if (!StringUtilidades::TerminaCom(nomeComExtensao, ".class")
+	if (!StringUtilidades::TerminaCom(nomeComExtensao, ".class") )
 	{
 		nomeComExtensao+= ".class";
 	}
@@ -22,7 +24,12 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	if(MetodoExiste(nomeSemExtensao, "<clinit>", "()V"))
 	{
 		//pseudocodigo:
-		Frame *novoFrame= new Frame(classes[nomeSemExtensao], "<clinit>", "()V");
+		string clinit= "<clinit>";
+		string V= "()V";
+		Objeto *obj= new Objeto();
+		obj->instancia = NULL;
+		obj->javaClass= classes[nomeSemExtensao];
+		Frame *novoFrame= new Frame(obj, clinit, V);
 		empilharFrame(novoFrame);
 	}
 }
@@ -42,9 +49,9 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 	this->pilhaJVM.push(*frame);
 }
 
-Frame* RuntimeDataArea::topoPilha()
+Frame RuntimeDataArea::topoPilha()
 {
-	return &(this->pilhaJVM.top());
+	return this->pilhaJVM.top();
 }
 
 Frame RuntimeDataArea::desempilharFrame()
@@ -54,17 +61,17 @@ Frame RuntimeDataArea::desempilharFrame()
 		cerr << "IndexOutOfBoundsException" << endl;
 		exit(1);
 	}
-	Frame topo = *(pilhaJVM.top());
+	Frame topo = pilhaJVM.top();
 	pilhaJVM.pop();
 	return topo;
 }
 
 bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string descritor)
 {
-	string nomeSemExtensao= nomeDaClasse;
-	if(StringUtilidadesTerminaCom(nomeClasse, ".class"))
+	string nomeSemExtensao= nomeClasse;
+	if(StringUtilidades::TerminaCom(nomeClasse, ".class"))
 	{
-		nomeSemExtensao= RemoverNoFinal(nomeSemExtensao, ".class");
+		nomeSemExtensao= StringUtilidades::RemoverNoFinal(nomeSemExtensao, ".class");
 	}
 	if(classes.count(nomeSemExtensao) >0)
 	{

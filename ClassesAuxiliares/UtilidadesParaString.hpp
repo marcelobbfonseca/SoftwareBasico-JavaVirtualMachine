@@ -3,7 +3,7 @@
 
 #include<string>
 #include<string.h>
-
+#include"Erro.hpp"
 
 namespace StringUtilidades
 {

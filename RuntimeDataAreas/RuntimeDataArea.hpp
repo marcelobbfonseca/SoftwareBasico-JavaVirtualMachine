@@ -19,7 +19,7 @@ class RuntimeDataArea
 {
 	private:
 //		map<string, DadosDaClasse> InformacoesDeClasses;
-//Necessário?	map<string, JavaClass*> classes;/
+		map<string, JavaClass*> classes;
 		ClassLoader *classLoader;
 		ExecutionEngine *executionEngine;
 
@@ -32,8 +32,8 @@ class RuntimeDataArea
 		bool MetodoExiste(string nomeClasse, string nomeMetodo, string descritor);
 		void empilharFrame(Frame *frame);
 		JavaClass* CarregarClasse(const string &nomeDaClasse);
-		Frame* topoPilha();
-		Frame* desempilharFrame();
+		Frame topoPilha();
+		Frame desempilharFrame();
 
 		//a descobrir
 };

@@ -25,12 +25,12 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 void Frame::pegarAtributos()
 {
 	vector<cp_info*> constantPool = objeto->javaClass->getConstantPool();
-	vector<attribute_info *> attributesAux = metodo.getAttributes();
+	vector<attribute_info *> attributesAux = metodo->getAttributes();
 
 	codeAttribute = NULL;
 	exceptionsAttribute = NULL;
 
-	for (int i = 0; i < metodo.getAttributesCount(); i++) {
+	for (int i = 0; i < metodo->getAttributesCount(); i++) {
 
 		CONSTANT_Utf8_info *attributeName = (CONSTANT_Utf8_info*)(constantPool[attributesAux[i]->getAttributeNameIndex()-1]);
 
