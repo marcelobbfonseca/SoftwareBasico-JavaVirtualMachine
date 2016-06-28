@@ -132,10 +132,11 @@ cout << "Attributes count = " << attributes_count << endl;
 		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);
-	if(this->NomeDaClasse()!= StringUtilidades::RemoverNoFinal(nomeArquivo, ".class"))
+	string nomeArquivoSemCaminhoNemExtensao= StringUtilidades::RemoverCaminhoEExtensao(nomeArquivo, ".class");
+	if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
 	{
 		char erro[200];
-		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), StringUtilidades::RemoverNoFinal(nomeArquivo, ".class").c_str());
+		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
 		throw new Erro(erro, "JavaClass", "JavaClass");
 	}
 }

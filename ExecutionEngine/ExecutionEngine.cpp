@@ -1,4 +1,15 @@
 #include "ExecutionEngine.hpp"
+
+ExecutionEngine::ExecutionEngine(void)
+{
+	
+}
+
+void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
+{
+	this->runtimeDataArea= runtimeDataArea;
+}
+
 void ExecutionEngine::Play(string classComMain)
 {
 

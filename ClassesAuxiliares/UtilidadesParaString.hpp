@@ -10,6 +10,8 @@ namespace StringUtilidades
 {
 	bool TerminaCom(const string &str, char const *final);
 	string RemoverNoFinal(string &str, char const *final);
+	string RemoverCaminho(string &str);
+	string RemoverCaminhoEExtensao(string &str, char const *extensao);
 }
 #endif
 #endif

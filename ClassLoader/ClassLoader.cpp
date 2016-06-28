@@ -19,3 +19,12 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 
 }
 
+ClassLoader::ClassLoader(void)
+{
+	
+}
+
+void ClassLoader::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
+{
+	this->runtimeDataArea= runtimeDataArea;
+}

@@ -223,6 +223,7 @@ class ExecutionEngine
 	public:
 		void SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea);
 		void Play(string classComMain);
+		ExecutionEngine();
 
 };
 
