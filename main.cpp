@@ -5,6 +5,7 @@
 #include"Erro.hpp"
 #include"AnalisadorArgumentos.hpp"
 #include"Easter.hpp"
+#include"JVM.hpp"
 
 #define JVM_NAO_FEITA
 
@@ -46,9 +47,10 @@ int main(int argc, char **argv)
 	else
 	{
 	//int indiceArquivo= AnalisadorArgumentos::EncontrarArgumento("--run", argc, argv) + 1;
-    JVM *jvm = new JVM(caminho);
+	std::string caminho = argv[1];
+	JVM *jvm = new JVM(caminho);
 		//faz o q quiser
-//		delete jvm;
+		delete jvm;
 	}
 	return 0;
 }

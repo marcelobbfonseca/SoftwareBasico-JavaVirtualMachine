@@ -32,6 +32,7 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 		Frame *novoFrame= new Frame(obj, clinit, V);
 		empilharFrame(novoFrame);
 	}
+	return classes[nomeSemExtensao];
 }
 
 void RuntimeDataArea::SetClassLoader(ClassLoader *classLoader)
@@ -75,7 +76,7 @@ bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string 
 	}
 	if(classes.count(nomeSemExtensao) >0)
 	{
-		return (classes[nomeSemExtensao])->MetodoExiste(nomeMetodo, descritor);
+		return ( (classes[nomeSemExtensao])->getMetodo(nomeMetodo, descritor) ) != NULL;
 	}
 	return false;
 }

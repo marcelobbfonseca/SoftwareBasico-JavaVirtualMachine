@@ -3,3 +3,4 @@
 #include"Endian.cpp"
 #include"Leitura.cpp"
 #include"Opcode.cpp"
+#include"UtilidadesParaString.cpp"

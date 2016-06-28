@@ -11,7 +11,7 @@ gcc:
 .PHONY: windows
 windows:
 	$(eval arquivoSaida = -o JVM.exe)
-ClassesAuxiliares.o: ClassesAuxiliares/AnalisadorArgumentos.hpp ClassesAuxiliares/Buffer.cpp ClassesAuxiliares/Buffer.hpp ClassesAuxiliares/Easter.hpp ClassesAuxiliares/Endian.cpp ClassesAuxiliares/Endian.hpp ClassesAuxiliares/Erro.hpp ClassesAuxiliares/Leitura.cpp ClassesAuxiliares/Leitura.hpp ClassesAuxiliares/Opcode.cpp ClassesAuxiliares/Opcode.hpp ClassesAuxiliares/UtilidadesParaString.hpp
+ClassesAuxiliares.o: ClassesAuxiliares/AnalisadorArgumentos.hpp ClassesAuxiliares/Buffer.cpp ClassesAuxiliares/Buffer.hpp ClassesAuxiliares/Easter.hpp ClassesAuxiliares/Endian.cpp ClassesAuxiliares/Endian.hpp ClassesAuxiliares/Erro.hpp ClassesAuxiliares/Leitura.cpp ClassesAuxiliares/Leitura.hpp ClassesAuxiliares/Opcode.cpp ClassesAuxiliares/Opcode.hpp ClassesAuxiliares/UtilidadesParaString.hpp ClassesAuxiliares/UtilidadesParaString.cpp
 	$(compilador) ClassesAuxiliares/uniao.cpp $(flags) $(INC_HPP) -o ClassesAuxiliares.o -c
 ClassLoader.o: ClassLoader/ClassLoader.cpp ClassLoader/ClassLoader.hpp
 	$(compilador) ClassLoader/uniao.cpp $(flags) $(INC_HPP) -o ClassLoader.o -c
@@ -22,6 +22,6 @@ JavaClass.o: JavaClass/attribute_info.cpp JavaClass/attribute_info.hpp JavaClass
 RuntimeDataArea.o: RuntimeDataAreas/DadosDaInstancia.cpp RuntimeDataAreas/DadosDaInstancia.hpp RuntimeDataAreas/Frame.cpp RuntimeDataAreas/Frame.hpp RuntimeDataAreas/RuntimeDataArea.cpp RuntimeDataAreas/RuntimeDataArea.hpp RuntimeDataAreas/Tipos.h
 	$(compilador) RuntimeDataAreas/uniao.cpp $(flags) $(INC_HPP) -o RuntimeDataArea.o -c
 mainJVM.o: JVM.hpp JVM.cpp main.cpp
-	$(compilador) main.cpp JVM.cpp $(flags) $(INC_HPP) -o mainJVM.o -c
+	$(compilador) uniao.cpp $(flags) $(INC_HPP) -o mainJVM.o -c
 clear:
 	rm -r *.o
