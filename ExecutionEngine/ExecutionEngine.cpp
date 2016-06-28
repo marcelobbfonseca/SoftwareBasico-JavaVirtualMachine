@@ -232,7 +232,7 @@ void ExecutionEngine::i_nop(){
     //anda uma posição e faz nada
     //incrementa pc + 1
 
-   runtimeDataArea->topoPilha().incrementaPC();
+   runtimeDataArea->topoPilha()->incrementaPC();
 
 }
 void ExecutionEngine::i_aconst_null(){
@@ -243,7 +243,7 @@ void ExecutionEngine::i_aconst_null(){
     toppilha->empilharOperando(valor);
 }
 void ExecutionEngine::i_iconst_m1(){
-
+    Frame *toppilha = runtimeDataArea->topoPilha();   
 }
 void ExecutionEngine::i_iconst_0(){}
 void ExecutionEngine::i_iconst_1(){}

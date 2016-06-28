@@ -42,21 +42,21 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 	this->pilhaJVM.push(frame);
 }
 
-Frame RuntimeDataArea::topoPilha()
+Frame* RuntimeDataArea::topoPilha()
 {
-	return this->pilhaJVM.top();
+	return &(this->pilhaJVM.top());
 }
 
-Frame RuntimeDataArea::desempilharFrame()
+Frame* RuntimeDataArea::desempilharFrame()
 {
 	if (pilhaJVM.size() == 0)
 	{
 		cerr << "IndexOutOfBoundsException" << endl;
 		exit(1);
 	}
-	Frame topo = pilhaJVM.top();
+	Frame* topo = pilhaJVM.top();
 	pilhaJVM.pop();
-	return topo;
+	return &topo;
 }
 
 bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string descritor)
