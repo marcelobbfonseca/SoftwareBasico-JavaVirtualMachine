@@ -37,17 +37,17 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 	this.executionEngine =executionEngine;
 }
 
-void RuntimeDataArea::EmpilharFrame(Frame *frame)
+void RuntimeDataArea::empilharFrame(Frame *frame)
 {
-	this->pilhaFrames.push(frame);
+	this->pilhaJVM.push(frame);
 }
 
 Frame RuntimeDataArea::topoPilha()
 {
-	return this->pilhaFrames.top();
+	return this->pilhaJVM.top();
 }
 
-Frame RuntimeDataArea::desempilhaFrame()
+Frame RuntimeDataArea::desempilharFrame()
 {
 	if (pilhaJVM.size() == 0)
 	{
@@ -56,13 +56,13 @@ Frame RuntimeDataArea::desempilhaFrame()
 	}
 	Frame topo = pilhaJVM.top();
 	pilhaJVM.pop();
-	return top;
+	return topo;
 }
 
 bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string descritor)
 {
 	string nomeSemExtensao= nomeDaClasse;
-	if(StringUtilidadesTerminaCom(nomeClasse, ".class")
+	if(StringUtilidadesTerminaCom(nomeClasse, ".class"))
 	{
 		nomeSemExtensao= RemoverNoFinal(nomeSemExtensao, ".class");
 	}

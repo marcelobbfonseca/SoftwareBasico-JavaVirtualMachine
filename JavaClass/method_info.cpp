@@ -129,4 +129,12 @@ uint16_t method_info::getAccessFlags(void)
 {
 	return access_flags;
 }
+uint16_t method_info::getAttributesCount(void)
+{
+    return attributes_count;
+}
+vector<attribute_info *> method_info::getAttributes(void)
+{
+    return attributes;
+}
 
