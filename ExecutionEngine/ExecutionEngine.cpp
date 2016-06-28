@@ -235,8 +235,16 @@ void ExecutionEngine::i_nop(){
    runtimeDataArea->topoPilha().incrementaPC();
 
 }
-void ExecutionEngine::i_aconst_null(){}
-void ExecutionEngine::i_iconst_m1(){}
+void ExecutionEngine::i_aconst_null(){
+    Frame *toppilha = runtimeDataArea->topoPilha();
+    Valor valor;
+    valor.tipo = TipoDado::REFERENCE;
+    valor.dado = NULL;
+    toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::i_iconst_m1(){
+    
+}
 void ExecutionEngine::i_iconst_0(){}
 void ExecutionEngine::i_iconst_1(){}
 void ExecutionEngine::i_iconst_2(){}
