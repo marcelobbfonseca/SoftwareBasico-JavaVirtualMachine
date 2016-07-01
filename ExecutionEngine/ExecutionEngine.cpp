@@ -30,7 +30,7 @@ void ExecutionEngine::Play(string classComMain)
 	do
 	{
 
-		instrucao = runtimeDataArea->topoPilha()->getCode();
+		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 		(this->*vetorDePonteirosParaFuncao[instrucao])();
 
 	}
@@ -246,7 +246,7 @@ void ExecutionEngine::inicializaInstrucoes() {
 void ExecutionEngine::i_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 
@@ -257,6 +257,7 @@ void ExecutionEngine::i_aconst_null(){
 	valor.dado = (uint32_t)NULL;
 	toppilha->empilharOperando(valor);
 }
+
 void ExecutionEngine::i_iconst_m1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -267,7 +268,7 @@ void ExecutionEngine::i_iconst_m1(){
 
 	toppilha->empilharOperando(valor);
 
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_0(){
 
@@ -278,7 +279,7 @@ void ExecutionEngine::i_iconst_0(){
 	valor.dado = (uint32_t)0;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_1(){
 
@@ -289,7 +290,7 @@ void ExecutionEngine::i_iconst_1(){
 	valor.dado = (uint32_t)1;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 void ExecutionEngine::i_iconst_2(){
@@ -300,7 +301,7 @@ void ExecutionEngine::i_iconst_2(){
 	valor.dado = (uint32_t)2;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -310,7 +311,7 @@ void ExecutionEngine::i_iconst_3(){
 	valor.dado = (uint32_t)3;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_4(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -320,7 +321,7 @@ void ExecutionEngine::i_iconst_4(){
 	valor.dado = (uint32_t)4;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 void ExecutionEngine::i_iconst_5(){
@@ -331,7 +332,7 @@ void ExecutionEngine::i_iconst_5(){
 	valor.dado = (uint32_t)5;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_lconst_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -346,7 +347,7 @@ void ExecutionEngine::i_lconst_0(){
 
 	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 
 }
@@ -363,7 +364,7 @@ void ExecutionEngine::i_lconst_1(){
 
 	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fconst_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -373,7 +374,7 @@ void ExecutionEngine::i_fconst_0(){
 	valor.dado = (uint32_t)0;
 
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fconst_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -383,7 +384,7 @@ void ExecutionEngine::i_fconst_1(){
 	valor.dado = (uint32_t)1;
 
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fconst_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -393,9 +394,14 @@ void ExecutionEngine::i_fconst_2(){
 	valor.dado = (uint32_t)2;
 
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_0(){}
+void ExecutionEngine::i_dconst_0(){
+
+
+
+
+}
 void ExecutionEngine::i_dconst_1(){}
 void ExecutionEngine::i_bipush(){}
 void ExecutionEngine::i_sipush(){}
@@ -580,5 +586,41 @@ void ExecutionEngine::i_wide(){}
 void ExecutionEngine::i_multianewarray(){}
 void ExecutionEngine::i_ifnull(){}
 void ExecutionEngine::i_ifnonnull(){}
-void ExecutionEngine::i_goto_w(){}
-void ExecutionEngine::i_jsr_w(){}
+
+void ExecutionEngine::i_goto_w(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint8_t byte3 = code[3];
+	uint8_t byte4 = code[4];
+	int32_t offsetSalto = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+
+	topo->incrementaPC(offsetSalto);
+	assert(topo->getPC() < (int32_t)topo->tamanhoCode());
+
+}
+
+void ExecutionEngine::i_jsr_w(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint8_t byte3 = code[3];
+	uint8_t byte4 = code[4];
+	int32_t offsetSalto = (byte1 << 24) | (byte2 << 16) | (byte3 << 8)| byte4;
+
+	Valor endRetorno;
+	endRetorno.tipo = TipoDado::RETURN_ADDR;
+	endRetorno.dado = topo->getPC() + 5;
+	topo->empilharOperando(endRetorno);
+
+	topo->incrementaPC(offsetSalto);
+	assert(topo->getPC() < (int32_t)(topo->tamanhoCode()));
+
+
+}

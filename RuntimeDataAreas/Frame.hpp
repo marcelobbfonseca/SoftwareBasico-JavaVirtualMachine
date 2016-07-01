@@ -44,10 +44,11 @@ class Frame{
 		Valor desempilhaOperando();
 		stack<Valor> retornaPilhaOperandos();
 		void setaPilhaOperandos(stack<Valor> pilha);
-		uint8_t getCode();
+		uint8_t *getCode();
 		uint16_t tamanhoVetorVariaveis();
-		uint32_t tamanhoCode() ;
-		void incrementaPC();
+		uint32_t tamanhoCode();
+		void incrementaPC(int32_t);
+		int32_t getPC();
 };
 
 #endif
