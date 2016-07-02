@@ -3,4 +3,7 @@ exibir o conteúdo dos pontos flutuantes
 Mostrar e calcular  os offsets nos bytecode
 Mostrar indireção
 Concatenar coisas que precisem concatenar
+Criar função putValueIntoField na DadosDaClasse
+implementar getValorDoField(string nomeField) DadosDaClasse
+implementar fieldExists(string nomeField) na DadosDaClasse
 

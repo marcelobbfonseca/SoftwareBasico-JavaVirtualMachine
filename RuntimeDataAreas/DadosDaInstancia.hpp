@@ -9,6 +9,7 @@
 class DadosDaInstancia{
 	public:
 		DadosDaInstancia(JavaClass *javaClass);
+		Valor getValorDoField(string nomeField);
 	private:
 		map<string, Valor> fieldsInstancia;
 };

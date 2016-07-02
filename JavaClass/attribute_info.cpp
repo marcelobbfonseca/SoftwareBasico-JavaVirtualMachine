@@ -1384,9 +1384,9 @@ uint16_t Code_attribute::getMaxLocals(void)
     return max_locals;
 }
 
-uint8_t Code_attribute::getCode(void)
+uint8_t *Code_attribute::getCode(void)
 {
-    return *code;
+    return code;
 }
 
 uint32_t Code_attribute::getCodeLength(void)

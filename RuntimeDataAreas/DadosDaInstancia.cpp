@@ -60,33 +60,13 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 	}
 }
 
-/*Pra que serve isso tudo ??
-ClassInstance::~ClassInstance() {
 
-}
 
-ObjectType ClassInstance::objectType() {
-	return ObjectType::CLASS_INSTANCE;
-}
-
-ClassRuntime* ClassInstance::getClassRuntime() {
-	return _classRuntime;
-}
-
-void ClassInstance::putValueIntoField(Value value, string fieldName) {
-	_fields[fieldName] = value;
-}
-
-Value ClassInstance::getValueFromField(string fieldName) {
-	if (_fields.count(fieldName) ==  0) {
-		cerr << "NoSuchFieldError" << endl;
+Valor DadosDaInstancia::getValorDoField(string nomeField){
+	if (fieldsInstancia.count(nomeField) ==  0) {
+		cerr << "Field não existente" << endl;
 		exit(1);
 	}
 
-	return _fields[fieldName];
+	return fieldsInstancia[nomeField];
 }
-
-bool ClassInstance::fieldExists(string fieldName) {
-	return _fields.count(fieldName) > 0;
-}
-*/
