@@ -170,7 +170,7 @@ void JavaClass::ExibirInformacoes(void)
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
 		cout  << tabs << "#" << cont+1 << " = ";
-		(*(constant_pool[cont])).ExibirInformacoes();
+		(*(constant_pool[cont])).ExibirInformacoes(this);
 		if(cont != constant_pool.size()-1)
 		{
 			cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -220,7 +220,7 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "Interfaces:" << endl;
 		for(unsigned int cont= 0; cont < interfaces.size() ; cont++)
 		{
-			cout << "\t\t#" << cont << "\t" << interfaces[cont] << endl;
+			cout << "\t\t#" << cont << "\t" << interfaces[cont] << getUTF8(interfaces[cont]) << endl;
 		}
 	}
 	cout << "-----------------------------------------------------------------" << endl;
@@ -232,7 +232,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(unsigned int cont= 0; cont < fields.size() ; cont++)
 		{
 			cout << "\tField[" << cont << "]:" << endl;;
-			fields[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			fields[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != fields.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -248,7 +248,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(int cont= 0; cont < methods_count ; cont++)
 		{
 			cout << "\tMethod[" << cont << "]:" << endl;;
-			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != methods_count-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -264,7 +264,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
 		{
 			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
-			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != attributes.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;

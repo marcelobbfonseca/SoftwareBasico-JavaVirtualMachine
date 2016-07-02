@@ -805,27 +805,27 @@ AtributoDesconhecido::~AtributoDesconhecido()
 	delete []info;
 }
 
-void ConstantValue_attribute::ExibirInformacoes(string tabs)
+void ConstantValue_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo ConstantValue." <<endl;
-	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
+	cout << tabs << "\tattribute_name_index = " << attribute_name_index << javaClass->getUTF8(attribute_name_index) << endl;
 	cout << tabs << "\tattribute_length = " << attribute_length << endl;
-	cout << tabs << "\tconstantvalue_index = " << constantvalue_index << endl;
+	cout << tabs << "\tconstantvalue_index = " << constantvalue_index << javaClass->getUTF8(constantvalue_index) << endl;
 }
 
-void Excecao::ExibirInformacoes(string tabs)
+void Excecao::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "elemento do exception_table" <<endl;
 	cout << tabs << "\tstart_pc = " << start_pc << endl;
 	cout << tabs << "\tend_pc = " << end_pc << endl;
 	cout << tabs << "\thandler_pc = " << handler_pc << endl;
-	cout << tabs << "\tcatch_type = " << catch_type << endl;
+	cout << tabs << "\tcatch_type = " << catch_type << javaClass->getUTF8(catch_type) << endl;
 }
 
-void Code_attribute::ExibirInformacoes(string tabs)
+void Code_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Code." <<endl;
-	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;
+	cout << tabs << "\tattribute_name_index = " << attribute_name_index << javaClass->getUTF8(attribute_name_index) << endl;
 	cout << tabs << "\tattribute_length = " << attribute_length << endl;
 	cout << tabs << "\tmax_stack = " << max_stack << endl;
 	cout << tabs << "\tmax_locals = " << max_locals << endl;
@@ -842,7 +842,7 @@ void Code_attribute::ExibirInformacoes(string tabs)
 	for(unsigned int cont =0; cont < attributes_count; cont++)
 	{
 		cout << tabs << "\tAttribute[" << cont << "]:" << endl;;
-		attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+		attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), javaClass );
 		if(cont != attributes.size()-1)
 		{
 			cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
@@ -850,21 +850,21 @@ void Code_attribute::ExibirInformacoes(string tabs)
 	}
 }
 
-void Exceptions_attribute::ExibirInformacoes(string tabs)
+void Exceptions_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Exceptions." <<endl;
 	cout << tabs << "\tnumber_of_exceptions = " << number_of_exceptions << endl;
 	for(int cont=0 ; cont < number_of_exceptions ; cont++)
 	{
-		cout << tabs << "\texception_index_table[" << cont << "]:\t" << exception_index_table[cont] << endl;
+		cout << tabs << "\texception_index_table[" << cont << "]:\t" << exception_index_table[cont] << javaClass->getUTF8(exception_index_table[cont]) << endl;
 	}
 }
 
-void InfoDaClasse::ExibirInformacoes(string tabs)
+void InfoDaClasse::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
-	cout << tabs << "inner_class_info_index = " << inner_class_info_index << endl;
-	cout << tabs << "outer_class_info_index = " << outer_class_info_index << endl;
-	cout << tabs << "inner_name_index = " << inner_name_index << endl;
+	cout << tabs << "inner_class_info_index = " << inner_class_info_index << javaClass->getUTF8(inner_class_info_index) << endl;
+	cout << tabs << "outer_class_info_index = " << outer_class_info_index << javaClass->getUTF8(outer_class_info_index) << endl;
+	cout << tabs << "inner_name_index = " << inner_name_index << javaClass->getUTF8(inner_name_index) << endl;
 	cout << tabs << "inner_class_access_flags = " << inner_class_access_flags << endl;
 	if(inner_class_access_flags & 0x0001)
 	{
@@ -908,42 +908,42 @@ void InfoDaClasse::ExibirInformacoes(string tabs)
 	}
 }
 
-void InnerClasses_attribute::ExibirInformacoes(string tabs)
+void InnerClasses_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo InnerClasses." <<endl;
 	cout << tabs << "\tnumber_of_classes = " << number_of_classes << endl;
 	for(unsigned int cont =0 ; cont < number_of_classes ; cont++)
 	{
 		cout << tabs << "\tclasses[" << cont << "]:" << endl;
-		classes[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+		classes[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
 	}
 }
 
-void EnclosingMethod_attribute::ExibirInformacoes(string tabs)
+void EnclosingMethod_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo EnclosingMethod." <<endl;
-	cout << tabs << "\tclass_index = " << class_index << endl;
-	cout << tabs << "\tmethod_index = " << method_index << endl;
+	cout << tabs << "\tclass_index = " << class_index << javaClass->getUTF8(class_index) << endl;
+	cout << tabs << "\tmethod_index = " << method_index << javaClass->getUTF8(method_index) << endl;
 }
 
-void Synthetic_attribute::ExibirInformacoes(string tabs)
+void Synthetic_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Synthetic." << endl << endl;
 }
 
-void Signature_attribute::ExibirInformacoes(string tabs)
+void Signature_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Signature." <<endl;
-	cout << tabs << "\tsignature_index = " << signature_index << endl;
+	cout << tabs << "\tsignature_index = " << signature_index << javaClass->getUTF8(signature_index) << endl;
 }
 
-void SourceFile_attribute::ExibirInformacoes(string tabs)
+void SourceFile_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo SourceFile." <<endl;
-	cout << tabs << "\tsourcefile_index = " << sourcefile_index << endl;
+	cout << tabs << "\tsourcefile_index = " << sourcefile_index << javaClass->getUTF8(sourcefile_index) << endl;
 }
 
-void SourceDebugExtension_attribute::ExibirInformacoes(string tabs)
+void SourceDebugExtension_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo SourceDebugExtension." <<endl;
 	for(unsigned int cont =0; cont < attribute_length; cont++)
@@ -952,69 +952,69 @@ void SourceDebugExtension_attribute::ExibirInformacoes(string tabs)
 	}
 }
 
-void Elemento_LineNumber::ExibirInformacoes(string tabs)
+void Elemento_LineNumber::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "start_pc = " << start_pc << endl;
 	cout << tabs << "line_number = " << start_pc << endl;
 }
 
-void LineNumberTable_attribute::ExibirInformacoes(string tabs)
+void LineNumberTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo LineNumberTable." <<endl;
 	cout << tabs << "\tline_number_table_length = " << line_number_table_length <<endl;
 	for(int cont=0; cont < line_number_table_length ; cont++)
 	{
 		cout << tabs << "\telements_number_table[" << cont << "]:" << endl;
-		elements_number_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+		elements_number_table[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
 	}
 }
 
-void Elemento_local_variable::ExibirInformacoes(string tabs)
+void Elemento_local_variable::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "start_pc = " << start_pc <<endl;
 	cout << tabs << "length = " << length <<endl;
-	cout << tabs << "name_index = " << name_index <<endl;
-	cout << tabs << "descriptor_index = " << descriptor_index <<endl;
+	cout << tabs << "name_index = " << name_index << javaClass->getUTF8(name_index) <<endl;
+	cout << tabs << "descriptor_index = " << descriptor_index << javaClass->getUTF8(descriptor_index) <<endl;
 	cout << tabs << "index = " << index <<endl;
 }
 
-void LocalVariableTable_attribute::ExibirInformacoes(string tabs)
+void LocalVariableTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo LocalVariableTable." <<endl;
 	cout << tabs << "\tlocal_variable_table_length = " << local_variable_table_length <<endl;
 	for(int cont=0; cont < local_variable_table_length ; cont++)
 	{
 		cout << tabs << "\tlocal_variable_table[ " << cont << "]:" << endl;
-		local_variable_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+		local_variable_table[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
 	}
 }
 
-void Elemento_LocalVariableType::ExibirInformacoes(string tabs)
+void Elemento_LocalVariableType::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "start_pc = " << start_pc <<endl;
 	cout << tabs << "length = " << length <<endl;
-	cout << tabs << "name_index = " << name_index <<endl;
-	cout << tabs << "signature_index = " << signature_index <<endl;
+	cout << tabs << "name_index = " << name_index << javaClass->getUTF8(name_index) <<endl;
+	cout << tabs << "signature_index = " << signature_index << javaClass->getUTF8(signature_index) <<endl;
 	cout << tabs << "index = " << index <<endl;
 }
 
-void LocalVariableTypeTable_attribute::ExibirInformacoes(string tabs)
+void LocalVariableTypeTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo LocalVariableTypeTable." <<endl;
 	cout << tabs << "\tlocal_variable_type_table_length = " << local_variable_type_table_length <<endl;
 	for(int cont=0; cont < local_variable_type_table_length ; cont++)
 	{
 		cout << tabs << "\tlocal_variable_type_table_length[ " << cont << "]:" << endl;
-		local_variable_type_table[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+		local_variable_type_table[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
 	}
 }
 
-void Deprecated_attribute::ExibirInformacoes(string tabs)
+void Deprecated_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Deprecated." << endl << endl;
 }
 
-void Elemento_Metodo_Bootstrap::ExibirInformacoes(string tabs)
+void Elemento_Metodo_Bootstrap::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "bootstrap_method_ref = " << bootstrap_method_ref << endl;
 	cout << tabs << "num_bootstrap_arguments = " << num_bootstrap_arguments << endl;
@@ -1024,18 +1024,18 @@ void Elemento_Metodo_Bootstrap::ExibirInformacoes(string tabs)
 	}
 }
 
-void BootstrapMethods_attribute::ExibirInformacoes(string tabs)
+void BootstrapMethods_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo BootstrapMethods." <<endl;
 	cout << tabs << "\tnum_bootstrap_methods = " << num_bootstrap_methods <<endl;
 	for(int cont=0; cont < num_bootstrap_methods ; cont++)
 	{
 		cout << tabs << "\tbootstrap_methods[ " << cont << "]:" << endl;
-		bootstrap_methods[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+		bootstrap_methods[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
 	}
 }
 
-void RuntimeVisibleAnnotations_attribute::ExibirInformacoes(string tabs)
+void RuntimeVisibleAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo RuntimeVisibleAnnotations." <<endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
@@ -1047,7 +1047,7 @@ void RuntimeVisibleAnnotations_attribute::ExibirInformacoes(string tabs)
 	cout << dec <<endl;
 }
 
-void RuntimeInvisibleAnnotations_attribute::ExibirInformacoes(string tabs)
+void RuntimeInvisibleAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo RuntimeInvisibleAnnotations." <<endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
@@ -1059,7 +1059,7 @@ void RuntimeInvisibleAnnotations_attribute::ExibirInformacoes(string tabs)
 	cout << dec <<endl;
 }
 
-void RuntimeVisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs)
+void RuntimeVisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo RuntimeVisibleParameterAnnotations." <<endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
@@ -1071,7 +1071,7 @@ void RuntimeVisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs
 	cout << dec <<endl;
 }
 
-void RuntimeInvisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs)
+void RuntimeInvisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo RuntimeInvisibleParameterAnnotations." <<endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
@@ -1083,7 +1083,7 @@ void RuntimeInvisibleParameterAnnotations_attribute::ExibirInformacoes(string ta
 	cout << dec <<endl;
 }
 
-void AnnotationDefault_attribute::ExibirInformacoes(string tabs)
+void AnnotationDefault_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo AnnotationDefault." <<endl;
 	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
@@ -1095,7 +1095,7 @@ void AnnotationDefault_attribute::ExibirInformacoes(string tabs)
 	cout << dec <<endl;
 }
 
-void verification_type_info::ExibirInformacoes(string tabs)
+void verification_type_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "tag = " << tag << "\t\t";
 	if(tag==ITEM_Object)
@@ -1110,7 +1110,7 @@ void verification_type_info::ExibirInformacoes(string tabs)
 	}
 }
 
-void stack_map_frame::ExibirInformacoes(string tabs)
+void stack_map_frame::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "frame_type = " << frame_type << endl;
 	cout << tabs << "offset_delta = " << offset_delta << endl;
@@ -1118,22 +1118,22 @@ void stack_map_frame::ExibirInformacoes(string tabs)
 	for(int cont =0; cont < number_of_locals ; cont++)
 	{
 		cout << tabs << "locals[" << cont << "]:" << endl;
-		locals[cont].ExibirInformacoes(tabs + "\t");
+		locals[cont].ExibirInformacoes(tabs + "\t", javaClass);
 	}
 }
 
-void StackMapTable_attribute::ExibirInformacoes(string tabs)
+void StackMapTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo StackMapTable." <<endl;
 	cout << tabs << "\tnumber_of_entries = " << number_of_entries <<endl;
 	for(int cont=0; cont < number_of_entries ; cont++)
 	{
 		cout << tabs << "\tentries[ " << cont << "]:" << endl;
-		entries[cont].ExibirInformacoes( (tabs + "\t") +"\t");
+		entries[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
 	}
 }
 
-void AtributoDesconhecido::ExibirInformacoes(string tabs)
+void AtributoDesconhecido::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo AtributoDesconhecido." <<endl;
 	cout << tabs << "\tattribute_name_index = " << attribute_name_index << endl;

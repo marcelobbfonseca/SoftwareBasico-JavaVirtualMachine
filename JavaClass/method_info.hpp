@@ -1,13 +1,23 @@
+#ifndef METHOD_INFO_HPP
+#define METHOD_INFO_HPP
+
 #include "attribute_info.hpp"
 #include <stdint.h>
 #include<stdio.h>
 #include<vector>
 
-#ifndef METHOD_INFO_HPP
-#define METHOD_INFO_HPP
+#ifndef ATTRIBUTE_INFO
+class attribute_info;
+#endif
+#ifndef JAVA_CLASS
+class JavaClass;
+#endif
+#ifndef CP_INFO
+class cp_info;
+#endif
 
 using namespace std;
-
+#define METHOD_INFO
 class method_info {
 
 	private:
@@ -22,7 +32,7 @@ class method_info {
 
 	method_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
 	~method_info();
-	void ExibirInformacoes(string tabs);
+	void ExibirInformacoes(string tabs, JavaClass *javaClass);
 	uint16_t getNameIndex(void);
 	uint16_t getDescriptorIndex(void);
 	uint16_t getAccessFlags(void);

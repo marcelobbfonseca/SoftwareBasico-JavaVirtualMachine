@@ -220,45 +220,45 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 	}
 }
 
-void CONSTANT_Class_info::ExibirInformacoes(void)
+void CONSTANT_Class_info::ExibirInformacoes(JavaClass *javaClass)
 {
-	cout << "Class\n\t\tname_index = " << name_index << endl;
+	cout << "Class\n\t\tname_index = " << name_index << "\t" << javaClass->getUTF8(name_index) << endl;
 }
 
-void CONSTANT_Fieldref_info::ExibirInformacoes(void)
+void CONSTANT_Fieldref_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Fieldref" << endl;
-	cout <<"\t\tclass_index = " << class_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tclass_index = " << class_index << "\t" << javaClass->getUTF8(class_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void CONSTANT_Methodref_info::ExibirInformacoes(void)
+void CONSTANT_Methodref_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Methodref" << endl;
-	cout <<"\t\tclass_index = " << class_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tclass_index = " << class_index << "\t" << javaClass->getUTF8(class_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void CONSTANT_InterfaceMethodref_info::ExibirInformacoes(void)
+void CONSTANT_InterfaceMethodref_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "InterfaceMethodref" << endl;
-	cout <<"\t\tclass_index = " << class_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tclass_index = " << class_index << "\t" << javaClass->getUTF8(class_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void CONSTANT_String_info::ExibirInformacoes(void)
+void CONSTANT_String_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "String" << endl;
-	cout << "\t\tstring_index = " << string_index << endl;
+	cout << "\t\tstring_index = " << string_index << "\t" << javaClass->getUTF8(string_index) << endl;
 }
 
-void CONSTANT_Integer_info::ExibirInformacoes(void)
+void CONSTANT_Integer_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Integer" << endl;
 	cout << "\t\tbytes = " << bytes << endl;
 }
 
-void CONSTANT_Float_info::ExibirInformacoes(void)
+void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Float" <<endl;
 	cout << "\t\tbytes = 0x";
@@ -281,7 +281,7 @@ void CONSTANT_Float_info::ExibirInformacoes(void)
 	}
 }
 
-void CONSTANT_Long_info:: ExibirInformacoes(void)
+void CONSTANT_Long_info:: ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Long" << endl;
 	cout << "\t\thigh_bytes = 0x";
@@ -293,7 +293,7 @@ void CONSTANT_Long_info:: ExibirInformacoes(void)
 	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << endl;
 }
 
-void CONSTANT_Double_info:: ExibirInformacoes(void)
+void CONSTANT_Double_info:: ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Double" << endl;
 	cout << "\t\thigh_bytes = 0x";
@@ -305,14 +305,14 @@ void CONSTANT_Double_info:: ExibirInformacoes(void)
 	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << endl;
 }
 
-void CONSTANT_NameAndType_info::ExibirInformacoes(void)
+void CONSTANT_NameAndType_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "NameAndType" << endl;
-	cout <<"\t\tname_index = " << name_index << endl;
-	cout <<"\t\tdescriptor_index = " << descriptor_index << endl;
+	cout <<"\t\tname_index = " << name_index << "\t" << javaClass->getUTF8(name_index) << endl;
+	cout <<"\t\tdescriptor_index = " << descriptor_index << "\t" << javaClass->getUTF8(descriptor_index) << endl;
 }
 
-void CONSTANT_Utf8_info::ExibirInformacoes(void)
+void CONSTANT_Utf8_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "UTF8" << endl;
 	cout << "\t\tlenght = " << lenght << endl;
@@ -328,7 +328,7 @@ void CONSTANT_Utf8_info::ExibirInformacoes(void)
 	cout << dec <<endl;
 }
 
-void CONSTANT_MethodHandle_info::ExibirInformacoes(void)
+void CONSTANT_MethodHandle_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "MethodHandle" << endl;
 	cout << "\t\treference_kind = " << reference_kind;
@@ -385,23 +385,23 @@ void CONSTANT_MethodHandle_info::ExibirInformacoes(void)
 			break;
 		}
 	}
-	cout << "\t\treference_index = " << reference_index;
+	cout << "\t\treference_index = " << reference_index << "\t" << javaClass->getUTF8(reference_index);
 }
 
-void CONSTANT_MethodType_info::ExibirInformacoes(void)
+void CONSTANT_MethodType_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "MethodType" << endl;
-	cout <<"\t\tdescriptor_index = " << descriptor_index << endl;
+	cout <<"\t\tdescriptor_index = " << descriptor_index << "\t" << javaClass->getUTF8(descriptor_index) << endl;
 }
 
-void CONSTANT_InvokeDynamic_info::ExibirInformacoes(void)
+void CONSTANT_InvokeDynamic_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "InvokeDynamic" << endl;
-	cout <<"\t\tbootstrap_method_attr_index = " << bootstrap_method_attr_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tbootstrap_method_attr_index = " << bootstrap_method_attr_index << "\t" << javaClass->getUTF8(bootstrap_method_attr_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void NaoUsavel::ExibirInformacoes(void)
+void NaoUsavel::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "\t//Nao usavel" << endl;
 }

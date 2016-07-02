@@ -1,3 +1,6 @@
+#ifndef JAVA_CLASS_HPP
+#define JAVA_CLASS_HPP
+
 #include<stdint.h>
 #include<vector>
 #include<string>
@@ -8,10 +11,21 @@
 
 using namespace std;
 
-#ifndef JAVA_CLASS_HPP
-#define JAVA_CLASS_HPP
+#ifndef CP_INFO
+class cp_info;
+#endif
+#ifndef FIELD_INFO
+class field_info;
+#endif
+#ifndef METHOD_INFO
+class method_info;
+#endif
+#ifndef ATTRIBUTE_INFO
+class attribute_info;
+#endif
 
 
+#define JAVA_CLASS
 //!  Classe que representa um .class
 /*!
   Classe responsável por armazenar dados de um arquivo .class
