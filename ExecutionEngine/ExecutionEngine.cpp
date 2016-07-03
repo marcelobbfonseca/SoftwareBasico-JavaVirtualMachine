@@ -585,7 +585,30 @@ void ExecutionEngine::i_monitorexit(){}
 void ExecutionEngine::i_wide(){}
 void ExecutionEngine::i_multianewarray(){}
 void ExecutionEngine::i_ifnull(){}
-void ExecutionEngine::i_ifnonnull(){}
+void ExecutionEngine::i_ifnonnull(){
+
+    Frame *topo = runtimeDataArea->topoPilha();
+
+    Valor referencia = topo->desempilhaOperando();
+
+    assert(referencia.tipo == TipoDado::REFERENCE);
+
+    if ((Objeto*)(referencia.dado) != NULL) {
+        uint8_t *code = topo->getCode();
+        uint8_t byte1 = code[1];
+        uint8_t byte2 = code[2];
+        int16_t salto =  (byte1 << 8) | byte2;
+        topo->incrementaPC(salto);
+    }
+    else {
+
+        topo->incrementaPC(3);
+
+    }
+
+
+
+}
 
 void ExecutionEngine::i_goto_w(){
 
