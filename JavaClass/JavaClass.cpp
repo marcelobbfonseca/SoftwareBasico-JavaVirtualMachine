@@ -61,7 +61,7 @@ JavaClass::JavaClass(string nomeArquivo)
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
 #ifdef DEBUG
 string tabs = "\t";
-cpInfo->ExibirInformacoes();
+//cpInfo->ExibirInformacoes(this);
 #endif
 			constant_pool.push_back(cpInfo);
 		}
@@ -115,7 +115,7 @@ cout<< "Começando a ler os " << methods_count <<" methods." << endl;
 		method_info *methodInfo = new method_info(arq, constant_pool);
 #ifdef DEBUG
 string tabs = "\t";
-methodInfo->ExibirInformacoes(tabs);
+//methodInfo->ExibirInformacoes(tabs, this);
 #endif
 		methods.push_back(*methodInfo);
 #ifdef DEBUG
@@ -402,6 +402,9 @@ uint16_t JavaClass::getAccessFlags(void)
 const string JavaClass::getUTF8(uint16_t posicao)
 {
 	cp_info* constante = constant_pool[posicao-1];
+#ifdef DEBUG
+cout<< "JavaClass::getUTF8\tposicao-1= " << posicao-1 << "\ttag= " << (uint32_t)constante->GetTag() << endl;
+#endif
 	switch(constante->GetTag())
 	{
 		case(CONSTANT_Class):
@@ -494,6 +497,7 @@ const string JavaClass::getUTF8(uint16_t posicao)
 	char erro[200];
 	sprintf(erro, "Arquivo .class possui uma tag %hhu invalida no pool de constantes.", constante->GetTag());
 	throw new Erro(erro, "JavaClass", "getUTF8");
+//	return "";
 }
 
 const vector<cp_info*>& JavaClass::getConstantPool(void)
