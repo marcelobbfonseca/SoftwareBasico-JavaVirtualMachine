@@ -15,8 +15,7 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 	for (int i = 0; i < javaClass->getFieldsCount(); i++)
 	{
 		field_info field = fields[i];
-		uint16_t staticAndFinalFlag = 0x0008 | 0x0010;
-		if ((field.getAccessFlags() & staticAndFinalFlag) == 0)// não estática e não final
+		if (!field.FlagAtivada(FIELD_STATIC|FIELD_FINAL))// não estática e não final
 		{
 			string nomeField = javaClass->getUTF8(field.getNameIndex());
 			string descritorField = javaClass->getUTF8(field.getDescriptorIndex());

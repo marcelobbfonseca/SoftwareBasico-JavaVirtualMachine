@@ -20,12 +20,12 @@ void ExecutionEngine::Play(string classComMain)
 	obj->javaClass = runtimeDataArea->CarregarClasse(classComMain);
 	obj->instancia = NULL;
 
-    runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
+	runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
 
-    if(obj->javaClass->getMetodo("<clinit>","()V") != NULL){
+	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL){
 
-        runtimeDataArea->empilharFrame(new Frame(obj, "<clinit>","()V"));
-    }
+		runtimeDataArea->empilharFrame(new Frame(obj, "<clinit>","()V"));
+	}
 
 	do
 	{

@@ -4,10 +4,12 @@
 #include<stdint.h>
 #include<vector>
 #include<string>
+#include<map>
 #include"cp_info.hpp"
 #include"field_info.hpp"
 #include"method_info.hpp"
 #include"attribute_info.hpp"
+#include"Tipos.h"
 
 using namespace std;
 
@@ -22,6 +24,9 @@ class method_info;
 #endif
 #ifndef ATTRIBUTE_INFO
 class attribute_info;
+#endif
+#ifndef VALOR
+struct Valor;
 #endif
 
 
@@ -48,6 +53,11 @@ class JavaClass
 		const string getUTF8(uint16_t posicao);
 		const vector<cp_info*>& getConstantPool(void);
 		method_info const * const getMetodo(string nomeMetodo, string descritorMetodo);
+		void ColocarValorNoField(string nomeDoField, Valor valor);
+		Valor getValorDoField(string nomeDoField);
+		bool FieldExiste(string nomeDoField);
+		void ColocarValor64NoField(string nomeDoField, uint64_t valor);
+		uint64_t getValor64DoField(string nomeDoField);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!
@@ -100,6 +110,8 @@ class JavaClass
 		vector<method_info> methods;
 		uint16_t attributes_count;
 		vector<attribute_info *> attributes;
+		map<string, Valor> camposEstaticos;
+		map<string, Valor> lowCampos64bits;
 };
 
 #endif

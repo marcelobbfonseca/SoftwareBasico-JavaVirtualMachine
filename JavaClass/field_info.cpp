@@ -77,20 +77,19 @@ void field_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	}
 }
 
-uint16_t field_info::getAccessFlags(void){
-
-    return access_flags;
-
-}
-
 uint16_t field_info::getNameIndex(void){
 
-    return name_index;
+	return name_index;
 
 }
 
 uint16_t field_info::getDescriptorIndex(void){
 
-        return descriptor_index;
+		return descriptor_index;
 
+}
+
+bool field_info::FlagAtivada(FieldFlag flag)
+{
+	return ( (this->access_flags & flag) != 0);
 }

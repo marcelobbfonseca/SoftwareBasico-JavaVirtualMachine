@@ -5,6 +5,7 @@
 #include "UtilidadesParaString.hpp"
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
 
 // Check ruindos
 #if _WIN32 || _WIN64
@@ -132,12 +133,102 @@ cout << "Attributes count = " << attributes_count << endl;
 		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);
+	//verificação se o nome do arquivo é igual ao nome da classe
 	string nomeArquivoSemCaminhoNemExtensao= StringUtilidades::RemoverCaminhoEExtensao(nomeArquivo, ".class");
 	if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
 	{
 		char erro[200];
 		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
 		throw new Erro(erro, "JavaClass", "JavaClass");
+	}
+	//inicialização dos fields estáticos para tempo de execução
+	for(unsigned int cont =0; cont < fields.size(); cont++)
+	{
+		field_info field= fields[cont];
+		if(field.FlagAtivada(FIELD_STATIC) && !field.FlagAtivada(FIELD_FINAL))//estática e não final
+		{
+			string nomeField= getUTF8(field.getNameIndex());
+			string descritorDoField= getUTF8(field.getDescriptorIndex());
+			char tipoField = descritorDoField[0];
+			Valor valor;
+			switch(tipoField)
+			{
+				case('B'):
+				{
+					valor.tipo= TipoDado::BYTE;
+					valor.dado = 0;
+					break;
+				}
+				case('C'):
+				{
+					valor.tipo= TipoDado::CHAR;
+					valor.dado= 0;
+					break;
+				}
+				case('D'):
+				{
+					valor.tipo= TipoDado::HIGHDOUBLE;
+					double aux=0;
+					memcpy(&(valor.dado), &aux, 4);
+					break;//tratar daqui a pouco nesse mesmo método
+				}
+				case('F'):
+				{
+					valor.tipo= TipoDado::FLOAT;
+					float aux =0;
+					memcpy(&(valor.dado), &aux, 4);
+					break;
+				}
+				case('I'):
+				{
+					valor.tipo= TipoDado::INT;
+					valor.dado= 0;
+					break;
+				}
+				case('J'):
+				{
+					valor.tipo= TipoDado::HIGHLONG;
+					valor.dado= 0;
+					break;//tratar daqui a pouco nesse mesmo método
+				}
+				case('S'):
+				{
+					valor.tipo= TipoDado::SHORT;
+					valor.dado= 0;
+					break;
+				}
+				case('Z'):
+				{
+					valor.tipo= TipoDado::BOOLEAN;
+					valor.dado= 0;
+					break;
+				}
+				default:
+				{
+					valor.tipo= TipoDado::REFERENCE;
+					void *aux= NULL;
+					memcpy(&(valor.dado), &aux, 4);
+				}
+			}
+			camposEstaticos[nomeField]= valor;
+			if(tipoField == 'D')
+			{
+				double aux=0;
+				uint32_t *auxptr;
+				auxptr = (uint32_t*)&aux;
+				Valor parte2;
+				parte2.tipo= TipoDado::LOWDOUBLE;
+				memcpy(&(parte2.dado), &(++auxptr), 4);
+				lowCampos64bits[nomeField]= parte2;
+			}
+			else if(tipoField == 'J')
+			{
+				Valor parte2;
+				parte2.tipo= TipoDado::LOWLONG;
+				parte2.dado=0;
+				lowCampos64bits[nomeField]= parte2;
+			}
+		}
 	}
 }
 
@@ -421,5 +512,48 @@ method_info const * const JavaClass::getMetodo(string nomeMetodo, string descrit
 		}
 	}
 	return NULL;
+}
+
+bool JavaClass::FieldExiste(string nomeDoField)
+{
+	return camposEstaticos.count(nomeDoField) > 0;
+}
+
+void JavaClass::ColocarValorNoField(string nomeDoField, Valor valor)
+{
+	camposEstaticos[nomeDoField]= valor;
+}
+
+Valor JavaClass::getValorDoField(string nomeDoField)
+{
+	if(!FieldExiste(nomeDoField))
+	{
+		throw new Erro("Solicitado field que não existe", "JavaClass", "getValorDoField");
+	}
+	return camposEstaticos[nomeDoField];
+}
+
+void JavaClass::ColocarValor64NoField(string nomeDoField, uint64_t valor)
+{
+	if(!FieldExiste(nomeDoField))
+	{
+		throw new Erro("Solicitado field que não existe", "JavaClass", "ColocarValor64NoField");
+	}
+	uint32_t *auxptr= (uint32_t *)&valor;
+//	uint32_t aux;
+	memcpy(&(camposEstaticos[nomeDoField].dado), auxptr, 4);
+	memcpy(&(lowCampos64bits[nomeDoField].dado), ++auxptr, 4);
+}
+
+uint64_t JavaClass::getValor64DoField(string nomeDoField)
+{
+	if(lowCampos64bits.count(nomeDoField) == 0)
+	{
+		throw new Erro("Solicitado field que não existe", "JavaClass", "getValor64DoField");
+	}
+	uint64_t retorno= camposEstaticos[nomeDoField].dado;
+	retorno= retorno << 32;
+	retorno= retorno | lowCampos64bits[nomeDoField].dado;
+	return retorno;
 }
 

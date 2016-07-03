@@ -17,6 +17,11 @@ class JavaClass;
 class cp_info;
 #endif
 
+//definição(preguiçosa(colocando à medida que é necessário)) das access flags
+#define FIELD_STATIC (0x0008)
+#define FIELD_FINAL (0x0010)
+typedef uint16_t FieldFlag;
+
 #define FIELD_INFO
 class field_info {
 
@@ -29,12 +34,12 @@ class field_info {
 	vector<attribute_info *> attributes;
 
 	public:
-
+	
 	field_info(FILE *arq, std::vector<cp_info*> const &constant_pool);
 	void ExibirInformacoes(string tabs, JavaClass *javaClass);
-	uint16_t getAccessFlags(void);
 	uint16_t getNameIndex(void);
 	uint16_t getDescriptorIndex(void);
+	bool FlagAtivada(FieldFlag flag);
 };
 
 #endif
