@@ -1212,17 +1212,39 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont, JavaClass *javaClass)
 		case(JAVA_OPCODE_IFNULL):
 		case(JAVA_OPCODE_JSR):
 		{
-			cout << "\tbranchbyte1 = " << (unsigned int)code[++(*cont)];
-			cout << "\tbranchbyte2 = " << (unsigned int)code[++(*cont)];
+			uint8_t branchbyte1= code[++(*cont)];
+			uint8_t branchbyte2= code[++(*cont)];
+			cout << "\tbranchbyte1 = " << (unsigned int)branchbyte1;
+			cout << "\tbranchbyte2 = " << (unsigned int)branchbyte2;
+			uint16_t offset;
+			uint8_t *ptr;
+			ptr= (uint8_t*)&offset;
+			memcpy(ptr++, &branchbyte1, 1);
+			memcpy(ptr, &branchbyte2, 1);
+			offset= InverterEndianess<uint16_t>(offset);
+			cout << "\t\t//" << offset;
 			break;
 		}
 		case(JAVA_OPCODE_GOTO_W):
 		case(JAVA_OPCODE_JSR_W):
 		{
-			cout << "\tbranchbyte1 = " << (unsigned int)code[++(*cont)];
-			cout << "\tbranchbyte2 = " << (unsigned int)code[++(*cont)];
-			cout << "\tbranchbyte3 = " << (unsigned int)code[++(*cont)];
-			cout << "\tbranchbyte4 = " << (unsigned int)code[++(*cont)];
+			uint8_t branchbyte1= code[++(*cont)];
+			uint8_t branchbyte2= code[++(*cont)];
+			uint8_t branchbyte3= code[++(*cont)];
+			uint8_t branchbyte4= code[++(*cont)];
+			cout << "\tbranchbyte1 = " << (unsigned int)branchbyte1;
+			cout << "\tbranchbyte2 = " << (unsigned int)branchbyte2;
+			cout << "\tbranchbyte3 = " << (unsigned int)branchbyte3;
+			cout << "\tbranchbyte4 = " << (unsigned int)branchbyte4;
+			uint32_t offset;
+			uint8_t *ptr;
+			ptr= (uint8_t*)&offset;
+			memcpy(ptr++, &branchbyte1, 1);
+			memcpy(ptr++, &branchbyte2, 1);
+			memcpy(ptr++, &branchbyte3, 1);
+			memcpy(ptr, &branchbyte4, 1);
+			offset= InverterEndianess<uint32_t>(offset);
+			cout << "\t\t//" << offset;
 			break;
 		}
 		case(JAVA_OPCODE_IINC):
@@ -1397,7 +1419,7 @@ void Code_attribute::ExibirCpIndex(unsigned int *cont, JavaClass *javaClass)
 	uint8_t indexbyte2 = code[++(*cont)];
 	cout << "\tindexbyte1 = " << (unsigned int)indexbyte1;
 	cout << "\tindexbyte2 = " << (unsigned int)indexbyte2;
-	uint16_t indice, i2= ((uint16_t)indexbyte1)<<8 | indexbyte2;
+	uint16_t indice;
 	uint8_t *ptr;
 	ptr= (uint8_t*)&indice;
 	memcpy(ptr++, &indexbyte1, 1);
