@@ -391,8 +391,38 @@ void ExecutionEngine::i_fconst_2(){
 	toppilha->empilharOperando(valor); 
 	runtimeDataArea->topoPilha()->incrementaPC();  
 }
-void ExecutionEngine::i_dconst_0(){}
-void ExecutionEngine::i_dconst_1(){}
+void ExecutionEngine::i_dconst_0(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor highvalor;
+    highvalor.tipo = TipoDado::HIGHDOUBLE;
+    highvalor.dado = (uint32_t)0;
+
+    Valor lowvalor;
+    lowvalor.tipo = TipoDado::LOWDOUBLE;
+    lowvalor.dado = (uint32_t)0;
+
+    toppilha->empilharOperando(highvalor); 
+    toppilha->empilharOperando(lowvalor);
+
+    runtimeDataArea->topoPilha()->incrementaPC();      
+}
+void ExecutionEngine::i_dconst_1(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor highvalor;
+    highvalor.tipo = TipoDado::HIGHDOUBLE;
+    highvalor.dado = (uint32_t)0;
+
+    Valor lowvalor;
+    lowvalor.tipo = TipoDado::LOWDOUBLE;
+    lowvalor.dado = (uint32_t)1;
+
+    toppilha->empilharOperando(highvalor); 
+    toppilha->empilharOperando(lowvalor);
+     
+    runtimeDataArea->topoPilha()->incrementaPC();      
+}
 void ExecutionEngine::i_bipush(){}
 void ExecutionEngine::i_sipush(){}
 void ExecutionEngine::i_ldc(){}
