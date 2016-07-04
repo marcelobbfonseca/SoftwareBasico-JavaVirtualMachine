@@ -499,12 +499,21 @@ float CONSTANT_Float_info::GetNumero(void)
 
 int64_t CONSTANT_Long_info::GetNumero(void)
 {
-	return ( ((int64_t)high_bytes) << 32) | ((int64_t)low_bytes);
+	int64_t ret;
+	int32_t *ptr;
+	ptr= &ret;
+	memcpy(ptr++, high_bytes, 4);
+	memcpy(ptr, low_bytes, 4);
+	return ret;
 }
 
 double CONSTANT_Double_info::GetNumero(void)
 {
-	int64_t bytes= ((int64_t)high_bytes<<32)|low_bytes; 
+	int64_t bytes; 
+	int32_t *ptr;
+	ptr= &bytes;
+	memcpy(ptr++, high_bytes, 4);
+	memcpy(ptr, low_bytes, 4);
 	int32_t sinal = ((bytes >> 63) == 0) ? 1 : -1;
 	int32_t expoente = (int32_t)((bytes >> 52) & 0x7ffL);
 	int64_t mantissa = (expoente == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
