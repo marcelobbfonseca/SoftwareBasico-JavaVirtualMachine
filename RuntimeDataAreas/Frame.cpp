@@ -139,3 +139,9 @@ int32_t Frame::getPC(){
 return pc;
 
 }
+
+Objeto getObjeto(){
+
+    return objeto;
+
+}

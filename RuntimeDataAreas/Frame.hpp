@@ -49,6 +49,7 @@ class Frame{
 		uint32_t tamanhoCode();
 		void incrementaPC(int32_t);
 		int32_t getPC();
+		Objeto *getObjeto();
 };
 
 #endif

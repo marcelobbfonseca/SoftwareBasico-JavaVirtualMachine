@@ -587,7 +587,7 @@ void ExecutionEngine::i_wide(){}
 void ExecutionEngine::i_multianewarray(){
 
     Frame *topo = runtimeDataArea->topoPilha();
-    vector<cp_info*> constantPool = topo->objeto->javaClass->getConstantPool();
+    vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
 
     uint8_t *code = topo->getCode();
     uint8_t byte1 = code[1];
@@ -597,10 +597,11 @@ void ExecutionEngine::i_multianewarray(){
 
     uint16_t classIndex = (byte1 << 8) | byte2;
     cp_info classCP = constantPool[classIndex-1];
-    assert(topo-> == CONSTANT_Class);
+    assert(classCP.GetTag() == CONSTANT_Class);
 
     CONSTANT_Class_info classInfo = classCP.info.class_info;
-    string className = topo->objeto->javaClass->getUTF8(classInfo.name_index);
+    //CONSTANT_Class_info classInfo = (CONSTANT_Class_info)classCP.;
+    string className = topo->getObjeto()->javaClass->getUTF8(classInfo.GetNameIndex());
 
     // obter o tipo dentro de className:
     TipoDado tipoDado;
@@ -612,7 +613,7 @@ void ExecutionEngine::i_multianewarray(){
     switch (className[i]) {
         case 'L':
             if (multiArrayType != "java/lang/String") {
-                runtimeDataArea->loadClassNamed(multiArrayType); // verifica se existe classe com esse nome
+                runtimeDataArea->CarregarClasse(multiArrayType); // verifica se existe classe com esse nome
             }
             tipoDado = TipoDado::REFERENCE;
             break;
@@ -648,12 +649,12 @@ void ExecutionEngine::i_multianewarray(){
     stack<int> count;
     for (int i = 0; i < dimensoes; i++) {
         Valor dimLength = topo->desempilhaOperando();
-        assert(dimLength.tipo == TipoDaDo::INT);
-        count.push(dimLength.data.intValue);
+        assert(dimLength.tipo == TipoDado::INT);
+        count.push(dimLength.dado);
     }
 
     ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
-    popularArray(arr, tipoDado, count);
+    arr->popularSubArray(tipoDado, count);
 
     Valor valorArr;
     valorArr.tipo = TipoDado::REFERENCE;
@@ -685,6 +686,7 @@ void ExecutionEngine::i_ifnull(){
         topo->incrementaPC(3);
 
     }
+}
 
 void ExecutionEngine::i_ifnonnull(){
 
