@@ -59,9 +59,9 @@ void field_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	{
 		cout << tabs << "\tACC_ENUM" << endl;
 	}
-	cout << tabs << "name_index =\t\t" << name_index << javaClass->getUTF8(name_index) << endl;
-	cout << tabs << "descriptor_index =\t\t" << descriptor_index << javaClass->getUTF8(descriptor_index) << endl;
-	cout << tabs << "attributes_count =\t\t" << attributes_count << javaClass->getUTF8(attributes_count) << endl;
+	cout << tabs << "name_index =\t\t" << name_index << "\t\t//" << javaClass->getUTF8(name_index) << endl;
+	cout << tabs << "descriptor_index =\t\t" << descriptor_index << "\t\t//" << javaClass->getUTF8(descriptor_index) << endl;
+	cout << tabs << "attributes_count =\t\t" << attributes_count << endl;
 	if(attributes.size() > 0)
 	{
 		cout <<  tabs << "Attributes:"<<endl;

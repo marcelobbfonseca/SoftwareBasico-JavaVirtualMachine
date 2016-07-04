@@ -276,7 +276,7 @@ void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
 	uint8_t *ptr= (uint8_t *) &bytes ;
 	for(int cont =0;  cont < 4 ; cont++)
 	{
-		cout<< hex << ptr[cont] << dec;
+		cout<< hex << (int)ptr[cont] << dec;
 	}
 
 /*	if(EhLittleEndian())
@@ -290,7 +290,9 @@ void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
 //		float *aux = (float *) &bytes;
 //		cout << "\t\t// " << (*aux);
 //	}
-	cout << "\t\t//" << GetNumero() << endl;
+	cout << "\t\t//";
+	printf("%f", GetNumero());
+	cout << endl;
 }
 
 void CONSTANT_Long_info:: ExibirInformacoes(JavaClass *javaClass)
