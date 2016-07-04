@@ -15,7 +15,7 @@ ClassesAuxiliares.o: ClassesAuxiliares/AnalisadorArgumentos.hpp ClassesAuxiliare
 	$(compilador) ClassesAuxiliares/uniao.cpp $(flags) $(INC_HPP) -o ClassesAuxiliares.o -c
 ClassLoader.o: ClassLoader/ClassLoader.cpp ClassLoader/ClassLoader.hpp
 	$(compilador) ClassLoader/uniao.cpp $(flags) $(INC_HPP) -o ClassLoader.o -c
-ExecutionEngine.o: ExecutionEngine/ExecutionEngine.cpp ExecutionEngine/ExecutionEngine.hpp
+ExecutionEngine.o: ExecutionEngine/ExecutionEngine.cpp ExecutionEngine/ExecutionEngine.hpp ExecutionEngine/ObjetoArray.hpp ExecutionEngine/ObjetoArray.cpp
 	$(compilador) ExecutionEngine/uniao.cpp $(flags) $(INC_HPP) -o ExecutionEngine.o -c
 JavaClass.o: JavaClass/attribute_info.cpp JavaClass/attribute_info.hpp JavaClass/cp_info.cpp JavaClass/cp_info.hpp JavaClass/field_info.cpp JavaClass/field_info.hpp JavaClass/JavaClass.cpp JavaClass/JavaClass.hpp JavaClass/method_info.cpp JavaClass/method_info.hpp
 	$(compilador) JavaClass/uniao.cpp $(flags) $(INC_HPP) -o JavaClass.o -c
