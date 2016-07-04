@@ -397,19 +397,66 @@ void ExecutionEngine::i_fconst_2(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_dconst_0(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
 
+    Valor highvalor;
+    highvalor.tipo = TipoDado::HIGHDOUBLE;
+    highvalor.dado = (uint32_t)0;
 
+    Valor lowvalor;
+    lowvalor.tipo = TipoDado::LOWDOUBLE;
+    lowvalor.dado = (uint32_t)0;
 
+    toppilha->empilharOperando(highvalor); 
+    toppilha->empilharOperando(lowvalor);
+
+    runtimeDataArea->topoPilha()->incrementaPC(1);      
+}
+void ExecutionEngine::i_dconst_1(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor highvalor;
+    highvalor.tipo = TipoDado::HIGHDOUBLE;
+    highvalor.dado = (uint32_t)0;
+
+    Valor lowvalor;
+    lowvalor.tipo = TipoDado::LOWDOUBLE;
+    lowvalor.dado = (uint32_t)1;
+
+    toppilha->empilharOperando(highvalor); 
+    toppilha->empilharOperando(lowvalor);
+     
+    runtimeDataArea->topoPilha()->incrementaPC(1);      
+}
+void ExecutionEngine::i_bipush(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor valor;
+    valor.tipo = TipoDado::BYTE;
+    //valor.data
+    //pegar ponteiro pra pc
+    //push pro stack
+
+    runtimeDataArea->topoPilha()->incrementaPC(2);
+}
+void ExecutionEngine::i_sipush(){
 
 }
-void ExecutionEngine::i_dconst_1(){}
-void ExecutionEngine::i_bipush(){}
-void ExecutionEngine::i_sipush(){}
-void ExecutionEngine::i_ldc(){}
-void ExecutionEngine::i_ldc_w(){}
-void ExecutionEngine::i_ldc2_w(){}
-void ExecutionEngine::i_iload(){}
-void ExecutionEngine::i_lload(){}
+void ExecutionEngine::i_ldc(){
+
+}
+void ExecutionEngine::i_ldc_w(){
+
+}
+void ExecutionEngine::i_ldc2_w(){
+
+}
+void ExecutionEngine::i_iload(){
+
+}
+void ExecutionEngine::i_lload(){
+
+}
 void ExecutionEngine::i_fload(){}
 void ExecutionEngine::i_dload(){}
 void ExecutionEngine::i_aload(){}
