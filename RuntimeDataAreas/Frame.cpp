@@ -112,7 +112,7 @@ void Frame::setaPilhaOperandos(stack<Valor> pilha){
 
 }
 
-uint8_t Frame::getCode() {
+uint8_t *Frame::getCode() {
 
 	return codeAttribute->getCode() + pc;
 
@@ -130,6 +130,18 @@ uint32_t Frame::tamanhoCode() {
 
 }
 
-void Frame::incrementaPC(){
-	pc = pc + 1;
+void Frame::incrementaPC(int32_t offset){
+	pc = pc + offset;
+}
+
+int32_t Frame::getPC(){
+
+return pc;
+
+}
+
+Objeto* Frame::getObjeto(){
+
+	return objeto;
+
 }

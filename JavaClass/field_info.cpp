@@ -20,7 +20,7 @@ field_info::field_info(FILE *arq, std::vector<cp_info*> const &constant_pool)
 
 }
 
-void field_info::ExibirInformacoes(string tabs)
+void field_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "access_flags =\t\t" << access_flags << endl;
 	if(access_flags & 0x0001)
@@ -59,8 +59,8 @@ void field_info::ExibirInformacoes(string tabs)
 	{
 		cout << tabs << "\tACC_ENUM" << endl;
 	}
-	cout << tabs << "name_index =\t\t" << name_index << endl;
-	cout << tabs << "descriptor_index =\t\t" << descriptor_index << endl;
+	cout << tabs << "name_index =\t\t" << name_index << "\t\t//" << javaClass->getUTF8(name_index) << endl;
+	cout << tabs << "descriptor_index =\t\t" << descriptor_index << "\t\t//" << javaClass->getUTF8(descriptor_index) << endl;
 	cout << tabs << "attributes_count =\t\t" << attributes_count << endl;
 	if(attributes.size() > 0)
 	{
@@ -68,7 +68,7 @@ void field_info::ExibirInformacoes(string tabs)
 		cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
 		for(int cont =0; cont < attributes_count; cont++)
 		{
-			attributes[cont]->ExibirInformacoes(tabs + "\t");
+			attributes[cont]->ExibirInformacoes(tabs + "\t", javaClass);
 			if(cont != attributes_count-1)
 			{
 				cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
@@ -77,20 +77,19 @@ void field_info::ExibirInformacoes(string tabs)
 	}
 }
 
-uint16_t field_info::getAccessFlags(void){
-
-    return access_flags;
-
-}
-
 uint16_t field_info::getNameIndex(void){
 
-    return name_index;
+	return name_index;
 
 }
 
 uint16_t field_info::getDescriptorIndex(void){
 
-        return descriptor_index;
+		return descriptor_index;
 
+}
+
+bool field_info::FlagAtivada(FieldFlag flag)
+{
+	return ( (this->access_flags & flag) != 0);
 }

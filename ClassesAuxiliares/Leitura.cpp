@@ -29,6 +29,13 @@ namespace Leitura
 				*auxPtr= aux;
 				return;
 			}
+			if(size == 8)
+			{
+				uint64_t *auxPtr= (uint64_t *) alvo;
+				uint64_t aux= InverterEndianess<uint64_t>( *auxPtr );
+				*auxPtr= aux;
+				return;
+			}
 		}
 	}
 }

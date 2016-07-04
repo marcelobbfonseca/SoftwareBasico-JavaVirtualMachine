@@ -93,6 +93,7 @@ CONSTANT_InvokeDynamic_info::CONSTANT_InvokeDynamic_info(uint16_t bootstrapMetho
 }
 CONSTANT_Utf8_info::CONSTANT_Utf8_info(uint16_t comprimento, uint8_t *arrayBytes)
 {
+	tag= CONSTANT_Utf8;
 	lenght= comprimento;
 	bytes= arrayBytes;
 }
@@ -156,21 +157,31 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		case (CONSTANT_Float):
 		{
 			uint32_t bytes;
-			LerAtributo(&bytes, 4, arq, IGNORAR_ENDIAN);
+			LerAtributo(&bytes, 4, arq);
 			return new CONSTANT_Float_info(bytes);
 		}
 		case (CONSTANT_Long):
 		{
+			uint64_t numero;
+			LerAtributo(&numero, 8, arq);
+			uint32_t *aux= (uint32_t*)&numero;
 			uint32_t highBytes, lowBytes;
-			LerAtributo(&highBytes, 4, arq);
-			LerAtributo(&lowBytes, 4, arq);
+			memcpy(&highBytes, aux++, 4);
+			memcpy(&lowBytes, aux, 4);
+//			LerAtributo(&highBytes, 4, arq);
+//			LerAtributo(&lowBytes, 4, arq);
 			throw new CONSTANT_Long_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_Double):
 		{
 			uint32_t highBytes, lowBytes;
-			LerAtributo(&highBytes, 4, arq, IGNORAR_ENDIAN);
-			LerAtributo(&lowBytes, 4, arq, IGNORAR_ENDIAN);
+			uint64_t numero;
+			LerAtributo(&numero, 8, arq);
+			uint32_t *aux= (uint32_t*)&numero;
+			memcpy(&highBytes, aux++, 4);
+			memcpy(&lowBytes, aux, 4);
+//			LerAtributo(&highBytes, 4, arq, IGNORAR_ENDIAN);
+//			LerAtributo(&lowBytes, 4, arq, IGNORAR_ENDIAN);
 			throw new CONSTANT_Double_info(highBytes, lowBytes);
 		}
 		case (CONSTANT_NameAndType):
@@ -220,68 +231,71 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 	}
 }
 
-void CONSTANT_Class_info::ExibirInformacoes(void)
+void CONSTANT_Class_info::ExibirInformacoes(JavaClass *javaClass)
 {
-	cout << "Class\n\t\tname_index = " << name_index << endl;
+	cout << "Class\n\t\tname_index = " << name_index << "\t\t//" << javaClass->getUTF8(name_index) << endl;
 }
 
-void CONSTANT_Fieldref_info::ExibirInformacoes(void)
+void CONSTANT_Fieldref_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Fieldref" << endl;
-	cout <<"\t\tclass_index = " << class_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tclass_index = " << class_index << "\t\t//" << javaClass->getUTF8(class_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t\t//" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void CONSTANT_Methodref_info::ExibirInformacoes(void)
+void CONSTANT_Methodref_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Methodref" << endl;
-	cout <<"\t\tclass_index = " << class_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tclass_index = " << class_index << "\t\t//" << javaClass->getUTF8(class_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t\t//" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void CONSTANT_InterfaceMethodref_info::ExibirInformacoes(void)
+void CONSTANT_InterfaceMethodref_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "InterfaceMethodref" << endl;
-	cout <<"\t\tclass_index = " << class_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tclass_index = " << class_index << "\t\t//" << javaClass->getUTF8(class_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t\t//" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void CONSTANT_String_info::ExibirInformacoes(void)
+void CONSTANT_String_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "String" << endl;
-	cout << "\t\tstring_index = " << string_index << endl;
+	cout << "\t\tstring_index = " << string_index << "\t\t//" << javaClass->getUTF8(string_index) << endl;
 }
 
-void CONSTANT_Integer_info::ExibirInformacoes(void)
+void CONSTANT_Integer_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Integer" << endl;
-	cout << "\t\tbytes = " << bytes << endl;
+	cout << "\t\tbytes = " << bytes << "\t\t//" << GetNumero() << endl;
 }
 
-void CONSTANT_Float_info::ExibirInformacoes(void)
+void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Float" <<endl;
 	cout << "\t\tbytes = 0x";
 	uint8_t *ptr= (uint8_t *) &bytes ;
 	for(int cont =0;  cont < 4 ; cont++)
 	{
-		cout<< hex << ptr[cont] << dec;
+		cout<< hex << (int)ptr[cont] << dec;
 	}
 
-	if(EhLittleEndian())
+/*	if(EhLittleEndian())
 	{
 		uint32_t numeroInvertido= InverterEndianess<uint32_t>(bytes);
 		float *fl= (float *) &numeroInvertido;
-		cout << "\t\t//"<< (*fl) << endl;
+		cout << "\t\t//"<< (*fl);
 	}
 	else
-	{
-		float *aux = (float *) &bytes;
-		cout << "\t\t// " << (*aux) << endl;
-	}
+	{*/
+//		float *aux = (float *) &bytes;
+//		cout << "\t\t// " << (*aux);
+//	}
+	cout << "\t\t//";
+	printf("%f", GetNumero());
+	cout << endl;
 }
 
-void CONSTANT_Long_info:: ExibirInformacoes(void)
+void CONSTANT_Long_info:: ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Long" << endl;
 	cout << "\t\thigh_bytes = 0x";
@@ -290,29 +304,31 @@ void CONSTANT_Long_info:: ExibirInformacoes(void)
 	cout << "\t\tlow_bytes = 0x";
 	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
 	cout << hex << invertido2 << dec << endl;
-	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << endl;
+	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << "\t\t//" << GetNumero() << endl;
 }
 
-void CONSTANT_Double_info:: ExibirInformacoes(void)
+void CONSTANT_Double_info:: ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Double" << endl;
-	cout << "\t\thigh_bytes = 0x";
-	uint32_t invertido = InverterEndianess<uint32_t>(high_bytes);
-	cout << hex << invertido << dec << endl;
-	cout << "\t\tlow_bytes = 0x";
-	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
-	cout << hex << invertido2 << dec << endl;
-	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << endl;
+//	cout << "\t\thigh_bytes = 0x";
+//	uint32_t invertido = InverterEndianess<uint32_t>(high_bytes);
+//	cout << hex << invertido << dec << endl;
+//	cout << "\t\tlow_bytes = 0x";
+//	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
+//	cout << hex << invertido2 << dec << endl;
+	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << "\t\t//";
+	printf("%f", GetNumero());
+	cout<< endl;
 }
 
-void CONSTANT_NameAndType_info::ExibirInformacoes(void)
+void CONSTANT_NameAndType_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "NameAndType" << endl;
-	cout <<"\t\tname_index = " << name_index << endl;
-	cout <<"\t\tdescriptor_index = " << descriptor_index << endl;
+	cout <<"\t\tname_index = " << name_index << "\t\t//" << javaClass->getUTF8(name_index) << endl;
+	cout <<"\t\tdescriptor_index = " << descriptor_index << "\t\t//" << javaClass->getUTF8(descriptor_index) << endl;
 }
 
-void CONSTANT_Utf8_info::ExibirInformacoes(void)
+void CONSTANT_Utf8_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "UTF8" << endl;
 	cout << "\t\tlenght = " << lenght << endl;
@@ -328,7 +344,7 @@ void CONSTANT_Utf8_info::ExibirInformacoes(void)
 	cout << dec <<endl;
 }
 
-void CONSTANT_MethodHandle_info::ExibirInformacoes(void)
+void CONSTANT_MethodHandle_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "MethodHandle" << endl;
 	cout << "\t\treference_kind = " << reference_kind;
@@ -385,23 +401,23 @@ void CONSTANT_MethodHandle_info::ExibirInformacoes(void)
 			break;
 		}
 	}
-	cout << "\t\treference_index = " << reference_index;
+	cout << "\t\treference_index = " << reference_index << "\t\t//" << javaClass->getUTF8(reference_index);
 }
 
-void CONSTANT_MethodType_info::ExibirInformacoes(void)
+void CONSTANT_MethodType_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "MethodType" << endl;
-	cout <<"\t\tdescriptor_index = " << descriptor_index << endl;
+	cout <<"\t\tdescriptor_index = " << descriptor_index << "\t\t//" << javaClass->getUTF8(descriptor_index) << endl;
 }
 
-void CONSTANT_InvokeDynamic_info::ExibirInformacoes(void)
+void CONSTANT_InvokeDynamic_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "InvokeDynamic" << endl;
-	cout <<"\t\tbootstrap_method_attr_index = " << bootstrap_method_attr_index << endl;
-	cout <<"\t\tname_and_type_index = " << name_and_type_index << endl;
+	cout <<"\t\tbootstrap_method_attr_index = " << bootstrap_method_attr_index << "\t\t//" << javaClass->getUTF8(bootstrap_method_attr_index) << endl;
+	cout <<"\t\tname_and_type_index = " << name_and_type_index << "\t\t//" << javaClass->getUTF8(name_and_type_index) << endl;
 }
 
-void NaoUsavel::ExibirInformacoes(void)
+void NaoUsavel::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "\t//Nao usavel" << endl;
 }
@@ -445,22 +461,6 @@ cout << "Match!" << endl;
 			return false;
 		}
 	}
-/*
-	cout << " lenght = " << lenght << endl;
-	return strncmp((char *)strcmp((char *)bytes, teste.c_str())==0, teste, lenght)==0;
-
-	char *temp= new char[lenght+1];
-	memcpy(temp, bytes, sizeof(bytes));
-	if(sizeof(bytes) != lenght)
-	{
-		cout << "Ue???" << sizeof(bytes) << "---" << lenght << endl;
-	}
-//	temp[lenght-1]= bytes[lenght-1];
-//	temp[lenght-1]= '\0';
-	temp[lenght]= '\0';
-	bool res= strcmp(temp, teste)==0;
-	delete []temp;
-	return (res);*/
 }
 
 string CONSTANT_Utf8_info::GetString(void)
@@ -476,25 +476,29 @@ int32_t CONSTANT_Integer_info::GetNumero(void)
 
 float CONSTANT_Float_info::GetNumero(void)
 {
-	uint32_t temp = bytes;
-	int32_t sinal = ((temp >> 31) == 0) ? 1 : -1;
-	int32_t expoente = ((temp >> 23) & 0xff);
-	int32_t mantissa = (expoente == 0) ? (temp & 0x7fffff) << 1 : (temp & 0x7fffff) | 0x800000;
-	return sinal * mantissa * pow(2, expoente-150);
+	float temp;
+	memcpy(&temp, &bytes, 4);
+	return temp;
 }
 
 int64_t CONSTANT_Long_info::GetNumero(void)
 {
-	return ( ((int64_t)high_bytes) << 32) | ((int64_t)low_bytes);
+	int64_t ret;
+	uint32_t *ptr;
+	ptr= (uint32_t*)&ret;
+	memcpy(ptr++, &high_bytes, 4);
+	memcpy(ptr, &low_bytes, 4);
+	return ret;
 }
 
 double CONSTANT_Double_info::GetNumero(void)
 {
-	int64_t bytes= ((int64_t)high_bytes<<32)|low_bytes; 
-	int32_t sinal = ((bytes >> 63) == 0) ? 1 : -1;
-	int32_t expoente = (int32_t)((bytes >> 52) & 0x7ffL);
-	int64_t mantissa = (expoente == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
-	return sinal * mantissa * pow(2, expoente-1075);
+	double bytes; 
+	uint32_t *ptr;
+	ptr= (uint32_t*)&bytes;
+	memcpy(ptr++, &high_bytes, 4);
+	memcpy(ptr, &low_bytes, 4);
+	return bytes;
 }
 
 uint8_t cp_info::GetTag(void)

@@ -1,17 +1,36 @@
+#ifndef JAVA_CLASS_HPP
+#define JAVA_CLASS_HPP
+
 #include<stdint.h>
 #include<vector>
 #include<string>
+#include<map>
 #include"cp_info.hpp"
 #include"field_info.hpp"
 #include"method_info.hpp"
 #include"attribute_info.hpp"
+#include"Tipos.h"
 
 using namespace std;
 
-#ifndef JAVA_CLASS_HPP
-#define JAVA_CLASS_HPP
+#ifndef CP_INFO
+class cp_info;
+#endif
+#ifndef FIELD_INFO
+class field_info;
+#endif
+#ifndef METHOD_INFO
+class method_info;
+#endif
+#ifndef ATTRIBUTE_INFO
+class attribute_info;
+#endif
+#ifndef VALOR
+struct Valor;
+#endif
 
 
+#define JAVA_CLASS
 //!  Classe que representa um .class
 /*!
   Classe responsável por armazenar dados de um arquivo .class
@@ -34,6 +53,9 @@ class JavaClass
 		const string getUTF8(uint16_t posicao);
 		const vector<cp_info*>& getConstantPool(void);
 		method_info const * const getMetodo(string nomeMetodo, string descritorMetodo);
+		void ColocarValorNoField(string nomeDoField, Valor valor);
+		Valor getValorDoField(string nomeDoField);
+		bool FieldExiste(string nomeDoField);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!
@@ -86,6 +108,7 @@ class JavaClass
 		vector<method_info> methods;
 		uint16_t attributes_count;
 		vector<attribute_info *> attributes;
+		map<string, Valor> camposEstaticos;
 };
 
 #endif

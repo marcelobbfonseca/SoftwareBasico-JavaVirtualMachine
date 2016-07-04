@@ -5,6 +5,7 @@
 #include "UtilidadesParaString.hpp"
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
 
 // Check ruindos
 #if _WIN32 || _WIN64
@@ -60,7 +61,7 @@ JavaClass::JavaClass(string nomeArquivo)
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
 #ifdef DEBUG
 string tabs = "\t";
-cpInfo->ExibirInformacoes();
+//cpInfo->ExibirInformacoes(this);
 #endif
 			constant_pool.push_back(cpInfo);
 		}
@@ -114,7 +115,7 @@ cout<< "Começando a ler os " << methods_count <<" methods." << endl;
 		method_info *methodInfo = new method_info(arq, constant_pool);
 #ifdef DEBUG
 string tabs = "\t";
-methodInfo->ExibirInformacoes(tabs);
+//methodInfo->ExibirInformacoes(tabs, this);
 #endif
 		methods.push_back(*methodInfo);
 #ifdef DEBUG
@@ -132,12 +133,85 @@ cout << "Attributes count = " << attributes_count << endl;
 		attributes.push_back(attributesInfo);
 	}
 	fclose(arq);
+	//verificação se o nome do arquivo é igual ao nome da classe
 	string nomeArquivoSemCaminhoNemExtensao= StringUtilidades::RemoverCaminhoEExtensao(nomeArquivo, ".class");
 	if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
 	{
 		char erro[200];
 		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
 		throw new Erro(erro, "JavaClass", "JavaClass");
+	}
+	//inicialização dos fields estáticos para tempo de execução
+	for(unsigned int cont =0; cont < fields.size(); cont++)
+	{
+		field_info field= fields[cont];
+		if(field.FlagAtivada(FIELD_STATIC) && !field.FlagAtivada(FIELD_FINAL))//estática e não final
+		{
+			string nomeField= getUTF8(field.getNameIndex());
+			string descritorDoField= getUTF8(field.getDescriptorIndex());
+			char tipoField = descritorDoField[0];
+			Valor valor;
+			switch(tipoField)
+			{
+				case('B'):
+				{
+					valor.tipo= TipoDado::BYTE;
+					valor.dado = 0;
+					break;
+				}
+				case('C'):
+				{
+					valor.tipo= TipoDado::CHAR;
+					valor.dado= 0;
+					break;
+				}
+				case('D'):
+				{
+					valor.tipo= TipoDado::DOUBLE;
+					double aux=0;
+					memcpy(&(valor.dado), &aux, 8);
+					break;//tratar daqui a pouco nesse mesmo método
+				}
+				case('F'):
+				{
+					valor.tipo= TipoDado::FLOAT;
+					float aux =0;
+					memcpy(&(valor.dado), &aux, 4);
+					break;
+				}
+				case('I'):
+				{
+					valor.tipo= TipoDado::INT;
+					valor.dado= 0;
+					break;
+				}
+				case('J'):
+				{
+					valor.tipo= TipoDado::LONG;
+					valor.dado= 0;
+					break;//tratar daqui a pouco nesse mesmo método
+				}
+				case('S'):
+				{
+					valor.tipo= TipoDado::SHORT;
+					valor.dado= 0;
+					break;
+				}
+				case('Z'):
+				{
+					valor.tipo= TipoDado::BOOLEAN;
+					valor.dado= 0;
+					break;
+				}
+				default:
+				{
+					valor.tipo= TipoDado::REFERENCE;
+					void *aux= NULL;
+					memcpy(&(valor.dado), &aux, sizeof(void*));
+				}
+			}
+			camposEstaticos[nomeField]= valor;
+		}
 	}
 }
 
@@ -170,7 +244,7 @@ void JavaClass::ExibirInformacoes(void)
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
 		cout  << tabs << "#" << cont+1 << " = ";
-		(*(constant_pool[cont])).ExibirInformacoes();
+		(*(constant_pool[cont])).ExibirInformacoes(this);
 		if(cont != constant_pool.size()-1)
 		{
 			cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -220,7 +294,7 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "Interfaces:" << endl;
 		for(unsigned int cont= 0; cont < interfaces.size() ; cont++)
 		{
-			cout << "\t\t#" << cont << "\t" << interfaces[cont] << endl;
+			cout << "\t\t#" << cont << "\t" << interfaces[cont] << getUTF8(interfaces[cont]) << endl;
 		}
 	}
 	cout << "-----------------------------------------------------------------" << endl;
@@ -232,7 +306,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(unsigned int cont= 0; cont < fields.size() ; cont++)
 		{
 			cout << "\tField[" << cont << "]:" << endl;;
-			fields[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			fields[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != fields.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -248,7 +322,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(int cont= 0; cont < methods_count ; cont++)
 		{
 			cout << "\tMethod[" << cont << "]:" << endl;;
-			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != methods_count-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -264,7 +338,7 @@ void JavaClass::ExibirInformacoes(void)
 		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
 		{
 			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
-			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != attributes.size()-1)
 			{
 				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -311,6 +385,9 @@ uint16_t JavaClass::getAccessFlags(void)
 const string JavaClass::getUTF8(uint16_t posicao)
 {
 	cp_info* constante = constant_pool[posicao-1];
+#ifdef DEBUG
+cout<< "JavaClass::getUTF8\tposicao-1= " << posicao-1 << "\ttag= " << (uint32_t)constante->GetTag() << endl;
+#endif
 	switch(constante->GetTag())
 	{
 		case(CONSTANT_Class):
@@ -403,6 +480,7 @@ const string JavaClass::getUTF8(uint16_t posicao)
 	char erro[200];
 	sprintf(erro, "Arquivo .class possui uma tag %hhu invalida no pool de constantes.", constante->GetTag());
 	throw new Erro(erro, "JavaClass", "getUTF8");
+//	return "";
 }
 
 const vector<cp_info*>& JavaClass::getConstantPool(void)
@@ -422,4 +500,24 @@ method_info const * const JavaClass::getMetodo(string nomeMetodo, string descrit
 	}
 	return NULL;
 }
+
+bool JavaClass::FieldExiste(string nomeDoField)
+{
+	return camposEstaticos.count(nomeDoField) > 0;
+}
+
+void JavaClass::ColocarValorNoField(string nomeDoField, Valor valor)
+{
+	camposEstaticos[nomeDoField]= valor;
+}
+
+Valor JavaClass::getValorDoField(string nomeDoField)
+{
+	if(!FieldExiste(nomeDoField))
+	{
+		throw new Erro("Solicitado field que não existe", "JavaClass", "getValorDoField");
+	}
+	return camposEstaticos[nomeDoField];
+}
+
 

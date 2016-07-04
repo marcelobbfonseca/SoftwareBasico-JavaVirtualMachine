@@ -1,3 +1,6 @@
+#ifndef ATTRIBUTE_INFO_HPP
+#define ATTRIBUTE_INFO_HPP
+
 #include<stdint.h>
 #include<stdio.h>
 #include<vector>
@@ -5,9 +8,14 @@
 #include"cp_info.hpp"
 #include"Buffer.hpp"
 
-#ifndef ATTRIBUTE_INFO_HPP
-#define ATTRIBUTE_INFO_HPP
+#ifndef CP_INFO
+class cp_info;
+#endif
+#ifndef JAVA_CLASS
+class JavaClass;
+#endif
 
+#define ATTRIBUTE_INFO
 class attribute_info
 {
 	protected:
@@ -18,7 +26,7 @@ class attribute_info
 		static attribute_info* LerAtributeInfo(FILE *arq, std::vector<cp_info*> const &constant_pool);
 		static attribute_info* LerAtributeInfo(Buffer &buff, std::vector<cp_info*> const &constant_pool);
 		virtual ~attribute_info(){}
-		virtual void ExibirInformacoes(std::string tabs)=0;
+		virtual void ExibirInformacoes(std::string tabs, JavaClass *javaClass)=0;
 		uint16_t getAttributeNameIndex();
 };
 
@@ -44,7 +52,7 @@ class ConstantValue_attribute: public attribute_info
 	public:
 		ConstantValue_attribute(FILE *arq, uint16_t attributeNameIndex);
 		ConstantValue_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Excecao
@@ -57,7 +65,7 @@ class Excecao
 	public:
 //		Excecao(FILE *arq);
 		Excecao(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Code_attribute: public attribute_info
@@ -77,12 +85,12 @@ class Code_attribute: public attribute_info
 		Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		~Code_attribute(void);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 
 		Code_attribute& operator=(Code_attribute );
 		Code_attribute(Code_attribute&);
 		uint16_t getMaxLocals(void);
-		uint8_t getCode(void);
+		uint8_t *getCode(void);
 		uint32_t getCodeLength();
 };
 
@@ -95,7 +103,7 @@ class Exceptions_attribute : public attribute_info
 	public:
 		Exceptions_attribute (FILE *arq, uint16_t attributeNameIndex);
 		Exceptions_attribute (Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class InfoDaClasse
@@ -107,7 +115,7 @@ class InfoDaClasse
 		uint16_t inner_class_access_flags;
 	public:
 		InfoDaClasse(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class InnerClasses_attribute: public attribute_info
@@ -118,7 +126,7 @@ class InnerClasses_attribute: public attribute_info
 	public:
 		InnerClasses_attribute(FILE *arq, uint16_t attributeNameIndex);
 		InnerClasses_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class EnclosingMethod_attribute:public attribute_info
@@ -129,7 +137,7 @@ class EnclosingMethod_attribute:public attribute_info
 	public:
 		EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex);
 		EnclosingMethod_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Synthetic_attribute: public attribute_info
@@ -138,7 +146,7 @@ class Synthetic_attribute: public attribute_info
 	public:
 		Synthetic_attribute(FILE *arq, uint16_t attributeNameIndex);
 		Synthetic_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Signature_attribute:public attribute_info
@@ -148,7 +156,7 @@ class Signature_attribute:public attribute_info
 	public:
 		Signature_attribute(FILE *arq, uint16_t attributeNameIndex);
 		Signature_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class SourceFile_attribute: public attribute_info
@@ -158,7 +166,7 @@ class SourceFile_attribute: public attribute_info
 	public:
 		SourceFile_attribute(FILE *arq, uint16_t attributeNameIndex);
 		SourceFile_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 		//para implementar
 		uint16_t GetSouceFileIndex(void);
 };
@@ -171,7 +179,7 @@ class SourceDebugExtension_attribute: public attribute_info
 		SourceDebugExtension_attribute(FILE *arq, uint16_t attributeNameIndex);
 		SourceDebugExtension_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~SourceDebugExtension_attribute();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Elemento_LineNumber
@@ -181,7 +189,7 @@ class Elemento_LineNumber
 		uint16_t line_number;
 	public:
 		Elemento_LineNumber(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class LineNumberTable_attribute: public attribute_info
@@ -192,7 +200,7 @@ class LineNumberTable_attribute: public attribute_info
 	public:
 		LineNumberTable_attribute(FILE *arq, uint16_t attributeNameIndex);
 		LineNumberTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Elemento_local_variable
@@ -205,7 +213,7 @@ class Elemento_local_variable
 		uint16_t index;
 	public:
 		Elemento_local_variable(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class LocalVariableTable_attribute : public attribute_info
@@ -216,7 +224,7 @@ class LocalVariableTable_attribute : public attribute_info
 	public:
 		LocalVariableTable_attribute(FILE *arq, uint16_t attributeNameIndex);
 		LocalVariableTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Elemento_LocalVariableType
@@ -229,7 +237,7 @@ class Elemento_LocalVariableType
 		uint16_t index;
 	public:
 		Elemento_LocalVariableType(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class LocalVariableTypeTable_attribute : public attribute_info
@@ -240,7 +248,7 @@ class LocalVariableTypeTable_attribute : public attribute_info
 	public:
 		LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex);
 		LocalVariableTypeTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Deprecated_attribute : public attribute_info
@@ -249,7 +257,7 @@ class Deprecated_attribute : public attribute_info
 	public:
 		Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex);
 		Deprecated_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class Elemento_Metodo_Bootstrap
@@ -260,7 +268,7 @@ class Elemento_Metodo_Bootstrap
 		vector<uint16_t> bootstrap_arguments;
 	public:
 		Elemento_Metodo_Bootstrap(Buffer &buff);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class BootstrapMethods_attribute: public attribute_info
@@ -271,7 +279,7 @@ class BootstrapMethods_attribute: public attribute_info
 	public:
 		BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex);
 		BootstrapMethods_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
@@ -282,7 +290,7 @@ class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa c
 		RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
 		RuntimeVisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~RuntimeVisibleAnnotations_attribute();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
@@ -293,7 +301,7 @@ class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa
 		RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
 		RuntimeInvisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~RuntimeInvisibleAnnotations_attribute();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível. Fazendo um attribute_info genérico.
@@ -304,7 +312,7 @@ class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-
 		RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
 		RuntimeVisibleParameterAnnotations_attribute(Buffer &buff, uint16_t ttributeNameIndex);
 		~RuntimeVisibleParameterAnnotations_attribute();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
@@ -315,7 +323,7 @@ class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Fod
 		RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
 		RuntimeInvisibleParameterAnnotations_attribute(Buffer &buff, uint16_t ttributeNameIndex);
 		~RuntimeInvisibleParameterAnnotations_attribute();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
 class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. Muito incompreensível.Fazendo um attribute_info genérico.
@@ -326,7 +334,7 @@ class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. M
 		AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex);
 		AnnotationDefault_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		~AnnotationDefault_attribute();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class verification_type_info
@@ -337,7 +345,7 @@ class verification_type_info
 	public:
 //		verification_type_info(FILE *arq);
 		verification_type_info(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class stack_map_frame
@@ -352,7 +360,7 @@ class stack_map_frame
 	public:
 //		stack_map_frame(FILE *arq);
 		stack_map_frame(Buffer &buffer);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class StackMapTable_attribute : public attribute_info
@@ -363,7 +371,7 @@ class StackMapTable_attribute : public attribute_info
 	public:
 		StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex);
 		StackMapTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 //A especificação da JVM diz que não deve dar erro ler um atributo desconhecido, basta ignorá-lo. Essa classe apenas armazena o atributo desconecido na forma de um attribute info genérico.
@@ -375,6 +383,6 @@ class AtributoDesconhecido : public attribute_info
 		AtributoDesconhecido(FILE *arq, uint16_t ttributeNameIndex);
 		AtributoDesconhecido(Buffer &buff, uint16_t ttributeNameIndex);
 		~AtributoDesconhecido();
-		void ExibirInformacoes(string tabs);
+		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 #endif

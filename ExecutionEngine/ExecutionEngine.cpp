@@ -2,7 +2,7 @@
 
 ExecutionEngine::ExecutionEngine(void)
 {
-	
+
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
@@ -21,12 +21,16 @@ void ExecutionEngine::Play(string classComMain)
 	obj->instancia = NULL;
 
 	runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
-	runtimeDataArea->empilharFrame(new Frame(obj, "<init>","()V"));
+
+	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL){
+
+		runtimeDataArea->empilharFrame(new Frame(obj, "<clinit>","()V"));
+	}
 
 	do
 	{
 
-		instrucao = runtimeDataArea->topoPilha()->getCode();
+		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 		(this->*vetorDePonteirosParaFuncao[instrucao])();
 
 	}
@@ -242,7 +246,7 @@ void ExecutionEngine::inicializaInstrucoes() {
 void ExecutionEngine::i_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 
@@ -253,6 +257,7 @@ void ExecutionEngine::i_aconst_null(){
 	valor.dado = (uint32_t)NULL;
 	toppilha->empilharOperando(valor);
 }
+
 void ExecutionEngine::i_iconst_m1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -263,7 +268,7 @@ void ExecutionEngine::i_iconst_m1(){
 
 	toppilha->empilharOperando(valor);
 
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_0(){
 
@@ -274,7 +279,7 @@ void ExecutionEngine::i_iconst_0(){
 	valor.dado = (uint32_t)0;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_1(){
 
@@ -284,8 +289,8 @@ void ExecutionEngine::i_iconst_1(){
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)1;
 	//falta uma parada de print do bastos
-	toppilha->empilharOperando(valor); 
-	runtimeDataArea->topoPilha()->incrementaPC();
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 void ExecutionEngine::i_iconst_2(){
@@ -296,7 +301,7 @@ void ExecutionEngine::i_iconst_2(){
 	valor.dado = (uint32_t)2;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -306,7 +311,7 @@ void ExecutionEngine::i_iconst_3(){
 	valor.dado = (uint32_t)3;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iconst_4(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -316,7 +321,7 @@ void ExecutionEngine::i_iconst_4(){
 	valor.dado = (uint32_t)4;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 void ExecutionEngine::i_iconst_5(){
@@ -327,69 +332,69 @@ void ExecutionEngine::i_iconst_5(){
 	valor.dado = (uint32_t)5;
 	//falta uma parada de print do bastos
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC();
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_lconst_0(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor padding;
-	padding.tipo = TipoDado::HIGHLONG;
+	padding.tipo = TipoDado::PADDING;
 	padding.dado = (uint32_t)0;
 
 	Valor valor;
-	valor.tipo = TipoDado::LOWLONG;
+	valor.tipo = TipoDado::LONG;
 	valor.dado = (uint32_t)0;
 
 	toppilha->empilharOperando(padding);
-	toppilha->empilharOperando(valor); 
-	runtimeDataArea->topoPilha()->incrementaPC();
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 
 }
 void ExecutionEngine::i_lconst_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor padding;
-	padding.tipo = TipoDado::HIGHLONG;
+	padding.tipo = TipoDado::PADDING;
 	padding.dado = (uint32_t)0;
 
 	Valor valor;
-	valor.tipo = TipoDado::LOWLONG;
+	valor.tipo = TipoDado::LONG;
 	valor.dado = (uint32_t)1;
 
 	toppilha->empilharOperando(padding);
-	toppilha->empilharOperando(valor); 
-	runtimeDataArea->topoPilha()->incrementaPC();	
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fconst_0(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
 	valor.tipo = TipoDado::FLOAT;
 	valor.dado = (uint32_t)0;
 
-	toppilha->empilharOperando(valor); 
-	runtimeDataArea->topoPilha()->incrementaPC();	
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fconst_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
 	valor.tipo = TipoDado::FLOAT;
 	valor.dado = (uint32_t)1;
 
-	toppilha->empilharOperando(valor); 
-	runtimeDataArea->topoPilha()->incrementaPC();
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fconst_2(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
 	valor.tipo = TipoDado::FLOAT;
 	valor.dado = (uint32_t)2;
 
-	toppilha->empilharOperando(valor); 
-	runtimeDataArea->topoPilha()->incrementaPC();  
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_dconst_0(){
     Frame *toppilha = runtimeDataArea->topoPilha();   
@@ -405,7 +410,7 @@ void ExecutionEngine::i_dconst_0(){
     toppilha->empilharOperando(highvalor); 
     toppilha->empilharOperando(lowvalor);
 
-    runtimeDataArea->topoPilha()->incrementaPC();      
+    runtimeDataArea->topoPilha()->incrementaPC(1);      
 }
 void ExecutionEngine::i_dconst_1(){
     Frame *toppilha = runtimeDataArea->topoPilha();   
@@ -421,15 +426,37 @@ void ExecutionEngine::i_dconst_1(){
     toppilha->empilharOperando(highvalor); 
     toppilha->empilharOperando(lowvalor);
      
-    runtimeDataArea->topoPilha()->incrementaPC();      
+    runtimeDataArea->topoPilha()->incrementaPC(1);      
 }
-void ExecutionEngine::i_bipush(){}
-void ExecutionEngine::i_sipush(){}
-void ExecutionEngine::i_ldc(){}
-void ExecutionEngine::i_ldc_w(){}
-void ExecutionEngine::i_ldc2_w(){}
-void ExecutionEngine::i_iload(){}
-void ExecutionEngine::i_lload(){}
+void ExecutionEngine::i_bipush(){
+    Frame *toppilha = runtimeDataArea->topoPilha();   
+
+    Valor valor;
+    valor.tipo = TipoDado::BYTE;
+    //valor.data
+    //pegar ponteiro pra pc
+    //push pro stack
+
+    runtimeDataArea->topoPilha()->incrementaPC(2);
+}
+void ExecutionEngine::i_sipush(){
+
+}
+void ExecutionEngine::i_ldc(){
+
+}
+void ExecutionEngine::i_ldc_w(){
+
+}
+void ExecutionEngine::i_ldc2_w(){
+
+}
+void ExecutionEngine::i_iload(){
+
+}
+void ExecutionEngine::i_lload(){
+
+}
 void ExecutionEngine::i_fload(){}
 void ExecutionEngine::i_dload(){}
 void ExecutionEngine::i_aload(){}
@@ -603,8 +630,170 @@ void ExecutionEngine::i_instanceof(){}
 void ExecutionEngine::i_monitorenter(){}
 void ExecutionEngine::i_monitorexit(){}
 void ExecutionEngine::i_wide(){}
-void ExecutionEngine::i_multianewarray(){}
-void ExecutionEngine::i_ifnull(){}
-void ExecutionEngine::i_ifnonnull(){}
-void ExecutionEngine::i_goto_w(){}
-void ExecutionEngine::i_jsr_w(){}
+
+void ExecutionEngine::i_multianewarray(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
+
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint8_t dimensoes = code[3];
+	assert(dimensoes >= 1);
+
+	uint16_t classIndex = (byte1 << 8) | byte2;
+	//Emidio
+	//cp_info classCP = constantPool[classIndex-1];
+	//CONSTANT_Class_info classInfo = classCP.info.class_info;
+	//Yoo
+	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
+	assert(classInfo->GetTag() == CONSTANT_Class);
+
+	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
+
+	// obter o tipo dentro de className:
+	TipoDado tipoDado;
+	int i = 0;
+	while (className[i] == '[') i++;
+
+	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+
+	switch (className[i]) {
+		case 'L':
+			if (multiArrayType != "java/lang/String") {
+				runtimeDataArea->CarregarClasse(multiArrayType); // verifica se existe classe com esse nome
+			}
+			tipoDado = TipoDado::REFERENCE;
+			break;
+		case 'B':
+			tipoDado = TipoDado::BYTE;
+			break;
+		case 'C':
+			tipoDado = TipoDado::CHAR;
+			break;
+		case 'D':
+			tipoDado = TipoDado::DOUBLE;
+			break;
+		case 'F':
+			tipoDado = TipoDado::FLOAT;
+			break;
+		case 'I':
+			tipoDado = TipoDado::INT;
+			break;
+		case 'J':
+			tipoDado = TipoDado::LONG;
+			break;
+		case 'S':
+			tipoDado = TipoDado::SHORT;
+			break;
+		case 'Z':
+			tipoDado = TipoDado::BOOLEAN;
+			break;
+		default:
+			cerr << "Descritor invalido em multianewarray" << endl;
+			exit(1);
+	}
+
+	stack<int> count;
+	for (int i = 0; i < dimensoes; i++) {
+		Valor dimLength = topo->desempilhaOperando();
+		assert(dimLength.tipo == TipoDado::INT);
+		count.push(dimLength.dado);
+	}
+
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+	arr->popularSubArray(tipoDado, count);
+
+	Valor valorArr;
+	valorArr.tipo = TipoDado::REFERENCE;
+	valorArr.dado = (uint64_t)arr;
+
+	topo->empilharOperando(valorArr);
+
+	topo->incrementaPC(4);
+}
+
+void ExecutionEngine::i_ifnull(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	Valor referencia = topo->desempilhaOperando();
+
+	assert(referencia.tipo == TipoDado::REFERENCE);
+
+	if ((Objeto*)((void*)(referencia.dado)) == NULL) {
+
+		uint8_t *code = topo->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		int16_t salto =  (byte1 << 8) | byte2;
+		topo->incrementaPC(salto);
+	}
+	else {
+
+		topo->incrementaPC(3);
+
+	}
+}
+
+void ExecutionEngine::i_ifnonnull(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	Valor referencia = topo->desempilhaOperando();
+
+	assert(referencia.tipo == TipoDado::REFERENCE);
+
+	if ((Objeto*)(referencia.dado) != NULL) {
+		uint8_t *code = topo->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		int16_t salto =  (byte1 << 8) | byte2;
+		topo->incrementaPC(salto);
+	}
+	else {
+
+		topo->incrementaPC(3);
+
+	}
+
+}
+
+void ExecutionEngine::i_goto_w(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint8_t byte3 = code[3];
+	uint8_t byte4 = code[4];
+	int32_t offsetSalto = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+
+	topo->incrementaPC(offsetSalto);
+	assert(topo->getPC() < (int32_t)topo->tamanhoCode());
+
+}
+
+void ExecutionEngine::i_jsr_w(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint8_t byte3 = code[3];
+	uint8_t byte4 = code[4];
+	int32_t offsetSalto = (byte1 << 24) | (byte2 << 16) | (byte3 << 8)| byte4;
+
+	Valor endRetorno;
+	endRetorno.tipo = TipoDado::RETURN_ADDR;
+	endRetorno.dado = topo->getPC() + 5;
+	topo->empilharOperando(endRetorno);
+
+	topo->incrementaPC(offsetSalto);
+	assert(topo->getPC() < (int32_t)(topo->tamanhoCode()));
+
+
+}

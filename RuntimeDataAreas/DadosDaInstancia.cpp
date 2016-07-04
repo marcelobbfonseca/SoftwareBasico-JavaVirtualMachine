@@ -1,4 +1,5 @@
 #include"DadosDaInstancia.hpp"
+#include<string.h>
 
 DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 {
@@ -15,8 +16,7 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 	for (int i = 0; i < javaClass->getFieldsCount(); i++)
 	{
 		field_info field = fields[i];
-		uint16_t staticAndFinalFlag = 0x0008 | 0x0010;
-		if ((field.getAccessFlags() & staticAndFinalFlag) == 0)// não estática e não final
+		if (!field.FlagAtivada(FIELD_STATIC|FIELD_FINAL))// não estática e não final
 		{
 			string nomeField = javaClass->getUTF8(field.getNameIndex());
 			string descritorField = javaClass->getUTF8(field.getDescriptorIndex());
@@ -27,66 +27,74 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 			switch (tipoField)
 			{
 				case 'B':
+				{
 					valor.tipo = TipoDado::BYTE;
+					valor.dado = 0;
 					break;
+				}
 				case 'C':
+				{
 					valor.tipo = TipoDado::CHAR;
+					valor.dado = 0;
 					break;
+				}
 				case 'D':
+				{
 					valor.tipo = TipoDado::DOUBLE;
+					double aux=0;
+					memcpy(&(valor.dado), &aux, 8);
 					break;
+				}
 				case 'F':
+				{
 					valor.tipo = TipoDado::FLOAT;
+					float aux =0;
+					memcpy(&(valor.dado), &aux, 4);
 					break;
+				}
 				case 'I':
+				{
 					valor.tipo = TipoDado::INT;
+					valor.dado = 0;
 					break;
+				}
 				case 'J':
+				{
 					valor.tipo = TipoDado::LONG;
+					valor.dado = 0;
 					break;
+				}
 				case 'S':
+				{
 					valor.tipo = TipoDado::SHORT;
+					valor.dado = 0;
 					break;
+				}
 				case 'Z':
+				{
 					valor.tipo = TipoDado::BOOLEAN;
+					void *aux= NULL;
+					memcpy(&(valor.dado), &aux, sizeof(void*));
 					break;
+				}
 				default:
+				{
 					valor.tipo = TipoDado::REFERENCE;
+				}
 			}
 
-			valor.dado = 0;
 			fieldsInstancia[nomeField] = valor;
 		}
 	}
 }
 
-/*Pra que serve isso tudo ??
-ClassInstance::~ClassInstance() {
 
-}
 
-ObjectType ClassInstance::objectType() {
-	return ObjectType::CLASS_INSTANCE;
-}
-
-ClassRuntime* ClassInstance::getClassRuntime() {
-	return _classRuntime;
-}
-
-void ClassInstance::putValueIntoField(Value value, string fieldName) {
-	_fields[fieldName] = value;
-}
-
-Value ClassInstance::getValueFromField(string fieldName) {
-	if (_fields.count(fieldName) ==  0) {
-		cerr << "NoSuchFieldError" << endl;
+Valor DadosDaInstancia::getValorDoField(string nomeField){
+	if (fieldsInstancia.count(nomeField) ==  0) {
+		cerr << "Field não existente" << endl;
 		exit(1);
 	}
 
-	return _fields[fieldName];
+	return fieldsInstancia[nomeField];
 }
-
-bool ClassInstance::fieldExists(string fieldName) {
-	return _fields.count(fieldName) > 0;
-}
-*/

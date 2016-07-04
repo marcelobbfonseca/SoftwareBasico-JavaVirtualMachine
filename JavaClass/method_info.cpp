@@ -45,7 +45,7 @@ method_info::~method_info()
 	}
 }
 
-void method_info::ExibirInformacoes(string tabs)
+void method_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "access_flags =\t\t" << access_flags << endl;
 	if(access_flags & 0x0001)
@@ -96,8 +96,8 @@ void method_info::ExibirInformacoes(string tabs)
 	{
 		cout << tabs << "\tACC_SYNTHETIC" << endl;
 	}
-	cout << tabs << "name_index =\t\t" << name_index << endl;
-	cout << tabs << "descriptor_index =\t" << descriptor_index << endl;
+	cout << tabs << "name_index =\t\t" << name_index << "\t\t//" << javaClass->getUTF8(name_index) << endl;
+	cout << tabs << "descriptor_index =\t" << descriptor_index << "\t\t//" << javaClass->getUTF8(descriptor_index) << endl;
 	cout << tabs << "attributes_count =\t" << attributes_count << endl;
 	if(attributes.size() > 0)
 	{
@@ -106,7 +106,7 @@ void method_info::ExibirInformacoes(string tabs)
 		for(int cont =0; cont < attributes_count; cont++)
 		{
 			cout << tabs << "\tAttributes[" << cont << "]:" << endl;
-			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ) );
+			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), javaClass );
 			if(cont < attributes_count -1)
 			{
 				cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
