@@ -586,128 +586,128 @@ void ExecutionEngine::i_wide(){}
 
 void ExecutionEngine::i_multianewarray(){
 
-    Frame *topo = runtimeDataArea->topoPilha();
-    vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
+	Frame *topo = runtimeDataArea->topoPilha();
+	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
 
-    uint8_t *code = topo->getCode();
-    uint8_t byte1 = code[1];
-    uint8_t byte2 = code[2];
-    uint8_t dimensoes = code[3];
-    assert(dimensoes >= 1);
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint8_t dimensoes = code[3];
+	assert(dimensoes >= 1);
 
-    uint16_t classIndex = (byte1 << 8) | byte2;
-    cp_info classCP = constantPool[classIndex-1];
-    assert(classCP.GetTag() == CONSTANT_Class);
+	uint16_t classIndex = (byte1 << 8) | byte2;
+	cp_info classCP = constantPool[classIndex-1];
+	assert(classCP.GetTag() == CONSTANT_Class);
 
-    CONSTANT_Class_info classInfo = classCP.info.class_info;
-    //CONSTANT_Class_info classInfo = (CONSTANT_Class_info)classCP.;
-    string className = topo->getObjeto()->javaClass->getUTF8(classInfo.GetNameIndex());
+	CONSTANT_Class_info classInfo = classCP.info.class_info;
+	//CONSTANT_Class_info classInfo = (CONSTANT_Class_info)classCP.;
+	string className = topo->getObjeto()->javaClass->getUTF8(classInfo.GetNameIndex());
 
-    // obter o tipo dentro de className:
-    TipoDado tipoDado;
-    int i = 0;
-    while (className[i] == '[') i++;
+	// obter o tipo dentro de className:
+	TipoDado tipoDado;
+	int i = 0;
+	while (className[i] == '[') i++;
 
-    string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
 
-    switch (className[i]) {
-        case 'L':
-            if (multiArrayType != "java/lang/String") {
-                runtimeDataArea->CarregarClasse(multiArrayType); // verifica se existe classe com esse nome
-            }
-            tipoDado = TipoDado::REFERENCE;
-            break;
-        case 'B':
-            tipoDado = TipoDado::BYTE;
-            break;
-        case 'C':
-            tipoDado = TipoDado::CHAR;
-            break;
-        case 'D':
-            tipoDado = TipoDado::DOUBLE;
-            break;
-        case 'F':
-            tipoDado = TipoDado::FLOAT;
-            break;
-        case 'I':
-            tipoDado = TipoDado::INT;
-            break;
-        case 'J':
-            tipoDado = TipoDado::LONG;
-            break;
-        case 'S':
-            tipoDado = TipoDado::SHORT;
-            break;
-        case 'Z':
-            tipoDado = TipoDado::BOOLEAN;
-            break;
-        default:
-            cerr << "Descritor invalido em multianewarray" << endl;
-            exit(1);
-    }
+	switch (className[i]) {
+		case 'L':
+			if (multiArrayType != "java/lang/String") {
+				runtimeDataArea->CarregarClasse(multiArrayType); // verifica se existe classe com esse nome
+			}
+			tipoDado = TipoDado::REFERENCE;
+			break;
+		case 'B':
+			tipoDado = TipoDado::BYTE;
+			break;
+		case 'C':
+			tipoDado = TipoDado::CHAR;
+			break;
+		case 'D':
+			tipoDado = TipoDado::DOUBLE;
+			break;
+		case 'F':
+			tipoDado = TipoDado::FLOAT;
+			break;
+		case 'I':
+			tipoDado = TipoDado::INT;
+			break;
+		case 'J':
+			tipoDado = TipoDado::LONG;
+			break;
+		case 'S':
+			tipoDado = TipoDado::SHORT;
+			break;
+		case 'Z':
+			tipoDado = TipoDado::BOOLEAN;
+			break;
+		default:
+			cerr << "Descritor invalido em multianewarray" << endl;
+			exit(1);
+	}
 
-    stack<int> count;
-    for (int i = 0; i < dimensoes; i++) {
-        Valor dimLength = topo->desempilhaOperando();
-        assert(dimLength.tipo == TipoDado::INT);
-        count.push(dimLength.dado);
-    }
+	stack<int> count;
+	for (int i = 0; i < dimensoes; i++) {
+		Valor dimLength = topo->desempilhaOperando();
+		assert(dimLength.tipo == TipoDado::INT);
+		count.push(dimLength.dado);
+	}
 
-    ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
-    arr->popularSubArray(tipoDado, count);
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+	arr->popularSubArray(tipoDado, count);
 
-    Valor valorArr;
-    valorArr.tipo = TipoDado::REFERENCE;
-    valorArr.dado = (uint32_t)arr;
+	Valor valorArr;
+	valorArr.tipo = TipoDado::REFERENCE;
+	valorArr.dado = (uint32_t)arr;
 
-    topo->empilharOperando(valorArr);
+	topo->empilharOperando(valorArr);
 
-    topo->incrementaPC(4);
+	topo->incrementaPC(4);
 }
 
 void ExecutionEngine::i_ifnull(){
 
-    Frame *topo = runtimeDataArea->topoPilha();
+	Frame *topo = runtimeDataArea->topoPilha();
 
-    Valor referencia = topo->desempilhaOperando();
+	Valor referencia = topo->desempilhaOperando();
 
-    assert(referencia.tipo == TipoDado::REFERENCE);
+	assert(referencia.tipo == TipoDado::REFERENCE);
 
-    if ((Objeto*)((void*)(referencia.dado)) == NULL) {
+	if ((Objeto*)((void*)(referencia.dado)) == NULL) {
 
-        uint8_t *code = topo->getCode();
-        uint8_t byte1 = code[1];
-        uint8_t byte2 = code[2];
-        int16_t salto =  (byte1 << 8) | byte2;
-        topo->incrementaPC(salto);
-    }
-    else {
+		uint8_t *code = topo->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		int16_t salto =  (byte1 << 8) | byte2;
+		topo->incrementaPC(salto);
+	}
+	else {
 
-        topo->incrementaPC(3);
+		topo->incrementaPC(3);
 
-    }
+	}
 }
 
 void ExecutionEngine::i_ifnonnull(){
 
-    Frame *topo = runtimeDataArea->topoPilha();
+	Frame *topo = runtimeDataArea->topoPilha();
 
-    Valor referencia = topo->desempilhaOperando();
+	Valor referencia = topo->desempilhaOperando();
 
-    assert(referencia.tipo == TipoDado::REFERENCE);
+	assert(referencia.tipo == TipoDado::REFERENCE);
 
-    if ((Objeto*)(referencia.dado) != NULL) {
-        uint8_t *code = topo->getCode();
-        uint8_t byte1 = code[1];
-        uint8_t byte2 = code[2];
-        int16_t salto =  (byte1 << 8) | byte2;
-        topo->incrementaPC(salto);
-    }
-    else {
+	if ((Objeto*)(referencia.dado) != NULL) {
+		uint8_t *code = topo->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		int16_t salto =  (byte1 << 8) | byte2;
+		topo->incrementaPC(salto);
+	}
+	else {
 
-        topo->incrementaPC(3);
+		topo->incrementaPC(3);
 
-    }
+	}
 
 }
 
