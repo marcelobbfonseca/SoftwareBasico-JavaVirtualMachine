@@ -600,10 +600,10 @@ void ExecutionEngine::i_multianewarray(){
 	//cp_info classCP = constantPool[classIndex-1];
 	//CONSTANT_Class_info classInfo = classCP.info.class_info;
 	//Yoo
-	CONSTANT_Class_info classInfo = (CONSTANT_Class_info)*constantPool[classIndex-1];
-	assert(classInfo.GetTag() == CONSTANT_Class);
+	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
+	assert(classInfo->GetTag() == CONSTANT_Class);
 
-	string className = topo->getObjeto()->javaClass->getUTF8(classInfo.GetNameIndex());
+	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
 
 	// obter o tipo dentro de className:
 	TipoDado tipoDado;
