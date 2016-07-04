@@ -338,11 +338,11 @@ void ExecutionEngine::i_lconst_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor padding;
-	padding.tipo = TipoDado::HIGHLONG;
+	padding.tipo = TipoDado::PADDING;
 	padding.dado = (uint32_t)0;
 
 	Valor valor;
-	valor.tipo = TipoDado::LOWLONG;
+	valor.tipo = TipoDado::LONG;
 	valor.dado = (uint32_t)0;
 
 	toppilha->empilharOperando(padding);
@@ -355,11 +355,11 @@ void ExecutionEngine::i_lconst_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor padding;
-	padding.tipo = TipoDado::HIGHLONG;
+	padding.tipo = TipoDado::PADDING;
 	padding.dado = (uint32_t)0;
 
 	Valor valor;
-	valor.tipo = TipoDado::LOWLONG;
+	valor.tipo = TipoDado::LONG;
 	valor.dado = (uint32_t)1;
 
 	toppilha->empilharOperando(padding);
@@ -660,7 +660,7 @@ void ExecutionEngine::i_multianewarray(){
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
-	valorArr.dado = (uint32_t)arr;
+	valorArr.dado = (uint64_t)arr;
 
 	topo->empilharOperando(valorArr);
 

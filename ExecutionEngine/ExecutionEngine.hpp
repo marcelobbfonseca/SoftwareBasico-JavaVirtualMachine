@@ -2,6 +2,7 @@
 #define EXECUTIONENGINE_HPP
 #include<vector>
 #include"RuntimeDataArea.hpp"
+#include"ObjetoArray.hpp"
 
 #ifndef RUNTIMEDATAAREA
 class RuntimeDataArea;

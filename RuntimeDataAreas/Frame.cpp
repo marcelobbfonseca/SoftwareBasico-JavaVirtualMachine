@@ -140,8 +140,8 @@ return pc;
 
 }
 
-Objeto getObjeto(){
+Objeto* Frame::getObjeto(){
 
-    return objeto;
+	return objeto;
 
 }

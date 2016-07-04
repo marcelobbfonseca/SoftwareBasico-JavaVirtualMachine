@@ -1,3 +1,6 @@
+#ifndef OBJETO_ARRAY_HPP
+#define OBJETO_ARRAY_HPP
+
 #include<vector>
 #include<stack>
 #include"Tipos.h"
@@ -11,3 +14,5 @@ class ObjetoArray
 		TipoDado tipo;
 		vector<Valor> elementos;
 };
+
+#endif

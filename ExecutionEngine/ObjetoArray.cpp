@@ -32,7 +32,7 @@ void ObjetoArray::popularSubArray(TipoDado tipoDado, stack<int> count){
 
 			Valor ValorSubArr;
 			ValorSubArr.tipo = TipoDado::REFERENCE;
-			ValorSubArr.dado = (uint32_t)subarray;
+			ValorSubArr.dado = (uint64_t)subarray;
 			this->empilhaValor(ValorSubArr);
 		}
 	}
