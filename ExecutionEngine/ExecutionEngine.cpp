@@ -672,7 +672,8 @@ void ExecutionEngine::i_ifnull(){
 
     assert(referencia.tipo == TipoDado::REFERENCE);
 
-    if ((Objeto*)(referencia.dado) == NULL) {
+    if ((Objeto*)((void*)(referencia.dado)) == NULL) {
+
         uint8_t *code = topo->getCode();
         uint8_t byte1 = code[1];
         uint8_t byte2 = code[2];
@@ -683,7 +684,8 @@ void ExecutionEngine::i_ifnull(){
 
         topo->incrementaPC(3);
 
-    }}
+    }
+
 void ExecutionEngine::i_ifnonnull(){
 
     Frame *topo = runtimeDataArea->topoPilha();

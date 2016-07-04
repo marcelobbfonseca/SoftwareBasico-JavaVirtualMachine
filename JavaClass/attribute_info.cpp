@@ -808,9 +808,9 @@ AtributoDesconhecido::~AtributoDesconhecido()
 void ConstantValue_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo ConstantValue." <<endl;
-	cout << tabs << "\tattribute_name_index = " << attribute_name_index << javaClass->getUTF8(attribute_name_index) << endl;
+	cout << tabs << "\tattribute_name_index = " << attribute_name_index << "\t\t//" << javaClass->getUTF8(attribute_name_index) << endl;
 	cout << tabs << "\tattribute_length = " << attribute_length << endl;
-	cout << tabs << "\tconstantvalue_index = " << constantvalue_index << javaClass->getUTF8(constantvalue_index) << endl;
+	cout << tabs << "\tconstantvalue_index = " << constantvalue_index << "\t\t//" << javaClass->getUTF8(constantvalue_index) << endl;
 }
 
 void Excecao::ExibirInformacoes(string tabs, JavaClass *javaClass)
@@ -819,13 +819,13 @@ void Excecao::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	cout << tabs << "\tstart_pc = " << start_pc << endl;
 	cout << tabs << "\tend_pc = " << end_pc << endl;
 	cout << tabs << "\thandler_pc = " << handler_pc << endl;
-	cout << tabs << "\tcatch_type = " << catch_type << javaClass->getUTF8(catch_type) << endl;
+	cout << tabs << "\tcatch_type = " << catch_type << "\t\t//" << javaClass->getUTF8(catch_type) << endl;
 }
 
 void Code_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Code." <<endl;
-	cout << tabs << "\tattribute_name_index = " << attribute_name_index << javaClass->getUTF8(attribute_name_index) << endl;
+	cout << tabs << "\tattribute_name_index = " << attribute_name_index << "\t\t//" << javaClass->getUTF8(attribute_name_index) << endl;
 	cout << tabs << "\tattribute_length = " << attribute_length << endl;
 	cout << tabs << "\tmax_stack = " << max_stack << endl;
 	cout << tabs << "\tmax_locals = " << max_locals << endl;
@@ -856,15 +856,15 @@ void Exceptions_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	cout << tabs << "\tnumber_of_exceptions = " << number_of_exceptions << endl;
 	for(int cont=0 ; cont < number_of_exceptions ; cont++)
 	{
-		cout << tabs << "\texception_index_table[" << cont << "]:\t" << exception_index_table[cont] << javaClass->getUTF8(exception_index_table[cont]) << endl;
+		cout << tabs << "\texception_index_table[" << cont << "]:\t" << exception_index_table[cont] << "\t\t//" << javaClass->getUTF8(exception_index_table[cont]) << endl;
 	}
 }
 
 void InfoDaClasse::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
-	cout << tabs << "inner_class_info_index = " << inner_class_info_index << javaClass->getUTF8(inner_class_info_index) << endl;
-	cout << tabs << "outer_class_info_index = " << outer_class_info_index << javaClass->getUTF8(outer_class_info_index) << endl;
-	cout << tabs << "inner_name_index = " << inner_name_index << javaClass->getUTF8(inner_name_index) << endl;
+	cout << tabs << "inner_class_info_index = " << inner_class_info_index << "\t\t//" << javaClass->getUTF8(inner_class_info_index) << endl;
+	cout << tabs << "outer_class_info_index = " << outer_class_info_index << "\t\t//" << javaClass->getUTF8(outer_class_info_index) << endl;
+	cout << tabs << "inner_name_index = " << inner_name_index << "\t\t//" << javaClass->getUTF8(inner_name_index) << endl;
 	cout << tabs << "inner_class_access_flags = " << inner_class_access_flags << endl;
 	if(inner_class_access_flags & 0x0001)
 	{
@@ -922,8 +922,8 @@ void InnerClasses_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass
 void EnclosingMethod_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo EnclosingMethod." <<endl;
-	cout << tabs << "\tclass_index = " << class_index << javaClass->getUTF8(class_index) << endl;
-	cout << tabs << "\tmethod_index = " << method_index << javaClass->getUTF8(method_index) << endl;
+	cout << tabs << "\tclass_index = " << class_index << "\t\t//" << javaClass->getUTF8(class_index) << endl;
+	cout << tabs << "\tmethod_index = " << method_index << "\t\t//" << javaClass->getUTF8(method_index) << endl;
 }
 
 void Synthetic_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
@@ -934,13 +934,13 @@ void Synthetic_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 void Signature_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Signature." <<endl;
-	cout << tabs << "\tsignature_index = " << signature_index << javaClass->getUTF8(signature_index) << endl;
+	cout << tabs << "\tsignature_index = " << signature_index << "\t\t//" << javaClass->getUTF8(signature_index) << endl;
 }
 
 void SourceFile_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo SourceFile." <<endl;
-	cout << tabs << "\tsourcefile_index = " << sourcefile_index << javaClass->getUTF8(sourcefile_index) << endl;
+	cout << tabs << "\tsourcefile_index = " << sourcefile_index << "\t\t//" << javaClass->getUTF8(sourcefile_index) << endl;
 }
 
 void SourceDebugExtension_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
@@ -973,8 +973,8 @@ void Elemento_local_variable::ExibirInformacoes(string tabs, JavaClass *javaClas
 {
 	cout << tabs << "start_pc = " << start_pc <<endl;
 	cout << tabs << "length = " << length <<endl;
-	cout << tabs << "name_index = " << name_index << javaClass->getUTF8(name_index) <<endl;
-	cout << tabs << "descriptor_index = " << descriptor_index << javaClass->getUTF8(descriptor_index) <<endl;
+	cout << tabs << "name_index = " << name_index << "\t\t//" << javaClass->getUTF8(name_index) <<endl;
+	cout << tabs << "descriptor_index = " << descriptor_index << "\t\t//" << javaClass->getUTF8(descriptor_index) <<endl;
 	cout << tabs << "index = " << index <<endl;
 }
 
@@ -993,8 +993,8 @@ void Elemento_LocalVariableType::ExibirInformacoes(string tabs, JavaClass *javaC
 {
 	cout << tabs << "start_pc = " << start_pc <<endl;
 	cout << tabs << "length = " << length <<endl;
-	cout << tabs << "name_index = " << name_index << javaClass->getUTF8(name_index) <<endl;
-	cout << tabs << "signature_index = " << signature_index << javaClass->getUTF8(signature_index) <<endl;
+	cout << tabs << "name_index = " << name_index << "\t\t//" << javaClass->getUTF8(name_index) <<endl;
+	cout << tabs << "signature_index = " << signature_index  << "\t\t//"<< javaClass->getUTF8(signature_index) <<endl;
 	cout << tabs << "index = " << index <<endl;
 }
 
