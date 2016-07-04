@@ -80,7 +80,8 @@ class Code_attribute: public attribute_info
 		uint16_t attributes_count;
 		vector<attribute_info *> attributes;
 		string ObterMinemonicoOpcode(uint8_t bytecode);
-		void ExibirInfoOpCode(unsigned int *cont);
+		void ExibirInfoOpCode(unsigned int *cont, JavaClass *javaClass);
+		void ExibirCpIndex(unsigned int* cont, JavaClass *javaClass);
 	public:
 		Code_attribute(FILE *arq, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);
 		Code_attribute(Buffer &buff, uint16_t attributeNameIndex, std::vector<cp_info*> const &constant_pool);

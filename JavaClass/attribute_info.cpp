@@ -1,6 +1,7 @@
 #include "attribute_info.hpp"
 #include"Leitura.hpp"
 #include"Opcode.hpp"
+#include"Endian.hpp"
 #include<iostream>
 #include <cstdlib>
 #include <cstring>
@@ -834,7 +835,7 @@ void Code_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	for(unsigned int cont=0; cont < code_length; cont++)
 	{
 		cout << tabs << "\t\t" << cont << "\t" << OpCode::GetReferencia()->GetMinemonico(code[cont]);
-		ExibirInfoOpCode(&cont);
+		ExibirInfoOpCode(&cont, javaClass);
 		cout << endl;
 	}
 	cout << tabs << "\tattributes_count = " << attributes_count << endl;
@@ -1151,7 +1152,7 @@ void AtributoDesconhecido::ExibirInformacoes(string tabs, JavaClass *javaClass)
 }
 
 
-void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
+void Code_attribute::ExibirInfoOpCode(unsigned int *cont, JavaClass *javaClass)
 {
 	switch(code[*cont])
 	{
@@ -1184,8 +1185,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		case(JAVA_OPCODE_PUTFIELD):
 		case(JAVA_OPCODE_NEW):
 		{
-			cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
-			cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
+			ExibirCpIndex(cont, javaClass);
 			break;
 		}
 		case(JAVA_OPCODE_BIPUSH):
@@ -1233,15 +1233,13 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		}
 		case(JAVA_OPCODE_INVOKEDYNAMIC):
 		{
-			cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
-			cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
+			ExibirCpIndex(cont, javaClass);
 			(*cont)= (*cont)+2;
 			break;
 		}
 		case(JAVA_OPCODE_INVOKEINTERFACE):
 		{
-			cout << "\tindexbyte1 = " << (unsigned int)code[++(*cont)];
-			cout << "\tindexbyte2 = " << (unsigned int)code[++(*cont)];
+			ExibirCpIndex(cont, javaClass);
 			cout << "\tcount = " << (unsigned int)code[++(*cont)];
 			(*cont)++;
 			break;
@@ -1276,8 +1274,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont)
 		}
 		case(JAVA_OPCODE_MULTIANEWARRAY):
 		{
-			cout << "\t indexbyte1 = " << (unsigned int)code[++(*cont)];
-			cout << "\t indexbyte2 = " << (unsigned int)code[++(*cont)];
+			ExibirCpIndex(cont, javaClass);
 			cout << "\t dimension = " << (unsigned int)code[++(*cont)];
 			break;
 		}
@@ -1381,15 +1378,30 @@ uint16_t SourceFile_attribute::GetSouceFileIndex(void)
 
 uint16_t Code_attribute::getMaxLocals(void)
 {
-    return max_locals;
+	return max_locals;
 }
 
 uint8_t *Code_attribute::getCode(void)
 {
-    return code;
+	return code;
 }
 
 uint32_t Code_attribute::getCodeLength(void)
 {
-    return code_length;
+	return code_length;
+}
+
+void Code_attribute::ExibirCpIndex(unsigned int *cont, JavaClass *javaClass)
+{
+	uint8_t indexbyte1 = code[++(*cont)];
+	uint8_t indexbyte2 = code[++(*cont)];
+	cout << "\tindexbyte1 = " << (unsigned int)indexbyte1;
+	cout << "\tindexbyte2 = " << (unsigned int)indexbyte2;
+	uint16_t indice, i2= ((uint16_t)indexbyte1)<<8 | indexbyte2;
+	uint8_t *ptr;
+	ptr= (uint8_t*)&indice;
+	memcpy(ptr++, &indexbyte1, 1);
+	memcpy(ptr, &indexbyte2, 1);
+	indice= InverterEndianess<uint16_t>(indice);
+	cout << "\t\t//" << indice << "-> " << javaClass->getUTF8(indice);
 }
