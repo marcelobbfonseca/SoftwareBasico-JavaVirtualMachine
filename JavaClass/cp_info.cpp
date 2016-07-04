@@ -461,22 +461,6 @@ cout << "Match!" << endl;
 			return false;
 		}
 	}
-/*
-	cout << " lenght = " << lenght << endl;
-	return strncmp((char *)strcmp((char *)bytes, teste.c_str())==0, teste, lenght)==0;
-
-	char *temp= new char[lenght+1];
-	memcpy(temp, bytes, sizeof(bytes));
-	if(sizeof(bytes) != lenght)
-	{
-		cout << "Ue???" << sizeof(bytes) << "---" << lenght << endl;
-	}
-//	temp[lenght-1]= bytes[lenght-1];
-//	temp[lenght-1]= '\0';
-	temp[lenght]= '\0';
-	bool res= strcmp(temp, teste)==0;
-	delete []temp;
-	return (res);*/
 }
 
 string CONSTANT_Utf8_info::GetString(void)
@@ -492,11 +476,9 @@ int32_t CONSTANT_Integer_info::GetNumero(void)
 
 float CONSTANT_Float_info::GetNumero(void)
 {
-	uint32_t temp = bytes;
-	int32_t sinal = ((temp >> 31) == 0) ? 1 : -1;
-	int32_t expoente = ((temp >> 23) & 0xff);
-	int32_t mantissa = (expoente == 0) ? (temp & 0x7fffff) << 1 : (temp & 0x7fffff) | 0x800000;
-	return sinal * mantissa * pow(2, expoente-127);
+	float temp;
+	memcpy(&temp, &bytes, 4);
+	return temp;
 }
 
 int64_t CONSTANT_Long_info::GetNumero(void)
@@ -511,15 +493,12 @@ int64_t CONSTANT_Long_info::GetNumero(void)
 
 double CONSTANT_Double_info::GetNumero(void)
 {
-	int64_t bytes; 
+	double bytes; 
 	uint32_t *ptr;
 	ptr= (uint32_t*)&bytes;
 	memcpy(ptr++, &high_bytes, 4);
 	memcpy(ptr, &low_bytes, 4);
-	int32_t sinal = ((bytes >> 63) == 0) ? 1 : -1;
-	int32_t expoente = (int32_t)((bytes >> 52) & 0x7ffL);
-	int64_t mantissa = (expoente == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
-	return sinal * mantissa * pow(2, expoente-1023);
+	return bytes;
 }
 
 uint8_t cp_info::GetTag(void)
