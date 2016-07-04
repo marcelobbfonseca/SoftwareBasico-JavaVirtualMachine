@@ -596,11 +596,13 @@ void ExecutionEngine::i_multianewarray(){
 	assert(dimensoes >= 1);
 
 	uint16_t classIndex = (byte1 << 8) | byte2;
-	cp_info classCP = constantPool[classIndex-1];
-	assert(classCP.GetTag() == CONSTANT_Class);
+	//Emidio
+	//cp_info classCP = constantPool[classIndex-1];
+	//CONSTANT_Class_info classInfo = classCP.info.class_info;
+	//Yoo
+	CONSTANT_Class_info classInfo = (CONSTANT_Class_info)*constantPool[classIndex-1];
+	assert(classInfo.GetTag() == CONSTANT_Class);
 
-	CONSTANT_Class_info classInfo = classCP.info.class_info;
-	//CONSTANT_Class_info classInfo = (CONSTANT_Class_info)classCP.;
 	string className = topo->getObjeto()->javaClass->getUTF8(classInfo.GetNameIndex());
 
 	// obter o tipo dentro de className:

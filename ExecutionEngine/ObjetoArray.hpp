@@ -5,7 +5,7 @@ class ObjetoArray
 {
 	public:
 		ObjetoArray(TipoDado tipo);
-		void popularArray(TipoDado tipoDado, stack<int> count);
+		void popularSubArray(TipoDado tipoDado, stack<int> count);
 		void empilhaValor(Valor valor);
 	private:
 		TipoDado tipo;
