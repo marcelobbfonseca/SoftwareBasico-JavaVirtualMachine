@@ -10,20 +10,17 @@ enum TipoDado {
 	SHORT,
 	INT,
 	FLOAT,
-	LONG,
-	DOUBLE,
 	RETURN_ADDR,
 	REFERENCE,
-	HIGHLONG,
-	LOWLONG,
-	HIGHDOUBLE,
-	LOWDOUBLE
+	LONG,
+	DOUBLE,
+	PADDING
 };
 typedef enum TipoDado TipoDado;
 #define VALOR
 struct Valor {
 	TipoDado tipo;
-	uint32_t dado;
+	uint64_t dado;
 };
 typedef struct Valor Valor;
 

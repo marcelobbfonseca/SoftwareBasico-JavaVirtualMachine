@@ -167,9 +167,9 @@ cout << "Attributes count = " << attributes_count << endl;
 				}
 				case('D'):
 				{
-					valor.tipo= TipoDado::HIGHDOUBLE;
+					valor.tipo= TipoDado::DOUBLE;
 					double aux=0;
-					memcpy(&(valor.dado), &aux, 4);
+					memcpy(&(valor.dado), &aux, 8);
 					break;//tratar daqui a pouco nesse mesmo método
 				}
 				case('F'):
@@ -187,7 +187,7 @@ cout << "Attributes count = " << attributes_count << endl;
 				}
 				case('J'):
 				{
-					valor.tipo= TipoDado::HIGHLONG;
+					valor.tipo= TipoDado::LONG;
 					valor.dado= 0;
 					break;//tratar daqui a pouco nesse mesmo método
 				}
@@ -207,27 +207,10 @@ cout << "Attributes count = " << attributes_count << endl;
 				{
 					valor.tipo= TipoDado::REFERENCE;
 					void *aux= NULL;
-					memcpy(&(valor.dado), &aux, 4);
+					memcpy(&(valor.dado), &aux, sizeof(void*));
 				}
 			}
 			camposEstaticos[nomeField]= valor;
-			if(tipoField == 'D')
-			{
-				double aux=0;
-				uint32_t *auxptr;
-				auxptr = (uint32_t*)&aux;
-				Valor parte2;
-				parte2.tipo= TipoDado::LOWDOUBLE;
-				memcpy(&(parte2.dado), &(++auxptr), 4);
-				lowCampos64bits[nomeField]= parte2;
-			}
-			else if(tipoField == 'J')
-			{
-				Valor parte2;
-				parte2.tipo= TipoDado::LOWLONG;
-				parte2.dado=0;
-				lowCampos64bits[nomeField]= parte2;
-			}
 		}
 	}
 }
@@ -537,27 +520,4 @@ Valor JavaClass::getValorDoField(string nomeDoField)
 	return camposEstaticos[nomeDoField];
 }
 
-void JavaClass::ColocarValor64NoField(string nomeDoField, uint64_t valor)
-{
-	if(!FieldExiste(nomeDoField))
-	{
-		throw new Erro("Solicitado field que não existe", "JavaClass", "ColocarValor64NoField");
-	}
-	uint32_t *auxptr= (uint32_t *)&valor;
-//	uint32_t aux;
-	memcpy(&(camposEstaticos[nomeDoField].dado), auxptr, 4);
-	memcpy(&(lowCampos64bits[nomeDoField].dado), ++auxptr, 4);
-}
-
-uint64_t JavaClass::getValor64DoField(string nomeDoField)
-{
-	if(lowCampos64bits.count(nomeDoField) == 0)
-	{
-		throw new Erro("Solicitado field que não existe", "JavaClass", "getValor64DoField");
-	}
-	uint64_t retorno= camposEstaticos[nomeDoField].dado;
-	retorno= retorno << 32;
-	retorno= retorno | lowCampos64bits[nomeDoField].dado;
-	return retorno;
-}
 

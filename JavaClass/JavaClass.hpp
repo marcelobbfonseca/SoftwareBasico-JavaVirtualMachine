@@ -56,8 +56,6 @@ class JavaClass
 		void ColocarValorNoField(string nomeDoField, Valor valor);
 		Valor getValorDoField(string nomeDoField);
 		bool FieldExiste(string nomeDoField);
-		void ColocarValor64NoField(string nomeDoField, uint64_t valor);
-		uint64_t getValor64DoField(string nomeDoField);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!
@@ -111,7 +109,6 @@ class JavaClass
 		uint16_t attributes_count;
 		vector<attribute_info *> attributes;
 		map<string, Valor> camposEstaticos;
-		map<string, Valor> lowCampos64bits;
 };
 
 #endif
