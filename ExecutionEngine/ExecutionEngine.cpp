@@ -583,8 +583,107 @@ void ExecutionEngine::i_instanceof(){}
 void ExecutionEngine::i_monitorenter(){}
 void ExecutionEngine::i_monitorexit(){}
 void ExecutionEngine::i_wide(){}
-void ExecutionEngine::i_multianewarray(){}
-void ExecutionEngine::i_ifnull(){}
+
+void ExecutionEngine::i_multianewarray(){
+
+    Frame *topo = runtimeDataArea->topoPilha();
+    vector<cp_info*> constantPool = topo->objeto->javaClass->getConstantPool();
+
+    uint8_t *code = topo->getCode();
+    uint8_t byte1 = code[1];
+    uint8_t byte2 = code[2];
+    uint8_t dimensoes = code[3];
+    assert(dimensoes >= 1);
+
+    uint16_t classIndex = (byte1 << 8) | byte2;
+    cp_info classCP = constantPool[classIndex-1];
+    assert(topo-> == CONSTANT_Class);
+
+    CONSTANT_Class_info classInfo = classCP.info.class_info;
+    string className = topo->objeto->javaClass->getUTF8(classInfo.name_index);
+
+    // obter o tipo dentro de className:
+    TipoDado tipoDado;
+    int i = 0;
+    while (className[i] == '[') i++;
+
+    string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+
+    switch (className[i]) {
+        case 'L':
+            if (multiArrayType != "java/lang/String") {
+                runtimeDataArea->loadClassNamed(multiArrayType); // verifica se existe classe com esse nome
+            }
+            tipoDado = TipoDado::REFERENCE;
+            break;
+        case 'B':
+            tipoDado = TipoDado::BYTE;
+            break;
+        case 'C':
+            tipoDado = TipoDado::CHAR;
+            break;
+        case 'D':
+            tipoDado = TipoDado::DOUBLE;
+            break;
+        case 'F':
+            tipoDado = TipoDado::FLOAT;
+            break;
+        case 'I':
+            tipoDado = TipoDado::INT;
+            break;
+        case 'J':
+            tipoDado = TipoDado::LONG;
+            break;
+        case 'S':
+            tipoDado = TipoDado::SHORT;
+            break;
+        case 'Z':
+            tipoDado = TipoDado::BOOLEAN;
+            break;
+        default:
+            cerr << "Descritor invalido em multianewarray" << endl;
+            exit(1);
+    }
+
+    stack<int> count;
+    for (int i = 0; i < dimensoes; i++) {
+        Valor dimLength = topo->desempilhaOperando();
+        assert(dimLength.tipo == TipoDaDo::INT);
+        count.push(dimLength.data.intValue);
+    }
+
+    ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+    popularArray(arr, tipoDado, count);
+
+    Valor valorArr;
+    valorArr.tipo = TipoDado::REFERENCE;
+    valorArr.dado = (uint32_t)arr;
+
+    topo->empilharOperando(valorArr);
+
+    topo->incrementaPC(4);
+}
+
+void ExecutionEngine::i_ifnull(){
+
+    Frame *topo = runtimeDataArea->topoPilha();
+
+    Valor referencia = topo->desempilhaOperando();
+
+    assert(referencia.tipo == TipoDado::REFERENCE);
+
+    if ((Objeto*)(referencia.dado) == NULL) {
+        uint8_t *code = topo->getCode();
+        uint8_t byte1 = code[1];
+        uint8_t byte2 = code[2];
+        int16_t salto =  (byte1 << 8) | byte2;
+        topo->incrementaPC(salto);
+    }
+    else {
+
+        topo->incrementaPC(3);
+
+    }}
 void ExecutionEngine::i_ifnonnull(){
 
     Frame *topo = runtimeDataArea->topoPilha();
@@ -605,8 +704,6 @@ void ExecutionEngine::i_ifnonnull(){
         topo->incrementaPC(3);
 
     }
-
-
 
 }
 
