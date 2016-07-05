@@ -18,13 +18,17 @@ void ExecutionEngine::Play(string classComMain)
 	uint8_t instrucao;
 	Objeto *obj = new Objeto();
 
+	cout<<"chegou até aqui!1"<< endl;
 	obj->javaClass = runtimeDataArea->CarregarClasse(classComMain);
+	cout<<"chegou até aqui!2"<< endl;
 	obj->instancia = NULL;
-
+	cout<<"chegou até aqui!3"<< endl;
+	cout<< "runtimeDataArea= " << (runtimeDataArea) <<endl;
 	runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
+	cout<<"chegou até aqui!4"<< endl;
 
-	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL){
-
+	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL)
+	{
 		runtimeDataArea->empilharFrame(new Frame(obj, "<clinit>","()V"));
 	}
 

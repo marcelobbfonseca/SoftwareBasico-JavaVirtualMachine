@@ -12,11 +12,11 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 	assert(metodoAux != NULL);
 	if(objeto->instancia != NULL)
 	{
-		assert((metodoAux->getAccessFlags() & 0x0008) == 0); // o método não pode ser estático
+		assert(!metodoAux->FlagAtivada(METHOD_STATIC)); // o método não pode ser estático
 	}
 	else
 	{
-		assert((metodoAux->getAccessFlags() & 0x0008) != 0); // o método precisa ser estático
+		assert(metodoAux->FlagAtivada(METHOD_STATIC)); // o método precisa ser estático
 	}
 	metodo = metodoAux;
 	pegarAtributos();

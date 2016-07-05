@@ -52,6 +52,9 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 
 void RuntimeDataArea::empilharFrame(Frame *frame)
 {
+#ifdef DEBUG
+	cout<< "RuntimeDataArea::empilharFrame" << endl << "\tframe= " << frame <<endl << "\tpilhaJVM= "<< pilhaJVM << endl;
+#endif
 	this->pilhaJVM.push(*frame);
 }
 
