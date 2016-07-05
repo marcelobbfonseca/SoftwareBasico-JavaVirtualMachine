@@ -848,7 +848,7 @@ void ExecutionEngine::i_multianewarray(){
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
-	valorArr.dado = (uint64_t)arr;
+//	valorArr.dado = (uint64_t)arr;
 
 	topo->empilharOperando(valorArr);
 

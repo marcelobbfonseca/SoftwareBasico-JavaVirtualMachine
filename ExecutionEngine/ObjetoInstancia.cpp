@@ -18,8 +18,8 @@ ObjetoInstancia::ObjetoInstancia(JavaClass *classe) : javaClass(classe)
 		field_info field= fields[cont];
 		if(!field.FlagAtivada(FIELD_STATIC|FIELD_FINAL))//não estática e não final
 		{
-			string nomeField= getUTF8(field.getNameIndex());
-			string descritorDoField= getUTF8(field.getDescriptorIndex());
+			string nomeField= javaClass->getUTF8(field.getNameIndex());
+			string descritorDoField= javaClass->getUTF8(field.getDescriptorIndex());
 			char tipoField = descritorDoField[0];
 			Valor valor;
 			switch(tipoField)
