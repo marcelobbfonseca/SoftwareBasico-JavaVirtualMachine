@@ -1,4 +1,5 @@
 #include "ExecutionEngine.hpp"
+#include<string.h>
 
 ExecutionEngine::ExecutionEngine(void)
 {
@@ -397,47 +398,47 @@ void ExecutionEngine::i_fconst_2(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_dconst_0(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();   
 
-    Valor highvalor;
-    highvalor.tipo = TipoDado::HIGHDOUBLE;
-    highvalor.dado = (uint32_t)0;
+	Valor padding;
+	padding.tipo = TipoDado::PADDING;
 
-    Valor lowvalor;
-    lowvalor.tipo = TipoDado::LOWDOUBLE;
-    lowvalor.dado = (uint32_t)0;
+	Valor valor;
+	valor.tipo = TipoDado::DOUBLE;
+	double temp =0;
+	memcpy(&valor.dado, &temp, 8/*sizeof(double)*/);
 
-    toppilha->empilharOperando(highvalor); 
-    toppilha->empilharOperando(lowvalor);
+	toppilha->empilharOperando(padding); 
+	toppilha->empilharOperando(valor);
 
-    runtimeDataArea->topoPilha()->incrementaPC(1);      
+	runtimeDataArea->topoPilha()->incrementaPC(1);	  
 }
 void ExecutionEngine::i_dconst_1(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();   
 
-    Valor highvalor;
-    highvalor.tipo = TipoDado::HIGHDOUBLE;
-    highvalor.dado = (uint32_t)0;
+	Valor padding;
+	padding.tipo = TipoDado::PADDING;
 
-    Valor lowvalor;
-    lowvalor.tipo = TipoDado::LOWDOUBLE;
-    lowvalor.dado = (uint32_t)1;
+	Valor valor;
+	valor.tipo = TipoDado::DOUBLE;
+	double temp =1;
+	memcpy(&valor.dado, &temp, 8/*sizeof(double)*/);
 
-    toppilha->empilharOperando(highvalor); 
-    toppilha->empilharOperando(lowvalor);
-     
-    runtimeDataArea->topoPilha()->incrementaPC(1);      
+	toppilha->empilharOperando(padding); 
+	toppilha->empilharOperando(valor);
+	 
+	runtimeDataArea->topoPilha()->incrementaPC(1);	  
 }
 void ExecutionEngine::i_bipush(){
-    Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();   
 
-    Valor valor;
-    valor.tipo = TipoDado::BYTE;
-    //valor.data
-    //pegar ponteiro pra pc
-    //push pro stack
+	Valor valor;
+	valor.tipo = TipoDado::BYTE;
+	//valor.data
+	//pegar ponteiro pra pc
+	//push pro stack
 
-    runtimeDataArea->topoPilha()->incrementaPC(2);
+	runtimeDataArea->topoPilha()->incrementaPC(2);
 }
 void ExecutionEngine::i_sipush(){
 
