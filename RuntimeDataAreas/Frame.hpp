@@ -8,12 +8,6 @@
 #include "JavaClass.hpp"
 #include "DadosDaInstancia.hpp"
 
-class Objeto {
-	public:
-		DadosDaInstancia *instancia;
-		JavaClass *javaClass;
-
-};
 
 class Frame{
 
