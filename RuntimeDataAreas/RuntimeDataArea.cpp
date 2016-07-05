@@ -35,7 +35,6 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 			//pseudocodigo:
 			string clinit= "<clinit>";
 			string V= "()V";
-			//TODO: Colocar o construtor de frame para métodos estáticos
 			Frame *novoFrame= new Frame(classes[nomeSemExtensao], clinit, V, this);
 			empilharFrame(novoFrame);
 		}

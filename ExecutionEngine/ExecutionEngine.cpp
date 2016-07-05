@@ -29,7 +29,7 @@ void ExecutionEngine::Play(string classComMain)
 	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
-//		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V"));
+		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
 	}
 
 	do
