@@ -14,16 +14,16 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 #endif
 	pc = 0;
 	method_info *metodoAux = (method_info *)((ObjetoInstancia*)objeto)->ObterJavaClass()->getMetodo(nomeMetodo, descritorMetodo);
-#ifdef DEBUG
 	if(metodoAux == NULL)
 	{
 		throw new Erro("metodoAux == NULL", "Frame", "pegarAtributos");
 	}
-#endif
+	/*//O código a seguir não tem sentido em existir
 	if(objeto->instancia != NULL)
 	{
 		assert(!metodoAux->FlagAtivada(METHOD_STATIC)); // o método não pode ser estático
 	}
+	*/
 	else
 	{
 		assert(metodoAux->FlagAtivada(METHOD_STATIC)); // o método precisa ser estático
@@ -40,19 +40,19 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 
 void Frame::pegarAtributos()
 {
-	vector<cp_info*> constantPool = objeto->javaClass->getConstantPool();
-	cout<<"pegando atributos" << endl;
-	vector<attribute_info *> attributesAux = metodo->getAttributes();
-	cout<<"pegando atributos" << endl;
 	if(objeto->ObterTipoObjeto() != TipoObjeto::INSTANCIA)
 	{
 		throw new Erro ("Isso não é uma instância de objeto!", "Frame", "pegarAtributos");
 	}
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)objeto)->ObterJavaClass()->getConstantPool();
+	cout<<"pegando atributos" << endl;
+	vector<attribute_info *> attributesAux = metodo->getAttributes();
+	cout<<"pegando atributos" << endl;
 	if(objeto == NULL)
 	{
 		throw new Erro("objeto == NULL", "Frame", "pegarAtributos");
 	}
-	if((ObjetoInstancia*)objeto->ObterJavaClass() == NULL)
+	if(((ObjetoInstancia*)objeto)->ObterJavaClass() == NULL)
 	{
 		throw new Erro("objeto->javaClass == NULL", "Frame", "pegarAtributos");
 	}
