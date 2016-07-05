@@ -398,7 +398,7 @@ void ExecutionEngine::i_fconst_2(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_dconst_0(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor padding;
 	padding.tipo = TipoDado::PADDING;
@@ -408,13 +408,13 @@ void ExecutionEngine::i_dconst_0(){
 	double temp =0;
 	memcpy(&valor.dado, &temp, 8/*sizeof(double)*/);
 
-	toppilha->empilharOperando(padding); 
+	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(valor);
 
-	runtimeDataArea->topoPilha()->incrementaPC(1);	  
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_dconst_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor padding;
 	padding.tipo = TipoDado::PADDING;
@@ -424,13 +424,13 @@ void ExecutionEngine::i_dconst_1(){
 	double temp =1;
 	memcpy(&valor.dado, &temp, 8/*sizeof(double)*/);
 
-	toppilha->empilharOperando(padding); 
+	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(valor);
-	 
-	runtimeDataArea->topoPilha()->incrementaPC(1);	  
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_bipush(){
-	Frame *toppilha = runtimeDataArea->topoPilha();   
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
 	valor.tipo = TipoDado::BYTE;
@@ -627,10 +627,92 @@ void ExecutionEngine::i_anewarray(){}
 void ExecutionEngine::i_arraylength(){}
 void ExecutionEngine::i_athrow(){}
 void ExecutionEngine::i_checkcast(){}
-void ExecutionEngine::i_instanceof(){}
-void ExecutionEngine::i_monitorenter(){}
-void ExecutionEngine::i_monitorexit(){}
-void ExecutionEngine::i_wide(){}
+void ExecutionEngine::i_instanceof(){
+
+    Frame *topo = runtimeDataArea->topoPilha();
+
+    uint8_t *code = topo->getCode();
+    uint8_t byte1 = code[1];
+    uint8_t byte2 = code[2];
+
+    uint16_t cpIndex = (byte1 << 8) | byte2;
+    vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
+    cp_info cpElement = constantPool[cpIndex-1];
+
+    assert(cpElement.tag == CONSTANT_Class);
+    string className = topo->getObjeto()->javaClass->getUTF8(cpIndex->GetNameIndex());
+
+    Valor objectrefValue = topo->desempilhaOperando();
+    assert(objectrefValue.tipo == TipoDado::REFERENCE);
+
+    Valor resultValue;
+    resultValue.tipo = TipoDado::INT;
+
+    if ((Objeto*)objectrefValue.dado == NULL) {
+        resultValue.dado. = 0;
+    }
+    else {
+        Object *obj = (Objeto*)objectrefValue.dado;
+
+        if (obj->objectType() == ObjectType::CLASS_INSTANCE) {
+            ClassInstance *classInstance = (ClassInstance *) obj;
+            ClassRuntime *classRuntime = classInstance->getClassRuntime();
+
+            bool found = false;
+            while (!found) {
+                ClassFile *classFile = classRuntime->getClassFile();
+                string currClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
+
+                if (currClassName == className) {
+                    found = true;
+                } else {
+                    if (classFile->super_class == 0) {
+                        break;
+                    } else {
+                        string superClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
+                        classRuntime = methodArea.loadClassNamed(superClassName);
+                    }
+                }
+            }
+
+            resultValue.data.intValue = found ? 1 : 0;
+        } else if (obj->objectType() == ObjectType::STRING_INSTANCE) {
+            resultValue.data.intValue = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
+        } else {
+            if (className == "java/lang/Object") {
+                resultValue.data.intValue = 1;
+            } else {
+                resultValue.data.intValue = 0;
+            }
+        }
+    }
+
+    topFrame->pushIntoOperandStack(resultValue);
+
+    topFrame->pc += 3;
+
+
+
+}
+void ExecutionEngine::i_monitorenter(){
+
+Frame *topo = runtimeDataArea->topoPilha();
+topo->incrementaPC(1);
+
+}
+void ExecutionEngine::i_monitorexit(){
+
+    Frame *topo = runtimeDataArea->topoPilha();
+    topo->incrementaPC(1);
+
+}
+void ExecutionEngine::i_wide(){
+
+    Frame *topo = runtimeDataArea->topoPilha();
+	isWide = true;
+	topo->incrementaPC(1);
+
+}
 
 void ExecutionEngine::i_multianewarray(){
 
