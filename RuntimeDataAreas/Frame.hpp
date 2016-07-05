@@ -7,7 +7,7 @@
 #include "method_info.hpp"
 #include "JavaClass.hpp"
 #include "DadosDaInstancia.hpp"
-#include "Objeto.hpp"
+#include "ObjetoInstancia.hpp"
 
 
 class Frame{

@@ -501,7 +501,7 @@ double CONSTANT_Double_info::GetNumero(void)
 	return bytes;
 }
 
-uint8_t cp_info::GetTag(void)
+uint8_t cp_info::GetTag(void) const
 {
 	return tag;
 }

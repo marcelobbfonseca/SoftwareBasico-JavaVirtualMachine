@@ -33,8 +33,9 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 		//pseudocodigo:
 		string clinit= "<clinit>";
 		string V= "()V";
-		Frame *novoFrame= new Frame(javaClass, clinit, V);
-		empilharFrame(novoFrame);
+		//TODO: Colocar o construtor de frame para métodos estáticos
+//		Frame *novoFrame= new Frame(javaClass, clinit, V);
+//		empilharFrame(novoFrame);
 	}
 	return classes[nomeSemExtensao];
 }
