@@ -629,7 +629,7 @@ void ExecutionEngine::i_areturn(){}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	//Frame *toppilha = runtimeDataArea->topoPilha();
-	runtimeDataArea->desempilhaOperando();
+//	runtimeDataArea->desempilhaOperando();
 }
 void ExecutionEngine::i_getstatic(){
 	//usa no helloworld
