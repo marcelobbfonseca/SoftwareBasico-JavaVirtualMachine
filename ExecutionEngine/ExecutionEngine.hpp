@@ -16,6 +16,9 @@ class ExecutionEngine
 		void (ExecutionEngine::*vetorDePonteirosParaFuncao[250])();
 		RuntimeDataArea *runtimeDataArea;
 
+        //Armazena \c true se a última instrução foi um wide, e \c false caso contrário.
+        bool _isWide;
+
 		void inicializaInstrucoes();
 
 		//Implementacao das funcionalidades de cada uma das 250 instrucoes
