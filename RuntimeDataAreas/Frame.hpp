@@ -28,11 +28,12 @@ class Frame{
 		cp_info *cpInfo;
 
 		void pegarAtributos();
+		method_info* BuscarMetodo(JavaClass*, string nome, string descritor);
 
 	public:
 		//Construtor
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
-		Frame(JavaClass *javaClass, string nomeMetodo, string descritorMetodo){/*IMPLEMENTAR!*/};
+		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos);
 
 		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);

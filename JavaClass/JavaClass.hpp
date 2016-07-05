@@ -58,6 +58,7 @@ class JavaClass
 		void ColocarValorNoField(string nomeDoField, Valor valor);
 		Valor getValorDoField(string nomeDoField);
 		bool FieldExiste(string nomeDoField);
+		uint16_t ObterSuperClasse(void);
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!

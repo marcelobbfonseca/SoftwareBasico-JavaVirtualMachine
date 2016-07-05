@@ -18,12 +18,10 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 	{
 		throw new Erro("metodoAux == NULL", "Frame", "pegarAtributos");
 	}
-	/*//O código a seguir não tem sentido em existir
-	if(objeto->instancia != NULL)
+	if(objeto != NULL)
 	{
 		assert(!metodoAux->FlagAtivada(METHOD_STATIC)); // o método não pode ser estático
 	}
-	*/
 	else
 	{
 		assert(metodoAux->FlagAtivada(METHOD_STATIC)); // o método precisa ser estático
@@ -36,6 +34,17 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 #ifdef DEBUG
 	cout<< "[Frame::Frame]Vou atributos empilhados" << endl;
 #endif
+}
+
+Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos)
+{
+	pc=0;
+	objeto=NULL;
+	method_info *metodoAux = javaClass()->getMetodo(nomeMetodo, descritor);
+	assert(metodoAux != NULL);
+	metodo= metodoAux;
+	assert(metodo->FlagAtivada(METHOD_STATIC));
+	pegarAtributos();
 }
 
 void Frame::pegarAtributos()
@@ -174,3 +183,18 @@ Objeto* Frame::getObjeto(){
 	return objeto;
 
 }
+
+method_info* Frame::BuscarMetodo(JavaClass*, string nome, string descritor)
+{
+	method_info* retorno= javaClass()->getMetodo(nomeMetodo, descritor);
+	if(retorno == NULL)
+	{//bingo
+		return retorno;
+	}
+	//procurar em classes pai
+	if(javaClass->ObterSuperClasse()==0)
+	{
+		
+	}
+}
+
