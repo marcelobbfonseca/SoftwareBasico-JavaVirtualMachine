@@ -826,7 +826,7 @@ void ExecutionEngine::i_putfield(){}
 void ExecutionEngine::i_invokevirtual(){
 	//usa no helloworld
 }
-void ExecutionEngine::i_invokespecial(){ // =======================================================
+void ExecutionEngine::i_invokespecial(){ // 
 	//usa no mainvazia
 /*	Frame *toppilha = runtimeDataArea->topoPilha();
 	//consertar isso:
