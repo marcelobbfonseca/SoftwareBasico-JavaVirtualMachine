@@ -1,6 +1,6 @@
 #include "ObjetoArray.hpp"
 
-TipoObjeto ObjetoArray::ObterTipoObjeto(void) const
+TipoObjeto ObjetoArray::ObterTipoObjeto(void)
 {
 	return ARRAY;
 }

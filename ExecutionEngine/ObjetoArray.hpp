@@ -20,7 +20,7 @@ class ObjetoArray: public Objeto
 		uint32_t ObterTamanho(void) const;
 		Valor ObterValor(uint32_t posicao) const;
 		void AlterarElementoDaPosicao(uint32_t posicao, Valor valor);
-		TipoObjeto ObterTipoObjeto(void) const;
+		TipoObjeto ObterTipoObjeto(void);
 	private:
 		TipoDado tipoDado;
 		vector<Valor> elementos;

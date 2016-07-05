@@ -19,14 +19,14 @@ void ExecutionEngine::Play(string classComMain)
 
 
 	uint8_t instrucao;
-	cout<< "Consertar Play do execution engine" << endl;
+//	cout<< "Consertar Play do execution engine" << endl;
 
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
-//	runtimeDataArea->empilharFrame(new Frame(javaclass, "main", "([Ljava/lang/String;)V"));
+	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
 //		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V"));

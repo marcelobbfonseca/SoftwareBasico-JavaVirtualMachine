@@ -36,7 +36,7 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 #endif
 }
 
-Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
+Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {
 	pc=0;
 	objeto=NULL;

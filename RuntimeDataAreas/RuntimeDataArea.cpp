@@ -27,16 +27,20 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	classes[nomeSemExtensao] = classLoader->CarregarClasse(nomeComExtensao);
 
 	// adicionando <clinit> da classe (se existir) na stack frame.
-
-	if(MetodoExiste(nomeSemExtensao, "<clinit>", "()V"))
+	static bool primeiraVez= true;//se for a primeira classe a ser carregada, deixa a execution engine carregar o clinit
+	if(!primeiraVez)
 	{
-		//pseudocodigo:
-		string clinit= "<clinit>";
-		string V= "()V";
-		//TODO: Colocar o construtor de frame para métodos estáticos
-//		Frame *novoFrame= new Frame(javaClass, clinit, V);
-//		empilharFrame(novoFrame);
+		if(MetodoExiste(nomeSemExtensao, "<clinit>", "()V"))
+		{
+			//pseudocodigo:
+			string clinit= "<clinit>";
+			string V= "()V";
+			//TODO: Colocar o construtor de frame para métodos estáticos
+			Frame *novoFrame= new Frame(classes[nomeSemExtensao], clinit, V, this);
+			empilharFrame(novoFrame);
+		}
 	}
+	primeiraVez= false;
 	return classes[nomeSemExtensao];
 }
 

@@ -38,7 +38,7 @@ class Frame{
 	public:
 		//Construtor
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
-		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
+		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea);
 
 		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
