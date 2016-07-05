@@ -6,7 +6,7 @@ enum TipoObjeto
 	ARRAY,
 	STRING,
 	INSTANCIA
-}
+};
 
 #define OBJETO
 class Objeto
