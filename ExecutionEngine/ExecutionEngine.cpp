@@ -641,33 +641,35 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	//consertar isso:
 	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
 	//vector<cp_info*> constantPool = ((Objetoinstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
-
-	uint8_t *code = toppilha->getCode();
+	
+	uint8_t *code = topo->getCode();
 	
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	uint16_t methodIndex = (byte1 << 8) | byte2;
 	
-    CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*) constantPool[methodIndex-1];
-	assert(methodInfo->GetTag() == CONSTANT_Methodref || methodInfo->GetTag() == CONSTANT_InterfaceMethodref); // precisa referenciar um método
 
+	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*)constantPool[methodIndex-1];
+	assert(methodInfo->GetTag() == CONSTANT_Methodref || methodInfo->GetTag() == CONSTANT_InterfaceMethodref); // precisa referenciar um método
+	//assert(validar referencia a um metodo)
 
 
 	CONSTANT_NameAndType_info *methodNameAndType =(CONSTANT_NameAndType*)constantPool[methodInfo->getNameAndTypeIndex()-1];
-    assert(ethodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
+	assert(methodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
 
-	cp_info cpElement = constantPool[cpIndex-1];
+	cp_info *cpElement = constantPool[cpIndex-1];
 
-	cp_info nameAndTypeCP = constantPool[methodInfo.name_and_type_index-1];
-    assert(nameAndTypeCP.tag == CONSTANT_NameAndType); 
+	cp_info *nameAndTypeCP = constantPool[methodInfo->GetNameAndTypeIndex()-1];
+	assert(nameAndTypeCP->GetTag() == CONSTANT_NameAndType); 
 
-    //precisa pegar nome da classe e metodo
-    string classNameAndMethod = ((Objetoinstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
-    //..
+	//precisa pegar nome da classe e metodo
+	string classNameAndMethod =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
+	//..
 
-    if (className.find("java/") != string::npos) {
-		cerr << "Tentando invocar metodo de interface invalido: " << methodName << endl;
+
+	if (className.find("java/") != string::npos) {
+		cerr << "Tentando invocar metodo de interface invalido: " << classNameAndMethod << endl;
 		exit(1);
 	}else{
 
