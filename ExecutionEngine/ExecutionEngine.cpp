@@ -466,22 +466,183 @@ void ExecutionEngine::i_lload(){
 void ExecutionEngine::i_fload(){}
 void ExecutionEngine::i_dload(){}
 void ExecutionEngine::i_aload(){}
-void ExecutionEngine::i_iload_0(){}
-void ExecutionEngine::i_iload_1(){}
-void ExecutionEngine::i_iload_2(){}
-void ExecutionEngine::i_iload_3(){}
-void ExecutionEngine::i_lload_0(){}
-void ExecutionEngine::i_lload_1(){}
-void ExecutionEngine::i_lload_2(){}
-void ExecutionEngine::i_lload_3(){}
-void ExecutionEngine::i_fload_0(){}
-void ExecutionEngine::i_fload_1(){}
-void ExecutionEngine::i_fload_2(){}
-void ExecutionEngine::i_fload_3(){}
-void ExecutionEngine::i_dload_0(){}
-void ExecutionEngine::i_dload_1(){}
-void ExecutionEngine::i_dload_2(){}
-void ExecutionEngine::i_dload_3(){}
+void ExecutionEngine::i_iload_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(0);
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_iload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_iload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_iload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lload_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(0);
+	assert(valor.tipo == TipoDado::LONG);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::LONG);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::LONG);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(4);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(3);
+	assert(valor.tipo == TipoDado::LONG);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fload_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(0);
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);	
+}
+void ExecutionEngine::i_fload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);	
+}
+void ExecutionEngine::i_fload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);		
+}
+void ExecutionEngine::i_fload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);	
+}
+void ExecutionEngine::i_dload_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(0);
+	assert(valor.tipo == TipoDado::DOUBLE);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}	
+void ExecutionEngine::i_dload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::DOUBLE);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_dload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::DOUBLE);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_dload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(4);
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(3);
+	assert(valor.tipo == TipoDado::DOUBLE);
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+
+}
 void ExecutionEngine::i_aload_0(){
 	//usa na mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -492,9 +653,33 @@ void ExecutionEngine::i_aload_0(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_aload_1(){}
-void ExecutionEngine::i_aload_2(){}
-void ExecutionEngine::i_aload_3(){}
+void ExecutionEngine::i_aload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	assert(valor.tipo == TipoDado::REFERENCE);
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_aload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	assert(valor.tipo == TipoDado::REFERENCE);
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_aload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	assert(valor.tipo == TipoDado::REFERENCE);
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_iaload(){}
 void ExecutionEngine::i_laload(){}
 void ExecutionEngine::i_faload(){}
