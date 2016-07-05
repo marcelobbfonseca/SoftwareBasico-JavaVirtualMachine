@@ -644,8 +644,15 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
+	uint16_t classIndex = (byte1 << 8) | byte2;
 
+
+	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
+	//assert(validar referencia a um metodo)
 	//fazendo..
+	assert(classInfo->GetTag() == CONSTANT_Class);
+	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
+
 
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
