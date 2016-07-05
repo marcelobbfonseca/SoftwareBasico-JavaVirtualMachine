@@ -62,7 +62,7 @@ class cp_info
 		static cp_info* LerCpInfo(FILE *arq);
 		virtual void ExibirInformacoes(JavaClass *javaClass) = 0;
 		virtual ~cp_info(void){}
-		uint8_t GetTag(void);
+		uint8_t GetTag(void) const;
 	private:
 	protected:
 	//! Tag que indica de qual filho deve ser usado

@@ -661,6 +661,7 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	cp_info *cpElement = constantPool[cpIndex-1];
 
 	cp_info *nameAndTypeCP = constantPool[methodInfo->GetNameAndTypeIndex()-1];
+	string className = topo->getObjeto()->javaClass->getUTF8(cpIndex->GetNameIndex());
 	assert(nameAndTypeCP->GetTag() == CONSTANT_NameAndType); 
 
 	//precisa pegar nome da classe e metodo
@@ -699,7 +700,6 @@ cout<<"Deus, Termina de implementar isso ai" << endl;
 	cp_info *cpElement = constantPool[cpIndex-1];
 
 	assert(cpElement->tag == CONSTANT_Class);
-	string className = topo->getObjeto()->javaClass->getUTF8(cpIndex->GetNameIndex());
 
 	Valor objectrefValue = topo->desempilhaOperando();
 	assert(objectrefValue.tipo == TipoDado::REFERENCE);
