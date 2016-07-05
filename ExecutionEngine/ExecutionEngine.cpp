@@ -638,12 +638,10 @@ void ExecutionEngine::i_invokevirtual(){
 void ExecutionEngine::i_invokespecial(){ // =======================================================
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
+	//consertar isso:
 	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
+	//vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
 
-	cout<<"Consertar ExecutionEngine::i_invokespecial" << endl;
-//	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
-		
-<<<<<<< HEAD
 	uint8_t *code = topo->getCode();
 	
 	//argumentos da instrucao
@@ -653,18 +651,10 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	
     CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*)constantPool[methodIndex-1];
 	assert(methodInfo->GetTag() == CONSTANT_Methodref || methodInfo->GetTag() == CONSTANT_InterfaceMethodref); // precisa referenciar um método
-	//assert(validar referencia a um metodo)
-=======
-//	uint8_t *code = topo->getCode();
-	//argumentos da instrucao
-//	uint8_t byte1 = code[1];
-//	uint8_t byte2 = code[2];
-//	uint16_t classIndex = (byte1 << 8) | byte2;
->>>>>>> e285f821c7ee5820066253dcec526410465743ca
+
 
 	string className = topo->getObjeto()->javaClass->getUTF8(methodInfo->GetClassIndex());
 
-<<<<<<< HEAD
 	CONSTANT_NameAndType_info *methodNameAndType =(CONSTANT_NameAndType*)constantPool[methodInfo->getNameAndTypeIndex()-1];
     assert(ethodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
 
@@ -672,13 +662,6 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 
 	cp_info nameAndTypeCP = constantPool[methodInfo.name_and_type_index-1];
     assert(nameAndTypeCP.tag == CONSTANT_NameAndType); 
-=======
-//	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
-	//assert(validar referencia a um metodo)
-	//fazendo..
-//	assert(classInfo->GetTag() == CONSTANT_Class);
-//	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
->>>>>>> e285f821c7ee5820066253dcec526410465743ca
 
     //precisa pegar nome da classe e metodo
     string classNameAndMethod =  toppilha->getObjeto()->javaClass->getUTF8(cpIndex);
