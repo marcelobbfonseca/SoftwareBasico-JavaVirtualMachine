@@ -520,4 +520,9 @@ Valor JavaClass::getValorDoField(string nomeDoField)
 	return camposEstaticos[nomeDoField];
 }
 
+uint16_t JavaClass::ObterSuperClasse(void)
+{
+	return super_class;
+}
+
 

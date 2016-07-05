@@ -36,11 +36,11 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 #endif
 }
 
-Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos)
+Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
 {
 	pc=0;
 	objeto=NULL;
-	method_info *metodoAux = javaClass()->getMetodo(nomeMetodo, descritor);
+	method_info *metodoAux = (method_info*)javaClass->getMetodo(nomeMetodo, descritor);
 	assert(metodoAux != NULL);
 	metodo= metodoAux;
 	assert(metodo->FlagAtivada(METHOD_STATIC));
@@ -184,17 +184,29 @@ Objeto* Frame::getObjeto(){
 
 }
 
-method_info* Frame::BuscarMetodo(JavaClass*, string nome, string descritor)
+method_info* Frame::BuscarMetodo(JavaClass* javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {
-	method_info* retorno= javaClass()->getMetodo(nomeMetodo, descritor);
-	if(retorno == NULL)
-	{//bingo
-		return retorno;
-	}
+	method_info* retorno;
+	JavaClass *classeComMetodo= javaClass;
 	//procurar em classes pai
-	if(javaClass->ObterSuperClasse()==0)
+	do
 	{
-		
+		retorno= (method_info*)classeComMetodo->getMetodo(nomeMetodo, descritor);
+		if(retorno != NULL)
+		{//Bingo!
+			return retorno;
+		}
+		if(javaClass->ObterSuperClasse()!=0)
+		{
+			string nomeDoPai= javaClass->getUTF8(javaClass->ObterSuperClasse());
+			classeComMetodo= runtimeDataArea->CarregarClasse(nomeDoPai);
+		}
+		else
+		{
+			classeComMetodo= NULL;
+		}
 	}
+	while(classeComMetodo!= NULL);
+	return NULL;
 }
 

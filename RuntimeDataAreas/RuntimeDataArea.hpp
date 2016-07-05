@@ -13,6 +13,9 @@ class ClassLoader;
 #ifndef EXECUTIONENGINE
 class ExecutionEngine;
 #endif
+#ifndef FRAME
+class Frame;
+#endif
 
 #define RUNTIMEDATAAREA
 class RuntimeDataArea

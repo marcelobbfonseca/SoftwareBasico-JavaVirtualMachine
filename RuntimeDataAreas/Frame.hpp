@@ -8,8 +8,13 @@
 #include "JavaClass.hpp"
 #include "DadosDaInstancia.hpp"
 #include "ObjetoInstancia.hpp"
+#include "RuntimeDataArea.hpp"
 
+#ifndef RUNTIMEDATAAREA
+class RuntimeDataArea;
+#endif
 
+#define FRAME
 class Frame{
 
 	private:
@@ -28,12 +33,12 @@ class Frame{
 		cp_info *cpInfo;
 
 		void pegarAtributos();
-		method_info* BuscarMetodo(JavaClass*, string nome, string descritor);
+		method_info* BuscarMetodo(JavaClass*, string nome, string descritor, RuntimeDataArea *runtimeDataArea);
 
 	public:
 		//Construtor
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
-		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos);
+		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
 
 		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
