@@ -11,4 +11,16 @@ public class numeros
 		int temporarioInt =190;
 		long temporarioLong= 550;
 	}
+	public void incrementaEdecrementa()
+	{
+		AtributoInteiro++;
+		AtributoLong--;
+		AtributoFloat= AtributoFloat-2;
+		AtributoDouble=AtributoDouble-2;
+		for(int cont =0; cont < 50; cont++)
+		{
+			cont--;
+			cont++;
+		}
+	}
 }

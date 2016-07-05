@@ -1216,7 +1216,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont, JavaClass *javaClass)
 			uint8_t branchbyte2= code[++(*cont)];
 			cout << "\tbranchbyte1 = " << (unsigned int)branchbyte1;
 			cout << "\tbranchbyte2 = " << (unsigned int)branchbyte2;
-			uint16_t offset;
+			int16_t offset;
 			uint8_t *ptr;
 			ptr= (uint8_t*)&offset;
 			memcpy(ptr++, &branchbyte1, 1);
@@ -1250,7 +1250,7 @@ void Code_attribute::ExibirInfoOpCode(unsigned int *cont, JavaClass *javaClass)
 		case(JAVA_OPCODE_IINC):
 		{
 			cout << "\tindex = " << (unsigned int)code[++(*cont)];
-			cout << "\tconst = " << (unsigned int)code[++(*cont)];
+			cout << "\tconst = " << (int)code[++(*cont)];
 			break;
 		}
 		case(JAVA_OPCODE_INVOKEDYNAMIC):
