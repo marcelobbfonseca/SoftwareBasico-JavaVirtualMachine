@@ -1,7 +1,7 @@
 public class numeros
 {
 	double AtributoDouble= -10.123;
-	float AtributoFloat= 5.456f;
+	static float AtributoFloat= 5.456f;
 	public int AtributoInteiro =10;
 	long AtributoLong= 50;
 	public static void main(String[] args)
