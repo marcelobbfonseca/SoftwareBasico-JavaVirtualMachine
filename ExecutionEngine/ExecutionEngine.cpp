@@ -629,7 +629,7 @@ void ExecutionEngine::i_areturn(){}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	//Frame *toppilha = runtimeDataArea->topoPilha();
-	runtimeDataArea->desempilhaOperando();
+	runtimeDataArea->topoPilha()->desempilhaOperando();
 }
 void ExecutionEngine::i_getstatic(){
 	//usa no helloworld
@@ -647,7 +647,7 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
 	//vector<cp_info*> constantPool = ((Objetoinstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
-	uint8_t *code = topo->getCode();
+	uint8_t *code = toppilha->getCode();
 	
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
