@@ -18,13 +18,17 @@ void ExecutionEngine::Play(string classComMain)
 	uint8_t instrucao;
 	Objeto *obj = new Objeto();
 
+	cout<<"chegou até aqui!1"<< endl;
 	obj->javaClass = runtimeDataArea->CarregarClasse(classComMain);
+	cout<<"chegou até aqui!2"<< endl;
 	obj->instancia = NULL;
-
+	cout<<"chegou até aqui!3"<< endl;
+	cout<< "runtimeDataArea= " << (runtimeDataArea) <<endl;
 	runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
+	cout<<"chegou até aqui!4"<< endl;
 
-	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL){
-
+	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL)
+	{
 		runtimeDataArea->empilharFrame(new Frame(obj, "<clinit>","()V"));
 	}
 
@@ -444,7 +448,7 @@ void ExecutionEngine::i_sipush(){
 
 }
 void ExecutionEngine::i_ldc(){
-
+	//usa no helloworld
 }
 void ExecutionEngine::i_ldc_w(){
 
@@ -477,7 +481,9 @@ void ExecutionEngine::i_dload_0(){}
 void ExecutionEngine::i_dload_1(){}
 void ExecutionEngine::i_dload_2(){}
 void ExecutionEngine::i_dload_3(){}
-void ExecutionEngine::i_aload_0(){}
+void ExecutionEngine::i_aload_0(){
+	//usa na mainvazia
+}
 void ExecutionEngine::i_aload_1(){}
 void ExecutionEngine::i_aload_2(){}
 void ExecutionEngine::i_aload_3(){}
@@ -612,13 +618,38 @@ void ExecutionEngine::i_lreturn(){}
 void ExecutionEngine::i_freturn(){}
 void ExecutionEngine::i_dreturn(){}
 void ExecutionEngine::i_areturn(){}
-void ExecutionEngine::i_return(){}
-void ExecutionEngine::i_getstatic(){}
+void ExecutionEngine::i_return(){
+	//usa no mainvazia
+	Frame *toppilha = runtimeDataArea->topoPilha();
+    toppilha->desempilhaOperando(valor);
+
+}
+void ExecutionEngine::i_getstatic(){
+	//usa no helloworld
+}
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
 void ExecutionEngine::i_putfield(){}
-void ExecutionEngine::i_invokevirtual(){}
-void ExecutionEngine::i_invokespecial(){}
+void ExecutionEngine::i_invokevirtual(){
+	//usa no helloworld
+}
+void ExecutionEngine::i_invokespecial(){ // =======================================================
+	//usa no mainvazia
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
+
+	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
+		
+	uint8_t *code = topo->getCode();
+	//argumentos da instrucao
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+
+	//fazendo..
+
+	runtimeDataArea->topoPilha()->incrementaPC(3);	  
+
+}
 void ExecutionEngine::i_invokestatic(){}
 void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
@@ -730,6 +761,7 @@ void ExecutionEngine::i_multianewarray(){
 	//cp_info classCP = constantPool[classIndex-1];
 	//CONSTANT_Class_info classInfo = classCP.info.class_info;
 	//Yoo
+
 	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
 	assert(classInfo->GetTag() == CONSTANT_Class);
 

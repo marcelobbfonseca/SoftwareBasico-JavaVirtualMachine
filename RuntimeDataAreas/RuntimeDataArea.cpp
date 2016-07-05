@@ -1,6 +1,8 @@
 #include"UtilidadesParaString.hpp"
 #include"RuntimeDataArea.hpp"
 
+#define DEBUG
+
 RuntimeDataArea::RuntimeDataArea(void)
 {
 	
@@ -52,6 +54,12 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 
 void RuntimeDataArea::empilharFrame(Frame *frame)
 {
+#ifdef DEBUG
+	printf("RuntimeDataArea::empilharFrame");
+	cout <<endl;
+	printf("\tframe= %p", (void*)frame);
+	cout <<endl;
+#endif
 	this->pilhaJVM.push(*frame);
 }
 

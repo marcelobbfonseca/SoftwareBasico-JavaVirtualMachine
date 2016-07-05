@@ -16,6 +16,9 @@ class JavaClass;
 class cp_info;
 #endif
 
+#define METHOD_STATIC (0x0008)
+typedef uint16_t MethodFlag;
+
 using namespace std;
 #define METHOD_INFO
 class method_info {
@@ -35,9 +38,9 @@ class method_info {
 	void ExibirInformacoes(string tabs, JavaClass *javaClass);
 	uint16_t getNameIndex(void);
 	uint16_t getDescriptorIndex(void);
-	uint16_t getAccessFlags(void);
 	uint16_t getAttributesCount(void);
 	vector<attribute_info *> getAttributes(void);
+	bool FlagAtivada(MethodFlag flag);
 
 };
 

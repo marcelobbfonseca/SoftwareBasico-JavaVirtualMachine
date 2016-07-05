@@ -125,16 +125,17 @@ uint16_t method_info::getDescriptorIndex(void)
 	return descriptor_index;
 }
 
-uint16_t method_info::getAccessFlags(void)
-{
-	return access_flags;
-}
 uint16_t method_info::getAttributesCount(void)
 {
-    return attributes_count;
+	return attributes_count;
 }
 vector<attribute_info *> method_info::getAttributes(void)
 {
-    return attributes;
+	return attributes;
+}
+
+bool method_info::FlagAtivada(MethodFlag flag)
+{
+	return ( (access_flags & flag) != 0);
 }
 

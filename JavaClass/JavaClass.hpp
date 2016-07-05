@@ -29,6 +29,8 @@ class attribute_info;
 struct Valor;
 #endif
 
+#define JAVA_CLASS_ABSTRACT (0x0400)
+typedef uint16_t JavaClassFlag;
 
 #define JAVA_CLASS
 //!  Classe que representa um .class
@@ -48,7 +50,7 @@ class JavaClass
 		void ExibirInformacoes(void);
 		string NomeDaClasse(void);
 		const vector<field_info>& getFieldInfo(void);
-		uint16_t getAccessFlags(void);
+		bool FlagAtivada(JavaClassFlag flag);
 		uint16_t getFieldsCount(void);
 		const string getUTF8(uint16_t posicao);
 		const vector<cp_info*>& getConstantPool(void);
