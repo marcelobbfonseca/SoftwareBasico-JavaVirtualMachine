@@ -1,8 +1,8 @@
 #include "ObjetoString.hpp"
 
-ObjetoString::ObjetoString(string s): stringInterna(s)
+ObjetoString::ObjetoString(string s)
 {
-	
+	stringInterna=s;
 }
 
 ObjetoString::~ObjetoString()

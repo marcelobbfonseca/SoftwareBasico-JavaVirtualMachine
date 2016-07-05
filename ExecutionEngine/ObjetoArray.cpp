@@ -49,10 +49,7 @@ Valor ObjetoArray::RemoverNoFinal(void)
 		elementos.pop_back();
 		return retorno;
 	}
-	else
-	{
-		throw new Erro ("Tentaram remover uma posicao invalida do vetor", "ObjetoArray", "RemoverNoFinal");
-	}
+	throw new Erro ("Tentaram remover uma posicao invalida do vetor", "ObjetoArray", "RemoverNoFinal");
 }
 
 Valor ObjetoArray::RemoverNoInicio(void)
@@ -63,10 +60,7 @@ Valor ObjetoArray::RemoverNoInicio(void)
 		elementos.erase(elementos.begin());
 		return retorno;
 	}
-	else
-	{
-		throw new Erro ("Tentaram remover uma posicao invalida do vetor", "ObjetoArray", "RemoverNoInicio");
-	}
+	throw new Erro ("Tentaram remover uma posicao invalida do vetor", "ObjetoArray", "RemoverNoInicio");
 }
 
 uint32_t ObjetoArray::ObterTamanho(void)
@@ -80,10 +74,7 @@ Valor ObjetoArray::ObterValor(uint32_t posicao)
 	{
 		return elementos[posicao];
 	}
-	else
-	{
-		throw new Erro ("Tentaram acessar uma posicao invalida do vetor", "ObjetoArray", "ObterValor");
-	}
+	throw new Erro ("Tentaram acessar uma posicao invalida do vetor", "ObjetoArray", "ObterValor");
 }
 
 void ObjetoArray::AlterarElementoDaPosicao(uint32_t posicao, Valor valor)

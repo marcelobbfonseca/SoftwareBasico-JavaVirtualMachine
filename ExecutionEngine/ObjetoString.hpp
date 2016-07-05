@@ -12,6 +12,6 @@ class ObjetoString: public Objeto
 		TipoObjeto ObterTipoObjeto(void);
 	private:
 		string stringInterna;
-}
+};
 
 #endif

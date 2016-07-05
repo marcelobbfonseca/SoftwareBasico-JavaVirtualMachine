@@ -98,21 +98,21 @@ JavaClass *ObjetoInstancia::ObterJavaClass(void)
 
 bool ObjetoInstancia::CampoExiste(string nomeDoCampo)
 {
-	return atributosDeInstancia.count(nomeDoField) > 0;
+	return atributosDeInstancia.count(nomeDoCampo) > 0;
 }
 
 void ObjetoInstancia::ColocarValorNoCampo(string nomeDoCampo, Valor valor)
 {
-	atributosDeInstancia[nomeDoField]= valor;
+	atributosDeInstancia[nomeDoCampo]= valor;
 }
 
 Valor ObjetoInstancia::ObterValorDoCampo(string nomeDoCampo)
 {
-	if(!CampoExiste(nomeDoField))
+	if(!CampoExiste(nomeDoCampo))
 	{
 		throw new Erro("Solicitado field que não existe", "JavaClass", "getValorDoField");
 	}
-	return atributosDeInstancia[nomeDoField];
+	return atributosDeInstancia[nomeDoCampo];
 }
 
 
