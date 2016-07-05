@@ -7,13 +7,8 @@
 #include "method_info.hpp"
 #include "JavaClass.hpp"
 #include "DadosDaInstancia.hpp"
+#include "Objeto.hpp"
 
-class Objeto {
-	public:
-		DadosDaInstancia *instancia;
-		JavaClass *javaClass;
-
-};
 
 class Frame{
 

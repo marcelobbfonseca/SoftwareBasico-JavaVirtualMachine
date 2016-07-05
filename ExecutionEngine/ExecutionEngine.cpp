@@ -1,4 +1,7 @@
 #include "ExecutionEngine.hpp"
+#include "ObjetoArray.hpp"
+#include "ObjetoInstancia.hpp"
+#include "Erro.hpp"
 #include<string.h>
 
 ExecutionEngine::ExecutionEngine(void)
@@ -16,20 +19,17 @@ void ExecutionEngine::Play(string classComMain)
 
 
 	uint8_t instrucao;
-	Objeto *obj = new Objeto();
+	cout<< "Consertar Play do execution engine" << endl;
 
-	cout<<"chegou até aqui!1"<< endl;
-	obj->javaClass = runtimeDataArea->CarregarClasse(classComMain);
-	cout<<"chegou até aqui!2"<< endl;
-	obj->instancia = NULL;
-	cout<<"chegou até aqui!3"<< endl;
-	cout<< "runtimeDataArea= " << (runtimeDataArea) <<endl;
-	runtimeDataArea->empilharFrame(new Frame(obj, "main", "([Ljava/lang/String;)V"));
-	cout<<"chegou até aqui!4"<< endl;
-
-	if(obj->javaClass->getMetodo("<clinit>","()V") != NULL)
+	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
+	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
-		runtimeDataArea->empilharFrame(new Frame(obj, "<clinit>","()V"));
+		throw new Erro("Classe informada não contém main");
+	}
+//	runtimeDataArea->empilharFrame(new Frame(javaclass, "main", "([Ljava/lang/String;)V"));
+	if(javaClass->getMetodo("<clinit>","()V") != NULL)
+	{
+//		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V"));
 	}
 
 	do
@@ -438,11 +438,12 @@ void ExecutionEngine::i_bipush(){
 
 	Valor valor;
 	valor.tipo = TipoDado::BYTE;
+	cout<< "Implementar ExecutionEngine::i_bipush()"<< endl;
 	//valor.data
 	//pegar ponteiro pra pc
 	//push pro stack
 
-	runtimeDataArea->topoPilha()->incrementaPC(2);
+	toppilha->incrementaPC(2);
 }
 void ExecutionEngine::i_sipush(){
 
@@ -621,7 +622,8 @@ void ExecutionEngine::i_areturn(){}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
-    toppilha->desempilhaOperando(valor);
+	cout<<"Consertar ExecutionEngine::i_return" << endl;
+//	toppilha->desempilhaOperando(valor);
 
 }
 void ExecutionEngine::i_getstatic(){
@@ -638,8 +640,10 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
 
-	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
+	cout<<"Consertar ExecutionEngine::i_invokespecial" << endl;
+//	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
 		
+<<<<<<< HEAD
 	uint8_t *code = topo->getCode();
 	
 	//argumentos da instrucao
@@ -650,9 +654,17 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
     CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*)constantPool[methodIndex-1];
 	assert(methodInfo->GetTag() == CONSTANT_Methodref || methodInfo->GetTag() == CONSTANT_InterfaceMethodref); // precisa referenciar um método
 	//assert(validar referencia a um metodo)
+=======
+//	uint8_t *code = topo->getCode();
+	//argumentos da instrucao
+//	uint8_t byte1 = code[1];
+//	uint8_t byte2 = code[2];
+//	uint16_t classIndex = (byte1 << 8) | byte2;
+>>>>>>> e285f821c7ee5820066253dcec526410465743ca
 
 	string className = topo->getObjeto()->javaClass->getUTF8(methodInfo->GetClassIndex());
 
+<<<<<<< HEAD
 	CONSTANT_NameAndType_info *methodNameAndType =(CONSTANT_NameAndType*)constantPool[methodInfo->getNameAndTypeIndex()-1];
     assert(ethodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
 
@@ -660,6 +672,13 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 
 	cp_info nameAndTypeCP = constantPool[methodInfo.name_and_type_index-1];
     assert(nameAndTypeCP.tag == CONSTANT_NameAndType); 
+=======
+//	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
+	//assert(validar referencia a um metodo)
+	//fazendo..
+//	assert(classInfo->GetTag() == CONSTANT_Class);
+//	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
+>>>>>>> e285f821c7ee5820066253dcec526410465743ca
 
     //precisa pegar nome da classe e metodo
     string classNameAndMethod =  toppilha->getObjeto()->javaClass->getUTF8(cpIndex);
@@ -682,70 +701,70 @@ void ExecutionEngine::i_arraylength(){}
 void ExecutionEngine::i_athrow(){}
 void ExecutionEngine::i_checkcast(){}
 void ExecutionEngine::i_instanceof(){
+cout<<"Deus, Termina de implementar isso ai" << endl;
+/*	Frame *topo = runtimeDataArea->topoPilha();
 
-    Frame *topo = runtimeDataArea->topoPilha();
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
 
-    uint8_t *code = topo->getCode();
-    uint8_t byte1 = code[1];
-    uint8_t byte2 = code[2];
+	uint16_t cpIndex = (byte1 << 8) | byte2;
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)(topo->getObjeto()))->ObterJavaClass()->getConstantPool();
+	cp_info *cpElement = constantPool[cpIndex-1];
 
-    uint16_t cpIndex = (byte1 << 8) | byte2;
-    vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
-    cp_info cpElement = constantPool[cpIndex-1];
+	assert(cpElement->tag == CONSTANT_Class);
+	string className = topo->getObjeto()->javaClass->getUTF8(cpIndex->GetNameIndex());
 
-    assert(cpElement.tag == CONSTANT_Class);
-    string className = topo->getObjeto()->javaClass->getUTF8(cpIndex->GetNameIndex());
+	Valor objectrefValue = topo->desempilhaOperando();
+	assert(objectrefValue.tipo == TipoDado::REFERENCE);
 
-    Valor objectrefValue = topo->desempilhaOperando();
-    assert(objectrefValue.tipo == TipoDado::REFERENCE);
+	Valor resultValue;
+	resultValue.tipo = TipoDado::INT;
 
-    Valor resultValue;
-    resultValue.tipo = TipoDado::INT;
+	if ((Objeto*)objectrefValue.dado == NULL) {
+		resultValue.dado. = 0;
+	}
+	else {
+		Object *obj = (Objeto*)objectrefValue.dado;
 
-    if ((Objeto*)objectrefValue.dado == NULL) {
-        resultValue.dado. = 0;
-    }
-    else {
-        Object *obj = (Objeto*)objectrefValue.dado;
+		if (obj->objectType() == ObjectType::CLASS_INSTANCE) {
+			ClassInstance *classInstance = (ClassInstance *) obj;
+			ClassRuntime *classRuntime = classInstance->getClassRuntime();
 
-        if (obj->objectType() == ObjectType::CLASS_INSTANCE) {
-            ClassInstance *classInstance = (ClassInstance *) obj;
-            ClassRuntime *classRuntime = classInstance->getClassRuntime();
+			bool found = false;
+			while (!found) {
+				ClassFile *classFile = classRuntime->getClassFile();
+				string currClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
 
-            bool found = false;
-            while (!found) {
-                ClassFile *classFile = classRuntime->getClassFile();
-                string currClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
+				if (currClassName == className) {
+					found = true;
+				} else {
+					if (classFile->super_class == 0) {
+						break;
+					} else {
+						string superClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
+						classRuntime = methodArea.loadClassNamed(superClassName);
+					}
+				}
+			}
 
-                if (currClassName == className) {
-                    found = true;
-                } else {
-                    if (classFile->super_class == 0) {
-                        break;
-                    } else {
-                        string superClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
-                        classRuntime = methodArea.loadClassNamed(superClassName);
-                    }
-                }
-            }
+			resultValue.data.intValue = found ? 1 : 0;
+		} else if (obj->objectType() == ObjectType::STRING_INSTANCE) {
+			resultValue.data.intValue = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
+		} else {
+			if (className == "java/lang/Object") {
+				resultValue.data.intValue = 1;
+			} else {
+				resultValue.data.intValue = 0;
+			}
+		}
+	}
 
-            resultValue.data.intValue = found ? 1 : 0;
-        } else if (obj->objectType() == ObjectType::STRING_INSTANCE) {
-            resultValue.data.intValue = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
-        } else {
-            if (className == "java/lang/Object") {
-                resultValue.data.intValue = 1;
-            } else {
-                resultValue.data.intValue = 0;
-            }
-        }
-    }
+	topFrame->pushIntoOperandStack(resultValue);
 
-    topFrame->pushIntoOperandStack(resultValue);
+	topFrame->pc += 3;
 
-    topFrame->pc += 3;
-
-
+*/
 
 }
 void ExecutionEngine::i_monitorenter(){
@@ -756,22 +775,22 @@ topo->incrementaPC(1);
 }
 void ExecutionEngine::i_monitorexit(){
 
-    Frame *topo = runtimeDataArea->topoPilha();
-    topo->incrementaPC(1);
+	Frame *topo = runtimeDataArea->topoPilha();
+	topo->incrementaPC(1);
 
 }
 void ExecutionEngine::i_wide(){
 
-    Frame *topo = runtimeDataArea->topoPilha();
+	Frame *topo = runtimeDataArea->topoPilha();
 	isWide = true;
 	topo->incrementaPC(1);
 
 }
 
 void ExecutionEngine::i_multianewarray(){
-
+	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
-	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
 
 	uint8_t *code = topo->getCode();
 	uint8_t byte1 = code[1];
@@ -788,7 +807,7 @@ void ExecutionEngine::i_multianewarray(){
 	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
 	assert(classInfo->GetTag() == CONSTANT_Class);
 
-	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
+	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(classInfo->GetNameIndex());
 
 	// obter o tipo dentro de className:
 	TipoDado tipoDado;
@@ -840,8 +859,9 @@ void ExecutionEngine::i_multianewarray(){
 		count.push(dimLength.dado);
 	}
 
-	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
-	arr->popularSubArray(tipoDado, count);
+	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
+//	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+//	arr->popularSubArray(tipoDado, count);
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;

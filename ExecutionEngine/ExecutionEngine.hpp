@@ -2,7 +2,6 @@
 #define EXECUTIONENGINE_HPP
 #include<vector>
 #include"RuntimeDataArea.hpp"
-#include"ObjetoArray.hpp"
 
 #ifndef RUNTIMEDATAAREA
 class RuntimeDataArea;
@@ -17,7 +16,7 @@ class ExecutionEngine
 		RuntimeDataArea *runtimeDataArea;
 
         //Armazena \c true se a última instrução foi um wide, e \c false caso contrário.
-        bool _isWide;
+        bool isWide;
 
 		void inicializaInstrucoes();
 
