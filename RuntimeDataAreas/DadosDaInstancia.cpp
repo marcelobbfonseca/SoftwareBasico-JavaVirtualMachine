@@ -4,9 +4,8 @@
 DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 {
 	vector<field_info> fields = javaClass->getFieldInfo();
-	uint16_t abstractFlag = 0x0400;
 
-	if ((javaClass->getAccessFlags() & abstractFlag) != 0)
+	if (javaClass->FlagAtivada(JAVA_CLASS_ABSTRACT))
 	{
 		// Não pode instanciar se for classe abstrata
 		cerr << "Erro de instanciamento" << endl;

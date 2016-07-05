@@ -1,4 +1,7 @@
 #include "Frame.hpp"
+#include "Erro.hpp"
+
+#define DEBUG
 //Construtor para métodos não estáticos
 Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 {
@@ -6,10 +9,17 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
    /* for (int i = 0; i < arguments.size(); i++) {
 		variaveisLocais[i] = argumentos[i];
 	}*/
-
+#ifdef DEBUG
+	cout<< "Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)" << endl;
+#endif
 	pc = 0;
 	method_info *metodoAux = (method_info *)objeto->javaClass->getMetodo(nomeMetodo, descritorMetodo);
-	assert(metodoAux != NULL);
+#ifdef DEBUG
+	if(metodoAux == NULL)
+	{
+		throw new Erro("metodoAux == NULL", "Frame", "pegarAtributos");
+	}
+#endif
 	if(objeto->instancia != NULL)
 	{
 		assert(!metodoAux->FlagAtivada(METHOD_STATIC)); // o método não pode ser estático
@@ -19,14 +29,29 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 		assert(metodoAux->FlagAtivada(METHOD_STATIC)); // o método precisa ser estático
 	}
 	metodo = metodoAux;
+#ifdef DEBUG
+	cout<< "[Frame::Frame]Vou pegar os atributos" << endl;
+#endif
 	pegarAtributos();
+#ifdef DEBUG
+	cout<< "[Frame::Frame]Vou atributos empilhados" << endl;
+#endif
 }
 
 void Frame::pegarAtributos()
 {
 	vector<cp_info*> constantPool = objeto->javaClass->getConstantPool();
+	cout<<"pegando atributos" << endl;
 	vector<attribute_info *> attributesAux = metodo->getAttributes();
-
+	cout<<"pegando atributos" << endl;
+	if(objeto == NULL)
+	{
+		throw new Erro("objeto == NULL", "Frame", "pegarAtributos");
+	}
+	if(objeto->javaClass == NULL)
+	{
+		throw new Erro("objeto->javaClass == NULL", "Frame", "pegarAtributos");
+	}
 	codeAttribute = NULL;
 	exceptionsAttribute = NULL;
 

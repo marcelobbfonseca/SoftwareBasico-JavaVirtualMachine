@@ -377,9 +377,9 @@ uint16_t JavaClass::getFieldsCount(void)
 	return fields_count;
 }
 
-uint16_t JavaClass::getAccessFlags(void)
+bool JavaClass::FlagAtivada(JavaClassFlag flag)
 {
-	return access_flags;
+	return (access_flags&flag) != 0;
 }
 
 const string JavaClass::getUTF8(uint16_t posicao)
