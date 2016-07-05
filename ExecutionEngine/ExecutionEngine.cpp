@@ -641,18 +641,34 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	vector<cp_info*> constantPool = topo->getObjeto()->javaClass->getConstantPool();
 		
 	uint8_t *code = topo->getCode();
+	
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
-	uint16_t classIndex = (byte1 << 8) | byte2;
-
-
-	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
+	uint16_t methodIndex = (byte1 << 8) | byte2;
+	
+    CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*)constantPool[methodIndex-1];
+	assert(methodInfo->GetTag() == CONSTANT_Methodref || methodInfo->GetTag() == CONSTANT_InterfaceMethodref); // precisa referenciar um método
 	//assert(validar referencia a um metodo)
-	//fazendo..
-	assert(classInfo->GetTag() == CONSTANT_Class);
-	string className = topo->getObjeto()->javaClass->getUTF8(classInfo->GetNameIndex());
 
+	string className = topo->getObjeto()->javaClass->getUTF8(methodInfo->GetClassIndex());
+
+	CONSTANT_NameAndType_info *methodNameAndType =(CONSTANT_NameAndType*)constantPool[methodInfo->getNameAndTypeIndex()-1];
+    assert(ethodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
+
+	cp_info cpElement = constantPool[cpIndex-1];
+
+	cp_info nameAndTypeCP = constantPool[methodInfo.name_and_type_index-1];
+    assert(nameAndTypeCP.tag == CONSTANT_NameAndType); 
+
+    //precisa pegar nome da classe e metodo
+    string classNameAndMethod =  toppilha->getObjeto()->javaClass->getUTF8(cpIndex);
+    //..
+
+    if (className.find("java/") != string::npos) {
+		cerr << "Tentando invocar metodo de interface invalido: " << methodName << endl;
+		exit(1);
+	}
 
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
