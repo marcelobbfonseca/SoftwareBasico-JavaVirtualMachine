@@ -1,16 +1,16 @@
 #include "ObjetoArray.hpp"
 
-TipoObjeto ObjetoArray::ObterTipoObjeto(void)
+TipoObjeto ObjetoArray::ObterTipoObjeto(void) const
 {
 	return ARRAY;
 }
 
-ObjetoArray::ObjetoArray(TipoDado tipo):tipoDado(tipoDado)
+ObjetoArray::ObjetoArray(TipoDado tipo)
 {
-	
+	this->tipoDado=tipoDado;
 }
 
-ObjetoArray::~ObjetoArray(TipoDado tipo)
+ObjetoArray::~ObjetoArray()
 {
 	
 }
@@ -32,7 +32,7 @@ Valor ObjetoArray::RemoverValorDaPosicao(uint32_t posicao)
 	if(elementos.size()>0 && posicao< elementos.size())
 	{
 		Valor retorno= elementos[posicao];
-		elementos.erase(elementos.begin() + index);
+		elementos.erase(elementos.begin() + posicao);
 		return retorno;
 	}
 	else
@@ -43,7 +43,7 @@ Valor ObjetoArray::RemoverValorDaPosicao(uint32_t posicao)
 
 Valor ObjetoArray::RemoverNoFinal(void)
 {
-	if(elementos.size()>0 && posicao< elementos.size())
+	if(elementos.size()>0)
 	{
 		Valor retorno= elementos.back();
 		elementos.pop_back();
@@ -54,7 +54,7 @@ Valor ObjetoArray::RemoverNoFinal(void)
 
 Valor ObjetoArray::RemoverNoInicio(void)
 {
-	if(elementos.size()>0 && posicao< elementos.size())
+	if(elementos.size()>0)
 	{
 		Valor retorno= elementos.front();
 		elementos.erase(elementos.begin());
@@ -63,12 +63,12 @@ Valor ObjetoArray::RemoverNoInicio(void)
 	throw new Erro ("Tentaram remover uma posicao invalida do vetor", "ObjetoArray", "RemoverNoInicio");
 }
 
-uint32_t ObjetoArray::ObterTamanho(void)
+uint32_t ObjetoArray::ObterTamanho(void) const
 {
 	return elementos.size();
 }
 
-Valor ObjetoArray::ObterValor(uint32_t posicao)
+Valor ObjetoArray::ObterValor(uint32_t posicao) const
 {
 	if(elementos.size()>0 && posicao< elementos.size())
 	{

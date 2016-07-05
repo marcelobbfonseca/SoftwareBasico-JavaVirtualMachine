@@ -33,10 +33,7 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 		//pseudocodigo:
 		string clinit= "<clinit>";
 		string V= "()V";
-		Objeto *obj= new Objeto();
-		obj->instancia = NULL;
-		obj->javaClass= classes[nomeSemExtensao];
-		Frame *novoFrame= new Frame(obj, clinit, V);
+		Frame *novoFrame= new Frame(javaClass, clinit, V);
 		empilharFrame(novoFrame);
 	}
 	return classes[nomeSemExtensao];
