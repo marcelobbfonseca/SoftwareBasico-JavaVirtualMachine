@@ -1,7 +1,7 @@
 #ifndef OBJETO_INSTANCIA_HPP
 #define OBJETO_INSTANCIA_HPP
 
-#include "ObjetoInstancia.hpp"
+#include "Objeto.hpp"
 #include "JavaClass.hpp"
 #include "Tipos.h"
 

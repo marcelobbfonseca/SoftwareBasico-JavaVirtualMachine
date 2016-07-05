@@ -13,7 +13,7 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 	cout<< "Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)" << endl;
 #endif
 	pc = 0;
-	method_info *metodoAux = (method_info *)objeto->javaClass->getMetodo(nomeMetodo, descritorMetodo);
+	method_info *metodoAux = (method_info *)((ObjetoInstancia*)objeto)->ObterJavaClass()->getMetodo(nomeMetodo, descritorMetodo);
 #ifdef DEBUG
 	if(metodoAux == NULL)
 	{
@@ -44,11 +44,15 @@ void Frame::pegarAtributos()
 	cout<<"pegando atributos" << endl;
 	vector<attribute_info *> attributesAux = metodo->getAttributes();
 	cout<<"pegando atributos" << endl;
+	if(objeto->ObterTipoObjeto() != TipoObjeto::INSTANCIA)
+	{
+		throw new Erro ("Isso não é uma instância de objeto!", "Frame", "pegarAtributos");
+	}
 	if(objeto == NULL)
 	{
 		throw new Erro("objeto == NULL", "Frame", "pegarAtributos");
 	}
-	if(objeto->javaClass == NULL)
+	if((ObjetoInstancia*)objeto->ObterJavaClass() == NULL)
 	{
 		throw new Erro("objeto->javaClass == NULL", "Frame", "pegarAtributos");
 	}

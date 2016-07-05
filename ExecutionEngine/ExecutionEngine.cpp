@@ -637,7 +637,7 @@ void ExecutionEngine::i_invokevirtual(){
 }
 void ExecutionEngine::i_invokespecial(){ // =======================================================
 	//usa no mainvazia
-	Frame *toppilha = runtimeDataArea->topoPilha();
+/*	Frame *toppilha = runtimeDataArea->topoPilha();
 	//consertar isso:
 	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
 	//vector<cp_info*> constantPool = ((Objetoinstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
@@ -677,7 +677,7 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	}
 
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
-
+*/
 }
 void ExecutionEngine::i_invokestatic(){}
 void ExecutionEngine::i_invokeinterface(){}
