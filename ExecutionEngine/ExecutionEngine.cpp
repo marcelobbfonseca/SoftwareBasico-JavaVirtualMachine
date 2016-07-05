@@ -484,6 +484,13 @@ void ExecutionEngine::i_dload_2(){}
 void ExecutionEngine::i_dload_3(){}
 void ExecutionEngine::i_aload_0(){
 	//usa na mainvazia
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(0);
+	assert(valor.tipo == TipoDado::REFERENCE);
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_aload_1(){}
 void ExecutionEngine::i_aload_2(){}
@@ -621,10 +628,8 @@ void ExecutionEngine::i_dreturn(){}
 void ExecutionEngine::i_areturn(){}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	cout<<"Consertar ExecutionEngine::i_return" << endl;
-//	toppilha->desempilhaOperando(valor);
-
+	//Frame *toppilha = runtimeDataArea->topoPilha();
+	runtimeDataArea->desempilhaOperando();
 }
 void ExecutionEngine::i_getstatic(){
 	//usa no helloworld
