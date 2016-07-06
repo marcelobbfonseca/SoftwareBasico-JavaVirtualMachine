@@ -7,7 +7,7 @@
 
 ExecutionEngine::ExecutionEngine(void)
 {
-	inicializaInstrucoes();
+
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
@@ -46,7 +46,7 @@ void ExecutionEngine::Play(string classComMain)
 	cout<< "Consertar Play do execution engine7" << endl;
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 	cout<< "Consertar Play do execution engine8" << endl;
-		(this->*vetorDePonteirosParaFuncao[instrucao])();//pulo depende de unitialized val
+		(this->*vetorDePonteirosParaFuncao[instrucao])();
 	cout<< "Consertar Play do execution engine9" << endl;
 
 	}
@@ -829,7 +829,6 @@ void ExecutionEngine::i_lreturn(){}
 void ExecutionEngine::i_freturn(){}
 void ExecutionEngine::i_dreturn(){}
 void ExecutionEngine::i_areturn(){}
-
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	runtimeDataArea->topoPilha()->desempilhaOperando();
@@ -1056,9 +1055,10 @@ void ExecutionEngine::i_athrow(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_checkcast(){}
+
 void ExecutionEngine::i_instanceof(){
-cout<<"Deus, Termina de implementar isso ai" << endl;
-/*	Frame *topo = runtimeDataArea->topoPilha();
+
+	Frame *topo = runtimeDataArea->topoPilha();
 
 	uint8_t *code = topo->getCode();
 	uint8_t byte1 = code[1];
@@ -1072,45 +1072,52 @@ cout<<"Deus, Termina de implementar isso ai" << endl;
 
 	Valor objectrefValue = topo->desempilhaOperando();
 	assert(objectrefValue.tipo == TipoDado::REFERENCE);
+ 	
+        string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
 
 	Valor resultValue;
 	resultValue.tipo = TipoDado::INT;
 
+        assert(cpElement.tag == CONSTANT_Class);
+   
 	if ((Objeto*)objectrefValue.dado == NULL) {
-		resultValue.dado. = 0;
+		resultValue.dad. = 0;
 	}
 	else {
-		Object *obj = (Objeto*)objectrefValue.dado;
+		Objeto *obj = (Objeto*)objectrefValue.dado;
 
-		if (obj->objectType() == ObjectType::CLASS_INSTANCE) {
-			ClassInstance *classInstance = (ClassInstance *) obj;
-			ClassRuntime *classRuntime = classInstance->getClassRuntime();
+		if (obj->ObterTipoObjeto() == TipoObjeto::CLASS_INSTANCE) {
+			ObjetoInstancia *classInstance = (TipoObjeto *) obj;
+			JavaClass *classRuntime = classInstance->ObterJavaClass();
 
 			bool found = false;
 			while (!found) {
-				ClassFile *classFile = classRuntime->getClassFile();
-				string currClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
+                                JavaClass *auxJavaClass = classRuntime;
+                                string currClassName = classRuntime->NomeDaClasse();
 
 				if (currClassName == className) {
 					found = true;
-				} else {
-					if (classFile->super_class == 0) {
+				} 
+                                else {
+					if (classRuntime->super_class == 0) {
 						break;
 					} else {
-						string superClassName = getFormattedConstant(classFile->constant_pool, classFile->this_class);
+						string superClassName = classRuntime->NomeDaClasse();;
 						classRuntime = methodArea.loadClassNamed(superClassName);
 					}
 				}
 			}
 
-			resultValue.data.intValue = found ? 1 : 0;
-		} else if (obj->objectType() == ObjectType::STRING_INSTANCE) {
-			resultValue.data.intValue = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
-		} else {
+			resultValue.dado = found ? 1 : 0;
+		} 
+                else if (obj->ObterTipoObjeto() == TipoObjeto::STRING_INSTANCE) {
+			resultValue.dado = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
+		} 
+                else {
 			if (className == "java/lang/Object") {
-				resultValue.data.intValue = 1;
+				resultValue.dato = 1;
 			} else {
-				resultValue.data.intValue = 0;
+				resultValue.dado = 0;
 			}
 		}
 	}
@@ -1119,9 +1126,8 @@ cout<<"Deus, Termina de implementar isso ai" << endl;
 
 	topFrame->pc += 3;
 
-*/
-
 }
+
 void ExecutionEngine::i_monitorenter(){
 
 Frame *topo = runtimeDataArea->topoPilha();
