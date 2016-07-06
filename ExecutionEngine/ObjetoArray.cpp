@@ -63,7 +63,7 @@ Valor ObjetoArray::RemoverNoInicio(void)
 	throw new Erro ("Tentaram remover uma posicao invalida do vetor", "ObjetoArray", "RemoverNoInicio");
 }
 
-uint32_t ObjetoArray::ObterTamanho(void) const
+int ObjetoArray::ObterTamanho(void) const
 {
 	return elementos.size();
 }

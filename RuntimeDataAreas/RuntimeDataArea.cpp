@@ -66,6 +66,10 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 	cout <<endl;
 #endif
 	this->pilhaJVM.push(*frame);
+#ifdef DEBUG
+	cout<< "Retornando" << endl;
+#endif
+
 }
 
 Frame *RuntimeDataArea::topoPilha()

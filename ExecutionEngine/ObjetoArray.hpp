@@ -20,7 +20,7 @@ class ObjetoArray: public Objeto
 		Valor RemoverValorDaPosicao(uint32_t posicao);
 		Valor RemoverNoFinal(void);
 		Valor RemoverNoInicio(void);
-		uint32_t ObterTamanho(void) const;
+		int ObterTamanho(void) const;
 		Valor ObterValor(uint32_t posicao) const;
 		void AlterarElementoDaPosicao(uint32_t posicao, Valor valor);
 		TipoObjeto ObterTipoObjeto(void);
