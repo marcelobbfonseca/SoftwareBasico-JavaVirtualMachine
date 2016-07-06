@@ -815,7 +815,6 @@ void ExecutionEngine::i_dreturn(){}
 void ExecutionEngine::i_areturn(){}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
-	//Frame *toppilha = runtimeDataArea->topoPilha();
 	runtimeDataArea->topoPilha()->desempilhaOperando();
 
 }
@@ -827,13 +826,16 @@ void ExecutionEngine::i_getfield(){}
 void ExecutionEngine::i_putfield(){}
 void ExecutionEngine::i_invokevirtual(){
 	//usa no helloworld
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+
 }
 void ExecutionEngine::i_invokespecial(){ // =======================================================
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
-	//consertar isso:
 	
-	stack<Value> operandStackBackup = toppilha->retornaPilhaOperandos();
+	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
 	//cp_info *constantPool = *(topFrame->getConstantPool());
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
