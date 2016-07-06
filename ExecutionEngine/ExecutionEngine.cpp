@@ -951,7 +951,7 @@ void ExecutionEngine::i_invokespecial(){
 
 	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
 
-//bastos daqui prabaixo..============================================================================================
+//bastos daqui prabaixo..
 	 // casos especiais
 	if ((className == "java/lang/Object" || className == "java/lang/String") && methodName == "<init>") {
 		if (className == "java/lang/String") {
