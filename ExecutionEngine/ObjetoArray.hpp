@@ -5,6 +5,10 @@
 #include "Tipos.h"
 #include <vector>
 #include <stdint.h>
+#include <vector>
+#include "Erro.hpp"
+
+using namespace std;
 
 #define OBJETO_ARRAY
 class ObjetoArray: public Objeto
