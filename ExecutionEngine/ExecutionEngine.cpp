@@ -474,14 +474,123 @@ void ExecutionEngine::i_ldc2_w(){
 
 }
 void ExecutionEngine::i_iload(){
-
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topoPilha()->tamanhoVetorVariaveis())) > index);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::INT);
+	
+	toppilha->empilharOperando(valor);
 }
 void ExecutionEngine::i_lload(){
-
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topoPilha()->tamanhoVetorVariaveis())) > index + 1);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::LONG);
+	
+	Valor padding;
+	padding.valor = TipoDado::PADDING;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_fload(){}
-void ExecutionEngine::i_dload(){}
-void ExecutionEngine::i_aload(){}
+void ExecutionEngine::i_fload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topoPilha()->tamanhoVetorVariaveis())) > index);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::FLOAT);
+	
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::i_dload(){
+		Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topoPilha()->tamanhoVetorVariaveis())) > index + 1);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::DOUBLE);
+	
+	Valor padding;
+	padding.valor = TipoDado::PADDING;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::i_aload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topoPilha()->tamanhoVetorVariaveis())) > index);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::REFERENCE);
+	
+	toppilha->empilharOperando(valor);
+}
 void ExecutionEngine::i_iload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
