@@ -40,12 +40,28 @@ Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeD
 {
 	pc=0;
 	objeto=NULL;
-	method_info *metodoAux = (method_info*)javaClass->getMetodo(nomeMetodo, descritor);
+	method_info *metodoAux = BuscarMetodo(javaClass, nomeMetodo, descritor, runtimeDataArea)
 	assert(metodoAux != NULL);
 	metodo= metodoAux;
 	assert(metodo->FlagAtivada(METHOD_STATIC));
 	pegarAtributos();
 }
+
+Frame::Frame(ObjetoInstancia *objeto string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
+{
+	pc =0;
+	this->objeto= objeto;
+	for (int cont = 0; cont < argumentos.size(); cont++) {
+		variaveisLocais[cont] = argumentos[cont];
+	}
+	
+	metodo = BuscarMetodo(objeto->GetJavaClass(), nomeMetodo, descritor, runtimeDataArea);
+	assert(method != NULL);
+	assert(!metodo->FlagAtivada(METHOD_STATIC));
+	
+	pegarAtributos();
+}
+
 
 void Frame::pegarAtributos()
 {
