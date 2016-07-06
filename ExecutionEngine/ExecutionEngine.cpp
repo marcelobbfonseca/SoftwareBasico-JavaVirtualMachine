@@ -832,7 +832,7 @@ void ExecutionEngine::i_areturn(){}
 
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
-	runtimeDataArea->topoPilha()->desempilhaOperando();
+	runtimeDataArea->desempilharFrame();
 
 }
 void ExecutionEngine::i_getstatic(){
@@ -1046,8 +1046,7 @@ void ExecutionEngine::i_invokespecial(){
 
 	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
 
-	//bastos daqui prabaixo..============================================================================================
-	 // casos especiais
+	// casos especiais
 	if ((className == "java/lang/Object" || className == "java/lang/String") && methodName == "<init>") {
 		if (className == "java/lang/String") {
 			toppilha->desempilhaOperando();
@@ -1104,6 +1103,9 @@ void ExecutionEngine::i_invokespecial(){
 		
 
 		Frame *newFrame = new Frame(instance, classRuntime, methodDescriptor, args, runtimeDataArea);
+
+		//Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
+
 
 		if (runtimeDataArea->topoPilha() != toppilha) {
 			toppilha->setaPilhaOperandos(operandStackBackup);

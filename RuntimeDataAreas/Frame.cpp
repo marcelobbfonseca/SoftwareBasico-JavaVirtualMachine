@@ -3,12 +3,10 @@
 
 #define DEBUG
 //Construtor para métodos não estáticos
+/*
 Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 {
 
-   /* for (int i = 0; i < arguments.size(); i++) {
-		variaveisLocais[i] = argumentos[i];
-	}*/
 #ifdef DEBUG
 	cout<< "Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)" << endl;
 #endif
@@ -35,7 +33,7 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 	cout<< "[Frame::Frame]Vou atributos empilhados" << endl;
 #endif
 }
-
+*/
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {
 #ifdef DEBUG
