@@ -5,6 +5,8 @@
 #include<string.h>
 #include <inttypes.h>
 
+#define DEBUG
+
 ExecutionEngine::ExecutionEngine(void)
 {
 	inicializaInstrucoes();
@@ -20,38 +22,58 @@ void ExecutionEngine::Play(string classComMain)
 
 
 	uint8_t instrucao;
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine" << endl;
+#endif
 	if(runtimeDataArea == NULL)
 	{
 		throw new Erro("RuntimeDataArea nao instanciado!", "ExecutionEngine", "Play");
 	}
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine2" << endl;
+#endif
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine3" << endl;
+#endif
 	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine4" << endl;
+#endif
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine5" << endl;
+#endif
 		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
 	}
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine6" << endl;
+#endif
 
 	do
 	{
-	cout<< "Consertar Play do execution engine7" << endl;
+#ifdef DEBUG
+	cout<< "Consertar Play do execution engine7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
+#endif
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine8" << endl;
+#endif
 		(this->*vetorDePonteirosParaFuncao[instrucao])();//pulo depende de unitialized val
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine9" << endl;
+#endif
 
 	}
 	while(runtimeDataArea->pilhaJVM.size() > 0);
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine10" << endl;
+#endif
 }
 
 void ExecutionEngine::inicializaInstrucoes() {
@@ -474,14 +496,123 @@ void ExecutionEngine::i_ldc2_w(){
 
 }
 void ExecutionEngine::i_iload(){
-
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(toppilha->tamanhoVetorVariaveis())) > index);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::INT);
+	
+	toppilha->empilharOperando(valor);
 }
 void ExecutionEngine::i_lload(){
-
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(toppilha->tamanhoVetorVariaveis())) > index + 1);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::LONG);
+	
+	Valor padding;
+	padding.dado = TipoDado::PADDING;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_fload(){}
-void ExecutionEngine::i_dload(){}
-void ExecutionEngine::i_aload(){}
+void ExecutionEngine::i_fload(){
+	Frame *topPilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topPilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topPilha->tamanhoVetorVariaveis())) > index);
+	Valor valor = topPilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::FLOAT);
+	
+	topPilha->empilharOperando(valor);
+}
+void ExecutionEngine::i_dload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(toppilha->tamanhoVetorVariaveis())) > index + 1);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::DOUBLE);
+	
+	Valor padding;
+	padding.dado = TipoDado::PADDING;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::i_aload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+	assert(((int16_t)(topoPilha()->tamanhoVetorVariaveis())) > index);
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	assert(valor.tipo == TipoDado::REFERENCE);
+	
+	toppilha->empilharOperando(valor);
+}
 void ExecutionEngine::i_iload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -697,12 +828,140 @@ void ExecutionEngine::i_aload_3(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iaload(){
-
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	assert(index.tipo == TipoDado::INT);
+	
+	Value arrayref = toppilha->desempilhaOperando();
+	assert(arrayref.tipo == TipoDado::REFERENCE);
+	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
+	
+	array = (Objeto*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+	}
+	toppilha->empilharOperando(array->ObterTamanho(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_laload(){}
-void ExecutionEngine::i_faload(){}
-void ExecutionEngine::i_daload(){}
-void ExecutionEngine::i_aaload(){}
+void ExecutionEngine::i_laload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	assert(index.tipo == TipoDado::LONG);
+	
+	Value arrayref = toppilha->desempilhaOperando();
+	assert(arrayref.tipo == TipoDado::REFERENCE);
+	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
+	
+	array = (Objeto*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+	}
+	
+	Value padding;
+	padding.valor = TipoDado::PADDING;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(array->ObterTamanho(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_faload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	assert(index.tipo == TipoDado::FLOAT);
+	
+	Value arrayref = toppilha->desempilhaOperando();
+	assert(arrayref.tipo == TipoDado::REFERENCE);
+	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
+	
+	array = (Objeto*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+	}
+	toppilha->empilharOperando(array->ObterTamanho(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_daload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	assert(index.tipo == TipoDado::DOUBLE);
+	
+	Value arrayref = toppilha->desempilhaOperando();
+	assert(arrayref.tipo == TipoDado::REFERENCE);
+	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
+	
+	array = (Objeto*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+	}
+	
+	Value padding;
+	padding.valor = TipoDado::PADDING;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(array->ObterTamanho(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_aaload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	assert(index.tipo == TipoDado::REFERENCE);
+	
+	Value arrayref = toppilha->desempilhaOperando();
+	assert(arrayref.tipo == TipoDado::REFERENCE);
+	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
+	
+	array = (Objeto*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+	}
+	toppilha->empilharOperando(array->ObterTamanho(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_baload(){}
 void ExecutionEngine::i_caload(){}
 void ExecutionEngine::i_saload(){}
