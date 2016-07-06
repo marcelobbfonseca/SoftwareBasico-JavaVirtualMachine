@@ -5,6 +5,8 @@
 #include<string.h>
 #include <inttypes.h>
 
+#define DEBUG
+
 ExecutionEngine::ExecutionEngine(void)
 {
 	inicializaInstrucoes();
@@ -20,38 +22,58 @@ void ExecutionEngine::Play(string classComMain)
 
 
 	uint8_t instrucao;
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine" << endl;
+#endif
 	if(runtimeDataArea == NULL)
 	{
 		throw new Erro("RuntimeDataArea nao instanciado!", "ExecutionEngine", "Play");
 	}
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine2" << endl;
+#endif
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine3" << endl;
+#endif
 	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine4" << endl;
+#endif
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine5" << endl;
+#endif
 		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
 	}
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine6" << endl;
+#endif
 
 	do
 	{
-	cout<< "Consertar Play do execution engine7" << endl;
+#ifdef DEBUG
+	cout<< "Consertar Play do execution engine7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
+#endif
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine8" << endl;
+#endif
 		(this->*vetorDePonteirosParaFuncao[instrucao])();//pulo depende de unitialized val
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine9" << endl;
+#endif
 
 	}
 	while(runtimeDataArea->pilhaJVM.size() > 0);
+#ifdef DEBUG
 	cout<< "Consertar Play do execution engine10" << endl;
+#endif
 }
 
 void ExecutionEngine::inicializaInstrucoes() {

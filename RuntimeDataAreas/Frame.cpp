@@ -200,7 +200,7 @@ Valor Frame::desempilhaOperando() {
 
 	if (pilhaOperandos.size() == 0) {
 
-		cerr << "IndexOutOfBoundsException" << endl;
+		cerr << "IndexOutOfBoundsException(Valor Frame::desempilhaOperando()" << endl;
 		exit(1);
 
 	}
@@ -285,4 +285,6 @@ method_info* Frame::BuscarMetodo(JavaClass* javaClass, string nomeMetodo, string
 	while(classeComMetodo!= NULL);
 	return NULL;
 }
+
+
 
