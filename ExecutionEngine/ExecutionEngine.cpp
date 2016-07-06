@@ -913,7 +913,7 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 
         JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
         
-        Frame *newFrame = new Frame(instance, methodName, methodDescriptor, args);//implementar essa poha
+        Frame *newFrame = new Frame(instance, methodName, methodDescriptor, args, runtimeDataArea);//implementar essa poha
 
         // se a stack frame mudou, é porque teve <clinit> adicionado, então terminar a execução da instrução para eles serem executados.
         if (runtimeDataArea->topoPilha() != toppilha) {
