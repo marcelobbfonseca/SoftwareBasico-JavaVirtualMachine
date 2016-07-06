@@ -1012,7 +1012,7 @@ void ExecutionEngine::i_invokespecial(){
 
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 		
-		Frame *newFrame = new Frame(instance,classRuntime, methodDescriptor,args,runtimeDataArea);
+		Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
 
 		if (runtimeDataArea->topoPilha() != toppilha) {
 			toppilha->setaPilhaOperandos(operandStackBackup);
