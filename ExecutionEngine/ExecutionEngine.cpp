@@ -848,8 +848,12 @@ void ExecutionEngine::i_iaload(){
 	if (num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
+<<<<<<< HEAD
+	toppilha->empilharOperando(array->ObterValor(num));
+=======
 	cout<<"corrigir ExecutionEngine::i_iaload()"<< endl;
 //	toppilha->empilharOperando(array->ObterTamanho(num));
+>>>>>>> origin/master
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -879,7 +883,7 @@ void ExecutionEngine::i_laload(){
 	padding.dado = TipoDado::PADDING;
 	
 	toppilha->empilharOperando(padding);
-	toppilha->empilharOperando(array->ObterTamanho(num));
+	toppilha->empilharOperando(array->ObterValor(num));
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -904,7 +908,7 @@ void ExecutionEngine::i_faload(){
 	if (num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
-	toppilha->empilharOperando(array->ObterTamanho(num));
+	toppilha->empilharOperando(array->ObterValor(num));
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -934,7 +938,7 @@ void ExecutionEngine::i_daload(){
 	padding.valor = TipoDado::PADDING;
 	
 	toppilha->empilharOperando(padding);
-	toppilha->empilharOperando(array->ObterTamanho(num));
+	toppilha->empilharOperando(array->ObterValor(num));
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -959,7 +963,7 @@ void ExecutionEngine::i_aaload(){
 	if (num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
-	toppilha->empilharOperando(array->ObterTamanho(num));
+	toppilha->empilharOperando(array->ObterValor(num));
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
