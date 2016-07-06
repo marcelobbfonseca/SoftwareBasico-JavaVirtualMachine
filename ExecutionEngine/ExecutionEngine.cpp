@@ -1358,6 +1358,7 @@ void ExecutionEngine::i_putfield()
 	runtimeDataArea->topoPilha()->desempilhaOperando();
 }//fim metodo
 
+void ExecutionEngine::i_invokevirtual(){}
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
