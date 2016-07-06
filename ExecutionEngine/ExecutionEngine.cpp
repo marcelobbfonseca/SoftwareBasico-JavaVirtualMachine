@@ -1124,58 +1124,67 @@ void ExecutionEngine::i_invokevirtual(){
 
 	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
 
-	if(className == "java/io/PrintStream" && (methodName == "print" || methodName =="println"))
+	if (className.find("java/") != string::npos)
 	{
-		if (methodDescriptor != "()V")
+
+		if(className == "java/io/PrintStream" && (methodName == "print" || methodName =="println"))
 		{
-			Valor printValor = toppilha->desempilhaOperando();
-			if (printValor.tipo == TipoDado::INT) 
+			
+			if (methodDescriptor != "()V")
 			{
-				switch (printValor.dado)
+				Valor printValor = toppilha->desempilhaOperando();
+				if (printValor.tipo == TipoDado::INT) 
 				{
-					case TipoDado::BOOLEAN:
-						printf("%s", printValor.dado == 0 ? "false" : "true");
-						break;
-					case TipoDado::CHAR:
-						printf("%c", (char)printValor.dado);
-						break;
-					default:
-						printf("%" PRIu64 , printValor.dado);
-						break;
-				}//fim switch
-			} else {
-				switch (printValor.tipo) {
-					case TipoDado::DOUBLE:
-						toppilha->desempilhaOperando(); // removendo padding
-						printf("%f", (float)printValor.dado);
-						break;
-					case TipoDado::FLOAT:
-						printf("%f", (float)printValor.dado);
-						break;
-					case TipoDado::LONG:
-						toppilha->desempilhaOperando(); // removendo padding
-						printf("%" PRIu64 , printValor.dado) ;
-						break;
-					case TipoDado::REFERENCE:
-						//assert(printValor.data.object->objectType() == ObjectType::STRING_INSTANCE);
-						//printf("%s", ((StringObject *) printValor.data.object)->getString().c_str());
-						break;
-					case TipoDado::BOOLEAN:
-						printf("%s", printValor.dado == 0 ? "false" : "true");
-						break;
-					case TipoDado::BYTE:
-						printf("%" PRIu64 , printValor.dado);
-						break;
-					case TipoDado::CHAR:
-						printf("%c", (char)printValor.dado);
-						break;
-					case TipoDado::SHORT:
-						printf("%" PRIu64 , printValor.dado);
-						break;
-					default:
-						cerr << "Tentando printar tipo de dado invalido: " << printValor.tipo << endl;
-						exit(1);
-						break;
+					switch (printValor.dado)
+					{
+						case TipoDado::BOOLEAN:
+							printf("%s", printValor.dado == 0 ? "false" : "true");
+							break;
+						case TipoDado::CHAR:
+							printf("%c", (char)printValor.dado);
+							break;
+						default:
+							printf("%" PRIu64 , printValor.dado);
+							break;
+					}//fim switch
+				
+				}
+				else
+				{
+
+					switch (printValor.tipo)
+					{
+						case TipoDado::DOUBLE:
+							toppilha->desempilhaOperando(); // removendo padding
+							printf("%f", (float)printValor.dado);
+							break;
+						case TipoDado::FLOAT:
+							printf("%f", (float)printValor.dado);
+							break;
+						case TipoDado::LONG:
+							toppilha->desempilhaOperando(); // removendo padding
+							printf("%" PRIu64 , printValor.dado) ;
+							break;
+						case TipoDado::REFERENCE:
+							//assert(printValor.data.object->objectType() == ObjectType::STRING_INSTANCE);
+							//printf("%s", ((StringObject *) printValor.data.object)->getString().c_str());
+							break;
+						case TipoDado::BOOLEAN:
+							printf("%s", printValor.dado == 0 ? "false" : "true");
+							break;
+						case TipoDado::BYTE:
+							printf("%" PRIu64 , printValor.dado);
+							break;
+						case TipoDado::CHAR:
+							printf("%c", (char)printValor.dado);
+							break;
+						case TipoDado::SHORT:
+							printf("%" PRIu64 , printValor.dado);
+							break;
+						default:
+							cerr << "Tentando printar tipo de dado invalido: " << printValor.tipo << endl;
+							exit(1);
+							break;
 					}//fim switch
 				}//fim else
 			}//fim if methodDescriptor
@@ -1205,20 +1214,19 @@ void ExecutionEngine::i_invokevirtual(){
 		else if(className == "java/lang/String" && methodName == "length")
 		{
 			Valor strValue = toppilha->desempilhaOperando();
-			assert(strValue.tipo == TipoDado::REFERENCE);		
-					
-			ObjetoString *str = (ObjetoString*) strValue.dado;		
-					
+			assert(strValue.tipo == TipoDado::REFERENCE);
+			ObjetoString *str = (ObjetoString*) strValue.dado;
 			Valor result;
-			result.dado = TipoDado::INT;		
-			//result.data.intValue = (str->getString()).size();		
+			result.dado = TipoDado::INT;
 			toppilha->empilharOperando(result);
+		
 		}//fim elsif lenght
 		else
 		{
 			cerr << "Tentando invocar metodo de instancia invalido: " << methodName << endl;
 			exit(1);
 		} 
+
 	}
 	else
 	{ //fim if
@@ -1239,7 +1247,7 @@ void ExecutionEngine::i_invokevirtual(){
 				nargs++;
 			}
 			i++;
-		}//fim while		
+		}//fim while
 		vector<Valor> args;
 		for (int i = 0; i < nargs; i++) {
 			Valor valor = toppilha->desempilhaOperando();
@@ -1272,11 +1280,9 @@ void ExecutionEngine::i_invokevirtual(){
 		newFrame = runtimeDataArea->topoPilha();
 
 	}//fim else
-   
 	runtimeDataArea->topoPilha()->desempilhaOperando();
-}
+}//fim metodo
 
-}//fim instrucao
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
