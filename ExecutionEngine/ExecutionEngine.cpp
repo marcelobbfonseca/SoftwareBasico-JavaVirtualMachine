@@ -864,7 +864,7 @@ void ExecutionEngine::i_laload(){
 	assert(arrayref.tipo == TipoDado::REFERENCE);
 	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
-	array = (Objeto*)(arrayref.dado);
+	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
 		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
@@ -875,8 +875,8 @@ void ExecutionEngine::i_laload(){
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
 	
-	Value padding;
-	padding.valor = TipoDado::PADDING;
+	Valor padding;
+	padding.dado = TipoDado::PADDING;
 	
 	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(array->ObterTamanho(num));
