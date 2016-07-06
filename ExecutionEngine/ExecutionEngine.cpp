@@ -1253,25 +1253,23 @@ void ExecutionEngine::i_invokevirtual(){
 		for (int i = 0; i < nargs; i++) {
 			Valor valor = toppilha->desempilhaOperando();
 			if (valor.tipo == TipoDado::PADDING) {
-				args.insert(args.begin() + 1, value); // adicionando o padding após o valor double/long.
+				args.insert(args.begin() + 1, valor); // adicionando o padding após o valor double/long.
 			} else {
-				args.insert(args.begin(), value);
+				args.insert(args.begin(), valor);
 			}
 		}//fim for nargs
 		
 		Valor objectValor = toppilha->desempilhaOperando();
-		assert(objectValor.tipo == ValorType::REFERENCE); // necessita ser uma referência para objeto
+		assert(objectValor.tipo == TipoDado::REFERENCE); // necessita ser uma referência para objeto
 		
 		args.insert(args.begin(), objectValor);
 
 		Objeto *objeto = (Objeto*)objectValor.dado;
 		ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
 
-		ClassInstance *instance = (ClassInstance *) object;
-
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 
-		Frame *newFrame = new Frame(instance, classRuntime, methodName, methodDescriptor, args);
+		Frame *newFrame = new Frame(instance, classRuntime, methodName, methodDescriptor, args, runtimeDataArea);
 
 		if (runtimeDataArea->topoPilha() != toppilha) {
 			toppilha->setaPilhaOperandos(operandStackBackup);
