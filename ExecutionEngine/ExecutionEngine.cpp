@@ -332,7 +332,7 @@ void ExecutionEngine::i_iconst_1(){
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)1;
 	//falta uma parada de print do bastos
-	toppilha->empilharOperando(valor);f
+	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
@@ -1101,8 +1101,8 @@ void ExecutionEngine::i_getstatic(){
 }
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
-void ExecutionEngine::i_putfield
-
+void ExecutionEngine::i_putfield()
+{
 	//usa no helloworld
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
@@ -1425,65 +1425,65 @@ void ExecutionEngine::i_instanceof(){
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)(topo->getObjeto()))->ObterJavaClass()->getConstantPool();
 	cp_info *cpElement = constantPool[cpIndex-1];
 
-	assert(cpElement->tag == CONSTANT_Class);
+	assert(cpElement->GetTag() == CONSTANT_Class);
 
 	Valor objectrefValue = topo->desempilhaOperando();
 	assert(objectrefValue.tipo == TipoDado::REFERENCE);
  	
-        string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
+		string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
 
 	Valor resultValor;
 	resultValor.tipo = TipoDado::INT;
 
-        assert(cpElement.tag == CONSTANT_Class);
+		assert(cpElement->GetTag() == CONSTANT_Class);
    
 	if ((Objeto*)objectrefValue.dado == NULL) {
-		resultValue.dado = 0;
+		resultValor.dado = 0;
 	}
 	else {
 		Objeto *obj = (Objeto*)objectrefValue.dado;
 
-		if (obj->ObterTipoObjeto() == TipoObjeto::CLASS_INSTANCE) {
-			ObjetoInstancia *classInstance = (TipoObjeto *) obj;
+		if (obj->ObterTipoObjeto() == TipoObjeto::INSTANCIA) {
+			ObjetoInstancia *classInstance = (ObjetoInstancia *) obj;
 			JavaClass *classRuntime = classInstance->ObterJavaClass();
 
 			bool found = false;
 			while (!found) {
-                                JavaClass *auxJavaClass = classRuntime;
-                                string currClassName = classRuntime->NomeDaClasse();
+								JavaClass *auxJavaClass = classRuntime;
+								string currClassName = classRuntime->NomeDaClasse();
 
 				if (currClassName == className) {
 					found = true;
 				} 
-                                else {
-					if (classRuntime->super_class == 0) {
+								else {
+					if (classRuntime->ObterSuperClasse() == 0) {
 						break;
 					} else {
 						string superClassName = classRuntime->NomeDaClasse();;
-						classRuntime = methodArea.loadClassNamed(superClassName);
+						classRuntime = runtimeDataArea->CarregarClasse(superClassName);
 					}
 				}
 			}
 
-			resultValue.dado = found ? 1 : 0;
+			resultValor.dado = found ? 1 : 0;
 		} 
-                else if (obj->ObterTipoObjeto() == TipoObjeto::STRING_INSTANCE) {
-			resultValue.dado = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
+				else if (obj->ObterTipoObjeto() == TipoObjeto::STRING) {
+			resultValor.dado = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
 		} 
-                else {
+				else {
 			if (className == "java/lang/Object") {
-				resultValue.dado = 1;
+				resultValor.dado = 1;
 			} 
 		else {
-			resultValue.dado = 0;
+			resultValor.dado = 0;
 
 			}
 		}
 	}
 
-	topFrame->pushIntoOperandStack(resultValor);
+	topo->pushIntoOperandStack(resultValor);
 
-	topFrame->pc += 3;
+	topo->pc += 3;
 
 }
 
