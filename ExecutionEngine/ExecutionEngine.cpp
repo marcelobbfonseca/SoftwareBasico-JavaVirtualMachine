@@ -923,7 +923,7 @@ void ExecutionEngine::i_invokespecial(){
 			delete newFrame;
 			return;
 		}
-		Frame *newFrame = runtimeDataArea->topoPilha();
+		newFrame = runtimeDataArea->topoPilha();
 	}
 
 
