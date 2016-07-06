@@ -830,10 +830,12 @@ void ExecutionEngine::i_invokevirtual(){
 }
 void ExecutionEngine::i_invokespecial(){ // =======================================================
 	//usa no mainvazia
-/*	Frame *toppilha = runtimeDataArea->topoPilha();
+	Frame *toppilha = runtimeDataArea->topoPilha();
 	//consertar isso:
-	//stack<Value> operandStackBackup = topFrame->backupOperandStack(); emidio
-	//vector<cp_info*> constantPool = ((Objetoinstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+	
+	stack<Value> operandStackBackup = toppilha->retornaPilhaOperandos();
+	//cp_info *constantPool = *(topFrame->getConstantPool());
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
 	uint8_t *code = toppilha->getCode();
 	
@@ -843,34 +845,90 @@ void ExecutionEngine::i_invokespecial(){ // ====================================
 	uint16_t methodIndex = (byte1 << 8) | byte2;
 	
 
-	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*)constantPool[methodIndex-1];
-	assert(methodInfo->GetTag() == CONSTANT_Methodref || methodInfo->GetTag() == CONSTANT_InterfaceMethodref); // precisa referenciar um método
+	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*) constantPool[methodIndex-1]; //em 1 linha
 	//assert(validar referencia a um metodo)
+	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(methodInfo->GetClassIndex());
 
 
-	CONSTANT_NameAndType_info *methodNameAndType =(CONSTANT_NameAndType*)constantPool[methodInfo->getNameAndTypeIndex()-1];
-	assert(methodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
-
-	cp_info *cpElement = constantPool[cpIndex-1];
+	CONSTANT_NameAndType_info *methodNameAndType = (CONSTANT_NameAndType_info*) constantPool[methodInfo->GetNameAndTypeIndex()-1];
+	//assert(methodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
 
 	cp_info *nameAndTypeCP = constantPool[methodInfo->GetNameAndTypeIndex()-1];
-	string className = topo->getObjeto()->javaClass->getUTF8(cpIndex->GetNameIndex());
-	assert(nameAndTypeCP->GetTag() == CONSTANT_NameAndType); 
+	string methodName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetNameIndex());
 
-	//precisa pegar nome da classe e metodo
-	string classNameAndMethod =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
-	//..
+	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
+//bastos daqui prabaixo..============================================================================================
+	 // casos especiais
+    if ((className == "java/lang/Object" || className == "java/lang/String") && methodName == "<init>") {
+        if (className == "java/lang/String") {
+            toppilha->desempilhaOperando();
+        }
+        
+        runtimeDataArea->topoPilha()->incrementaPC(3);
+        return;
+    }
+    // fim dos casos especiais
+    
+    if (className.find("java/") != string::npos) {
+        cerr << "Tentando invocar metodo especial invalido: " << methodName << endl;
+        exit(1);
+    } else {
+        uint16_t nargs = 0; // numero de argumentos contidos na pilha de operandos
+        uint16_t i = 1; // pulando o primeiro '('
+        while (methodDescriptor[i] != ')') {
+            char baseType = methodDescriptor[i];
+            if (baseType == 'D' || baseType == 'J') {
+                nargs += 2;
+            } else if (baseType == 'L') {
+                nargs++;
+                while (methodDescriptor[++i] != ';');
+            } else if (baseType == '[') {
+                nargs++;
+                while (methodDescriptor[++i] == '[');
+                if (methodDescriptor[i] == 'L') while (methodDescriptor[++i] != ';');
+            } else {
+                nargs++;
+            }
+            i++;
+        }
+
+        vector<Valor> args;
+        for (int i = 0; i < nargs; i++) {
+            Valor valor = toppilha->desempilhaOperando();
+            if (valor.tipo == TipoDado::PADDING) {
+                args.insert(args.begin() + 1, value); // adicionando o padding após o valor double/long.
+            } else {
+                args.insert(args.begin(), value);
+            }
+        }
+
+        Valor objectValue = toppilha->desempilhaOperando();
+        assert(objectValue.tipo == TipoDado::REFERENCE); // necessita ser uma referência para objeto
+        args.insert(args.begin(), objectValue);
+
+        Objeto *objeto = (Objeto*)objectValue.dado;
+
+        //assert(object->objectType() == ObjectType::CLASS_INSTANCE); // objeto precisa ser uma instância
+        ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
+
+        JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
+        
+        Frame *newFrame = new Frame(instance, methodName, methodDescriptor, args);//implementar essa poha
+
+        // se a stack frame mudou, é porque teve <clinit> adicionado, então terminar a execução da instrução para eles serem executados.
+        if (runtimeDataArea->topoPilha() != toppilha) {
+            toppilha->setaPilhaOperandos(operandStackBackup);
+            delete newFrame;
+            return;
+        }
+        Frame *newFrame = runtimeDataArea->topoPilha();
+    }
 
 
-	if (className.find("java/") != string::npos) {
-		cerr << "Tentando invocar metodo de interface invalido: " << classNameAndMethod << endl;
-		exit(1);
-	}else{
 
-	}
 
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
-*/
+
 }
 void ExecutionEngine::i_invokestatic(){}
 void ExecutionEngine::i_invokeinterface(){}
