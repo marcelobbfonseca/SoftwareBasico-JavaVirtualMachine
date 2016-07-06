@@ -42,7 +42,6 @@ class Frame{
 		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea);
 		Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
 		Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
-
 		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
 		void empilharOperando(Valor operando);
@@ -53,7 +52,7 @@ class Frame{
 		uint16_t tamanhoVetorVariaveis();
 		uint32_t tamanhoCode();
 		void incrementaPC(int32_t);
-		int32_t getPC();
+		int32_t getPC(); 
 		Objeto *getObjeto();
 };
 

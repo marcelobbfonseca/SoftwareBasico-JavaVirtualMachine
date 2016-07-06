@@ -922,9 +922,99 @@ void ExecutionEngine::i_invokevirtual(){
 
                 }//fim else
 
-		}//fim if methodDescriptor
+			}//fim if methodDescriptor
+			if (methodName == "println")printf("\n");
+		} else if (className == "java/lang/String" && methodName == "equals") {
+            Valor strValue1 = toppilha->desempilhaOperando();
+            Valor strValue2 = toppilha->desempilhaOperando();
+            //assert(strValue1.type == tipoDado::REFERENCE);
+            //assert(strValue2.type == tipoDado::REFERENCE);
+            //assert(strValue1.data.object->objectType() == ObjectType::STRING_INSTANCE);
+            //assert(strValue2.data.object->objectType() == ObjectType::STRING_INSTANCE);
+            
+            ObjetoString *str1 = (ObjetoString*) strValue1.dado;
+            ObjetoString *str2 = (ObjetoString*) strValue2.dado;
+            
+            Valor result;
+            result.dado = TipoDado::INT;
+            if (str1->getString() == str2->getString()) {
+                result.dado = 1; //Se forem iguals true
+            } else {
+                result.dado = 0; //Se forem diferentes false
+            }
+            toppilha->empilharOperando(result);
+        
+        }//fim else if equals
+        else if(className == "java/lang/String" && methodName == "length") {	
+            Valor strValue = toppilha->desempilhaOperando();
+            assert(strValue.tipo == TipoDado::REFERENCE);		
+                    
+            ObjetoString *str = (ObjetoString*) strValue.dado;		
+                    
+            Valor result;
+            result.dado = TipoDado::INT;		
+            //result.data.intValue = (str->getString()).size();		
+            toppilha->empilharOperando(result);
+        }//fim elsif lenght
+        else {
+            cerr << "Tentando invocar metodo de instancia invalido: " << methodName << endl;
+            exit(1);
+        } 
 
-	} //fim if className
+	}else{ //fim if
+ 		uint16_t nargs = 0; // numero de argumentos contidos na pilha de operandos
+        uint16_t i = 1; // pulando o primeiro '('
+        while (methodDescriptor[i] != ')') {
+            char baseType = methodDescriptor[i];
+            if (baseType == 'D' || baseType == 'J') {
+                nargs += 2;
+            } else if (baseType == 'L') {
+                nargs++;
+                while (methodDescriptor[++i] != ';');
+            } else if (baseType == '[') {
+                nargs++;
+                while (methodDescriptor[++i] == '[');
+                if (methodDescriptor[i] == 'L') while (methodDescriptor[++i] != ';');
+            } else {
+                nargs++;
+            }
+            i++;
+        }//fim while		
+        vector<Valor> args;
+        for (int i = 0; i < nargs; i++) {
+            Valor valor = toppilha->desempilhaOperando();
+            if (valor.tipo == TipoDado::PADDING) {
+                args.insert(args.begin() + 1, value); // adicionando o padding após o valor double/long.
+            } else {
+                args.insert(args.begin(), value);
+            }
+        }//fim for nargs
+        
+        Valor objectValue = toppilha->desempilhaOperando();
+        assert(objectValue.tipo == ValueType::REFERENCE); // necessita ser uma referência para objeto
+        
+        args.insert(args.begin(), objectValue);
+
+		Objeto *objeto = (Objeto*)objectValue.dado;
+		ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
+
+        ClassInstance *instance = (ClassInstance *) object;
+
+        JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
+
+        Frame *newFrame = new Frame(instance, classRuntime, methodName, methodDescriptor, args);
+
+		if (runtimeDataArea->topoPilha() != toppilha) {
+			toppilha->setaPilhaOperandos(operandStackBackup);
+			delete newFrame;
+			return;
+		}//fim if toppilha validacao
+		newFrame = runtimeDataArea->topoPilha();
+
+	}//fim else
+   
+	runtimeDataArea->topoPilha()->desempilhaOperando();
+}
 
 }//fim instrucao
 void ExecutionEngine::i_invokespecial(){ 
@@ -956,7 +1046,7 @@ void ExecutionEngine::i_invokespecial(){
 
 	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
 
-//bastos daqui prabaixo..============================================================================================
+	//bastos daqui prabaixo..============================================================================================
 	 // casos especiais
 	if ((className == "java/lang/Object" || className == "java/lang/String") && methodName == "<init>") {
 		if (className == "java/lang/String") {
@@ -1012,7 +1102,8 @@ void ExecutionEngine::i_invokespecial(){
 
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 		
-		//Frame *newFrame = new Frame(instance,classRuntime, methodDescriptor,args,runtimeDataArea);
+
+		Frame *newFrame = new Frame(instance, classRuntime, methodDescriptor, args, runtimeDataArea);
 
 		if (runtimeDataArea->topoPilha() != toppilha) {
 			toppilha->setaPilhaOperandos(operandStackBackup);
@@ -1154,7 +1245,7 @@ void ExecutionEngine::i_multianewarray(){
 	assert(dimensoes >= 1);
 
 	uint16_t classIndex = (byte1 << 8) | byte2;
-	//Emidio
+	//Bastos
 	//cp_info classCP = constantPool[classIndex-1];
 	//CONSTANT_Class_info classInfo = classCP.info.class_info;
 	//Yoo
