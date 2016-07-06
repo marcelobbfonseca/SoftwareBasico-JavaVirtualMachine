@@ -3,6 +3,7 @@
 #include "ObjetoInstancia.hpp"
 #include "Erro.hpp"
 #include<string.h>
+#include <inttypes.h>
 
 ExecutionEngine::ExecutionEngine(void)
 {
@@ -868,10 +869,10 @@ void ExecutionEngine::i_invokevirtual(){
                             printf("%s", printValor.dado == 0 ? "false" : "true");
                             break;
                         case TipoDado::CHAR:
-                            printf("%c", printValor.dado);
+                            printf("%c", (char)printValor.dado);
                             break;
                         default:
-                            printf("%d", printValor.dado);
+                            printf("%" PRIu64 , printValor.dado);
                             break;
                     }//fim switch
                 
@@ -880,14 +881,14 @@ void ExecutionEngine::i_invokevirtual(){
 					switch (printValor.tipo) {
                         case TipoDado::DOUBLE:
                             toppilha->desempilhaOperando(); // removendo padding
-                            printf("%f", printValor.dado);
+                            printf("%f", (float)printValor.dado);
                             break;
                         case TipoDado::FLOAT:
-                            printf("%f", printValor.dado);
+                            printf("%f", (float)printValor.dado);
                             break;
                         case TipoDado::LONG:
                             toppilha->desempilhaOperando(); // removendo padding
-                            printf("%lld", printValor.dado);
+                            printf("%" PRIu64 , printValor.dado) ;
                             break;
                         case TipoDado::REFERENCE:
                             //assert(printValor.data.object->objectType() == ObjectType::STRING_INSTANCE);
@@ -897,13 +898,13 @@ void ExecutionEngine::i_invokevirtual(){
                             printf("%s", printValor.dado == 0 ? "false" : "true");
                             break;
                         case TipoDado::BYTE:
-                            printf("%d", printValor.dado);
+                            printf("%" PRIu64 , printValor.dado);
                             break;
                         case TipoDado::CHAR:
-                            printf("%c", printValor.dado);
+                            printf("%c", (char)printValor.dado);
                             break;
                         case TipoDado::SHORT:
-                            printf("%d", printValor.dado);
+                            printf("%" PRIu64 , printValor.dado);
                             break;
                         default:
                             cerr << "Tentando printar tipo de dado invalido: " << printValor.tipo << endl;
