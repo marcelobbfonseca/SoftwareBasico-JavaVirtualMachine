@@ -1,6 +1,9 @@
 #ifndef OBJETO_STRING_HPP
 #define OBJETO_STRING_HPP
 #include "Objeto.hpp"
+#include <string>
+
+using namespace std;
 
 class ObjetoString: public Objeto
 {

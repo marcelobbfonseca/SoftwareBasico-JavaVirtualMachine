@@ -46,7 +46,7 @@ void ExecutionEngine::Play(string classComMain)
 	cout<< "Consertar Play do execution engine7" << endl;
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 	cout<< "Consertar Play do execution engine8" << endl;
-		(this->*vetorDePonteirosParaFuncao[instrucao])();
+		(this->*vetorDePonteirosParaFuncao[instrucao])();//pulo depende de unitialized val
 	cout<< "Consertar Play do execution engine9" << endl;
 
 	}
@@ -446,16 +446,20 @@ void ExecutionEngine::i_dconst_1(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_bipush(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
 
-	Valor valor;
-	valor.tipo = TipoDado::BYTE;
-	cout<< "Implementar ExecutionEngine::i_bipush()"<< endl;
-	//valor.data
-	//pegar ponteiro pra pc
-	//push pro stack
+	Frame *topo = runtimeDataArea->topoPilha();
 
-	toppilha->incrementaPC(2);
+    	uint8_t *code = topo->getCode();
+	uint8_t byte = code[1];
+
+    	Valor valor;
+    	valor.tipo = TipoDado::INT;
+    	valor.dado = (int32_t) (int8_t) byte; // convertendo para inteiro e estendendo o sinal
+
+    	topo->empilharOperando(valor);
+
+    	topo->incrementaPC(2);
+
 }
 void ExecutionEngine::i_sipush(){
 
@@ -825,6 +829,7 @@ void ExecutionEngine::i_lreturn(){}
 void ExecutionEngine::i_freturn(){}
 void ExecutionEngine::i_dreturn(){}
 void ExecutionEngine::i_areturn(){}
+
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	runtimeDataArea->topoPilha()->desempilhaOperando();
@@ -1007,9 +1012,8 @@ void ExecutionEngine::i_invokespecial(){
 
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 		
-		Frame *newFrame = new Frame(instance, methodName, methodDescriptor, args, runtimeDataArea);//implementar essa poha
+		Frame *newFrame = new Frame(instance,classRuntime, methodDescriptor,args,runtimeDataArea);
 
-		// se a stack frame mudou, é porque teve <clinit> adicionado, então terminar a execução da instrução para eles serem executados.
 		if (runtimeDataArea->topoPilha() != toppilha) {
 			toppilha->setaPilhaOperandos(operandStackBackup);
 			delete newFrame;

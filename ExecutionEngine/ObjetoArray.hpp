@@ -3,8 +3,11 @@
 
 #include "Objeto.hpp"
 #include "Tipos.h"
+#include "Erro.hpp"
 #include <vector>
 #include <stdint.h>
+
+using namespace std;
 
 #define OBJETO_ARRAY
 class ObjetoArray: public Objeto

@@ -4,6 +4,7 @@
 #include "Objeto.hpp"
 #include "JavaClass.hpp"
 #include "Tipos.h"
+#include "Erro.hpp"
 
 #define OBJETO_INSTANCIA
 class ObjetoInstancia: public Objeto
