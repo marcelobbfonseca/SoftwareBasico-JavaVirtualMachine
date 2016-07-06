@@ -86,6 +86,20 @@ Frame::Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetod
 	pegarAtributos();
 }
 
+Frame::Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
+{
+	pc =0;
+	this->objeto= objeto;
+	for (unsigned int cont = 0; cont < argumentos.size(); cont++) {
+		variaveisLocais[cont] = argumentos[cont];
+	}
+	
+	metodo = BuscarMetodo(javaClass, nomeDoMetodo, descritorMetodo, runtimeDataArea);
+	assert(metodo != NULL);
+	assert(!metodo->FlagAtivada(METHOD_STATIC));
+	
+	pegarAtributos();
+}
 
 void Frame::pegarAtributos(JavaClass *classe)
 {
