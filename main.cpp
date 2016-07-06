@@ -46,11 +46,17 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-	//int indiceArquivo= AnalisadorArgumentos::EncontrarArgumento("--run", argc, argv) + 1;
-	std::string caminho = argv[1];
-	JVM *jvm = new JVM(caminho);
-		//faz o q quiser
-		delete jvm;
+		//int indiceArquivo= AnalisadorArgumentos::EncontrarArgumento("--run", argc, argv) + 1;
+		std::string caminho = argv[1];
+		try{
+			JVM *jvm = new JVM(caminho);
+			//faz o q quiser
+			delete jvm;
+		}
+		catch(Erro *err)
+		{
+			cout<< err->GetMensagem() << endl;
+		}
 	}
 	return 0;
 }

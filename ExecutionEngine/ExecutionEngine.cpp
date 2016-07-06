@@ -20,17 +20,25 @@ void ExecutionEngine::Play(string classComMain)
 
 	uint8_t instrucao;
 	cout<< "Consertar Play do execution engine" << endl;
-
+	if(runtimeDataArea == NULL)
+	{
+		throw new Erro("RuntimeDataArea nao instanciado!", "ExecutionEngine", "Play");
+	}
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
+	cout<< "Consertar Play do execution engine2" << endl;
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
-//	runtimeDataArea->empilharFrame(new Frame(javaclass, "main", "([Ljava/lang/String;)V"));
+	cout<< "Consertar Play do execution engine3" << endl;
+	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
+	cout<< "Consertar Play do execution engine4" << endl;
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
-//		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V"));
+	cout<< "Consertar Play do execution engine5" << endl;
+		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
 	}
+	cout<< "Consertar Play do execution engine6" << endl;
 
 	do
 	{
