@@ -41,7 +41,7 @@ class Frame{
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
 		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea);
 		Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
-		Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
+		Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
 
 		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
