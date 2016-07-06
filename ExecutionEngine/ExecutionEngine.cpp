@@ -848,12 +848,9 @@ void ExecutionEngine::i_iaload(){
 	if (num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
-<<<<<<< HEAD
+
 	toppilha->empilharOperando(array->ObterValor(num));
-=======
-	cout<<"corrigir ExecutionEngine::i_iaload()"<< endl;
-//	toppilha->empilharOperando(array->ObterTamanho(num));
->>>>>>> origin/master
+
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -1376,9 +1373,9 @@ void ExecutionEngine::i_invokespecial(){
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 		
 
-		Frame *newFrame = new Frame(instance, classRuntime, methodDescriptor, args, runtimeDataArea);
+		//Frame *newFrame = new Frame(instance, classRuntime, methodDescriptor, args, runtimeDataArea);
 
-		//Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
+		Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
 
 
 		if (runtimeDataArea->topoPilha() != toppilha) {
