@@ -43,12 +43,15 @@ void ExecutionEngine::Play(string classComMain)
 
 	do
 	{
-
+	cout<< "Consertar Play do execution engine7" << endl;
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
+	cout<< "Consertar Play do execution engine8" << endl;
 		(this->*vetorDePonteirosParaFuncao[instrucao])();
+	cout<< "Consertar Play do execution engine9" << endl;
 
 	}
 	while(runtimeDataArea->pilhaJVM.size() > 0);
+	cout<< "Consertar Play do execution engine10" << endl;
 }
 
 void ExecutionEngine::inicializaInstrucoes() {
