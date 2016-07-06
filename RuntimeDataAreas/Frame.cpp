@@ -47,7 +47,7 @@ Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeD
 	pegarAtributos();
 }
 
-Frame::Frame(ObjetoInstancia *objeto string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos)
+Frame::Frame(ObjetoInstancia *objeto string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
 {
 	pc =0;
 	this->objeto= objeto;
