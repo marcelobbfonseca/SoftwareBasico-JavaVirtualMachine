@@ -1013,8 +1013,8 @@ void ExecutionEngine::i_swap(){}
 void ExecutionEngine::i_iadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	Valor valor2 = topoPilha->desempilhaOperando();
-	Valor valor1 = topoPilha->desempilhaOperando();
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
 	
 	assert(valor2.tipo == TipoDado::INT);
 	assert(valor1.tipo == TipoDado::INT);
@@ -1026,15 +1026,15 @@ void ExecutionEngine::i_iadd(){
 	num1 = num1 + num2;
 	memcpy(&valor1.dado,&num1,4);
 	
-	topoPilha->empilharOperando(valor1);
+	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_ladd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	Valor valor2 = topoPilha->desempilhaOperando();
-	topoPilha->desempilhaOperando(); //padding
-	Valor valor1 = topoPilha->desempilhaOperando();
+	Valor valor2 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	Valor valor1 = toppilha->desempilhaOperando();
 	
 	assert(valor2.tipo == TipoDado::LONG);
 	assert(valor1.tipo == TipoDado::LONG);
@@ -1046,14 +1046,14 @@ void ExecutionEngine::i_ladd(){
 	num1 = num1 + num2;
 	memcpy(&valor1.dado,&num1,8);
 	
-	topoPilha->empilharOperando(valor1);
+	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
 void ExecutionEngine::i_fadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	Valor valor2 = topoPilha->desempilhaOperando();
-	Valor valor1 = topoPilha->desempilhaOperando();
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
 	
 	assert(valor2.tipo == TipoDado::FLOAT);
 	assert(valor1.tipo == TipoDado::FLOAT);
@@ -1065,15 +1065,15 @@ void ExecutionEngine::i_fadd(){
 	num1 = num1 + num2;
 	memcpy(&valor1.dado,&num1,4);
 	
-	topoPilha->empilharOperando(valor1);
+	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_dadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	Valor valor2 = topoPilha->desempilhaOperando();
-	topoPilha->desempilhaOperando(); //padding
-	Valor valor1 = topoPilha->desempilhaOperando();
+	Valor valor2 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	Valor valor1 = toppilha->desempilhaOperando();
 	
 	assert(valor2.tipo == TipoDado::DOUBLE);
 	assert(valor1.tipo == TipoDado::DOUBLE);
@@ -1085,7 +1085,7 @@ void ExecutionEngine::i_dadd(){
 	num1 = num1 + num2;
 	memcpy(&valor1.dado,&num1,8);
 	
-	topoPilha->empilharOperando(valor1);
+	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
 void ExecutionEngine::i_isub(){}
