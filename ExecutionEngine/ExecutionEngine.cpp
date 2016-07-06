@@ -1,5 +1,6 @@
 #include "ExecutionEngine.hpp"
 #include "ObjetoArray.hpp"
+#include "ObjetoString.hpp"
 #include "ObjetoInstancia.hpp"
 #include "Erro.hpp"
 #include<string.h>
@@ -888,11 +889,11 @@ void ExecutionEngine::i_faload(){
 	Valor index = toppilha->desempilhaOperando();
 	assert(index.tipo == TipoDado::FLOAT);
 	
-	Value arrayref = toppilha->desempilhaOperando();
+	Valor arrayref = toppilha->desempilhaOperando();
 	assert(arrayref.tipo == TipoDado::REFERENCE);
 	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
-	array = (Objeto*)(arrayref.dado);
+	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
 		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
@@ -913,11 +914,11 @@ void ExecutionEngine::i_daload(){
 	Valor index = toppilha->desempilhaOperando();
 	assert(index.tipo == TipoDado::DOUBLE);
 	
-	Value arrayref = toppilha->desempilhaOperando();
+	Valor arrayref = toppilha->desempilhaOperando();
 	assert(arrayref.tipo == TipoDado::REFERENCE);
 	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
-	array = (Objeto*)(arrayref.dado);
+	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
 		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
@@ -928,8 +929,8 @@ void ExecutionEngine::i_daload(){
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
 	
-	Value padding;
-	padding.valor = TipoDado::PADDING;
+	Valor padding;
+	padding.dado = TipoDado::PADDING;
 	
 	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(array->ObterValor(num));
@@ -943,11 +944,11 @@ void ExecutionEngine::i_aaload(){
 	Valor index = toppilha->desempilhaOperando();
 	assert(index.tipo == TipoDado::REFERENCE);
 	
-	Value arrayref = toppilha->desempilhaOperando();
+	Valor arrayref = toppilha->desempilhaOperando();
 	assert(arrayref.tipo == TipoDado::REFERENCE);
 	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
-	array = (Objeto*)(arrayref.dado);
+	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
 		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
@@ -1192,19 +1193,19 @@ void ExecutionEngine::i_invokevirtual(){
 		}
 		else if (className == "java/lang/String" && methodName == "equals")
 		{
-			Valor strValue1 = toppilha->desempilhaOperando();
-			Valor strValue2 = toppilha->desempilhaOperando();
-			//assert(strValue1.type == tipoDado::REFERENCE);
-			//assert(strValue2.type == tipoDado::REFERENCE);
-			//assert(strValue1.data.object->objectType() == ObjectType::STRING_INSTANCE);
-			//assert(strValue2.data.object->objectType() == ObjectType::STRING_INSTANCE);
+			Valor strValor1 = toppilha->desempilhaOperando();
+			Valor strValor2 = toppilha->desempilhaOperando();
+			//assert(strValor1.type == tipoDado::REFERENCE);
+			//assert(strValor2.type == tipoDado::REFERENCE);
+			//assert(strValor1.data.object->objectType() == ObjectType::STRING_INSTANCE);
+			//assert(strValor2.data.object->objectType() == ObjectType::STRING_INSTANCE);
 			
-			ObjetoString *str1 = (ObjetoString*) strValue1.dado;
-			ObjetoString *str2 = (ObjetoString*) strValue2.dado;
+			ObjetoString *str1 = (ObjetoString*) strValor1.dado;
+			ObjetoString *str2 = (ObjetoString*) strValor2.dado;
 			
 			Valor result;
 			result.dado = TipoDado::INT;
-			if (str1->getString() == str2->getString()) {
+			if (str1->ObterString() == str2->ObterString()) {
 				result.dado = 1; //Se forem iguals true
 			} else {
 				result.dado = 0; //Se forem diferentes false
@@ -1213,9 +1214,9 @@ void ExecutionEngine::i_invokevirtual(){
 		}//fim else if equals
 		else if(className == "java/lang/String" && methodName == "length")
 		{
-			Valor strValue = toppilha->desempilhaOperando();
-			assert(strValue.tipo == TipoDado::REFERENCE);
-			ObjetoString *str = (ObjetoString*) strValue.dado;
+			Valor strValor = toppilha->desempilhaOperando();
+			assert(strValor.tipo == TipoDado::REFERENCE);
+			ObjetoString *str = (ObjetoString*) strValor.dado;
 			Valor result;
 			result.dado = TipoDado::INT;
 			toppilha->empilharOperando(result);
@@ -1258,12 +1259,12 @@ void ExecutionEngine::i_invokevirtual(){
 			}
 		}//fim for nargs
 		
-		Valor objectValue = toppilha->desempilhaOperando();
-		assert(objectValue.tipo == ValueType::REFERENCE); // necessita ser uma referência para objeto
+		Valor objectValor = toppilha->desempilhaOperando();
+		assert(objectValor.tipo == ValorType::REFERENCE); // necessita ser uma referência para objeto
 		
-		args.insert(args.begin(), objectValue);
+		args.insert(args.begin(), objectValor);
 
-		Objeto *objeto = (Objeto*)objectValue.dado;
+		Objeto *objeto = (Objeto*)objectValor.dado;
 		ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
 
 		ClassInstance *instance = (ClassInstance *) object;
@@ -1356,11 +1357,11 @@ void ExecutionEngine::i_invokespecial(){
 			}
 		}
 
-		Valor objectValue = toppilha->desempilhaOperando();
-		assert(objectValue.tipo == TipoDado::REFERENCE); // necessita ser uma referência para objeto
-		args.insert(args.begin(), objectValue);
+		Valor objectValor = toppilha->desempilhaOperando();
+		assert(objectValor.tipo == TipoDado::REFERENCE); // necessita ser uma referência para objeto
+		args.insert(args.begin(), objectValor);
 
-		Objeto *objeto = (Objeto*)objectValue.dado;
+		Objeto *objeto = (Objeto*)objectValor.dado;
 
 		//assert(object->objectType() == ObjectType::CLASS_INSTANCE); // objeto precisa ser uma instância
 		ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
@@ -1368,9 +1369,9 @@ void ExecutionEngine::i_invokespecial(){
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 		
 
-		Frame *newFrame = new Frame(instance, classRuntime, methodDescriptor, args, runtimeDataArea);
+		//Frame *newFrame = new Frame(instance, classRuntime, methodDescriptor, args, runtimeDataArea);
 
-		//Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
+		Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
 
 
 		if (runtimeDataArea->topoPilha() != toppilha) {
@@ -1406,7 +1407,7 @@ void ExecutionEngine::i_arraylength(){
 	
 	Valor length;
 	length.tipo = TipoDado::INT;
-	//length.data.intValue = ((ArrayObject *) arrayref.data.object)->getSize();
+	//length.data.intValor = ((ArrayObject *) arrayref.data.object)->getSize();
 	//topFrame->pushIntoOperandStack(length);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1429,17 +1430,17 @@ cout<<"Deus, Termina de implementar isso ai" << endl;
 
 	assert(cpElement->tag == CONSTANT_Class);
 
-	Valor objectrefValue = topo->desempilhaOperando();
-	assert(objectrefValue.tipo == TipoDado::REFERENCE);
+	Valor objectrefValor = topo->desempilhaOperando();
+	assert(objectrefValor.tipo == TipoDado::REFERENCE);
 
-	Valor resultValue;
-	resultValue.tipo = TipoDado::INT;
+	Valor resultValor;
+	resultValor.tipo = TipoDado::INT;
 
-	if ((Objeto*)objectrefValue.dado == NULL) {
-		resultValue.dado. = 0;
+	if ((Objeto*)objectrefValor.dado == NULL) {
+		resultValor.dado. = 0;
 	}
 	else {
-		Object *obj = (Objeto*)objectrefValue.dado;
+		Object *obj = (Objeto*)objectrefValor.dado;
 
 		if (obj->objectType() == ObjectType::CLASS_INSTANCE) {
 			ClassInstance *classInstance = (ClassInstance *) obj;
@@ -1462,19 +1463,19 @@ cout<<"Deus, Termina de implementar isso ai" << endl;
 				}
 			}
 
-			resultValue.data.intValue = found ? 1 : 0;
+			resultValor.data.intValor = found ? 1 : 0;
 		} else if (obj->objectType() == ObjectType::STRING_INSTANCE) {
-			resultValue.data.intValue = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
+			resultValor.data.intValor = (className == "java/lang/String" || className == "java/lang/Object") ? 1 : 0;
 		} else {
 			if (className == "java/lang/Object") {
-				resultValue.data.intValue = 1;
+				resultValor.data.intValor = 1;
 			} else {
-				resultValue.data.intValue = 0;
+				resultValor.data.intValor = 0;
 			}
 		}
 	}
 
-	topFrame->pushIntoOperandStack(resultValue);
+	topFrame->pushIntoOperandStack(resultValor);
 
 	topFrame->pc += 3;
 
