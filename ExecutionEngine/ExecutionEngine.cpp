@@ -7,7 +7,7 @@
 
 ExecutionEngine::ExecutionEngine(void)
 {
-
+	inicializaInstrucoes();
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
@@ -46,7 +46,7 @@ void ExecutionEngine::Play(string classComMain)
 	cout<< "Consertar Play do execution engine7" << endl;
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 	cout<< "Consertar Play do execution engine8" << endl;
-		(this->*vetorDePonteirosParaFuncao[instrucao])();
+		(this->*vetorDePonteirosParaFuncao[instrucao])();//pulo depende de unitialized val
 	cout<< "Consertar Play do execution engine9" << endl;
 
 	}
@@ -825,6 +825,7 @@ void ExecutionEngine::i_lreturn(){}
 void ExecutionEngine::i_freturn(){}
 void ExecutionEngine::i_dreturn(){}
 void ExecutionEngine::i_areturn(){}
+
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	runtimeDataArea->topoPilha()->desempilhaOperando();
