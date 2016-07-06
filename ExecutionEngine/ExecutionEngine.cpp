@@ -1130,14 +1130,19 @@ void ExecutionEngine::i_invokevirtual(){
 
 	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
 
-	if (className.find("java/") != string::npos) {
+
+	if (className.find("java/") != string::npos)
+	{
+
 		if(className == "java/io/PrintStream" && (methodName == "print" || methodName =="println"))
 		{
 			
-			if (methodDescriptor != "()V") {
+			if (methodDescriptor != "()V") 
+			{
 	                Valor printValor = toppilha->desempilhaOperando();
 
-	                if (printValor.tipo == TipoDado::INT) {
+	                if (printValor.tipo == TipoDado::INT) 
+	                {
 	                
 	                    switch (printValor.dado) {
 	                        case TipoDado::BOOLEAN:
@@ -1284,9 +1289,8 @@ void ExecutionEngine::i_invokevirtual(){
 	}//fim else
    
 	runtimeDataArea->topoPilha()->desempilhaOperando();
-}
+}//fim metodo
 
-}//fim instrucao
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
