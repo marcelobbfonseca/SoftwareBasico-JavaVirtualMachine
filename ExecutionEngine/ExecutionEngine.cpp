@@ -19,17 +19,17 @@ void ExecutionEngine::Play(string classComMain)
 
 
 	uint8_t instrucao;
-//	cout<< "Consertar Play do execution engine" << endl;
+	cout<< "Consertar Play do execution engine" << endl;
 
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
-	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
+//	runtimeDataArea->empilharFrame(new Frame(javaclass, "main", "([Ljava/lang/String;)V"));
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
-		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
+//		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V"));
 	}
 
 	do
@@ -680,7 +680,9 @@ void ExecutionEngine::i_aload_3(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iaload(){}
+void ExecutionEngine::i_iaload(){
+
+}
 void ExecutionEngine::i_laload(){}
 void ExecutionEngine::i_faload(){}
 void ExecutionEngine::i_daload(){}
@@ -826,7 +828,7 @@ void ExecutionEngine::i_putfield(){}
 void ExecutionEngine::i_invokevirtual(){
 	//usa no helloworld
 }
-void ExecutionEngine::i_invokespecial(){ // 
+void ExecutionEngine::i_invokespecial(){ // =======================================================
 	//usa no mainvazia
 /*	Frame *toppilha = runtimeDataArea->topoPilha();
 	//consertar isso:
@@ -875,8 +877,28 @@ void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
 void ExecutionEngine::i_newarray(){}
 void ExecutionEngine::i_anewarray(){}
-void ExecutionEngine::i_arraylength(){}
-void ExecutionEngine::i_athrow(){}
+
+void ExecutionEngine::i_arraylength(){
+    Frame *toppilha = runtimeDataArea->topoPilha();
+    
+    Valor arrayref = toppilha->desempilhaOperando();
+    assert(arrayref.tipo == TipoDado::REFERENCE);
+
+    //if (arrayref.data.object == NULL) {
+    //    cerr << "NullPointerException" << endl;
+    //    exit(1);
+    //} FAZENDO
+    
+    Valor length;
+    length.tipo = TipoDado::INT;
+    //length.data.intValue = ((ArrayObject *) arrayref.data.object)->getSize();
+    //topFrame->pushIntoOperandStack(length);
+
+    runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_athrow(){
+    runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_checkcast(){}
 void ExecutionEngine::i_instanceof(){
 cout<<"Deus, Termina de implementar isso ai" << endl;
