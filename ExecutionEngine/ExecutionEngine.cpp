@@ -7,11 +7,29 @@
 #include <inttypes.h>
 #include <cmath>
 
+// Check ruindos
+#if _WIN32 || _WIN64
+	#if _WIN64
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
+// Check GCC
+#if __GNUC__
+	#if __x86_64__ || __ppc64__
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
 #define DEBUG
 
 ExecutionEngine::ExecutionEngine(void)
 {
-
+	inicializaInstrucoes();
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
@@ -541,9 +559,62 @@ void ExecutionEngine::i_ldc(){
 void ExecutionEngine::i_ldc_w(){
 
 }
-void ExecutionEngine::i_ldc2_w(){
-	//double
+void ExecutionEngine::i_ldc2_w() {
+/*	//double
+    Frame *toppilha = runtimeDataArea->topoPilha();
 
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint16_t index = (byte1 << 8) | byte2;
+
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+    
+    //
+    cp_info *classFile = *(toppilha->getConstantPool());
+    
+
+    cp_info entry = constantPool[index-1];
+    //
+
+    Valor valor;
+    
+    if (entry.tag == CONSTANT_Long) {
+        uint32_t highBytes = entry.info.long_info.high_bytes;
+        uint32_t lowBytes = entry.info.long_info.low_bytes;
+        
+        int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+        valor.tipo = ValueType::LONG;
+        
+        Valor padding;
+        padding.type = ValueType::PADDING;
+        
+        toppilha->pushIntoOperandStack(padding);
+    } else if (entry.tag == CONSTANT_Double) {
+        u4 highBytes = entry.info.double_info.high_bytes;
+        u4 lowBytes = entry.info.double_info.low_bytes;
+        
+        int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+        
+        int32_t s = ((longNumber >> 63) == 0) ? 1 : -1;
+        int32_t e = (int32_t)((longNumber >> 52) & 0x7ffL);
+        int64_t m = (e == 0) ? (longNumber & 0xfffffffffffffL) << 1 : (longNumber & 0xfffffffffffffL) | 0x10000000000000L;
+        
+        double doubleNumber = s*m*pow(2, e-1075);
+        valor.tipo = TipoDado::DOUBLE;
+        
+        Valor padding;
+        padding.tipo = TipoDado::PADDING;
+        
+        toppilha->pushIntoOperandStack(padding);
+    } else {
+        cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << entry.tag << endl;
+        exit(1);
+    }
+    
+    toppilha->empilharOperando(valor);
+    runtimeDataArea->topoPilha()->incrementaPC(1);
+*/
 }
 void ExecutionEngine::i_iload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -1019,25 +1090,199 @@ void ExecutionEngine::i_lstore(){}
 void ExecutionEngine::i_fstore(){}
 void ExecutionEngine::i_dstore(){}
 void ExecutionEngine::i_astore(){}
-void ExecutionEngine::i_istore_0(){}
-void ExecutionEngine::i_istore_1(){}
-void ExecutionEngine::i_istore_2(){}
-void ExecutionEngine::i_istore_3(){}
-void ExecutionEngine::i_lstore_0(){}
-void ExecutionEngine::i_lstore_1(){}
-void ExecutionEngine::i_lstore_2(){}
-void ExecutionEngine::i_lstore_3(){}
-void ExecutionEngine::i_fstore_0(){}
-void ExecutionEngine::i_fstore_1(){}
-void ExecutionEngine::i_fstore_2(){}
-void ExecutionEngine::i_fstore_3(){}
-void ExecutionEngine::i_dstore_0(){}
+void ExecutionEngine::i_istore_0(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::INT);
+    toppilha->mudarVariavelLocal(valor, 0);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+
+}
+void ExecutionEngine::i_istore_1(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::INT);
+    toppilha->mudarVariavelLocal(valor, 1);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+
+}
+void ExecutionEngine::i_istore_2(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::INT);
+    toppilha->mudarVariavelLocal(valor, 2);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+
+}
+void ExecutionEngine::i_istore_3(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::INT);
+    toppilha->mudarVariavelLocal(valor, 3);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lstore_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::LONG);
+    
+    toppilha->mudarVariavelLocal(valor, 0);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 1);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lstore_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::LONG);
+    
+    toppilha->mudarVariavelLocal(valor, 1);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 2);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lstore_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::LONG);
+    
+    toppilha->mudarVariavelLocal(valor, 2);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 3);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_lstore_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::LONG);
+    
+    toppilha->mudarVariavelLocal(valor, 3);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 4);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fstore_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::FLOAT);
+    toppilha->mudarVariavelLocal(valor, 0);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fstore_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::FLOAT);
+    toppilha->mudarVariavelLocal(valor, 1);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fstore_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::FLOAT);
+    toppilha->mudarVariavelLocal(valor, 2);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fstore_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::FLOAT);
+    toppilha->mudarVariavelLocal(valor, 3);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_dstore_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::DOUBLE);
+	
+	toppilha->mudarVariavelLocal(valor, 0);
+
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 1);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_dstore_1(){
 	//double
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::DOUBLE);
+	
+	toppilha->mudarVariavelLocal(valor, 1);
+
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 2);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+
 }
-void ExecutionEngine::i_dstore_2(){}
+void ExecutionEngine::i_dstore_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::DOUBLE);
+	
+	toppilha->mudarVariavelLocal(valor, 2);
+
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 3);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_dstore_3(){
 	//double
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::DOUBLE);
+	
+	toppilha->mudarVariavelLocal(valor, 3);
+
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 4);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_astore_0(){}
 void ExecutionEngine::i_astore_1(){}
@@ -2213,10 +2458,15 @@ void ExecutionEngine::i_dcmpl(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dcmpg(){
+void ExecutionEngine::i_dcmpg(){ /*
+
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor2 = toppilha		
+	uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;lha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
@@ -2245,7 +2495,7 @@ void ExecutionEngine::i_dcmpg(){
 	
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
+*/}
 void ExecutionEngine::i_ifeq(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -2575,7 +2825,7 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
-void ExecutionEngine::i_getstatic() {/*
+void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -2594,74 +2844,71 @@ void ExecutionEngine::i_getstatic() {/*
 
 	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetClassIndex());
 
-
-
 	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
 
 	string campoName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetNameIndex());
 	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
 
+	if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		return;
+	}	
 
-    if (className == "java/lang/System" && fieldDescriptor == "Ljava/io/PrintStream;" ) {
-        runtimeDataArea->topoPilha()->incrementaPC(3);
-        return;
-    }	
 
+	JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 
-    JavaClass *classRuntime = runtimeDataArea->carregarClasse(className);
+	while (classRuntime != NULL) {
+		if (classRuntime->FieldExiste(campoName) == false) {
+			if (classRuntime->ObterSuperClasse()) {
+				classRuntime = NULL;
+			} else {
 
-    while (classRuntime != NULL) {
-        if (classRuntime->fieldExists(campoName) == false) {
-            if (runtimeDataArea->ObterSuperClasse()) {
-                classRuntime = NULL;
-            } else {
-
-            	string superClassName = classRuntime->getUTF8(runtimeDataArea->ObterSuperClasse());
-                classRuntime = runtimeDataArea->carregarClasse(superClassName);
-      		  
-      
-            }
-        } else {
-            break;
-        }
-    }// fim while classRuntime   
-    
-    if (classRuntime == NULL) {
-        cerr << "NoSuchFieldError" << endl;
-        exit(1);
-    }
-    if (runtimeDataArea->topoPilha() != toppilha)
+				string superClassName = classRuntime->getUTF8(classRuntime->ObterSuperClasse());
+				classRuntime = runtimeDataArea->CarregarClasse(superClassName);
+	  		  
+	  
+			}
+		} else {
+			break;
+		}
+	}// fim while classRuntime   
+	
+	if (classRuntime == NULL) {
+		cerr << "NoSuchFieldError" << endl;
+		exit(1);
+	}
+	if (runtimeDataArea->topoPilha() != toppilha)
    		return;
 
-    Valor valorStatico = classRuntime->getValueFromField(campoName);
-    
-    switch (valorStatico.tipo) {
-        case TipoDado::BOOLEAN:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        case TipoDado::BYTE:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        case TipoDado::SHORT:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        case TipoDado::INT:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        default:
-            break;
-    }
-    if (valorStatico.tipo == TipoDado::DOUBLE || valorStatico.tipo == TipoDado::LONG) {
-        Valor padding;
-        padding.tipo = TipoDado::PADDING;
-        toppilha->empilharOperando(padding);
-    }
+	Valor valorStatico = classRuntime->getValorDoField(campoName);
+	
+	switch (valorStatico.tipo) {
+		case TipoDado::BOOLEAN:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		case TipoDado::BYTE:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		case TipoDado::SHORT:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		case TipoDado::INT:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		default:
+			break;
+	}
+	if (valorStatico.tipo == TipoDado::DOUBLE || valorStatico.tipo == TipoDado::LONG) {
+		Valor padding;
+		padding.tipo = TipoDado::PADDING;
+		toppilha->empilharOperando(padding);
+	}
 
-    toppilha->empilharOperando(valorStatico);
+	toppilha->empilharOperando(valorStatico);
 
-    runtimeDataArea->topoPilha()->incrementaPC(3);
+	runtimeDataArea->topoPilha()->incrementaPC(3);
 
-*/}
+}
 
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
@@ -2686,13 +2933,243 @@ void ExecutionEngine::i_putfield()
 
 }//fim metodo
 
-void ExecutionEngine::i_invokevirtual(){}
+void ExecutionEngine::i_invokevirtual()
+{
+	Frame *topoDaPilha= runtimeDataArea->topoPilha();
+	stack<Valor> pilhaDeOperandosDeReserva= topoDaPilha->retornaPilhaOperandos();
+	uint8_t *instrucoes=topoDaPilha->getCode();
+	uint16_t indiceMetodo;
+	memcpy(&indiceMetodo, instrucoes, 2);
+	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
+	if(javaClass->getConstantPool().at(indiceMetodo-1)->GetTag() != CONSTANT_Methodref)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokevirtual");
+	}
+	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)javaClass->getConstantPool().at(indiceMetodo-1);
+	string nomeDaClasse= javaClass->getUTF8(metodo->GetClassIndex());
+	if(javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "i_invokevirtual");
+	}
+	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
+	string nomeDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetNameIndex());
+	string descritorDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetDescriptorIndex());
+	
+	if(nomeDaClasse.find("java/") != string::npos)
+	{//Provavelmente estamos tratando de um print
+		if(nomeDaClasse== "java/io/PrintStream" && (nomeDoMetodo == "print" || nomeDoMetodo == "println"))
+		{
+			if(descritorDoMetodo != "()V")
+			{
+				Valor valorQueSeraImpresso= topoDaPilha->desempilhaOperando();
+				switch(valorQueSeraImpresso.tipo)
+				{
+					case(BOOLEAN):
+					{
+						printf("%s", valorQueSeraImpresso.dado != 0 ? "true" : "true");
+						break;
+					}
+					case(BYTE):
+					{
+						int8_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 1);
+						printf("%c", aux);
+						break;
+					}
+					case(SHORT):
+					{
+						int16_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 2);
+						printf("%hd", aux);
+						break;
+					}
+					case(INT):
+					{
+						int32_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 4);
+						printf("%d", aux);
+						break;
+					}
+					case(DOUBLE):
+					{
+						topoDaPilha->desempilhaOperando();//desempilhando a entrada de preenchimento
+						double aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 8);
+						printf("%f", aux);
+						break;
+					}
+					case(FLOAT):
+					{
+						float aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 4);
+						printf("%f", aux);
+						break;
+					}
+					case(LONG):
+					{
+						topoDaPilha->desempilhaOperando();//desempilhando a entrada de preenchimento
+						int64_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 8);
+#ifdef ENVIRONMENT32
+						printf("%lld", aux);
+#else
+						printf("%ld", aux);
+#endif
+						break;
+					}
+					case(REFERENCE):
+					{
+						if(((Objeto*)valorQueSeraImpresso.dado)->ObterTipoObjeto() != STRING)
+						{
+							throw new Erro("String esperado quando deve imprimir referencias", "ExecutionEngine", "invokevirtual");
+						}
+						ObjetoString *stringPtr;
+						memcpy(&stringPtr, &(valorQueSeraImpresso.dado), sizeof(ObjetoString *));
+						printf("%s", stringPtr->ObterString().c_str());
+						break;
+					}
+					default:
+					{
+						throw new Erro("Tentou-se imprimir um tipo de dado invalido");
+					}
+				}
+			}
+			if(nomeDoMetodo == "println")
+			{
+				cout << endl;
+			}
+			else if(nomeDaClasse== "java/lang/String")
+			{
+				if(nomeDoMetodo == "lenght")
+				{
+					Valor string1= topoDaPilha->desempilhaOperando();
+					if(string1.tipo != REFERENCE)
+					{
+						throw new Erro("Esperado valor do tipo referencia para pegar comprimento da string", "ExecutionEngine", "i_invokevirtual");
+					}
+					if(((Objeto*)string1.dado)->ObterTipoObjeto() == STRING)
+					{
+						throw new Erro("Esperado objeto do tipo string para calcular", "ExecutionEngine", "i_invokevirtual");
+					}
+					ObjetoString *stringObj= (ObjetoString *)string1.dado;
+					Valor tamanhoDaString;
+					tamanhoDaString.tipo= INT;
+					tamanhoDaString.dado=stringObj->ObterString().size();
+					topoDaPilha->empilharOperando(tamanhoDaString);
+				}
+				else if(nomeDoMetodo == "equals")
+				{
+					Valor string1 = topoDaPilha->desempilhaOperando();
+					if(string1.tipo != REFERENCE)
+					{
+						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					if(((Objeto*)string1.dado)->ObterTipoObjeto() == STRING)
+					{
+						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					Valor string2 = topoDaPilha->desempilhaOperando();
+					if(string2.tipo != REFERENCE)
+					{
+						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na  string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					if(((Objeto*)string2.dado)->ObterTipoObjeto() == STRING)
+					{
+						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na segunda string string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					//se chegou ate aqui é pq os operandos são válidos
+					string stringReal1= ((ObjetoString*)string1.dado)->ObterString();
+					string stringReal2= ((ObjetoString*)string2.dado)->ObterString();
+					Valor resultado;
+					resultado.tipo=BOOLEAN;
+					if(stringReal1 == stringReal2)
+					{
+						resultado.dado= 0xFFFFFFFFFFFFFFFF;
+					}
+					else
+					{
+						resultado.dado= 0;
+					}
+					topoDaPilha->empilharOperando(resultado);
+				}
+			}
+		}
+		else
+		{
+			throw new Erro("Metodo que esta tentando invocar um metodo desconhecido", "ExecutionEngine", "invokevirtual");
+		}
+	}
+	else
+	{
+		uint16_t numeroDeargumentos;
+		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++)//pula o abre parenteses
+		{
+			char indicadorDeTipo= descritorDoMetodo[cont];
+			if(indicadorDeTipo == 'J' || indicadorDeTipo == 'D')
+			{
+				numeroDeargumentos+= 2;
+			}
+			else if(indicadorDeTipo == 'L')
+			{
+				numeroDeargumentos++;
+				while(descritorDoMetodo[++cont] != ';');
+			}
+			else if(indicadorDeTipo == '[')
+			{
+				if(descritorDoMetodo[++cont] == 'L')
+				{
+					while(descritorDoMetodo[++cont] != ';');
+				}
+			}
+			else
+			{
+				numeroDeargumentos++;
+			}
+		}
+		vector<Valor> argumentos;
+		Valor temp;
+		for(int cont =0; cont < numeroDeargumentos; cont++)
+		{
+			temp= topoDaPilha->desempilhaOperando();
+			if(temp.tipo == PADDING)
+			{
+				argumentos.insert(argumentos.begin()+1, temp);
+			}
+			else
+			{
+				argumentos.insert(argumentos.begin(), temp);
+			}
+		}
+		Valor valorQueArmazenaObjeto= topoDaPilha->desempilhaOperando();
+		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		{
+			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "InvokeVirtual");
+		}
+		argumentos.insert(argumentos.begin(), valorQueArmazenaObjeto);
+		Objeto *obj= (Objeto*) valorQueArmazenaObjeto.dado;
+		if(obj->ObterTipoObjeto() != INSTANCIA)
+		{
+			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "Invokevirtual");
+		}
+		ObjetoInstancia *instancia= (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
+		runtimeDataArea->CarregarClasse(nomeDaClasse);
+		Frame *novoFrame= new Frame(instancia, javaClass, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		if(runtimeDataArea->topoPilha() != topoDaPilha)
+		{
+			topoDaPilha->setaPilhaOperandos(pilhaDeOperandosDeReserva);
+			delete novoFrame;
+			return;
+		}
+		runtimeDataArea->pilhaJVM.push(*novoFrame);
+	}
+	topoDaPilha->incrementaPC(3);
+}
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
-	//cp_info *constantPool = *(topFrame->getConstantPool());
+	//cp_info *constantPool = *(toppilha->getConstantPool());
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
 	uint8_t *code = toppilha->getCode();

@@ -6,6 +6,8 @@
 #include "Erro.hpp"
 #include <vector>
 #include <stdint.h>
+#include <stack>
+#include <assert.h>
 
 using namespace std;
 
