@@ -2486,15 +2486,10 @@ void ExecutionEngine::i_dcmpl(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dcmpg(){ /*
-
+void ExecutionEngine::i_dcmpg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	Valor valor2 = toppilha		
-	uint8_t *code = toppilha->getCode();
-		uint8_t byte1 = code[1];
-		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;lha->desempilhaOperando();
+	Valor valor2 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
@@ -2523,7 +2518,7 @@ void ExecutionEngine::i_dcmpg(){ /*
 	
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-*/}
+}
 void ExecutionEngine::i_ifeq(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
