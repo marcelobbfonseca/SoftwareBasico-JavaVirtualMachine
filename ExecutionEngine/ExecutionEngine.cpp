@@ -869,12 +869,12 @@ void ExecutionEngine::i_laload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_laload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_laload");
 	}
 	
 	Valor padding;
@@ -899,12 +899,12 @@ void ExecutionEngine::i_faload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_faload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_faload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
 	
@@ -924,12 +924,12 @@ void ExecutionEngine::i_daload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_daload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_daload");
 	}
 	
 	Valor padding;
@@ -954,12 +954,12 @@ void ExecutionEngine::i_aaload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_aaload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_aaload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
 	
@@ -1244,10 +1244,100 @@ void ExecutionEngine::i_dmul(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_idiv(){}
-void ExecutionEngine::i_ldiv(){}
-void ExecutionEngine::i_fdiv(){}
-void ExecutionEngine::i_ddiv(){}
+void ExecutionEngine::i_idiv(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
+	
+	assert(valor2.tipo == TipoDado::INT);
+	assert(valor1.tipo == TipoDado::INT);
+	
+	int32_t num1, num2;
+	memcpy(&num1,&valor1.dado,4);
+	memcpy(&num2,&valor2.dado,4);
+	
+	if (num2 == 0) {
+		throw new Erro("Divisao por zero.","ExecutionEngine","i_idiv");
+	}
+	
+	num1 = num1 / num2;
+	memcpy(&valor1.dado,&num1,4);
+	
+	toppilha->empilharOperando(valor1);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_ldiv(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	Valor valor1 = toppilha->desempilhaOperando();
+	
+	assert(valor2.tipo == TipoDado::LONG);
+	assert(valor1.tipo == TipoDado::LONG);
+	
+	int64_t num1, num2;
+	memcpy(&num1,&valor1.dado,8);
+	memcpy(&num2,&valor2.dado,8);
+	
+	if (num2 == 0) {
+		throw new Erro("Divisao por zero.","ExecutionEngine","i_ldiv");
+	}
+	
+	num1 = num1 / num2;
+	memcpy(&valor1.dado,&num1,8);
+	
+	toppilha->empilharOperando(valor1);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fdiv(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
+	
+	assert(valor2.tipo == TipoDado::FLOAT);
+	assert(valor1.tipo == TipoDado::FLOAT);
+	
+	int32_t num1, num2;
+	memcpy(&num1,&valor1.dado,4);
+	memcpy(&num2,&valor2.dado,4);
+	
+	if (num2 == 0) {
+		throw new Erro("Divisao por zero.","ExecutionEngine","i_fdiv");
+	}
+	
+	num1 = num1 / num2;
+	memcpy(&valor1.dado,&num1,4);
+	
+	toppilha->empilharOperando(valor1);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_ddiv(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	Valor valor1 = toppilha->desempilhaOperando();
+	
+	assert(valor2.tipo == TipoDado::DOUBLE);
+	assert(valor1.tipo == TipoDado::DOUBLE);
+	
+	int64_t num1, num2;
+	memcpy(&num1,&valor1.dado,8);
+	memcpy(&num2,&valor2.dado,8);
+	
+	if (num2 == 0) {
+		throw new Erro("Divisao por zero.","ExecutionEngine","i_ddiv");
+	}
+	
+	num1 = num1 / num2;
+	memcpy(&valor1.dado,&num1,8);
+	
+	toppilha->empilharOperando(valor1);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_irem(){}
 void ExecutionEngine::i_lrem(){}
 void ExecutionEngine::i_frem(){}
