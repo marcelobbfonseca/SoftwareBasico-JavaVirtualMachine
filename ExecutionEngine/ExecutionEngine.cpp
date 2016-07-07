@@ -1740,18 +1740,246 @@ void ExecutionEngine::i_lxor(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_iinc(){}
-void ExecutionEngine::i_i2l(){}
-void ExecutionEngine::i_i2f(){}
-void ExecutionEngine::i_i2d(){}
-void ExecutionEngine::i_l2i(){}
-void ExecutionEngine::i_l2f(){}
-void ExecutionEngine::i_l2d(){}
-void ExecutionEngine::i_f2i(){}
-void ExecutionEngine::i_f2l(){}
-void ExecutionEngine::i_f2d(){}
-void ExecutionEngine::i_d2i(){}
-void ExecutionEngine::i_d2l(){}
-void ExecutionEngine::i_d2f(){}
+void ExecutionEngine::i_i2l(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::INT);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::LONG;
+	Valor padding;
+	padding.tipo = tipoDado::PADDING;
+	toppilha->empilharOperando(padding);
+	
+	int32_t num1;
+	int64_t num2;
+	
+	memcpy(&num1,&valor1.dado,4);
+	num2 = (int64_t) num1;
+	memcpy(&valor2.dado,&num2,8);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_i2f(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::INT);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::FLOAT;
+	
+	int32_t num1, num2;
+	
+	memcpy(&num1,&valor1.dado,4);
+	num2 = (float) num1;
+	memcpy(&valor2.dado,&num2,4);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_i2d(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::INT);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::DOUBLE;
+	Valor padding;
+	padding.tipo = tipoDado::PADDING;
+	toppilha->empilharOperando(padding);
+	
+	int32_t num1;
+	int64_t num2;
+	
+	memcpy(&num1,&valor1.dado,4);
+	num2 = (double) num1;
+	memcpy(&valor2.dado,&num2,8);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_l2i(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	assert(valor1.tipo == tipoDado::LONG);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::INT;
+	
+	int64_t num1;
+	int32_t num2;
+	
+	memcpy(&num1,&valor1.dado,8);
+	num2 = (int32_t) num1;
+	memcpy(&valor2.dado,&num2,4);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_l2f(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	assert(valor1.tipo == tipoDado::LONG);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::FLOAT;
+	
+	int64_t num1;
+	int32_t num2;
+	
+	memcpy(&num1,&valor1.dado,8);
+	num2 = (float) num1;
+	memcpy(&valor2.dado,&num2,4);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_l2d(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::LONG);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::DOUBLE;
+	
+	int64_t num1, num2;
+	
+	memcpy(&num1,&valor1.dado,8);
+	num2 = (double) num1;
+	memcpy(&valor2.dado,&num2,8);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_f2i(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::FLOAT);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::INT;
+	
+	int32_t num1, num2;
+	
+	memcpy(&num1,&valor1.dado,4);
+	num2 = (int32_t) num1;
+	memcpy(&valor2.dado,&num2,4);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_f2l(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::FLOAT);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::LONG;
+	Valor padding;
+	padding.tipo = tipoDado::PADDING;
+	toppilha->empilharOperando(padding);
+	
+	int32_t num1;
+	int64_t num2;
+	
+	memcpy(&num1,&valor1.dado,4);
+	num2 = (int64_t) num1;
+	memcpy(&valor2.dado,&num2,8);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_f2d(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::INT);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::DOUBLE;
+	Valor padding;
+	padding.tipo = tipoDado::PADDING;
+	toppilha->empilharOperando(padding);
+	
+	int32_t num1;
+	int64_t num2;
+	
+	memcpy(&num1,&valor1.dado,4);
+	num2 = (double) num1;
+	memcpy(&valor2.dado,&num2,8);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_d2i(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	assert(valor1.tipo == tipoDado::DOUBLE);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::INT;
+	
+	int64_t num1;
+	int32_t num2;
+	
+	memcpy(&num1,&valor1.dado,8);
+	num2 = (int32_t) num1;
+	memcpy(&valor2.dado,&num2,4);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_d2l(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == tipoDado::DOUBLE);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::LONG;
+	
+	int64_t num1, num2;
+	
+	memcpy(&num1,&valor1.dado,8);
+	num2 = (int64_t) num1;
+	memcpy(&valor2.dado,&num2,8);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_d2f(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor1 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	assert(valor1.tipo == tipoDado::DOUBLE);
+	
+	Valor valor2;
+	valor2.tipo = tipoDado::FLOAT;
+	
+	int64_t num1;
+	int32_t num2;
+	
+	memcpy(&num1,&valor1.dado,8);
+	num2 = (float) num1;
+	memcpy(&valor2.dado,&num2,4);
+	
+	toppilha->empilharOperando(valor2);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_i2b(){}
 void ExecutionEngine::i_i2c(){}
 void ExecutionEngine::i_i2s(){}
@@ -2042,16 +2270,17 @@ void ExecutionEngine::i_instanceof(){
 	Valor objectrefValue = topo->desempilhaOperando();
 	assert(objectrefValue.tipo == TipoDado::REFERENCE);
  	
-		string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
+	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
 
 	Valor resultValor;
 	resultValor.tipo = TipoDado::INT;
 
-		assert(cpElement->GetTag() == CONSTANT_Class);
+	assert(cpElement->GetTag() == CONSTANT_Class);
    
 	if ((Objeto*)objectrefValue.dado == NULL) {
 		resultValor.dado = 0;
 	}
+
 	else {
 		Objeto *obj = (Objeto*)objectrefValue.dado;
 
@@ -2061,14 +2290,14 @@ void ExecutionEngine::i_instanceof(){
 
 			bool found = false;
 			while (!found) {
-								JavaClass *auxJavaClass = classRuntime;
-								string currClassName = classRuntime->NomeDaClasse();
+					JavaClass *auxJavaClass = classRuntime;
+					string currClassName = classRuntime->NomeDaClasse();
 
 				if (currClassName == className) {
 					found = true;
 				} 
 								else {
-					if (classRuntime->ObterSuperClasse() == 0) {
+					if (auxJavaClass->ObterSuperClasse() == 0) {
 						break;
 					} else {
 						string superClassName = classRuntime->NomeDaClasse();;
@@ -2120,6 +2349,7 @@ void ExecutionEngine::i_wide(){
 }
 
 void ExecutionEngine::i_multianewarray(){
+
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
@@ -2131,10 +2361,6 @@ void ExecutionEngine::i_multianewarray(){
 	assert(dimensoes >= 1);
 
 	uint16_t classIndex = (byte1 << 8) | byte2;
-	//Bastos
-	//cp_info classCP = constantPool[classIndex-1];
-	//CONSTANT_Class_info classInfo = classCP.info.class_info;
-	//Yoo 
 
 	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
 	assert(classInfo->GetTag() == CONSTANT_Class);
@@ -2146,7 +2372,7 @@ void ExecutionEngine::i_multianewarray(){
 	int i = 0;
 	while (className[i] == '[') i++;
 
-	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência ([[[Ljava/lang/String;)
 
 	switch (className[i]) {
 		case 'L':
@@ -2192,12 +2418,12 @@ void ExecutionEngine::i_multianewarray(){
 	}
 
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
-//	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
-//	arr->popularSubArray(tipoDado, count);
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+	arr->popularSubArray(tipoDado, count);
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
-//	valorArr.dado = (uint64_t)arr;
+	valorArr.dado = (uint64_t)arr;
 
 	topo->empilharOperando(valorArr);
 
