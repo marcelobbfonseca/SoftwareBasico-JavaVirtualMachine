@@ -1320,6 +1320,7 @@ void ExecutionEngine::i_return(){
 }
 void ExecutionEngine::i_getstatic(){
 	//usa no helloworld
+	
 }
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
