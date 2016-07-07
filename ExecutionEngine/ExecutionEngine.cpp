@@ -2967,7 +2967,9 @@ void ExecutionEngine::i_invokevirtual()
 	uint8_t *instrucoes=topoDaPilha->getCode();
 	uint16_t indiceMetodo;
 	memcpy(&indiceMetodo, instrucoes, 2);
+	cout<<"ChegouAteAqui"<<endl;
 	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
+	cout<<"Mas NaoAqui"<<endl;
 	if(javaClass->getConstantPool().at(indiceMetodo-1)->GetTag() != CONSTANT_Methodref)
 	{
 		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokevirtual");
