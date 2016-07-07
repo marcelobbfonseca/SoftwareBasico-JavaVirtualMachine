@@ -2531,7 +2531,7 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
-void ExecutionEngine::i_getstatic() {/*
+void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -2558,22 +2558,22 @@ void ExecutionEngine::i_getstatic() {/*
 	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
 
 
-    if (className == "java/lang/System" && fieldDescriptor == "Ljava/io/PrintStream;" ) {
+    if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
         runtimeDataArea->topoPilha()->incrementaPC(3);
         return;
     }	
 
 
-    JavaClass *classRuntime = runtimeDataArea->carregarClasse(className);
+    JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 
     while (classRuntime != NULL) {
-        if (classRuntime->fieldExists(campoName) == false) {
-            if (runtimeDataArea->ObterSuperClasse()) {
+        if (classRuntime->FieldExiste(campoName) == false) {
+            if (classRuntime->ObterSuperClasse()) {
                 classRuntime = NULL;
             } else {
 
-            	string superClassName = classRuntime->getUTF8(runtimeDataArea->ObterSuperClasse());
-                classRuntime = runtimeDataArea->carregarClasse(superClassName);
+            	string superClassName = classRuntime->getUTF8(classRuntime->ObterSuperClasse());
+                classRuntime = runtimeDataArea->CarregarClasse(superClassName);
       		  
       
             }
@@ -2589,7 +2589,7 @@ void ExecutionEngine::i_getstatic() {/*
     if (runtimeDataArea->topoPilha() != toppilha)
    		return;
 
-    Valor valorStatico = classRuntime->getValueFromField(campoName);
+    Valor valorStatico = classRuntime->getValorDoField(campoName);
     
     switch (valorStatico.tipo) {
         case TipoDado::BOOLEAN:
@@ -2617,7 +2617,7 @@ void ExecutionEngine::i_getstatic() {/*
 
     runtimeDataArea->topoPilha()->incrementaPC(3);
 
-*/}
+}
 
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
