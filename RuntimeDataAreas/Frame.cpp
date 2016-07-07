@@ -3,43 +3,13 @@
 
 #define DEBUG
 //Construtor para métodos não estáticos
-/*
-Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
-{
-
-#ifdef DEBUG
-	cout<< "Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)" << endl;
-#endif
-	pc = 0;
-	method_info *metodoAux = (method_info *)((ObjetoInstancia*)objeto)->ObterJavaClass()->getMetodo(nomeMetodo, descritorMetodo);
-	if(metodoAux == NULL)
-	{
-		throw new Erro("metodoAux == NULL", "Frame", "pegarAtributos");
-	}
-	if(objeto != NULL)
-	{
-		assert(!metodoAux->FlagAtivada(METHOD_STATIC)); // o método não pode ser estático
-	}
-	else
-	{
-		assert(metodoAux->FlagAtivada(METHOD_STATIC)); // o método precisa ser estático
-	}
-	metodo = metodoAux;
-#ifdef DEBUG
-	cout<< "[Frame::Frame]Vou pegar os atributos" << endl;
-#endif
-	pegarAtributos();
-#ifdef DEBUG
-	cout<< "[Frame::Frame]Vou atributos empilhados" << endl;
-#endif
-}
-*/
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {
 #ifdef DEBUG
 	cout<< "Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)"<< endl;
 #endif
 	pc=0;
+	this->javaClass= javaClass;
 #ifdef DEBUG
 	cout<< "\t1"<< endl;
 #endif
@@ -73,6 +43,7 @@ Frame::Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetod
 {
 	pc =0;
 	this->objeto= objeto;
+	this->javaClass= objeto->ObterJavaClass();
 	for (unsigned int cont = 0; cont < argumentos.size(); cont++) {
 		variaveisLocais[cont] = argumentos[cont];
 	}
@@ -84,15 +55,16 @@ Frame::Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetod
 	pegarAtributos();
 }
 
-Frame::Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
+Frame::Frame(ObjetoInstancia *objeto, JavaClass *classe, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
 {
 	pc =0;
 	this->objeto= objeto;
+	this->javaClass= objeto->ObterJavaClass();
 	for (unsigned int cont = 0; cont < argumentos.size(); cont++) {
 		variaveisLocais[cont] = argumentos[cont];
 	}
 	
-	metodo = BuscarMetodo(javaClass, nomeDoMetodo, descritorMetodo, runtimeDataArea);
+	metodo = BuscarMetodo(classe, nomeDoMetodo, descritorMetodo, runtimeDataArea);
 	assert(metodo != NULL);
 	assert(!metodo->FlagAtivada(METHOD_STATIC));
 	
@@ -286,5 +258,8 @@ method_info* Frame::BuscarMetodo(JavaClass* javaClass, string nomeMetodo, string
 	return NULL;
 }
 
-
+JavaClass *Frame::ObterJavaClass(void)
+{
+	return javaClass;
+}
 

@@ -6,11 +6,29 @@
 #include<string.h>
 #include <inttypes.h>
 
+// Check ruindos
+#if _WIN32 || _WIN64
+	#if _WIN64
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
+// Check GCC
+#if __GNUC__
+	#if __x86_64__ || __ppc64__
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
 #define DEBUG
 
 ExecutionEngine::ExecutionEngine(void)
 {
-
+	inicializaInstrucoes();
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
@@ -1294,7 +1312,8 @@ void ExecutionEngine::i_putfield()
 			assert(strValor.tipo == TipoDado::REFERENCE);
 			ObjetoString *str = (ObjetoString*) strValor.dado;
 			Valor result;
-			result.dado = TipoDado::INT;
+			result.tipo = TipoDado::INT;
+			result.dado= str->ObterString().size();
 			toppilha->empilharOperando(result);
 		
 		}//fim elsif lenght
@@ -1358,7 +1377,237 @@ void ExecutionEngine::i_putfield()
 	runtimeDataArea->topoPilha()->desempilhaOperando();
 }//fim metodo
 
-void ExecutionEngine::i_invokevirtual(){}
+void ExecutionEngine::i_invokevirtual()
+{
+	Frame *topoDaPilha= runtimeDataArea->topoPilha();
+	stack<Valor> pilhaDeOperandosDeReserva= topoDaPilha->retornaPilhaOperandos();
+	uint8_t *instrucoes=topoDaPilha->getCode();
+	uint16_t indiceMetodo;
+	memcpy(&indiceMetodo, instrucoes, 2);
+	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
+	if(javaClass->getConstantPool().at(indiceMetodo-1)->GetTag() != CONSTANT_Methodref)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokevirtual");
+	}
+	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)javaClass->getConstantPool().at(indiceMetodo-1);
+	string nomeDaClasse= javaClass->getUTF8(metodo->GetClassIndex());
+	if(javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "i_invokevirtual");
+	}
+	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
+	string nomeDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetNameIndex());
+	string descritorDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetDescriptorIndex());
+	
+	if(nomeDaClasse.find("java/") != string::npos)
+	{//Provavelmente estamos tratando de um print
+		if(nomeDaClasse== "java/io/PrintStream" && (nomeDoMetodo == "print" || nomeDoMetodo == "println"))
+		{
+			if(descritorDoMetodo != "()V")
+			{
+				Valor valorQueSeraImpresso= topoDaPilha->desempilhaOperando();
+				switch(valorQueSeraImpresso.tipo)
+				{
+					case(BOOLEAN):
+					{
+						printf("%s", valorQueSeraImpresso.dado != 0 ? "true" : "true");
+						break;
+					}
+					case(BYTE):
+					{
+						int8_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 1);
+						printf("%c", aux);
+						break;
+					}
+					case(SHORT):
+					{
+						int16_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 2);
+						printf("%hd", aux);
+						break;
+					}
+					case(INT):
+					{
+						int32_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 4);
+						printf("%d", aux);
+						break;
+					}
+					case(DOUBLE):
+					{
+						topoDaPilha->desempilhaOperando();//desempilhando a entrada de preenchimento
+						double aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 8);
+						printf("%f", aux);
+						break;
+					}
+					case(FLOAT):
+					{
+						float aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 4);
+						printf("%f", aux);
+						break;
+					}
+					case(LONG):
+					{
+						topoDaPilha->desempilhaOperando();//desempilhando a entrada de preenchimento
+						int64_t aux;
+						memcpy(&aux, &(valorQueSeraImpresso.dado), 8);
+#ifdef ENVIRONMENT32
+						printf("%lld", aux);
+#else
+						printf("%ld", aux);
+#endif
+						break;
+					}
+					case(REFERENCE):
+					{
+						if(((Objeto*)valorQueSeraImpresso.dado)->ObterTipoObjeto() != STRING)
+						{
+							throw new Erro("String esperado quando deve imprimir referencias", "ExecutionEngine", "invokevirtual");
+						}
+						ObjetoString *stringPtr;
+						memcpy(&stringPtr, &(valorQueSeraImpresso.dado), sizeof(ObjetoString *));
+						printf("%s", stringPtr->ObterString().c_str());
+						break;
+					}
+					default:
+					{
+						throw new Erro("Tentou-se imprimir um tipo de dado invalido");
+					}
+				}
+			}
+			if(nomeDoMetodo == "println")
+			{
+				cout << endl;
+			}
+			else if(nomeDaClasse== "java/lang/String")
+			{
+				if(nomeDoMetodo == "lenght")
+				{
+					Valor string1= topoDaPilha->desempilhaOperando();
+					if(string1.tipo != REFERENCE)
+					{
+						throw new Erro("Esperado valor do tipo referencia para pegar comprimento da string", "ExecutionEngine", "i_invokevirtual");
+					}
+					if(((Objeto*)string1.dado)->ObterTipoObjeto() == STRING)
+					{
+						throw new Erro("Esperado objeto do tipo string para calcular", "ExecutionEngine", "i_invokevirtual");
+					}
+					ObjetoString *stringObj= (ObjetoString *)string1.dado;
+					Valor tamanhoDaString;
+					tamanhoDaString.tipo= INT;
+					tamanhoDaString.dado=stringObj->ObterString().size();
+					topoDaPilha->empilharOperando(tamanhoDaString);
+				}
+				else if(nomeDoMetodo == "equals")
+				{
+					Valor string1 = topoDaPilha->desempilhaOperando();
+					if(string1.tipo != REFERENCE)
+					{
+						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					if(((Objeto*)string1.dado)->ObterTipoObjeto() == STRING)
+					{
+						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					Valor string2 = topoDaPilha->desempilhaOperando();
+					if(string2.tipo != REFERENCE)
+					{
+						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na  string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					if(((Objeto*)string2.dado)->ObterTipoObjeto() == STRING)
+					{
+						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na segunda string string)", "ExecutionEngine", "i_invokevirtual");
+					}
+					//se chegou ate aqui é pq os operandos são válidos
+					string stringReal1= ((ObjetoString*)string1.dado)->ObterString();
+					string stringReal2= ((ObjetoString*)string2.dado)->ObterString();
+					Valor resultado;
+					resultado.tipo=BOOLEAN;
+					if(stringReal1 == stringReal2)
+					{
+						resultado.dado= 0xFFFFFFFFFFFFFFFF;
+					}
+					else
+					{
+						resultado.dado= 0;
+					}
+					topoDaPilha->empilharOperando(resultado);
+				}
+			}
+		}
+		else
+		{
+			throw new Erro("Metodo que esta tentando invocar um metodo desconhecido", "ExecutionEngine", "invokevirtual");
+		}
+	}
+	else
+	{
+		uint16_t numeroDeargumentos;
+		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++)//pula o abre parenteses
+		{
+			char indicadorDeTipo= descritorDoMetodo[cont];
+			if(indicadorDeTipo == 'J' || indicadorDeTipo == 'D')
+			{
+				numeroDeargumentos+= 2;
+			}
+			else if(indicadorDeTipo == 'L')
+			{
+				numeroDeargumentos++;
+				while(descritorDoMetodo[++cont] != ';');
+			}
+			else if(indicadorDeTipo == '[')
+			{
+				if(descritorDoMetodo[++cont] == 'L')
+				{
+					while(descritorDoMetodo[++cont] != ';');
+				}
+			}
+			else
+			{
+				numeroDeargumentos++;
+			}
+		}
+		vector<Valor> argumentos;
+		Valor temp;
+		for(int cont =0; cont < numeroDeargumentos; cont++)
+		{
+			temp= topoDaPilha->desempilhaOperando();
+			if(temp.tipo == PADDING)
+			{
+				argumentos.insert(argumentos.begin()+1, temp);
+			}
+			else
+			{
+				argumentos.insert(argumentos.begin(), temp);
+			}
+		}
+		Valor valorQueArmazenaObjeto= topoDaPilha->desempilhaOperando();
+		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		{
+			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "InvokeVirtual");
+		}
+		argumentos.insert(argumentos.begin(), valorQueArmazenaObjeto);
+		Objeto *obj= (Objeto*) valorQueArmazenaObjeto.dado;
+		if(obj->ObterTipoObjeto() != INSTANCIA)
+		{
+			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "Invokevirtual");
+		}
+		ObjetoInstancia *instancia= (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
+		runtimeDataArea->CarregarClasse(nomeDaClasse);
+		Frame *novoFrame= new Frame(instancia, javaClass, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		if(runtimeDataArea->topoPilha() != topoDaPilha)
+		{
+			topoDaPilha->setaPilhaOperandos(pilhaDeOperandosDeReserva);
+			delete novoFrame;
+			return;
+		}
+		runtimeDataArea->pilhaJVM.push(*novoFrame);
+	}
+	topoDaPilha->incrementaPC(3);
+}
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
