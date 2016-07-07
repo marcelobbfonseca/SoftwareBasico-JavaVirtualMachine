@@ -130,33 +130,12 @@ class InnerClasses_attribute: public attribute_info
 		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
-class EnclosingMethod_attribute:public attribute_info
-{
-	private:
-		uint16_t class_index;
-		uint16_t method_index;
-	public:
-		EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex);
-		EnclosingMethod_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
 class Synthetic_attribute: public attribute_info
 {
 	private:
 	public:
 		Synthetic_attribute(FILE *arq, uint16_t attributeNameIndex);
 		Synthetic_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
-class Signature_attribute:public attribute_info
-{
-	private:
-		uint16_t signature_index;
-	public:
-		Signature_attribute(FILE *arq, uint16_t attributeNameIndex);
-		Signature_attribute(Buffer &buff, uint16_t attributeNameIndex);
 		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
@@ -170,17 +149,6 @@ class SourceFile_attribute: public attribute_info
 		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 		//para implementar
 		uint16_t GetSouceFileIndex(void);
-};
-//nao utilizar
-class SourceDebugExtension_attribute: public attribute_info
-{
-	private:
-		uint8_t *debug_extension;
-	public:
-		SourceDebugExtension_attribute(FILE *arq, uint16_t attributeNameIndex);
-		SourceDebugExtension_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		~SourceDebugExtension_attribute();
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
 class Elemento_LineNumber
@@ -228,30 +196,6 @@ class LocalVariableTable_attribute : public attribute_info
 		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 
-class Elemento_LocalVariableType
-{
-	private:
-		uint16_t start_pc;
-		uint16_t length;
-		uint16_t name_index;
-		uint16_t signature_index;
-		uint16_t index;
-	public:
-		Elemento_LocalVariableType(Buffer &buffer);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
-class LocalVariableTypeTable_attribute : public attribute_info
-{
-	private:
-		uint16_t local_variable_type_table_length;
-		vector<Elemento_LocalVariableType>local_variable_type_table;
-	public:
-		LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex);
-		LocalVariableTypeTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
 class Deprecated_attribute : public attribute_info
 {
 	private:
@@ -261,120 +205,6 @@ class Deprecated_attribute : public attribute_info
 		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
 };
 //nao utilizar
-class Elemento_Metodo_Bootstrap
-{
-	private:
-		uint16_t bootstrap_method_ref;
-		uint16_t num_bootstrap_arguments;
-		vector<uint16_t> bootstrap_arguments;
-	public:
-		Elemento_Metodo_Bootstrap(Buffer &buff);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-//nao utilizar
-class BootstrapMethods_attribute: public attribute_info
-{
-	private:
-		uint16_t num_bootstrap_methods;
-		vector<Elemento_Metodo_Bootstrap>bootstrap_methods;
-	public:
-		BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex);
-		BootstrapMethods_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-//nao utilizar
-class RuntimeVisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
-{
-	private:
-		uint8_t *info;
-	public:
-		RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
-		RuntimeVisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		~RuntimeVisibleAnnotations_attribute();
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-//nao utilizar
-class RuntimeInvisibleAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
-{
-	private:
-		uint8_t *info;
-	public:
-		RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex);
-		RuntimeInvisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		~RuntimeInvisibleAnnotations_attribute();
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-//nao utilizar
-class RuntimeVisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível. Fazendo um attribute_info genérico.
-{
-	private:
-		uint8_t *info;
-	public:
-		RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
-		RuntimeVisibleParameterAnnotations_attribute(Buffer &buff, uint16_t ttributeNameIndex);
-		~RuntimeVisibleParameterAnnotations_attribute();
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-//nao utilizar
-class RuntimeInvisibleParameterAnnotations_attribute: public attribute_info//Foda-se essa classe. Muito imcompreensível.Fazendo um attribute_info genérico.
-{
-	private:
-		uint8_t *info;
-	public:
-		RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t ttributeNameIndex);
-		RuntimeInvisibleParameterAnnotations_attribute(Buffer &buff, uint16_t ttributeNameIndex);
-		~RuntimeInvisibleParameterAnnotations_attribute();
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-//nao utilizar
-class AnnotationDefault_attribute: public attribute_info//Foda-se essa classe. Muito incompreensível.Fazendo um attribute_info genérico.
-{
-	private:
-		uint8_t *info;
-	public:
-		AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex);
-		AnnotationDefault_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		~AnnotationDefault_attribute();
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
-class verification_type_info
-{
-	private:
-		uint8_t tag;
-		uint16_t cpoolOuOffset;
-	public:
-//		verification_type_info(FILE *arq);
-		verification_type_info(Buffer &buffer);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
-class stack_map_frame
-{
-	private:
-		int8_t frame_type;
-		uint16_t offset_delta;
-		uint16_t number_of_locals;
-		vector<verification_type_info> locals;
-		uint16_t number_of_stack_items;
-		vector<verification_type_info> stack;
-	public:
-//		stack_map_frame(FILE *arq);
-		stack_map_frame(Buffer &buffer);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
-class StackMapTable_attribute : public attribute_info
-{
-	private:
-		uint16_t number_of_entries;
-		vector<stack_map_frame> entries;
-	public:
-		StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex);
-		StackMapTable_attribute(Buffer &buff, uint16_t attributeNameIndex);
-		void ExibirInformacoes(std::string tabs, JavaClass *javaClass);
-};
-
 //A especificação da JVM diz que não deve dar erro ler um atributo desconhecido, basta ignorá-lo. Essa classe apenas armazena o atributo desconecido na forma de um attribute info genérico.
 class AtributoDesconhecido : public attribute_info
 {

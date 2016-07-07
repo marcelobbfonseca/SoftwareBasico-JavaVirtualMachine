@@ -14,7 +14,7 @@ void ExibirMensagemDeAjuda(void);
 int main(int argc, char **argv)
 {
 //pedido de ajuda
-	if(AnalisadorArgumentos::EncontrarArgumento("--help", argc, argv) != -1)
+	if((AnalisadorArgumentos::EncontrarArgumento("--help", argc, argv) != -1) || argc ==1)
 	{
 		ExibirMensagemDeAjuda();
 	}
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		MostrarGokuNaCapivara();
 	}
 //Chamando apenas o exibidor
-	else if(AnalisadorArgumentos::EncontrarArgumento("--exibir-informacoes", argc, argv) != -1)
+	else if((AnalisadorArgumentos::EncontrarArgumento("--exibir-informacoes", argc, argv) != -1) || (AnalisadorArgumentos::EncontrarArgumento("-info", argc, argv) != -1) )
 	{
 		std::string caminho = argv[1];
 		try{

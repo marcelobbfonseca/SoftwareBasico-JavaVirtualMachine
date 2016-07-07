@@ -40,10 +40,6 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new Code_attribute(arq, attributeNameIndex, constant_pool);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "StackMapTable")
-	{
-		return new StackMapTable_attribute(arq, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Exceptions")
 	{
 		return new Exceptions_attribute(arq, attributeNameIndex);
@@ -52,25 +48,13 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new InnerClasses_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "EnclosingMethod")
-	{
-		return new EnclosingMethod_attribute(arq, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Synthetic")
 	{
 		return new Synthetic_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Signature")
-	{
-		return new Signature_attribute(arq, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "SourceFile")
 	{
 		return new SourceFile_attribute(arq, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "SourceDebugExtension")
-	{
-		return new SourceDebugExtension_attribute(arq, attributeNameIndex);
 	}
 
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LineNumberTable")
@@ -81,41 +65,13 @@ attribute_info* attribute_info::LerAtributeInfo(FILE *arq, std::vector<cp_info*>
 	{
 		return new LocalVariableTable_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "LocalVariableTypeTable")
-	{
-		return new LocalVariableTypeTable_attribute(arq, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "Deprecated")
 	{
 		return new Deprecated_attribute(arq, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeVisibleAnnotations")
-	{
-		return new RuntimeVisibleAnnotations_attribute(arq, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeInvisibleAnnotations")
-	{
-		return new RuntimeInvisibleAnnotations_attribute(arq, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeVisibleParameterAnnotations")
-	{
-		return new RuntimeVisibleParameterAnnotations_attribute(arq, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "RuntimeInvisibleParameterAnnotations")
-	{
-		return new RuntimeInvisibleParameterAnnotations_attribute(arq, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "AnnotationDefault")
-	{
-		return new AnnotationDefault_attribute(arq, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex -1] ) )== "BootstrapMethods")
-	{
-		return new BootstrapMethods_attribute(arq, attributeNameIndex);
-	}
 	else
 	{
-		printf("atributoLixo %d",attributeNameIndex);
+//		printf("atributoLixo %d",attributeNameIndex);
 		return new AtributoDesconhecido(arq, attributeNameIndex);
 	}
 
@@ -135,10 +91,6 @@ attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_i
 	{
 		return new Code_attribute(buffer, attributeNameIndex, constant_pool);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "StackMapTable")
-	{
-		return new StackMapTable_attribute(buffer, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Exceptions")
 	{
 		return new Exceptions_attribute(buffer, attributeNameIndex);
@@ -147,25 +99,13 @@ attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_i
 	{
 		return new InnerClasses_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "EnclosingMethod")
-	{
-		return new EnclosingMethod_attribute(buffer, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Synthetic")
 	{
 		return new Synthetic_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Signature")
-	{
-		return new Signature_attribute(buffer, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "SourceFile")
 	{
 		return new SourceFile_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "SourceDebugExtension")
-	{
-		return new SourceDebugExtension_attribute(buffer, attributeNameIndex);
 	}
 
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "LineNumberTable")
@@ -176,37 +116,9 @@ attribute_info* attribute_info::LerAtributeInfo(Buffer &buffer, std::vector<cp_i
 	{
 		return new LocalVariableTable_attribute(buffer, attributeNameIndex);
 	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "LocalVariableTypeTable")
-	{
-		return new LocalVariableTypeTable_attribute(buffer, attributeNameIndex);
-	}
 	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "Deprecated")
 	{
 		return new Deprecated_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeVisibleAnnotations")
-	{
-		return new RuntimeVisibleAnnotations_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeInvisibleAnnotations")
-	{
-		return new RuntimeInvisibleAnnotations_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeVisibleParameterAnnotations")
-	{
-		return new RuntimeVisibleParameterAnnotations_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "RuntimeInvisibleParameterAnnotations")
-	{
-		return new RuntimeInvisibleParameterAnnotations_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "AnnotationDefault")
-	{
-		return new AnnotationDefault_attribute(buffer, attributeNameIndex);
-	}
-	else if( *( ( CONSTANT_Utf8_info *) ( constant_pool[attributeNameIndex-1] ) )== "BootstrapMethods")
-	{
-		return new BootstrapMethods_attribute(buffer, attributeNameIndex);
 	}
 	else
 	{
@@ -363,26 +275,6 @@ InnerClasses_attribute::InnerClasses_attribute(Buffer &buff, uint16_t attributeN
 	delete buffer;
 }
 
-EnclosingMethod_attribute::EnclosingMethod_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	Buffer *buffer= new Buffer(arq, attribute_length);
-	buffer->Ler(&class_index, 2);
-	buffer->Ler(&method_index, 2);
-	delete buffer;
-}
-
-EnclosingMethod_attribute::EnclosingMethod_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	Buffer *buffer= new Buffer(buff, attribute_length);
-	buffer->Ler(&class_index, 2);
-	buffer->Ler(&method_index, 2);
-	delete buffer;
-}
-
 Synthetic_attribute::Synthetic_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
@@ -393,20 +285,6 @@ Synthetic_attribute::Synthetic_attribute(Buffer &buff, uint16_t attributeNameInd
 {
 	this->attribute_name_index= attributeNameIndex;
 	buff.Ler(&attribute_length, 4);
-}
-
-Signature_attribute::Signature_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	LerAtributo(&signature_index, 2, arq);
-}
-
-Signature_attribute::Signature_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	buff.Ler(&signature_index, 2);
 }
 
 SourceFile_attribute::SourceFile_attribute(FILE *arq, uint16_t attributeNameIndex)
@@ -421,27 +299,6 @@ SourceFile_attribute::SourceFile_attribute(Buffer &buff, uint16_t attributeNameI
 	this->attribute_name_index= attributeNameIndex;
 	buff.Ler(&attribute_length, 4);
 	buff.Ler(&sourcefile_index, 2);
-}
-
-SourceDebugExtension_attribute::SourceDebugExtension_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	debug_extension= new uint8_t[attribute_length];
-	LerAtributo(debug_extension, attribute_length, arq, IGNORAR_ENDIAN);
-}
-
-SourceDebugExtension_attribute::SourceDebugExtension_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	debug_extension= new uint8_t[attribute_length];
-	buff.Ler(debug_extension, attribute_length, IGNORAR_ENDIAN);
-}
-
-SourceDebugExtension_attribute::~SourceDebugExtension_attribute()
-{
-	delete []debug_extension;
 }
 
 Elemento_LineNumber::Elemento_LineNumber(Buffer &buffer)
@@ -515,43 +372,6 @@ LocalVariableTable_attribute::LocalVariableTable_attribute(Buffer &buff, uint16_
 	delete buffer;
 }
 
-Elemento_LocalVariableType::Elemento_LocalVariableType(Buffer &buffer)
-{
-	buffer.Ler(&start_pc, 2);
-	buffer.Ler(&length, 2);
-	buffer.Ler(&name_index, 2);
-	buffer.Ler(&signature_index, 2);
-	buffer.Ler(&index, 2);
-}
-
-LocalVariableTypeTable_attribute::LocalVariableTypeTable_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	Buffer *buffer = new Buffer (arq, attribute_length);
-	buffer->Ler(&local_variable_type_table_length, 2);
-	for(int cont=0; cont< local_variable_type_table_length; cont++)
-	{
-		Elemento_LocalVariableType *temp= new Elemento_LocalVariableType(*buffer);
-		local_variable_type_table.push_back(*temp);
-	}
-	delete buffer;
-}
-
-LocalVariableTypeTable_attribute::LocalVariableTypeTable_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	Buffer *buffer = new Buffer (buff, attribute_length);
-	buffer->Ler(&local_variable_type_table_length, 2);
-	for(int cont=0; cont< local_variable_type_table_length; cont++)
-	{
-		Elemento_LocalVariableType *temp= new Elemento_LocalVariableType(*buffer);
-		local_variable_type_table.push_back(*temp);
-	}
-	delete buffer;
-}
-
 Deprecated_attribute::Deprecated_attribute(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
@@ -564,233 +384,12 @@ Deprecated_attribute::Deprecated_attribute(Buffer &buff, uint16_t attributeNameI
 	buff.Ler(&attribute_length, 4);
 }
 
-Elemento_Metodo_Bootstrap::Elemento_Metodo_Bootstrap(Buffer &buffer)
-{
-	buffer.Ler(&bootstrap_method_ref, 2);
-	buffer.Ler(&num_bootstrap_arguments, 2);
-	for(int cont=0; cont < num_bootstrap_arguments; cont++)
-	{
-		int16_t temp;
-		buffer.Ler(&temp, 2);
-		bootstrap_arguments.push_back(temp);
-	}
-}
-
-BootstrapMethods_attribute::BootstrapMethods_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	Buffer *buffer= new Buffer(arq, attribute_length);
-	buffer->Ler(&num_bootstrap_methods, 2);
-	for(int cont =0; cont < num_bootstrap_methods; cont++)
-	{
-		Elemento_Metodo_Bootstrap *aux= new Elemento_Metodo_Bootstrap(*buffer);
-		bootstrap_methods.push_back(*aux);
-	}
-	delete buffer;
-}
-
-BootstrapMethods_attribute::BootstrapMethods_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	Buffer *buffer= new Buffer(buff, attribute_length);
-	buffer->Ler(&num_bootstrap_methods, 2);
-	for(int cont =0; cont < num_bootstrap_methods; cont++)
-	{
-		Elemento_Metodo_Bootstrap *aux= new Elemento_Metodo_Bootstrap(*buffer);
-		bootstrap_methods.push_back(*aux);
-	}
-	delete buffer;
-}
-
-RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	info= new uint8_t[attribute_length];
-	LerAtributo(info, attribute_length, arq);
-}
-
-RuntimeVisibleAnnotations_attribute::RuntimeVisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	info= new uint8_t[attribute_length];
-	buff.Ler(info, attribute_length);
-}
-
-RuntimeVisibleAnnotations_attribute::~RuntimeVisibleAnnotations_attribute()
-{
-	delete []info;
-}
-
-RuntimeInvisibleAnnotations_attribute::RuntimeInvisibleAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	info= new uint8_t[attribute_length];
-	LerAtributo(info, attribute_length, arq);
-}
-
-RuntimeInvisibleAnnotations_attribute::RuntimeInvisibleAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	info= new uint8_t[attribute_length];
-	buff.Ler(info, attribute_length);
-}
-
-RuntimeInvisibleAnnotations_attribute::~RuntimeInvisibleAnnotations_attribute()
-{
-	delete []info;
-}
-
-RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	info= new uint8_t[attribute_length];
-	LerAtributo(info, attribute_length, arq);
-}
-
-RuntimeVisibleParameterAnnotations_attribute::RuntimeVisibleParameterAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	info= new uint8_t[attribute_length];
-	buff.Ler(info, attribute_length);
-}
-
-RuntimeVisibleParameterAnnotations_attribute::~RuntimeVisibleParameterAnnotations_attribute()
-{
-	delete []info;
-}
-
-RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotations_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	info= new uint8_t[attribute_length];
-	LerAtributo(info, attribute_length, arq);
-}
-
-RuntimeInvisibleParameterAnnotations_attribute::RuntimeInvisibleParameterAnnotations_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	info= new uint8_t[attribute_length];
-	buff.Ler(info, attribute_length);
-}
-
-RuntimeInvisibleParameterAnnotations_attribute::~RuntimeInvisibleParameterAnnotations_attribute()
-{
-	delete []info;
-}
-
-AnnotationDefault_attribute::AnnotationDefault_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-	info= new uint8_t[attribute_length];
-	LerAtributo(info, attribute_length, arq);
-}
-
-AnnotationDefault_attribute::AnnotationDefault_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-	info= new uint8_t[attribute_length];
-	buff.Ler(info, attribute_length);
-}
-
-AnnotationDefault_attribute::~AnnotationDefault_attribute()
-{
-	delete []info;
-}
-
-verification_type_info::verification_type_info(Buffer &buffer)
-{
-	buffer.Ler(&tag, 1);
-	if(tag==ITEM_Object || tag ==ITEM_Uninitialized)
-	{
-		buffer.Ler(&cpoolOuOffset, 2);
-	}
-}
-
-stack_map_frame::stack_map_frame(Buffer &buffer)
-{
-	buffer.Ler(&frame_type, 1);
-	if(frame_type >= 247)
-	{
-		buffer.Ler(&offset_delta, 2);
-	}
-	if( ( 64 <= frame_type && frame_type <= 127 ) || frame_type == 247)
-	{
-		verification_type_info *temp= new verification_type_info(buffer);
-		this->stack.push_back(*temp);
-	}
-	if(252 <= frame_type && frame_type <= 254)
-	{
-		for(int cont=0 ; cont < frame_type-251 ; cont++)
-		{
-			verification_type_info *temp= new verification_type_info(buffer);
-			this->locals.push_back(*temp);
-		}
-	}
-	if(frame_type == 255)
-	{
-		buffer.Ler(&number_of_locals, 2);
-		for(int cont =0; cont < number_of_locals; cont++)
-		{
-			verification_type_info *temp= new verification_type_info(buffer);
-			this->locals.push_back(*temp);
-		}
-		buffer.Ler(&number_of_stack_items, 2);
-		for(int cont =0; cont < number_of_stack_items; cont++)
-		{
-			verification_type_info *temp= new verification_type_info(buffer);
-			this->stack.push_back(*temp);
-		}
-	}
-}
-
-StackMapTable_attribute::StackMapTable_attribute(FILE *arq, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	LerAtributo(&attribute_length, 4, arq);
-
-	Buffer *buffer= new Buffer(arq, attribute_length);
-	buffer->Ler(&number_of_entries, 2);
-	for(int cont=0; cont < number_of_entries; cont++)
-	{
-		stack_map_frame *temp= new stack_map_frame(*buffer);
-		entries.push_back(*temp);
-	}
-	delete buffer;
-}
-
-StackMapTable_attribute::StackMapTable_attribute(Buffer &buff, uint16_t attributeNameIndex)
-{
-	this->attribute_name_index= attributeNameIndex;
-	buff.Ler(&attribute_length, 4);
-
-	Buffer *buffer= new Buffer(buff, attribute_length);
-	buffer->Ler(&number_of_entries, 2);
-	for(int cont=0; cont < number_of_entries; cont++)
-	{
-		stack_map_frame *temp= new stack_map_frame(*buffer);
-		entries.push_back(*temp);
-	}
-	delete buffer;
-}
-
 AtributoDesconhecido::AtributoDesconhecido(FILE *arq, uint16_t attributeNameIndex)
 {
 	this->attribute_name_index= attributeNameIndex;
 	LerAtributo(&attribute_length, 4, arq);
 	info= new uint8_t[attribute_length];
-	LerAtributo(info, attribute_length, arq);
+	LerAtributo(info, attribute_length, arq, IGNORAR_ENDIAN);
 }
 
 AtributoDesconhecido::AtributoDesconhecido(Buffer &buff, uint16_t attributeNameIndex)
@@ -798,7 +397,7 @@ AtributoDesconhecido::AtributoDesconhecido(Buffer &buff, uint16_t attributeNameI
 	this->attribute_name_index= attributeNameIndex;
 	buff.Ler(&attribute_length, 4);
 	info= new uint8_t[attribute_length];
-	buff.Ler(info, attribute_length);
+	buff.Ler(info, attribute_length, IGNORAR_ENDIAN);
 }
 
 AtributoDesconhecido::~AtributoDesconhecido()
@@ -920,22 +519,9 @@ void InnerClasses_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass
 	}
 }
 
-void EnclosingMethod_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo EnclosingMethod." <<endl;
-	cout << tabs << "\tclass_index = " << class_index << "\t\t//" << javaClass->getUTF8(class_index) << endl;
-	cout << tabs << "\tmethod_index = " << method_index << "\t\t//" << javaClass->getUTF8(method_index) << endl;
-}
-
 void Synthetic_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Synthetic." << endl << endl;
-}
-
-void Signature_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo Signature." <<endl;
-	cout << tabs << "\tsignature_index = " << signature_index << "\t\t//" << javaClass->getUTF8(signature_index) << endl;
 }
 
 void SourceFile_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
@@ -944,19 +530,10 @@ void SourceFile_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	cout << tabs << "\tsourcefile_index = " << sourcefile_index << "\t\t//" << javaClass->getUTF8(sourcefile_index) << endl;
 }
 
-void SourceDebugExtension_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo SourceDebugExtension." <<endl;
-	for(unsigned int cont =0; cont < attribute_length; cont++)
-	{
-		cout << tabs << "\tdebug_extension[ " << cont << "] = " << debug_extension[cont] << endl;
-	}
-}
-
 void Elemento_LineNumber::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "start_pc = " << start_pc << endl;
-	cout << tabs << "line_number = " << start_pc << endl;
+	cout << tabs << "line_number = " << line_number << endl;
 }
 
 void LineNumberTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
@@ -990,148 +567,9 @@ void LocalVariableTable_attribute::ExibirInformacoes(string tabs, JavaClass *jav
 	}
 }
 
-void Elemento_LocalVariableType::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "start_pc = " << start_pc <<endl;
-	cout << tabs << "length = " << length <<endl;
-	cout << tabs << "name_index = " << name_index << "\t\t//" << javaClass->getUTF8(name_index) <<endl;
-	cout << tabs << "signature_index = " << signature_index  << "\t\t//"<< javaClass->getUTF8(signature_index) <<endl;
-	cout << tabs << "index = " << index <<endl;
-}
-
-void LocalVariableTypeTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo LocalVariableTypeTable." <<endl;
-	cout << tabs << "\tlocal_variable_type_table_length = " << local_variable_type_table_length <<endl;
-	for(int cont=0; cont < local_variable_type_table_length ; cont++)
-	{
-		cout << tabs << "\tlocal_variable_type_table_length[ " << cont << "]:" << endl;
-		local_variable_type_table[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
-	}
-}
-
 void Deprecated_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 {
 	cout << tabs << "attribute_info do tipo Deprecated." << endl << endl;
-}
-
-void Elemento_Metodo_Bootstrap::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "bootstrap_method_ref = " << bootstrap_method_ref << endl;
-	cout << tabs << "num_bootstrap_arguments = " << num_bootstrap_arguments << endl;
-	for(int cont=0; cont < num_bootstrap_arguments ; cont++)
-	{
-		cout << tabs << "bootstrap_arguments[" << cont << "] = " << bootstrap_arguments[cont] << endl;
-	}
-}
-
-void BootstrapMethods_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo BootstrapMethods." <<endl;
-	cout << tabs << "\tnum_bootstrap_methods = " << num_bootstrap_methods <<endl;
-	for(int cont=0; cont < num_bootstrap_methods ; cont++)
-	{
-		cout << tabs << "\tbootstrap_methods[ " << cont << "]:" << endl;
-		bootstrap_methods[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
-	}
-}
-
-void RuntimeVisibleAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo RuntimeVisibleAnnotations." <<endl;
-	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= 0x" << hex;
-	for(unsigned int cont = 0; cont < attribute_length; cont++)
-	{
-		cout << info[cont];
-	}
-	cout << dec <<endl;
-}
-
-void RuntimeInvisibleAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo RuntimeInvisibleAnnotations." <<endl;
-	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= 0x" << hex;
-	for(unsigned int cont = 0; cont < attribute_length; cont++)
-	{
-		cout << info[cont];
-	}
-	cout << dec <<endl;
-}
-
-void RuntimeVisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo RuntimeVisibleParameterAnnotations." <<endl;
-	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= 0x" << hex;
-	for(unsigned int cont = 0; cont < attribute_length; cont++)
-	{
-		cout << info[cont];
-	}
-	cout << dec <<endl;
-}
-
-void RuntimeInvisibleParameterAnnotations_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo RuntimeInvisibleParameterAnnotations." <<endl;
-	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= 0x" << hex;
-	for(unsigned int cont = 0; cont < attribute_length; cont++)
-	{
-		cout << info[cont];
-	}
-	cout << dec <<endl;
-}
-
-void AnnotationDefault_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo AnnotationDefault." <<endl;
-	cout << tabs << "\ttamanho em bytes: " << attribute_length << endl;
-	cout << tabs << "\tinfo= 0x" << hex;
-	for(unsigned int cont = 0; cont < attribute_length; cont++)
-	{
-		cout << info[cont];
-	}
-	cout << dec <<endl;
-}
-
-void verification_type_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "tag = " << tag << "\t\t";
-	if(tag==ITEM_Object)
-	{
-		cout << "//ITEM_Object" << endl;
-		cout << tabs << "cpool_index = " << cpoolOuOffset << endl;
-	}
-	if(tag == ITEM_Uninitialized)
-	{
-		cout << "//ITEM_Uninitialized" << endl;
-		cout << tabs << "offset = " << cpoolOuOffset << endl;
-	}
-}
-
-void stack_map_frame::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "frame_type = " << frame_type << endl;
-	cout << tabs << "offset_delta = " << offset_delta << endl;
-	cout << tabs << "number_of_locals = " << number_of_locals << endl;
-	for(int cont =0; cont < number_of_locals ; cont++)
-	{
-		cout << tabs << "locals[" << cont << "]:" << endl;
-		locals[cont].ExibirInformacoes(tabs + "\t", javaClass);
-	}
-}
-
-void StackMapTable_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
-{
-	cout << tabs << "attribute_info do tipo StackMapTable." <<endl;
-	cout << tabs << "\tnumber_of_entries = " << number_of_entries <<endl;
-	for(int cont=0; cont < number_of_entries ; cont++)
-	{
-		cout << tabs << "\tentries[ " << cont << "]:" << endl;
-		entries[cont].ExibirInformacoes( (tabs + "\t") +"\t", javaClass);
-	}
 }
 
 void AtributoDesconhecido::ExibirInformacoes(string tabs, JavaClass *javaClass)
