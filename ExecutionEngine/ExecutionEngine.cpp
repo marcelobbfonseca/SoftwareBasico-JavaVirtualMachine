@@ -2962,19 +2962,38 @@ void ExecutionEngine::i_putfield()
 
 void ExecutionEngine::i_invokevirtual()
 {
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()" << endl;
+#endif
 	Frame *topoDaPilha= runtimeDataArea->topoPilha();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()1" << endl;
+#endif
 	stack<Valor> pilhaDeOperandosDeReserva= topoDaPilha->retornaPilhaOperandos();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()2" << endl;
+#endif
 	uint8_t *instrucoes=topoDaPilha->getCode();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()3" << endl;
+#endif
 	uint16_t indiceMetodo;
-	memcpy(&indiceMetodo, instrucoes, 2);
-	cout<<"ChegouAteAqui"<<endl;
+	memcpy(&indiceMetodo, &(instrucoes[1]), 2);
 	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
-	cout<<"Mas NaoAqui"<<endl;
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()4" << endl;
+#endif
 	if(javaClass->getConstantPool().at(indiceMetodo-1)->GetTag() != CONSTANT_Methodref)
 	{
 		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokevirtual");
 	}
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()5" << endl;
+#endif
 	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)javaClass->getConstantPool().at(indiceMetodo-1);
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()6" << endl;
+#endif
 	string nomeDaClasse= javaClass->getUTF8(metodo->GetClassIndex());
 	if(javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
 	{
