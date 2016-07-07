@@ -26,6 +26,9 @@
 #endif
 
 #define DEBUG
+#ifdef DEBUG
+	#include"Opcode.hpp"
+#endif
 
 ExecutionEngine::ExecutionEngine(void)
 {
@@ -43,7 +46,7 @@ void ExecutionEngine::Play(string classComMain)
 
 	uint8_t instrucao;
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine" << endl;
+	cout<< "ExecutionEngine::Play" << endl;
 #endif
 	if(runtimeDataArea == NULL)
 	{
@@ -51,51 +54,51 @@ void ExecutionEngine::Play(string classComMain)
 	}
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine2" << endl;
+	cout<< "ExecutionEngine::Play2" << endl;
 #endif
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine3" << endl;
+	cout<< "ExecutionEngine::Play3" << endl;
 #endif
 	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine4" << endl;
+	cout<< "ExecutionEngine::Play4" << endl;
 #endif
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine5" << endl;
+	cout<< "ExecutionEngine::Play5" << endl;
 #endif
 		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
 	}
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine6" << endl;
+	cout<< "ExecutionEngine::Play6" << endl;
 #endif
 
 	do
 	{
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
+	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
 #endif
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine8" << endl;
+	cout<< "ExecutionEngine::Play8\t" << OpCode::GetReferencia()->GetMinemonico(instrucao) << endl;
 
 		(this->*vetorDePonteirosParaFuncao[instrucao])();
 #endif
 
 #ifdef DEBUG
 
-	cout<< "Consertar Play do execution engine9" << endl;
+	cout<< "ExecutionEngine::Play9" << endl;
 #endif
 
 	}
 	while(runtimeDataArea->pilhaJVM.size() > 0);
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine10" << endl;
+	cout<< "ExecutionEngine::Play10" << endl;
 #endif
 }
 
@@ -2602,28 +2605,51 @@ void ExecutionEngine::i_return(){
 }
 void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic" << endl;
+#endif
 	Frame *toppilha = runtimeDataArea->topoPilha();
-	
-	
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic1" << endl;
+#endif
+	vector<cp_info*> constantPool;
+	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
+	constantPool = classe->getConstantPool();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic2" << endl;
+#endif
 	uint8_t *code = toppilha->getCode();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic3" << endl;
+#endif
 
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	
 	uint16_t campoIndex = (byte1 << 8) | byte2;
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic4" << endl;
+#endif
 
 
 	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
-
-	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetClassIndex());
-
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic5" << endl;
+#endif
+	string className = classe->getUTF8(fieldRef->GetClassIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic6" << endl;
+#endif
 	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
-
-	string campoName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetNameIndex());
-	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
-
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic7" << endl;
+#endif
+	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex());
+	string campoDescriptor = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic8" << endl;
+#endif
 	if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		return;
