@@ -583,13 +583,10 @@ void ExecutionEngine::i_ldc2_w() {
 	Valor valor;
 	
 	if (ponteiroCpInfo->GetTag() == CONSTANT_Long) {
-		//uint32_t highBytes = entry.info.long_info.high_bytes;
-		//uint32_t lowBytes = entry.info.long_info.low_bytes;
 
-		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Long_info*)ponteiroCpInfo)->Get- 1];
-		
-		valor.dado = (long)utf8Entry;
-		//int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+//		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Long_info*)ponteiroCpInfo)->Get- 1];		
+//		valor.dado = (long)utf8Entry;
+
 		valor.tipo = TipoDado::LONG;
 		
 		Valor padding;
@@ -597,17 +594,10 @@ void ExecutionEngine::i_ldc2_w() {
 		
 		toppilha->empilharOperando(padding);
 	} else if (ponteiroCpInfo->GetTag() == CONSTANT_Double) {
-		//u4 highBytes = entry.info.double_info.high_bytes;
-		//u4 lowBytes = entry.info.double_info.low_bytes;
-		CONSTANT_Utf8_info* utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Double_info*)ponteiroCpInfo)->GetNumero() - 1];
-		valor.dado = (double) utf8Entry;
-		//int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
 		
-		//int32_t s = ((longNumber >> 63) == 0) ? 1 : -1;
-		//int32_t e = (int32_t)((longNumber >> 52) & 0x7ffL);
-		//int64_t m = (e == 0) ? (longNumber & 0xfffffffffffffL) << 1 : (longNumber & 0xfffffffffffffL) | 0x10000000000000L;
-		
-		//double doubleNumber = s*m*pow(2, e-1075);
+//		CONSTANT_Utf8_info* utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Double_info*)ponteiroCpInfo)->GetNumero() - 1];
+//		valor.dado = (double) utf8Entry;
+
 		valor.tipo = TipoDado::DOUBLE;
 		
 		Valor padding;
