@@ -1488,16 +1488,17 @@ void ExecutionEngine::i_instanceof(){
 	Valor objectrefValue = topo->desempilhaOperando();
 	assert(objectrefValue.tipo == TipoDado::REFERENCE);
  	
-		string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
+	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
 
 	Valor resultValor;
 	resultValor.tipo = TipoDado::INT;
 
-		assert(cpElement->GetTag() == CONSTANT_Class);
+	assert(cpElement->GetTag() == CONSTANT_Class);
    
 	if ((Objeto*)objectrefValue.dado == NULL) {
 		resultValor.dado = 0;
 	}
+
 	else {
 		Objeto *obj = (Objeto*)objectrefValue.dado;
 
@@ -1507,14 +1508,14 @@ void ExecutionEngine::i_instanceof(){
 
 			bool found = false;
 			while (!found) {
-								JavaClass *auxJavaClass = classRuntime;
-								string currClassName = classRuntime->NomeDaClasse();
+					JavaClass *auxJavaClass = classRuntime;
+					string currClassName = classRuntime->NomeDaClasse();
 
 				if (currClassName == className) {
 					found = true;
 				} 
 								else {
-					if (classRuntime->ObterSuperClasse() == 0) {
+					if (auxJavaClass->ObterSuperClasse() == 0) {
 						break;
 					} else {
 						string superClassName = classRuntime->NomeDaClasse();;
@@ -1566,6 +1567,7 @@ void ExecutionEngine::i_wide(){
 }
 
 void ExecutionEngine::i_multianewarray(){
+
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
@@ -1577,10 +1579,6 @@ void ExecutionEngine::i_multianewarray(){
 	assert(dimensoes >= 1);
 
 	uint16_t classIndex = (byte1 << 8) | byte2;
-	//Bastos
-	//cp_info classCP = constantPool[classIndex-1];
-	//CONSTANT_Class_info classInfo = classCP.info.class_info;
-	//Yoo 
 
 	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
 	assert(classInfo->GetTag() == CONSTANT_Class);
@@ -1592,7 +1590,7 @@ void ExecutionEngine::i_multianewarray(){
 	int i = 0;
 	while (className[i] == '[') i++;
 
-	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência (e.g. [[[Ljava/lang/String;)
+	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência ([[[Ljava/lang/String;)
 
 	switch (className[i]) {
 		case 'L':
@@ -1638,12 +1636,12 @@ void ExecutionEngine::i_multianewarray(){
 	}
 
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
-//	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
-//	arr->popularSubArray(tipoDado, count);
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+	arr->popularSubArray(tipoDado, count);
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
-//	valorArr.dado = (uint64_t)arr;
+	valorArr.dado = (uint64_t)arr;
 
 	topo->empilharOperando(valorArr);
 
