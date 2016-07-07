@@ -2247,10 +2247,10 @@ void ExecutionEngine::i_getstatic() {
 
 
 
-	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[campoIndex->GetNameAndtipoIndex()-1];
+	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
 
 	string campoName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetNameIndex());
-	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetDescriptorIndex());
+	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
 
 
     if (className == "java/lang/System" && fieldDescriptor == "Ljava/io/PrintStream;" ) {
@@ -2627,13 +2627,8 @@ void ExecutionEngine::i_multianewarray(){
 	}
 
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
-<<<<<<< HEAD
 //	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : TipoDado);
-//	arr->popularSubArray(TipoDado, count);
-=======
-	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
-	arr->popularSubArray(tipoDado, count);
->>>>>>> origin/master
+//	arr->popularSubArray(TipoDado, count);  
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
