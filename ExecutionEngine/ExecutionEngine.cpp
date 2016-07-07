@@ -2054,7 +2054,7 @@ void ExecutionEngine::i_lcmp(){
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
 	
-	Value resultado;
+	Valor resultado;
 	resultado.tipo = TipoDado::INT;
 	
 	if (num1 > num2) {
@@ -2083,7 +2083,7 @@ void ExecutionEngine::i_fcmpl(){
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
 	
-	Value resultado;
+	Valor resultado;
 	resultado.tipo = TipoDado::INT;
 	
 	if (isnan(num1) || isnan(num2)) {
@@ -2114,7 +2114,7 @@ void ExecutionEngine::i_fcmpg(){
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
 	
-	Value resultado;
+	Valor resultado;
 	resultado.tipo = TipoDado::INT;
 	
 	if (isnan(num1) || isnan(num2)) {
@@ -2147,7 +2147,7 @@ void ExecutionEngine::i_dcmpl(){
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
 	
-	Value resultado;
+	Valor resultado;
 	resultado.tipo = TipoDado::INT;
 	
 	if (isnan(num1) || isnan(num2)) {
@@ -2180,7 +2180,7 @@ void ExecutionEngine::i_dcmpg(){
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
 	
-	Value resultado;
+	Valor resultado;
 	resultado.tipo = TipoDado::INT;
 	
 	if (isnan(num1) || isnan(num2)) {
@@ -2197,13 +2197,142 @@ void ExecutionEngine::i_dcmpg(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ifeq(){}
-void ExecutionEngine::i_ifne(){}
-void ExecutionEngine::i_iflt(){}
-void ExecutionEngine::i_ifge(){}
-void ExecutionEngine::i_ifgt(){}
-void ExecutionEngine::i_ifle(){}
-void ExecutionEngine::i_if_icmpeq(){}
+void ExecutionEngine::i_ifeq(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	
+	int32_t num;
+	memcpy(&num,&valor.dado,4);
+	
+	if (num == 0) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
+void ExecutionEngine::i_ifne(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	
+	int32_t num;
+	memcpy(&num,&valor.dado,4);
+	
+	if (num != 0) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
+void ExecutionEngine::i_iflt(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	
+	int32_t num;
+	memcpy(&num,&valor.dado,4);
+	
+	if (num < 0) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
+void ExecutionEngine::i_ifge(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	
+	int32_t num;
+	memcpy(&num,&valor.dado,4);
+	
+	if (num >= 0) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
+void ExecutionEngine::i_ifgt(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	
+	int32_t num;
+	memcpy(&num,&valor.dado,4);
+	
+	if (num > 0) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
+void ExecutionEngine::i_ifle(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	
+	int32_t num;
+	memcpy(&num,&valor.dado,4);
+	
+	if (num <= 0) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
+void ExecutionEngine::i_if_icmpeq(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
+	assert(valor1.tipo == TipoDado::INT);
+	assert(valor2.tipo == TipoDado::INT);
+	
+	int32_t num1, num2;
+	memcpy(&num1,&valor1.dado,4);
+	memcpy(&num2,&valor2.dado,4);
+	
+	if (num1 == num2) {
+		uint8_t *code = toppilha->getCode();
+		uint8_t byte1 = code[1];
+		uint8_t byte2 = code[2];
+		uint16_t offsetPC = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+	}
+}
 void ExecutionEngine::i_if_icmpne(){}
 void ExecutionEngine::i_if_icmplt(){}
 void ExecutionEngine::i_if_icmpge(){}
