@@ -326,7 +326,6 @@ void ExecutionEngine::i_iconst_m1(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)-1;
-	//falta uma parada de print do bastos
 
 	toppilha->empilharOperando(valor);
 
@@ -339,7 +338,7 @@ void ExecutionEngine::i_iconst_0(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)0;
-	//falta uma parada de print do bastos
+
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -350,7 +349,7 @@ void ExecutionEngine::i_iconst_1(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)1;
-	//falta uma parada de print do bastos
+
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
@@ -361,7 +360,7 @@ void ExecutionEngine::i_iconst_2(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)2;
-	//falta uma parada de print do bastos
+
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -371,7 +370,7 @@ void ExecutionEngine::i_iconst_3(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)3;
-	//falta uma parada de print do bastos
+
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -381,7 +380,7 @@ void ExecutionEngine::i_iconst_4(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)4;
-	//falta uma parada de print do bastos
+
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
@@ -392,7 +391,7 @@ void ExecutionEngine::i_iconst_5(){
 	Valor valor;
 	valor.tipo = TipoDado::INT;
 	valor.dado = (uint32_t)5;
-	//falta uma parada de print do bastos
+
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -492,18 +491,18 @@ void ExecutionEngine::i_dconst_1(){
 }
 void ExecutionEngine::i_bipush(){
 
-	Frame *topo = runtimeDataArea->topoPilha();
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
-		uint8_t *code = topo->getCode();
+		uint8_t *code = toppilha->getCode();
 	uint8_t byte = code[1];
 
 		Valor valor;
 		valor.tipo = TipoDado::INT;
 		valor.dado = (int32_t) (int8_t) byte; // convertendo para inteiro e estendendo o sinal
 
-		topo->empilharOperando(valor);
+		toppilha->empilharOperando(valor);
 
-		topo->incrementaPC(2);
+		toppilha->incrementaPC(2);
 
 }
 void ExecutionEngine::i_sipush(){
@@ -511,6 +510,7 @@ void ExecutionEngine::i_sipush(){
 }
 void ExecutionEngine::i_ldc(){
 	//usa no helloworld
+
 }
 void ExecutionEngine::i_ldc_w(){
 
@@ -1045,7 +1045,28 @@ void ExecutionEngine::i_istore(){}
 void ExecutionEngine::i_lstore(){}
 void ExecutionEngine::i_fstore(){}
 void ExecutionEngine::i_dstore(){}
-void ExecutionEngine::i_astore(){}
+void ExecutionEngine::i_astore(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::REFERENCE);
+
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1]; //índice do vetor de variáveis locais
+	int16_t index = (int16_t)byte1;
+
+	if (isWide) {
+		uint8_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	} else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+
+	toppilha->mudarVariavelLocal(valor, index);
+}
 void ExecutionEngine::i_istore_0(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
