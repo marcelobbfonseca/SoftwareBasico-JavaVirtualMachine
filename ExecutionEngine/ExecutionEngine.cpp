@@ -491,8 +491,60 @@ void ExecutionEngine::i_sipush(){
 
 }
 void ExecutionEngine::i_ldc(){
-	//usa no helloworld
+
+    	Frame *topo = runtimeDataArea.topoPilha();
+    
+	Value value;
+    	uint8_t *code = topo->getCode();
+    	uint8_t index = code[1];
+    
+        vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+    
+    	if (constantPool[index -1].tag == CONSTANT_String) {
+
+        	cp_info utf8Entry = constantPool[((CONSTANT_String_info*)constantPool[index -1])->GetString_index()/*->getStringIndex()*/-1];
+        	assert(utf8Entry.tag == CONSTANT_Utf8);
+        
+        	uint8_t* bytes = utf8Entry.utf8_info.bytes;
+        	char utf8String[utf8Entry.utf8_info.length + 1];
+        	int i;
+        	for (i = 0; i < utf8Entry.info.utf8_info.length; i++) {
+
+            		utf8String[i] = bytes[i];
+
+	        }
+        
+		utf8String[i] = '\0';
+        
+        	valore.tipo = TipoDado::REFERENCE;
+		StringObject * temp=new StringObject(utf8String);
+        	memcpy(&(value.dado), temp, sizeof(void*));
+
+    	} 
+	else if (constantPool[index -1].tag == CONSTANT_Integer) {
+
+                valor.tipo = TipoDado::INT;
+        	value.dado = ((CONSTANT_Integer_info*)constantPool[index -1]).GetNumero();
+
+	} 
+	else if (constantPool[index -1].tag == CONSTANT_Float) {
+
+		float numero = ((CONSTANT_Float_info*)constantPool[index -1]).GetNumero();
+        
+        	value.type = ValueType::FLOAT;
+        	value.data.floatValue = numero;
+    	
+	} 
+	else {
+
+        	cerr << "CP invalido em i_LDC: " << entry.tag << endl;
+        	exit(1);
+    	}
+    
+    topo->empilharOperando(valor);
+    topo->incrementaPC(2);
 }
+
 void ExecutionEngine::i_ldc_w(){
 
 }
