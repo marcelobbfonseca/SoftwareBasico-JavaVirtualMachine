@@ -67,7 +67,7 @@ void ExibirMensagemDeAjuda(void)
 	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classeComMain.class] *[argumentosParaMain]\t\tpara rodar um arquivo .class" << std::endl;
 	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] --exibir-informacoes\t\tpara ver as informacoes do .class informado" << std::endl;
 	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] --help\t\t\tpara ver essa mensagem de erro" << std::endl;
-	std::cout << "Este programa tem os poderes do goku na capivara." << std::endl;
+//	std::cout << "Este programa tem os poderes do goku na capivara." << std::endl;
 }
 
 
