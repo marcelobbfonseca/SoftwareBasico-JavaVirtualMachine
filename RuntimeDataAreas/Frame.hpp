@@ -30,7 +30,7 @@ class Frame{
 		Exceptions_attribute *exceptionsAttribute;
 
 		// Obter um ponteiro para a pool de constantes referente ao frame atual.
-		cp_info *cpInfo;
+		JavaClass *javaClass;
 
 //		void pegarAtributos();
 		void pegarAtributos(JavaClass *classe= NULL);
@@ -55,6 +55,7 @@ class Frame{
 		void incrementaPC(int32_t);
 		int32_t getPC();
 		Objeto *getObjeto();
+		JavaClass *ObterJavaClass(void);
 };
 
 #endif
