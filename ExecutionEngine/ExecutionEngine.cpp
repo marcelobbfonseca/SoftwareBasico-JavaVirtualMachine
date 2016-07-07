@@ -492,6 +492,7 @@ void ExecutionEngine::i_dconst_1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+//push byte pra stack de operando
 void ExecutionEngine::i_bipush(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -511,6 +512,7 @@ void ExecutionEngine::i_bipush(){
 void ExecutionEngine::i_sipush(){
 
 }
+//Push item from run-time constant pool
 void ExecutionEngine::i_ldc(){
 
 	//usa no helloworld
@@ -613,6 +615,7 @@ void ExecutionEngine::i_ldc2_w() {
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
+//Load int from local variable
 void ExecutionEngine::i_iload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -620,7 +623,7 @@ void ExecutionEngine::i_iload(){
 	uint8_t byte1 = code[1];
 	int16_t index = (int16_t)byte1;
 	
-	if(isWide) {
+	if(isWide) {//aumenta o tamanho de bytes dos argumentos(ex:pra jumps)
 		uint16_t byte2 = code[2];
 		index = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(3);
@@ -2843,6 +2846,11 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
+/*	*	*	*	*	*	*	*	*	*	*	*	*	*
+get a static field value of a class, where the 		*
+field is identified by field reference in the 		*
+constant pool index (indexbyte1 << 8 + indexbyte2)	*
+*	*	*	*	*	*	*	*	*	*	*	*	*	*/
 void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
 #ifdef DEBUG
@@ -2872,7 +2880,7 @@ void ExecutionEngine::i_getstatic() {
 	cout<< "ExecutionEngine::i_getstatic4" << endl;
 #endif
 
-
+	//consulta a field. percorre os fields do java
 	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
 #ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic5" << endl;
