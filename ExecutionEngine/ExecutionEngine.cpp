@@ -516,7 +516,7 @@ void ExecutionEngine::i_ldc(){
 	if(ponteiroCpInfo->GetTag() == CONSTANT_String)
 	{
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
-		
+														
 		string utf8String = utf8Entry->GetString();
 		
 			valor.tipo = TipoDado::REFERENCE;
@@ -552,9 +552,7 @@ void ExecutionEngine::i_ldc_w(){
 
 }
 
-void ExecutionEngine::i_ldc2_w() {
-
-}
+void ExecutionEngine::i_ldc2_w() {}
 void ExecutionEngine::i_iload(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -584,7 +582,6 @@ void ExecutionEngine::i_iload(){
 
 	}
 	Valor valor = toppilha->getValorVariavelLocal(index);
-	assert(valor.tipo == TipoDado::INT);
 	
 	toppilha->empilharOperando(valor);
 }
@@ -652,7 +649,6 @@ void ExecutionEngine::i_fload(){
 	}
 
 	Valor valor = topPilha->getValorVariavelLocal(index);
-	assert(valor.tipo == TipoDado::FLOAT);
 	
 	topPilha->empilharOperando(valor);
 }
@@ -1061,11 +1057,12 @@ void ExecutionEngine::i_iaload(){
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
-	assert(index.tipo == TipoDado::INT);
-	
+		 if(!(index.tipo == TipoDado::INT)){
+		
+		throw new Erro("O tipo do dado não é um int", "ExecutionEngine", "i_iload");
+
+	}
 	Valor arrayref = toppilha->desempilhaOperando();
-	assert(arrayref.tipo == TipoDado::REFERENCE);
-	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
 	array = (ObjetoArray*)(arrayref.dado);
 	
@@ -1085,11 +1082,8 @@ void ExecutionEngine::i_laload(){
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
-	assert(index.tipo == TipoDado::LONG);
 	
 	Valor arrayref = toppilha->desempilhaOperando();
-	assert(arrayref.tipo == TipoDado::REFERENCE);
-	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
 	array = (ObjetoArray*)(arrayref.dado);
 	
@@ -1115,11 +1109,8 @@ void ExecutionEngine::i_faload(){
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
-	assert(index.tipo == TipoDado::FLOAT);
 	
 	Valor arrayref = toppilha->desempilhaOperando();
-	assert(arrayref.tipo == TipoDado::REFERENCE);
-	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
 	array = (ObjetoArray*)(arrayref.dado);
 	
@@ -1140,11 +1131,9 @@ void ExecutionEngine::i_daload(){
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
-	assert(index.tipo == TipoDado::DOUBLE);
+
 	
 	Valor arrayref = toppilha->desempilhaOperando();
-	assert(arrayref.tipo == TipoDado::REFERENCE);
-	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
 	array = (ObjetoArray*)(arrayref.dado);
 	
@@ -1170,11 +1159,8 @@ void ExecutionEngine::i_aaload(){
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
-	assert(index.tipo == TipoDado::REFERENCE);
 	
 	Valor arrayref = toppilha->desempilhaOperando();
-	assert(arrayref.tipo == TipoDado::REFERENCE);
-	assert(((Objeto*)(arrayref.dado))->ObterTipoObjeto() == TipoObjeto::ARRAY);
 	
 	array = (ObjetoArray*)(arrayref.dado);
 	
@@ -1210,12 +1196,17 @@ void ExecutionEngine::i_astore(){
 	int16_t index = (int16_t)byte1;
 
 	if (isWide) {
+
 		uint8_t byte2 = code[2];
 		index = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		isWide = false;
-	} else {
+
+	}
+	 else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(2);
+
 	}
 
 	toppilha->mudarVariavelLocal(valor, index);
@@ -1225,7 +1216,6 @@ void ExecutionEngine::i_istore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	toppilha->mudarVariavelLocal(valor, 0);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1236,7 +1226,6 @@ void ExecutionEngine::i_istore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1247,7 +1236,6 @@ void ExecutionEngine::i_istore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	toppilha->mudarVariavelLocal(valor, 2);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1258,7 +1246,6 @@ void ExecutionEngine::i_istore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1267,12 +1254,10 @@ void ExecutionEngine::i_lstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::LONG);
 	
 	toppilha->mudarVariavelLocal(valor, 0);
 
 	valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::PADDING);
 	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1281,12 +1266,10 @@ void ExecutionEngine::i_lstore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::LONG);
 	
 	toppilha->mudarVariavelLocal(valor, 1);
 
 	valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::PADDING);
 	toppilha->mudarVariavelLocal(valor, 2);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1295,12 +1278,11 @@ void ExecutionEngine::i_lstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::LONG);
+
 	
 	toppilha->mudarVariavelLocal(valor, 2);
 
 	valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::PADDING);
 	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1309,12 +1291,10 @@ void ExecutionEngine::i_lstore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::LONG);
 	
 	toppilha->mudarVariavelLocal(valor, 3);
 
 	valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::PADDING);
 	toppilha->mudarVariavelLocal(valor, 4);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1323,7 +1303,6 @@ void ExecutionEngine::i_fstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::FLOAT);
 	toppilha->mudarVariavelLocal(valor, 0);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1332,7 +1311,6 @@ void ExecutionEngine::i_fstore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::FLOAT);
 	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1341,7 +1319,6 @@ void ExecutionEngine::i_fstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::FLOAT);
 	toppilha->mudarVariavelLocal(valor, 2);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1350,7 +1327,6 @@ void ExecutionEngine::i_fstore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::FLOAT);
 	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1359,12 +1335,10 @@ void ExecutionEngine::i_dstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::DOUBLE);
 	
 	toppilha->mudarVariavelLocal(valor, 0);
 
 	valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::PADDING);
 	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1403,10 +1377,7 @@ void ExecutionEngine::i_iadd(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
-	
+
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
@@ -1424,9 +1395,6 @@ void ExecutionEngine::i_ladd(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1442,9 +1410,6 @@ void ExecutionEngine::i_fadd(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1463,9 +1428,6 @@ void ExecutionEngine::i_dadd(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1481,9 +1443,6 @@ void ExecutionEngine::i_isub(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1501,10 +1460,7 @@ void ExecutionEngine::i_lsub(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
+
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1520,10 +1476,7 @@ void ExecutionEngine::i_fsub(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
-	
+
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
@@ -1541,9 +1494,6 @@ void ExecutionEngine::i_dsub(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1559,9 +1509,6 @@ void ExecutionEngine::i_imul(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1580,9 +1527,6 @@ void ExecutionEngine::i_lmul(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1598,9 +1542,6 @@ void ExecutionEngine::i_fmul(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1619,9 +1560,6 @@ void ExecutionEngine::i_dmul(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1637,9 +1575,6 @@ void ExecutionEngine::i_idiv(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1662,9 +1597,6 @@ void ExecutionEngine::i_ldiv(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1684,9 +1616,6 @@ void ExecutionEngine::i_fdiv(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1709,9 +1638,6 @@ void ExecutionEngine::i_ddiv(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1731,9 +1657,6 @@ void ExecutionEngine::i_irem(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1756,9 +1679,6 @@ void ExecutionEngine::i_lrem(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1778,9 +1698,6 @@ void ExecutionEngine::i_frem(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1803,9 +1720,6 @@ void ExecutionEngine::i_drem(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1824,7 +1738,6 @@ void ExecutionEngine::i_ineg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
@@ -1839,7 +1752,6 @@ void ExecutionEngine::i_lneg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::LONG);
 	
 	int64_t num;
 	memcpy(&num,&valor.dado,8);
@@ -1854,7 +1766,6 @@ void ExecutionEngine::i_fneg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::FLOAT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
@@ -1869,7 +1780,6 @@ void ExecutionEngine::i_dneg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::DOUBLE);
 	
 	int64_t num;
 	memcpy(&num,&valor.dado,8);
@@ -1885,9 +1795,6 @@ void ExecutionEngine::i_ishl(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1906,9 +1813,6 @@ void ExecutionEngine::i_lshl(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1925,9 +1829,6 @@ void ExecutionEngine::i_ishr(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1946,9 +1847,6 @@ void ExecutionEngine::i_lshr(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -1965,9 +1863,6 @@ void ExecutionEngine::i_iushr(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -1991,9 +1886,6 @@ void ExecutionEngine::i_lushr(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -2016,9 +1908,6 @@ void ExecutionEngine::i_iand(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
-	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
@@ -2036,9 +1925,6 @@ void ExecutionEngine::i_land(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -2054,9 +1940,6 @@ void ExecutionEngine::i_ior(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -2075,9 +1958,6 @@ void ExecutionEngine::i_lor(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -2093,9 +1973,6 @@ void ExecutionEngine::i_ixor(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::INT);
-	assert(valor1.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -2114,9 +1991,6 @@ void ExecutionEngine::i_lxor(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
-	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
@@ -2132,7 +2006,6 @@ void ExecutionEngine::i_i2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::LONG;
@@ -2154,8 +2027,7 @@ void ExecutionEngine::i_i2f(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	
+
 	Valor valor2;
 	valor2.tipo = TipoDado::FLOAT;
 	
@@ -2172,7 +2044,6 @@ void ExecutionEngine::i_i2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::DOUBLE;
@@ -2195,7 +2066,6 @@ void ExecutionEngine::i_l2i(){
 	
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	assert(valor1.tipo == TipoDado::LONG);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::INT;
@@ -2215,7 +2085,6 @@ void ExecutionEngine::i_l2f(){
 	
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	assert(valor1.tipo == TipoDado::LONG);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::FLOAT;
@@ -2234,7 +2103,6 @@ void ExecutionEngine::i_l2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::LONG);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::DOUBLE;
@@ -2252,7 +2120,6 @@ void ExecutionEngine::i_f2i(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::INT;
@@ -2270,7 +2137,6 @@ void ExecutionEngine::i_f2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::LONG;
@@ -2292,8 +2158,7 @@ void ExecutionEngine::i_f2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	
+
 	Valor valor2;
 	valor2.tipo = TipoDado::DOUBLE;
 	Valor padding;
@@ -2315,7 +2180,6 @@ void ExecutionEngine::i_d2i(){
 	
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	assert(valor1.tipo == TipoDado::DOUBLE);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::INT;
@@ -2334,7 +2198,6 @@ void ExecutionEngine::i_d2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::DOUBLE);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::LONG;
@@ -2353,7 +2216,6 @@ void ExecutionEngine::i_d2f(){
 	
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	assert(valor1.tipo == TipoDado::DOUBLE);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::FLOAT;
@@ -2372,7 +2234,6 @@ void ExecutionEngine::i_i2b(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::BYTE;
@@ -2391,7 +2252,6 @@ void ExecutionEngine::i_i2c(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::CHAR;
@@ -2410,7 +2270,6 @@ void ExecutionEngine::i_i2s(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
 	
 	Valor valor2;
 	valor2.tipo = TipoDado::SHORT;
@@ -2432,9 +2291,6 @@ void ExecutionEngine::i_lcmp(){
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	
-	assert(valor2.tipo == TipoDado::LONG);
-	assert(valor1.tipo == TipoDado::LONG);
 	
 	int64_t num1, num2;
 	int32_t num3;
@@ -2462,9 +2318,6 @@ void ExecutionEngine::i_fcmpl(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
-	
 	int64_t num1, num2;
 	int32_t num3;
 	memcpy(&num1,&valor1.dado,4);
@@ -2475,11 +2328,14 @@ void ExecutionEngine::i_fcmpl(){
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = -1;
-	} else if (num1 > num2) {
+	} 
+	else if (num1 > num2) {
 		num3 = 1;
-	} else if (num1 == num2) {
+	}
+	 else if (num1 == num2) {
 		num3 = 0;
-	} else {
+	}
+	 else {
 		num3 = -1;
 	}
 	memcpy(&resultado.dado,&num3,4);
@@ -2492,9 +2348,6 @@ void ExecutionEngine::i_fcmpg(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	
-	assert(valor2.tipo == TipoDado::FLOAT);
-	assert(valor1.tipo == TipoDado::FLOAT);
 	
 	int64_t num1, num2;
 	int32_t num3;
@@ -2526,9 +2379,6 @@ void ExecutionEngine::i_dcmpl(){
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
 	int64_t num1, num2;
 	int32_t num3;
 	memcpy(&num1,&valor1.dado,8);
@@ -2539,11 +2389,14 @@ void ExecutionEngine::i_dcmpl(){
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = -1;
-	} else if (num1 > num2) {
+	}
+	 else if (num1 > num2) {
 		num3 = 1;
-	} else if (num1 == num2) {
+	}
+	 else if (num1 == num2) {
 		num3 = 0;
-	} else {
+	}
+	 else {
 		num3 = -1;
 	}
 	memcpy(&resultado.dado,&num3,4);
@@ -2559,9 +2412,7 @@ void ExecutionEngine::i_dcmpg(){
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
 	
-	assert(valor2.tipo == TipoDado::DOUBLE);
-	assert(valor1.tipo == TipoDado::DOUBLE);
-	
+
 	int64_t num1, num2;
 	int32_t num3;
 	memcpy(&num1,&valor1.dado,8);
@@ -2572,11 +2423,14 @@ void ExecutionEngine::i_dcmpg(){
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = 1;
-	} else if (num1 > num2) {
+	} 
+	else if (num1 > num2) {
 		num3 = 1;
-	} else if (num1 == num2) {
+	}
+	 else if (num1 == num2) {
 		num3 = 0;
-	} else {
+	} 
+	else {
 		num3 = -1;
 	}
 	memcpy(&resultado.dado,&num3,4);
@@ -2588,7 +2442,6 @@ void ExecutionEngine::i_ifeq(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
@@ -2599,53 +2452,65 @@ void ExecutionEngine::i_ifeq(){
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+	} 
+         else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_ifne(){
+
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
 	
 	if (num != 0) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	} 
+        else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_iflt(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
 	
 	if (num < 0) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	} 
+        else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_ifge(){
+
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
@@ -2656,46 +2521,59 @@ void ExecutionEngine::i_ifge(){
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+	} 
+         else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_ifgt(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
 	
 	if (num > 0) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	} 
+	else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
+
 void ExecutionEngine::i_ifle(){
+
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::INT);
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
 	
 	if (num <= 0) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	} 
+	else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_if_icmpeq(){
@@ -2703,21 +2581,24 @@ void ExecutionEngine::i_if_icmpeq(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	assert(valor2.tipo == TipoDado::INT);
-	
+			
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num1 == num2) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	}
+	 else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_if_icmpne(){
@@ -2725,9 +2606,7 @@ void ExecutionEngine::i_if_icmpne(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	assert(valor2.tipo == TipoDado::INT);
-	
+
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
@@ -2738,8 +2617,11 @@ void ExecutionEngine::i_if_icmpne(){
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+	} 
+        else{
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_if_icmplt(){
@@ -2747,21 +2629,24 @@ void ExecutionEngine::i_if_icmplt(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	assert(valor2.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num1 < num2) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	} 
+        else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_if_icmpge(){
@@ -2769,8 +2654,6 @@ void ExecutionEngine::i_if_icmpge(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	assert(valor2.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -2791,21 +2674,24 @@ void ExecutionEngine::i_if_icmpgt(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	assert(valor2.tipo == TipoDado::INT);
-	
+
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num1 > num2) {
+
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
-	} else {
+
+	} 
+	else {
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
+
 	}
 }
 void ExecutionEngine::i_if_icmple(){
@@ -2813,8 +2699,6 @@ void ExecutionEngine::i_if_icmple(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::INT);
-	assert(valor2.tipo == TipoDado::INT);
 	
 	int32_t num1, num2;
 	memcpy(&num1,&valor1.dado,4);
@@ -2835,8 +2719,6 @@ void ExecutionEngine::i_if_acmpeq(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::REFERENCE);
-	assert(valor2.tipo == TipoDado::REFERENCE);
 	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,sizeof(void*));
@@ -2857,8 +2739,6 @@ void ExecutionEngine::i_if_acmpne(){
 	
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == TipoDado::REFERENCE);
-	assert(valor2.tipo == TipoDado::REFERENCE);
 	
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,sizeof(void*));
@@ -3057,7 +2937,6 @@ void ExecutionEngine::i_putfield()
 
 	//...	
 
-	runtimeDataArea->topoPilha()->desempilhaOperando();
 	*/
 
 }//fim metodo
@@ -3320,7 +3199,6 @@ void ExecutionEngine::i_invokespecial(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
-	//cp_info *constantPool = *(topFrame->getConstantPool());
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
 	uint8_t *code = toppilha->getCode();
@@ -3331,8 +3209,7 @@ void ExecutionEngine::i_invokespecial(){
 	uint16_t methodIndex = (byte1 << 8) | byte2;
 	
 
-	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*) constantPool[methodIndex-1]; //em 1 linha
-	//assert(validar referencia a um metodo)
+	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*) constantPool[methodIndex-1]; 
 	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(methodInfo->GetClassIndex());
 
 	CONSTANT_NameAndType_info *nameAndTypeCP = (CONSTANT_NameAndType_info *)constantPool[methodInfo->GetNameAndTypeIndex()-1];
@@ -3385,12 +3262,10 @@ void ExecutionEngine::i_invokespecial(){
 		}
 
 		Valor objectValor = toppilha->desempilhaOperando();
-		assert(objectValor.tipo == TipoDado::REFERENCE); // necessita ser uma referência para objeto
 		args.insert(args.begin(), objectValor);
 
 		Objeto *objeto = (Objeto*)objectValor.dado;
 
-		//assert(object->objectType() == ObjectType::CLASS_INSTANCE); // objeto precisa ser uma instância
 		ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
 
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
@@ -3422,7 +3297,6 @@ void ExecutionEngine::i_arraylength(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor arrayref = toppilha->desempilhaOperando();
-	assert(arrayref.tipo == TipoDado::REFERENCE);
 
 	if ((Objeto*)arrayref.dado == NULL) {
 		cerr << "NullPointerException" << endl;
@@ -3453,18 +3327,13 @@ void ExecutionEngine::i_instanceof(){
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)(topo->getObjeto()))->ObterJavaClass()->getConstantPool();
 	cp_info *cpElement = constantPool[cpIndex-1];
 
-	assert(cpElement->GetTag() == CONSTANT_Class);
-
 	Valor objectrefValue = topo->desempilhaOperando();
-	assert(objectrefValue.tipo == TipoDado::REFERENCE);
  	
 	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
 
 	Valor resultValor;
 	resultValor.tipo = TipoDado::INT;
 
-	assert(cpElement->GetTag() == CONSTANT_Class);
-   
 	if ((Objeto*)objectrefValue.dado == NULL) {
 		resultValor.dado = 0;
 	}
@@ -3537,7 +3406,7 @@ void ExecutionEngine::i_wide(){
 }
 
 void ExecutionEngine::i_multianewarray(){
-/*
+
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
@@ -3551,21 +3420,20 @@ void ExecutionEngine::i_multianewarray(){
 	uint16_t classIndex = (byte1 << 8) | byte2;
 
 	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
-	assert(classInfo->GetTag() == CONSTANT_Class);
-
+	
 	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(classInfo->GetNameIndex());
 
 	// obter o tipo dentro de className:
 	TipoDado TipoDado;
 	int i = 0;
 	while (className[i] == '[') i++;
-
-	string multiArrayType = className.substr(i+1, className.size()-i-2); // em caso de ser uma referência ([[[Ljava/lang/String;)
+        // em caso de ser uma referência ([[[Ljava/lang/String;)
+	string multiArrayType = className.substr(i+1, className.size()-i-2); 
 
 	switch (className[i]) {
-		case 'L':
+		case 'L':// verifica se existe classe com esse nome
 			if (multiArrayType != "java/lang/String") {
-				runtimeDataArea->CarregarClasse(multiArrayType); // verifica se existe classe com esse nome
+				runtimeDataArea->CarregarClasse(multiArrayType); 
 			}
 			TipoDado = TipoDado::REFERENCE;
 			break;
@@ -3601,13 +3469,12 @@ void ExecutionEngine::i_multianewarray(){
 	stack<int> count;
 	for (int i = 0; i < dimensoes; i++) {
 		Valor dimLength = topo->desempilhaOperando();
-		assert(dimLength.tipo == TipoDado::INT);
 		count.push(dimLength.dado);
 	}
 
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
-//	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : TipoDado);
-//	arr->popularSubArray(TipoDado, count);  
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : TipoDado);
+	arr->popularSubArray(TipoDado, count);  
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
@@ -3616,7 +3483,7 @@ void ExecutionEngine::i_multianewarray(){
 	topo->empilharOperando(valorArr);
 
 	topo->incrementaPC(4);
-*/
+
 }
  
 void ExecutionEngine::i_ifnull(){
@@ -3625,7 +3492,6 @@ void ExecutionEngine::i_ifnull(){
 
 	Valor referencia = topo->desempilhaOperando();
 
-	assert(referencia.tipo == TipoDado::REFERENCE);
 
 	if ((Objeto*)((void*)(referencia.dado)) == NULL) {
 
@@ -3647,8 +3513,6 @@ void ExecutionEngine::i_ifnonnull(){
 	Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor referencia = topo->desempilhaOperando();
-
-	assert(referencia.tipo == TipoDado::REFERENCE);
 
 	if ((Objeto*)(referencia.dado) != NULL) {
 		uint8_t *code = topo->getCode();
@@ -3677,7 +3541,6 @@ void ExecutionEngine::i_goto_w(){
 	int32_t offsetSalto = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
 
 	topo->incrementaPC(offsetSalto);
-	assert(topo->getPC() < (int32_t)topo->tamanhoCode());
 
 }
 
@@ -3698,7 +3561,6 @@ void ExecutionEngine::i_jsr_w(){
 	topo->empilharOperando(endRetorno);
 
 	topo->incrementaPC(offsetSalto);
-	assert(topo->getPC() < (int32_t)(topo->tamanhoCode()));
 
 
 }
