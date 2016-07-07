@@ -438,15 +438,10 @@ void Code_attribute::ExibirInformacoes(string tabs, JavaClass *javaClass)
 		cout << endl;
 	}
 	cout << tabs << "\tattributes_count = " << attributes_count << endl;
-	cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
 	for(unsigned int cont =0; cont < attributes_count; cont++)
 	{
 		cout << tabs << "\tAttribute[" << cont << "]:" << endl;;
 		attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), javaClass );
-		if(cont != attributes.size()-1)
-		{
-			cout << "-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -" << endl;
-		}
 	}
 }
 
