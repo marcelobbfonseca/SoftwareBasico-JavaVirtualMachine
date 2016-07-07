@@ -493,52 +493,44 @@ void ExecutionEngine::i_sipush(){
 }
 void ExecutionEngine::i_ldc(){
 
-    	Frame *topo = runtimeDataArea.topoPilha();
+    	Frame *topo = runtimeDataArea->topoPilha();
     
-	Value value;
+	Valor valor;
     	uint8_t *code = topo->getCode();
     	uint8_t index = code[1];
     
-        vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+        vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
+        
+        cp_info *ponteiroCpInfo = constantPool[index - 1];
     
-    	if (constantPool[index -1].tag == CONSTANT_String) {
+    	if(ponteiroCpInfo->GetTag() == CONSTANT_String){
 
-        	cp_info utf8Entry = constantPool[((CONSTANT_String_info*)constantPool[index -1])->GetString_index()/*->getStringIndex()*/-1];
-        	assert(utf8Entry.tag == CONSTANT_Utf8);
+        	CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
         
-        	uint8_t* bytes = utf8Entry.utf8_info.bytes;
-        	char utf8String[utf8Entry.utf8_info.length + 1];
-        	int i;
-        	for (i = 0; i < utf8Entry.info.utf8_info.length; i++) {
-
-            		utf8String[i] = bytes[i];
-
-	        }
+        	string utf8String = utf8Entry->GetString();
         
-		utf8String[i] = '\0';
-        
-        	valore.tipo = TipoDado::REFERENCE;
-		StringObject * temp=new StringObject(utf8String);
-        	memcpy(&(value.dado), temp, sizeof(void*));
+        	valor.tipo = TipoDado::REFERENCE;
+		ObjetoString * temp = new ObjetoString(utf8String);
+        	memcpy(&(valor.dado), temp, sizeof(void*));
 
     	} 
-	else if (constantPool[index -1].tag == CONSTANT_Integer) {
+	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer){
 
                 valor.tipo = TipoDado::INT;
-        	value.dado = ((CONSTANT_Integer_info*)constantPool[index -1]).GetNumero();
+        	valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
 
 	} 
-	else if (constantPool[index -1].tag == CONSTANT_Float) {
+	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Float) {
 
-		float numero = ((CONSTANT_Float_info*)constantPool[index -1]).GetNumero();
+		float numero = ((CONSTANT_Float_info*)constantPool[index -1])->GetNumero();
         
-        	value.type = ValueType::FLOAT;
-        	value.data.floatValue = numero;
+        	valor.tipo = TipoDado::FLOAT;
+        	valor.dado = numero;
     	
 	} 
 	else {
 
-        	cerr << "CP invalido em i_LDC: " << entry.tag << endl;
+        	cerr << "CP invalido em i_LDC: " << constantPool[index -1]->GetTag() << endl;
         	exit(1);
     	}
     
