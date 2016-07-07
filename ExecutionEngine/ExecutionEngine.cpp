@@ -26,6 +26,9 @@
 #endif
 
 #define DEBUG
+#ifdef DEBUG
+	#include"Opcode.hpp"
+#endif
 
 ExecutionEngine::ExecutionEngine(void)
 {
@@ -43,7 +46,7 @@ void ExecutionEngine::Play(string classComMain)
 
 	uint8_t instrucao;
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine" << endl;
+	cout<< "ExecutionEngine::Play" << endl;
 #endif
 	if(runtimeDataArea == NULL)
 	{
@@ -51,51 +54,51 @@ void ExecutionEngine::Play(string classComMain)
 	}
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine2" << endl;
+	cout<< "ExecutionEngine::Play2" << endl;
 #endif
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine3" << endl;
+	cout<< "ExecutionEngine::Play3" << endl;
 #endif
 	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine4" << endl;
+	cout<< "ExecutionEngine::Play4" << endl;
 #endif
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine5" << endl;
+	cout<< "ExecutionEngine::Play5" << endl;
 #endif
 		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
 	}
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine6" << endl;
+	cout<< "ExecutionEngine::Play6" << endl;
 #endif
 
 	do
 	{
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
+	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
 #endif
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine8" << endl;
+	cout<< "ExecutionEngine::Play8\t" << OpCode::GetReferencia()->GetMinemonico(instrucao) << endl;
 
 		(this->*vetorDePonteirosParaFuncao[instrucao])();
 #endif
 
 #ifdef DEBUG
 
-	cout<< "Consertar Play do execution engine9" << endl;
+	cout<< "ExecutionEngine::Play9" << endl;
 #endif
 
 	}
 	while(runtimeDataArea->pilhaJVM.size() > 0);
 #ifdef DEBUG
-	cout<< "Consertar Play do execution engine10" << endl;
+	cout<< "ExecutionEngine::Play10" << endl;
 #endif
 }
 
@@ -509,15 +512,63 @@ void ExecutionEngine::i_sipush(){
 
 }
 void ExecutionEngine::i_ldc(){
+
 	//usa no helloworld
 
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	
+	Valor valor;
+	uint8_t *code = topo->getCode();
+	uint8_t index = code[1];
+	
+	JavaClass *classe= (topo->getObjeto()== NULL )? topo->ObterJavaClass(): ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass();
+
+	vector<cp_info*> constantPool = classe->getConstantPool();
+	
+	cp_info *ponteiroCpInfo = constantPool[index - 1];
+	
+	if(ponteiroCpInfo->GetTag() == CONSTANT_String)
+	{
+		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
+		
+		string utf8String = utf8Entry->GetString();
+		
+			valor.tipo = TipoDado::REFERENCE;
+		ObjetoString * temp = new ObjetoString(utf8String);
+			memcpy(&(valor.dado), temp, sizeof(void*));
+	}
+	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
+	{
+				valor.tipo = TipoDado::INT;
+			valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
+	} 
+	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Float)
+	{
+		float numero = ((CONSTANT_Float_info*)constantPool[index -1])->GetNumero();
+		
+		valor.tipo = TipoDado::FLOAT;
+		valor.dado = numero;
+		
+	}
+	else
+	{
+
+		cerr << "CP invalido em i_LDC: " << constantPool[index -1]->GetTag() << endl;
+		exit(1);
+	}
+	
+	topo->empilharOperando(valor);
+	topo->incrementaPC(2);
+
 }
+
 void ExecutionEngine::i_ldc_w(){
 
 }
 void ExecutionEngine::i_ldc2_w() {
 /*	//double
-    Frame *toppilha = runtimeDataArea->topoPilha();
+	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
@@ -525,51 +576,51 @@ void ExecutionEngine::i_ldc2_w() {
 	uint16_t index = (byte1 << 8) | byte2;
 
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
-    
-    //
-    cp_info *classFile = *(toppilha->getConstantPool());
-    
+	
+	//
+	cp_info *classFile = *(toppilha->getConstantPool());
+	
 
-    cp_info entry = constantPool[index-1];
-    //
+	cp_info entry = constantPool[index-1];
+	//
 
-    Valor valor;
-    
-    if (entry.tag == CONSTANT_Long) {
-        uint32_t highBytes = entry.info.long_info.high_bytes;
-        uint32_t lowBytes = entry.info.long_info.low_bytes;
-        
-        int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
-        valor.tipo = ValueType::LONG;
-        
-        Valor padding;
-        padding.type = ValueType::PADDING;
-        
-        toppilha->pushIntoOperandStack(padding);
-    } else if (entry.tag == CONSTANT_Double) {
-        u4 highBytes = entry.info.double_info.high_bytes;
-        u4 lowBytes = entry.info.double_info.low_bytes;
-        
-        int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
-        
-        int32_t s = ((longNumber >> 63) == 0) ? 1 : -1;
-        int32_t e = (int32_t)((longNumber >> 52) & 0x7ffL);
-        int64_t m = (e == 0) ? (longNumber & 0xfffffffffffffL) << 1 : (longNumber & 0xfffffffffffffL) | 0x10000000000000L;
-        
-        double doubleNumber = s*m*pow(2, e-1075);
-        valor.tipo = TipoDado::DOUBLE;
-        
-        Valor padding;
-        padding.tipo = TipoDado::PADDING;
-        
-        toppilha->pushIntoOperandStack(padding);
-    } else {
-        cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << entry.tag << endl;
-        exit(1);
-    }
-    
-    toppilha->empilharOperando(valor);
-    runtimeDataArea->topoPilha()->incrementaPC(1);
+	Valor valor;
+	
+	if (entry.tag == CONSTANT_Long) {
+		uint32_t highBytes = entry.info.long_info.high_bytes;
+		uint32_t lowBytes = entry.info.long_info.low_bytes;
+		
+		int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+		valor.tipo = ValueType::LONG;
+		
+		Valor padding;
+		padding.type = ValueType::PADDING;
+		
+		toppilha->pushIntoOperandStack(padding);
+	} else if (entry.tag == CONSTANT_Double) {
+		u4 highBytes = entry.info.double_info.high_bytes;
+		u4 lowBytes = entry.info.double_info.low_bytes;
+		
+		int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+		
+		int32_t s = ((longNumber >> 63) == 0) ? 1 : -1;
+		int32_t e = (int32_t)((longNumber >> 52) & 0x7ffL);
+		int64_t m = (e == 0) ? (longNumber & 0xfffffffffffffL) << 1 : (longNumber & 0xfffffffffffffL) | 0x10000000000000L;
+		
+		double doubleNumber = s*m*pow(2, e-1075);
+		valor.tipo = TipoDado::DOUBLE;
+		
+		Valor padding;
+		padding.tipo = TipoDado::PADDING;
+		
+		toppilha->pushIntoOperandStack(padding);
+	} else {
+		cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << entry.tag << endl;
+		exit(1);
+	}
+	
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 */
 }
 void ExecutionEngine::i_iload(){
@@ -1071,9 +1122,9 @@ void ExecutionEngine::i_istore_0(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::INT);
-    toppilha->mudarVariavelLocal(valor, 0);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->mudarVariavelLocal(valor, 0);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
@@ -1082,9 +1133,9 @@ void ExecutionEngine::i_istore_1(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::INT);
-    toppilha->mudarVariavelLocal(valor, 1);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
@@ -1093,9 +1144,9 @@ void ExecutionEngine::i_istore_2(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::INT);
-    toppilha->mudarVariavelLocal(valor, 2);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->mudarVariavelLocal(valor, 2);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
@@ -1104,101 +1155,101 @@ void ExecutionEngine::i_istore_3(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::INT);
-    toppilha->mudarVariavelLocal(valor, 3);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::INT);
+	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_lstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::LONG);
-    
-    toppilha->mudarVariavelLocal(valor, 0);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::LONG);
+	
+	toppilha->mudarVariavelLocal(valor, 0);
 
-    valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::PADDING);
-    toppilha->mudarVariavelLocal(valor, 1);
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_lstore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::LONG);
-    
-    toppilha->mudarVariavelLocal(valor, 1);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::LONG);
+	
+	toppilha->mudarVariavelLocal(valor, 1);
 
-    valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::PADDING);
-    toppilha->mudarVariavelLocal(valor, 2);
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 2);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_lstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::LONG);
-    
-    toppilha->mudarVariavelLocal(valor, 2);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::LONG);
+	
+	toppilha->mudarVariavelLocal(valor, 2);
 
-    valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::PADDING);
-    toppilha->mudarVariavelLocal(valor, 3);
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_lstore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::LONG);
-    
-    toppilha->mudarVariavelLocal(valor, 3);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::LONG);
+	
+	toppilha->mudarVariavelLocal(valor, 3);
 
-    valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::PADDING);
-    toppilha->mudarVariavelLocal(valor, 4);
+	valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::PADDING);
+	toppilha->mudarVariavelLocal(valor, 4);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::FLOAT);
-    toppilha->mudarVariavelLocal(valor, 0);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->mudarVariavelLocal(valor, 0);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fstore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::FLOAT);
-    toppilha->mudarVariavelLocal(valor, 1);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->mudarVariavelLocal(valor, 1);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::FLOAT);
-    toppilha->mudarVariavelLocal(valor, 2);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->mudarVariavelLocal(valor, 2);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_fstore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-    Valor valor = toppilha->desempilhaOperando();
-    assert(valor.tipo == TipoDado::FLOAT);
-    toppilha->mudarVariavelLocal(valor, 3);
+	Valor valor = toppilha->desempilhaOperando();
+	assert(valor.tipo == TipoDado::FLOAT);
+	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
@@ -2804,28 +2855,51 @@ void ExecutionEngine::i_return(){
 }
 void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic" << endl;
+#endif
 	Frame *toppilha = runtimeDataArea->topoPilha();
-	
-	
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic1" << endl;
+#endif
+	vector<cp_info*> constantPool;
+	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
+	constantPool = classe->getConstantPool();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic2" << endl;
+#endif
 	uint8_t *code = toppilha->getCode();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic3" << endl;
+#endif
 
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	
 	uint16_t campoIndex = (byte1 << 8) | byte2;
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic4" << endl;
+#endif
 
 
 	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
-
-	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetClassIndex());
-
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic5" << endl;
+#endif
+	string className = classe->getUTF8(fieldRef->GetClassIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic6" << endl;
+#endif
 	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
-
-	string campoName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetNameIndex());
-	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
-
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic7" << endl;
+#endif
+	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex());
+	string campoDescriptor = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic8" << endl;
+#endif
 	if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		return;

@@ -6,8 +6,9 @@ TipoObjeto ObjetoInstancia::ObterTipoObjeto(void)
 	return INSTANCIA;
 }
 
-ObjetoInstancia::ObjetoInstancia(JavaClass *classe) : javaClass(classe)
+ObjetoInstancia::ObjetoInstancia(JavaClass *classe)
 {
+	this->javaClass= classe;
 	const vector<field_info> fields= javaClass->getFieldInfo();
 	if(javaClass->FlagAtivada(JAVA_CLASS_ABSTRACT))
 	{
