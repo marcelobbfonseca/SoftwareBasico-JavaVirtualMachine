@@ -1804,16 +1804,15 @@ void ExecutionEngine::i_getstatic() {
 	uint16_t campoIndex = (byte1 << 8) | byte2;
 
 
-	CONSTANT_Fieldref *fieldRef = (CONSTANT_Fieldref*) constantPool[campoIndex-1];
+	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
 
 	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetClassIndex());
 
 
 
+	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[campoIndex->GetNameAndtipoIndex()-1];
 
-	CONSTANT_NameAndtipo_info *campoNameAndtipoCP = (CONSTANT_NameAndtipo_info *)constantPool[campoInfo->GetNameAndtipoIndex()-1];
-
-	string campoName = 		 ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetNameIndex());
+	string campoName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetNameIndex());
 	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetDescriptorIndex());
 
 
