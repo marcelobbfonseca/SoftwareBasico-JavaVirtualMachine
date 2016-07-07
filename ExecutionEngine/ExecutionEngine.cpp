@@ -434,16 +434,20 @@ void ExecutionEngine::i_dconst_1(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_bipush(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
 
-	Valor valor;
-	valor.tipo = TipoDado::BYTE;
-	cout<< "Implementar ExecutionEngine::i_bipush()"<< endl;
-	//valor.data
-	//pegar ponteiro pra pc
-	//push pro stack
+	Frame *topo = runtimeDataArea->topoPilha();
 
-	toppilha->incrementaPC(2);
+    	uint8_t *code = topo->getCode();
+	uint8_t byte = code[1];
+
+    	Valor valor;
+    	valor.tipo = TipoDado::INT;
+    	valor.dado = (int32_t) (int8_t) byte; // convertendo para inteiro e estendendo o sinal
+
+    	topo->empilharOperando(valor);
+
+    	topo->incrementaPC(2);
+
 }
 void ExecutionEngine::i_sipush(){
 
@@ -915,9 +919,8 @@ void ExecutionEngine::i_invokespecial(){
 
 		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
 		
-		Frame *newFrame = new Frame(instance, methodName, methodDescriptor, args, runtimeDataArea);//implementar essa poha
+		Frame *newFrame = new Frame(instance,classRuntime, methodDescriptor, args, runtimeDataArea);//implementar essa poha
 
-		// se a stack frame mudou, é porque teve <clinit> adicionado, então terminar a execução da instrução para eles serem executados.
 		if (runtimeDataArea->topoPilha() != toppilha) {
 			toppilha->setaPilhaOperandos(operandStackBackup);
 			delete newFrame;
