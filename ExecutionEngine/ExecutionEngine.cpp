@@ -1318,9 +1318,92 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
-void ExecutionEngine::i_getstatic(){
+void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
+	Frame *toppilha = runtimeDataArea->topoPilha();
 	
+	
+	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+	uint8_t *code = toppilha->getCode();
+
+	//argumentos da instrucao
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	
+	uint16_t campoIndex = (byte1 << 8) | byte2;
+
+
+	CONSTANT_Fieldref *fieldRef = (CONSTANT_Fieldref*) constantPool[campoIndex-1];
+
+	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetClassIndex());
+
+
+
+
+	CONSTANT_NameAndtipo_info *campoNameAndtipoCP = (CONSTANT_NameAndtipo_info *)constantPool[campoInfo->GetNameAndtipoIndex()-1];
+
+	string campoName = 		 ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetNameIndex());
+	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetDescriptorIndex());
+
+
+    if (className == "java/lang/System" && fieldDescriptor == "Ljava/io/PrintStream;" ) {
+        runtimeDataArea->topoPilha()->incrementaPC(3);
+        return;
+    }	
+
+
+    JavaClass *classRuntime = runtimeDataArea->carregarClasse(className);
+
+    while (classRuntime != NULL) {
+        if (classRuntime->fieldExists(campoName) == false) {
+            if (runtimeDataArea->ObterSuperClasse()) {
+                classRuntime = NULL;
+            } else {
+
+            	string superClassName = classRuntime->getUTF8(runtimeDataArea->ObterSuperClasse());
+                classRuntime = runtimeDataArea->carregarClasse(superClassName);
+      		  
+      
+            }
+        } else {
+            break;
+        }
+    }// fim while classRuntime   
+    
+    if (classRuntime == NULL) {
+        cerr << "NoSuchFieldError" << endl;
+        exit(1);
+    }
+    if (runtimeDataArea->topoPilha() != toppilha)
+   		return;
+
+    Valor valorStatico = classRuntime->getValueFromField(campoName);
+    switch (valorStatico.tipo) {
+        case TipoDado::BOOLEAN:
+            valorStatico.tipo = TipoDado::INT;
+            break;
+        case TipoDado::BYTE:
+            valorStatico.tipo = TipoDado::INT;
+            break;
+        case TipoDado::SHORT:
+            valorStatico.tipo = TipoDado::INT;
+            break;
+        case TipoDado::INT:
+            valorStatico.tipo = TipoDado::INT;
+            break;
+        default:
+            break;
+    }
+    if (valorStatico.tipo == TipoDado::DOUBLE || valorStatico.tipo == TipoDado::LONG) {
+        Valor padding;
+        padding.tipo = TipoDado::PADDING;
+        toppilha->empilharOperando(padding);
+    }
+
+    toppilha->empilharOperando(valorStatico);
+
+    runtimeDataArea->topoPilha()->incrementaPC(3);
+
 }
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
