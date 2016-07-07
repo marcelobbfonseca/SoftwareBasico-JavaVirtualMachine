@@ -987,13 +987,64 @@ void ExecutionEngine::i_fstore_0(){}
 void ExecutionEngine::i_fstore_1(){}
 void ExecutionEngine::i_fstore_2(){}
 void ExecutionEngine::i_fstore_3(){}
-void ExecutionEngine::i_dstore_0(){}
+void ExecutionEngine::i_dstore_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::DOUBLE);
+    
+    toppilha->mudarVariavelLocal(valor, 0);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 1);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_dstore_1(){
 	//double
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::DOUBLE);
+    
+    toppilha->mudarVariavelLocal(valor, 1);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 2);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+
 }
-void ExecutionEngine::i_dstore_2(){}
+void ExecutionEngine::i_dstore_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::DOUBLE);
+    
+    toppilha->mudarVariavelLocal(valor, 2);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 3);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_dstore_3(){
 	//double
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+    Valor valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::DOUBLE);
+    
+    toppilha->mudarVariavelLocal(valor, 3);
+
+    valor = toppilha->desempilhaOperando();
+    assert(valor.tipo == TipoDado::PADDING);
+    toppilha->mudarVariavelLocal(valor, 4);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 void ExecutionEngine::i_astore_0(){}
 void ExecutionEngine::i_astore_1(){}
