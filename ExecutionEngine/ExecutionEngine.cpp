@@ -3,8 +3,9 @@
 #include "ObjetoString.hpp"
 #include "ObjetoInstancia.hpp"
 #include "Erro.hpp"
-#include<string.h>
+#include <string.h>
 #include <inttypes.h>
+#include <cmath>
 
 #define DEBUG
 
@@ -2068,10 +2069,134 @@ void ExecutionEngine::i_lcmp(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fcmpl(){}
-void ExecutionEngine::i_fcmpg(){}
-void ExecutionEngine::i_dcmpl(){}
-void ExecutionEngine::i_dcmpg(){}
+void ExecutionEngine::i_fcmpl(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
+	
+	assert(valor2.tipo == TipoDado::FLOAT);
+	assert(valor1.tipo == TipoDado::FLOAT);
+	
+	int64_t num1, num2;
+	int32_t num3;
+	memcpy(&num1,&valor1.dado,4);
+	memcpy(&num2,&valor2.dado,4);
+	
+	Value resultado;
+	resultado.tipo = TipoDado::INT;
+	
+	if (isnan(num1) || isnan(num2)) {
+		num3 = -1;
+	} else if (num1 > num2) {
+		num3 = 1;
+	} else if (num1 == num2) {
+		num3 = 0;
+	} else {
+		num3 = -1;
+	}
+	memcpy(&resultado.dado,&num3,4);
+	
+	toppilha->empilharOperando(resultado);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_fcmpg(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	Valor valor1 = toppilha->desempilhaOperando();
+	
+	assert(valor2.tipo == TipoDado::FLOAT);
+	assert(valor1.tipo == TipoDado::FLOAT);
+	
+	int64_t num1, num2;
+	int32_t num3;
+	memcpy(&num1,&valor1.dado,4);
+	memcpy(&num2,&valor2.dado,4);
+	
+	Value resultado;
+	resultado.tipo = TipoDado::INT;
+	
+	if (isnan(num1) || isnan(num2)) {
+		num3 = 1;
+	} else if (num1 > num2) {
+		num3 = 1;
+	} else if (num1 == num2) {
+		num3 = 0;
+	} else {
+		num3 = -1;
+	}
+	memcpy(&resultado.dado,&num3,4);
+	
+	toppilha->empilharOperando(resultado);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_dcmpl(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	Valor valor1 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	
+	assert(valor2.tipo == TipoDado::DOUBLE);
+	assert(valor1.tipo == TipoDado::DOUBLE);
+	
+	int64_t num1, num2;
+	int32_t num3;
+	memcpy(&num1,&valor1.dado,8);
+	memcpy(&num2,&valor2.dado,8);
+	
+	Value resultado;
+	resultado.tipo = TipoDado::INT;
+	
+	if (isnan(num1) || isnan(num2)) {
+		num3 = -1;
+	} else if (num1 > num2) {
+		num3 = 1;
+	} else if (num1 == num2) {
+		num3 = 0;
+	} else {
+		num3 = -1;
+	}
+	memcpy(&resultado.dado,&num3,4);
+	
+	toppilha->empilharOperando(resultado);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_dcmpg(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	Valor valor2 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	Valor valor1 = toppilha->desempilhaOperando();
+	toppilha->desempilhaOperando(); //padding
+	
+	assert(valor2.tipo == TipoDado::DOUBLE);
+	assert(valor1.tipo == TipoDado::DOUBLE);
+	
+	int64_t num1, num2;
+	int32_t num3;
+	memcpy(&num1,&valor1.dado,8);
+	memcpy(&num2,&valor2.dado,8);
+	
+	Value resultado;
+	resultado.tipo = TipoDado::INT;
+	
+	if (isnan(num1) || isnan(num2)) {
+		num3 = 1;
+	} else if (num1 > num2) {
+		num3 = 1;
+	} else if (num1 == num2) {
+		num3 = 0;
+	} else {
+		num3 = -1;
+	}
+	memcpy(&resultado.dado,&num3,4);
+	
+	toppilha->empilharOperando(resultado);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_ifeq(){}
 void ExecutionEngine::i_ifne(){}
 void ExecutionEngine::i_iflt(){}
