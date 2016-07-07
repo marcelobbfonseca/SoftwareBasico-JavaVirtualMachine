@@ -1189,7 +1189,6 @@ void ExecutionEngine::i_astore(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
-	assert(valor.tipo == TipoDado::REFERENCE);
 
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1]; //índice do vetor de variáveis locais
@@ -2793,132 +2792,7 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
-void ExecutionEngine::i_getstatic() {/*
-	//usa no helloworld
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic" << endl;
-#endif
-	Frame *toppilha = runtimeDataArea->topoPilha();
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic1" << endl;
-#endif
-	vector<cp_info*> constantPool;
-	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
-	constantPool = classe->getConstantPool();
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic2" << endl;
-#endif
-	uint8_t *code = toppilha->getCode();
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic3" << endl;
-#endif
-
-	//argumentos da instrucao
-	uint8_t byte1 = code[1];
-	uint8_t byte2 = code[2];
-	
-	uint16_t campoIndex = (byte1 << 8) | byte2;
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic4" << endl;
-#endif
-
-
-	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
-<<<<<<< HEAD
-
-	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(fieldRef->GetClassIndex());
-
-
-
-	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
-
-	string campoName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetNameIndex());
-	string campoDescriptor = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
-
-=======
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic5" << endl;
-#endif
-	string className = classe->getUTF8(fieldRef->GetClassIndex());
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic6" << endl;
-#endif
-	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic7" << endl;
-#endif
-	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex());
-	string campoDescriptor = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
-#ifdef DEBUG
-	cout<< "ExecutionEngine::i_getstatic8" << endl;
-#endif
-	if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
-		runtimeDataArea->topoPilha()->incrementaPC(3);
-		return;
-	}	
->>>>>>> 9d9efcf85b81c80c931539139db78589b8574738
-
-    if (className == "java/lang/System" && fieldDescriptor == "Ljava/io/PrintStream;" ) {
-        runtimeDataArea->topoPilha()->incrementaPC(3);
-        return;
-    }	
-
-
-    JavaClass *classRuntime = runtimeDataArea->carregarClasse(className);
-
-    while (classRuntime != NULL) {
-        if (classRuntime->fieldExists(campoName) == false) {
-            if (runtimeDataArea->ObterSuperClasse()) {
-                classRuntime = NULL;
-            } else {
-
-            	string superClassName = classRuntime->getUTF8(runtimeDataArea->ObterSuperClasse());
-                classRuntime = runtimeDataArea->carregarClasse(superClassName);
-      		  
-      
-            }
-        } else {
-            break;
-        }
-    }// fim while classRuntime   
-    
-    if (classRuntime == NULL) {
-        cerr << "NoSuchFieldError" << endl;
-        exit(1);
-    }
-    if (runtimeDataArea->topoPilha() != toppilha)
-   		return;
-
-    Valor valorStatico = classRuntime->getValueFromField(campoName);
-    
-    switch (valorStatico.tipo) {
-        case TipoDado::BOOLEAN:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        case TipoDado::BYTE:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        case TipoDado::SHORT:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        case TipoDado::INT:
-            valorStatico.tipo = TipoDado::INT;
-            break;
-        default:
-            break;
-    }
-    if (valorStatico.tipo == TipoDado::DOUBLE || valorStatico.tipo == TipoDado::LONG) {
-        Valor padding;
-        padding.tipo = TipoDado::PADDING;
-        toppilha->empilharOperando(padding);
-    }
-
-    toppilha->empilharOperando(valorStatico);
-
-    runtimeDataArea->topoPilha()->incrementaPC(3);
-
-*/}
-
+void ExecutionEngine::i_getstatic() {}
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
 void ExecutionEngine::i_putfield()
@@ -3325,7 +3199,6 @@ void ExecutionEngine::i_instanceof(){
 
 	uint16_t cpIndex = (byte1 << 8) | byte2;
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)(topo->getObjeto()))->ObterJavaClass()->getConstantPool();
-	cp_info *cpElement = constantPool[cpIndex-1];
 
 	Valor objectrefValue = topo->desempilhaOperando();
  	
@@ -3415,7 +3288,6 @@ void ExecutionEngine::i_multianewarray(){
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	uint8_t dimensoes = code[3];
-	assert(dimensoes >= 1);
 
 	uint16_t classIndex = (byte1 << 8) | byte2;
 
@@ -3424,7 +3296,7 @@ void ExecutionEngine::i_multianewarray(){
 	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(classInfo->GetNameIndex());
 
 	// obter o tipo dentro de className:
-	TipoDado TipoDado;
+	TipoDado tipoDado;
 	int i = 0;
 	while (className[i] == '[') i++;
         // em caso de ser uma referência ([[[Ljava/lang/String;)
@@ -3435,31 +3307,31 @@ void ExecutionEngine::i_multianewarray(){
 			if (multiArrayType != "java/lang/String") {
 				runtimeDataArea->CarregarClasse(multiArrayType); 
 			}
-			TipoDado = TipoDado::REFERENCE;
+			tipoDado = TipoDado::REFERENCE;
 			break;
 		case 'B':
-			TipoDado = TipoDado::BYTE;
+			tipoDado = TipoDado::BYTE;
 			break;
 		case 'C':
-			TipoDado = TipoDado::CHAR;
+			tipoDado = TipoDado::CHAR;
 			break;
 		case 'D':
-			TipoDado = TipoDado::DOUBLE;
+			tipoDado = TipoDado::DOUBLE;
 			break;
 		case 'F':
-			TipoDado = TipoDado::FLOAT;
+			tipoDado = TipoDado::FLOAT;
 			break;
 		case 'I':
-			TipoDado = TipoDado::INT;
+			tipoDado = TipoDado::INT;
 			break;
 		case 'J':
-			TipoDado = TipoDado::LONG;
+			tipoDado = TipoDado::LONG;
 			break;
 		case 'S':
-			TipoDado = TipoDado::SHORT;
+			tipoDado = TipoDado::SHORT;
 			break;
 		case 'Z':
-			TipoDado = TipoDado::BOOLEAN;
+			tipoDado = TipoDado::BOOLEAN;
 			break;
 		default:
 			cerr << "Descritor invalido em multianewarray" << endl;
@@ -3472,9 +3344,8 @@ void ExecutionEngine::i_multianewarray(){
 		count.push(dimLength.dado);
 	}
 
-	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
-	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : TipoDado);
-	arr->popularSubArray(TipoDado, count);  
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+	arr->popularSubArray(tipoDado, count);  
 
 	Valor valorArr;
 	valorArr.tipo = TipoDado::REFERENCE;
