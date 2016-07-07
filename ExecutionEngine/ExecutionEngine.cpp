@@ -498,6 +498,7 @@ void ExecutionEngine::i_ldc_w(){
 
 }
 void ExecutionEngine::i_ldc2_w(){
+	//double
 
 }
 void ExecutionEngine::i_iload(){
@@ -987,9 +988,13 @@ void ExecutionEngine::i_fstore_1(){}
 void ExecutionEngine::i_fstore_2(){}
 void ExecutionEngine::i_fstore_3(){}
 void ExecutionEngine::i_dstore_0(){}
-void ExecutionEngine::i_dstore_1(){}
+void ExecutionEngine::i_dstore_1(){
+	//double
+}
 void ExecutionEngine::i_dstore_2(){}
-void ExecutionEngine::i_dstore_3(){}
+void ExecutionEngine::i_dstore_3(){
+	//double
+}
 void ExecutionEngine::i_astore_0(){}
 void ExecutionEngine::i_astore_1(){}
 void ExecutionEngine::i_astore_2(){}
@@ -1990,8 +1995,8 @@ void ExecutionEngine::i_i2b(){
 	Valor valor2;
 	valor2.tipo = TipoDado::BYTE;
 	
-	int32_t num1, 
-	int8_t num2;
+	int32_t num1=0; 
+	int8_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
 	num2 = (int8_t) num1;
@@ -2009,8 +2014,8 @@ void ExecutionEngine::i_i2c(){
 	Valor valor2;
 	valor2.tipo = TipoDado::CHAR;
 	
-	int32_t num1, 
-	int8_t num2;
+	int32_t num1=0; 
+	int8_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
 	num2 = (int8_t) num1;
@@ -2028,8 +2033,8 @@ void ExecutionEngine::i_i2s(){
 	Valor valor2;
 	valor2.tipo = TipoDado::SHORT;
 	
-	int32_t num1, 
-	int16_t num2;
+	int32_t num1=0; 
+	int16_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
 	num2 = (int8_t) num1;
@@ -2355,7 +2360,7 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
-void ExecutionEngine::i_getstatic() {
+void ExecutionEngine::i_getstatic() {/*
 	//usa no helloworld
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -2414,6 +2419,7 @@ void ExecutionEngine::i_getstatic() {
    		return;
 
     Valor valorStatico = classRuntime->getValueFromField(campoName);
+    
     switch (valorStatico.tipo) {
         case TipoDado::BOOLEAN:
             valorStatico.tipo = TipoDado::INT;
@@ -2440,7 +2446,8 @@ void ExecutionEngine::i_getstatic() {
 
     runtimeDataArea->topoPilha()->incrementaPC(3);
 
-}
+*/}
+
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
 void ExecutionEngine::i_putfield()
@@ -2668,8 +2675,8 @@ void ExecutionEngine::i_instanceof(){
 
 void ExecutionEngine::i_monitorenter(){
 
-Frame *topo = runtimeDataArea->topoPilha();
-topo->incrementaPC(1);
+	Frame *topo = runtimeDataArea->topoPilha();
+	topo->incrementaPC(1);
 
 }
 void ExecutionEngine::i_monitorexit(){
@@ -2687,7 +2694,7 @@ void ExecutionEngine::i_wide(){
 }
 
 void ExecutionEngine::i_multianewarray(){
-
+/*
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
@@ -2766,8 +2773,9 @@ void ExecutionEngine::i_multianewarray(){
 	topo->empilharOperando(valorArr);
 
 	topo->incrementaPC(4);
+*/
 }
-
+ 
 void ExecutionEngine::i_ifnull(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
