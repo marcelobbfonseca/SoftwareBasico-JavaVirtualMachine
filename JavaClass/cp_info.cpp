@@ -266,7 +266,7 @@ void CONSTANT_String_info::ExibirInformacoes(JavaClass *javaClass)
 void CONSTANT_Integer_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Integer" << endl;
-	cout << "\t\tbytes = " << bytes << "\t\t//" << GetNumero() << endl;
+	cout << hex << "\t\tbytes = " << bytes << dec << "\t\t//" << GetNumero() << endl;
 }
 
 void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
