@@ -3435,31 +3435,31 @@ void ExecutionEngine::i_multianewarray(){
 			if (multiArrayType != "java/lang/String") {
 				runtimeDataArea->CarregarClasse(multiArrayType); 
 			}
-			TipoDado = TipoDado::REFERENCE;
+			tipoDado = TipoDado::REFERENCE;
 			break;
 		case 'B':
-			TipoDado = TipoDado::BYTE;
+			tipoDado = TipoDado::BYTE;
 			break;
 		case 'C':
-			TipoDado = TipoDado::CHAR;
+			tipoDado = TipoDado::CHAR;
 			break;
 		case 'D':
-			TipoDado = TipoDado::DOUBLE;
+			tipoDado = TipoDado::DOUBLE;
 			break;
 		case 'F':
-			TipoDado = TipoDado::FLOAT;
+			tipoDado = TipoDado::FLOAT;
 			break;
 		case 'I':
-			TipoDado = TipoDado::INT;
+			tipoDado = TipoDado::INT;
 			break;
 		case 'J':
-			TipoDado = TipoDado::LONG;
+			tipoDado = TipoDado::LONG;
 			break;
 		case 'S':
-			TipoDado = TipoDado::SHORT;
+			tipoDado = TipoDado::SHORT;
 			break;
 		case 'Z':
-			TipoDado = TipoDado::BOOLEAN;
+			tipoDado = TipoDado::BOOLEAN;
 			break;
 		default:
 			cerr << "Descritor invalido em multianewarray" << endl;
