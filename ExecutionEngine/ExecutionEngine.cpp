@@ -3,6 +3,7 @@
 #include "ObjetoInstancia.hpp"
 #include "Erro.hpp"
 #include<string.h>
+#include <inttypes.h>
 
 ExecutionEngine::ExecutionEngine(void)
 {
@@ -843,9 +844,88 @@ void ExecutionEngine::i_invokevirtual(){
 	//usa no helloworld
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
+	
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+	uint8_t *code = toppilha->getCode();
 
-}
+	//argumentos da instrucao
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint16_t methodIndex = (byte1 << 8) | byte2;
+
+	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*) constantPool[methodIndex-1]; //em 1 linha
+
+	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(methodInfo->GetClassIndex());
+
+	CONSTANT_NameAndType_info *methodNameAndType = (CONSTANT_NameAndType_info*) constantPool[methodInfo->GetNameAndTypeIndex()-1];
+	//assert(methodNameAndType->GetTag() == CONSTANT_NameAndType); // precisa ser um nameAndType
+
+	CONSTANT_NameAndType_info *nameAndTypeCP = (CONSTANT_NameAndType_info *)constantPool[methodInfo->GetNameAndTypeIndex()-1];
+	string methodName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetNameIndex());
+
+	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
+
+	if(className == "java/io/PrintStream" && (methodName == "print" || methodName =="println")){
+		if (methodDescriptor != "()V") {
+                Valor printValor = toppilha->desempilhaOperando();
+
+                if (printValor.tipo == TipoDado::INT) {
+                
+                    switch (printValor.dado) {
+                        case TipoDado::BOOLEAN:
+                            printf("%s", printValor.dado == 0 ? "false" : "true");
+                            break;
+                        case TipoDado::CHAR:
+                            printf("%c", (char)printValor.dado);
+                            break;
+                        default:
+                            printf("%" PRIu64 , printValor.dado);
+                            break;
+                    }//fim switch
+                
+                } else {
+
+					switch (printValor.tipo) {
+                        case TipoDado::DOUBLE:
+                            toppilha->desempilhaOperando(); // removendo padding
+                            printf("%f", (float)printValor.dado);
+                            break;
+                        case TipoDado::FLOAT:
+                            printf("%f", (float)printValor.dado);
+                            break;
+                        case TipoDado::LONG:
+                            toppilha->desempilhaOperando(); // removendo padding
+                            printf("%" PRIu64 , printValor.dado) ;
+                            break;
+                        case TipoDado::REFERENCE:
+                            //assert(printValor.data.object->objectType() == ObjectType::STRING_INSTANCE);
+                            //printf("%s", ((StringObject *) printValor.data.object)->getString().c_str());
+                            break;
+                        case TipoDado::BOOLEAN:
+                            printf("%s", printValor.dado == 0 ? "false" : "true");
+                            break;
+                        case TipoDado::BYTE:
+                            printf("%" PRIu64 , printValor.dado);
+                            break;
+                        case TipoDado::CHAR:
+                            printf("%c", (char)printValor.dado);
+                            break;
+                        case TipoDado::SHORT:
+                            printf("%" PRIu64 , printValor.dado);
+                            break;
+                        default:
+                            cerr << "Tentando printar tipo de dado invalido: " << printValor.tipo << endl;
+                            exit(1);
+                            break;
+                    }//fim switch
+
+                }//fim else
+
+		}//fim if methodDescriptor
+
+	} //fim if className
+
+}//fim instrucao
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -874,6 +954,7 @@ void ExecutionEngine::i_invokespecial(){
 	string methodName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetNameIndex());
 
 	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
+
 //bastos daqui prabaixo..============================================================================================
 	 // casos especiais
 	if ((className == "java/lang/Object" || className == "java/lang/String") && methodName == "<init>") {
