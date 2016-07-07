@@ -531,7 +531,7 @@ void ExecutionEngine::i_ldc(){
 	if(ponteiroCpInfo->GetTag() == CONSTANT_String)
 	{
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
-		
+														
 		string utf8String = utf8Entry->GetString();
 		
 			valor.tipo = TipoDado::REFERENCE;
@@ -562,12 +562,9 @@ void ExecutionEngine::i_ldc(){
 	topo->incrementaPC(2);
 
 }
-
-void ExecutionEngine::i_ldc_w(){
-
-}
+void ExecutionEngine::i_ldc_w(){}
 void ExecutionEngine::i_ldc2_w() {
-/*	//double
+	//double
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	uint8_t *code = toppilha->getCode();
@@ -575,53 +572,56 @@ void ExecutionEngine::i_ldc2_w() {
 	uint8_t byte2 = code[2];
 	uint16_t index = (byte1 << 8) | byte2;
 
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+	//vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
 	//
-	cp_info *classFile = *(toppilha->getConstantPool());
-	
-
-	cp_info entry = constantPool[index-1];
+	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
+	vector<cp_info*> constantPool = classe->getConstantPool();
+	cp_info *ponteiroCpInfo = constantPool[index - 1];
 	//
 
 	Valor valor;
 	
-	if (entry.tag == CONSTANT_Long) {
-		uint32_t highBytes = entry.info.long_info.high_bytes;
-		uint32_t lowBytes = entry.info.long_info.low_bytes;
+	if (ponteiroCpInfo->GetTag() == CONSTANT_Long) {
+		//uint32_t highBytes = entry.info.long_info.high_bytes;
+		//uint32_t lowBytes = entry.info.long_info.low_bytes;
+
+		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Long_info*)ponteiroCpInfo)->Get- 1];
 		
-		int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
-		valor.tipo = ValueType::LONG;
+		valor.dado = (long)utf8Entry;
+		//int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+		valor.tipo = TipoDado::LONG;
 		
 		Valor padding;
-		padding.type = ValueType::PADDING;
+		padding.tipo = TipoDado::PADDING;
 		
-		toppilha->pushIntoOperandStack(padding);
-	} else if (entry.tag == CONSTANT_Double) {
-		u4 highBytes = entry.info.double_info.high_bytes;
-		u4 lowBytes = entry.info.double_info.low_bytes;
+		toppilha->empilharOperando(padding);
+	} else if (ponteiroCpInfo->GetTag() == CONSTANT_Double) {
+		//u4 highBytes = entry.info.double_info.high_bytes;
+		//u4 lowBytes = entry.info.double_info.low_bytes;
+		CONSTANT_Utf8_info* utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Double_info*)ponteiroCpInfo)->GetNumero() - 1];
+		valor.dado = (double) utf8Entry;
+		//int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
 		
-		int64_t longNumber = ((int64_t) highBytes << 32) + lowBytes;
+		//int32_t s = ((longNumber >> 63) == 0) ? 1 : -1;
+		//int32_t e = (int32_t)((longNumber >> 52) & 0x7ffL);
+		//int64_t m = (e == 0) ? (longNumber & 0xfffffffffffffL) << 1 : (longNumber & 0xfffffffffffffL) | 0x10000000000000L;
 		
-		int32_t s = ((longNumber >> 63) == 0) ? 1 : -1;
-		int32_t e = (int32_t)((longNumber >> 52) & 0x7ffL);
-		int64_t m = (e == 0) ? (longNumber & 0xfffffffffffffL) << 1 : (longNumber & 0xfffffffffffffL) | 0x10000000000000L;
-		
-		double doubleNumber = s*m*pow(2, e-1075);
+		//double doubleNumber = s*m*pow(2, e-1075);
 		valor.tipo = TipoDado::DOUBLE;
 		
 		Valor padding;
 		padding.tipo = TipoDado::PADDING;
 		
-		toppilha->pushIntoOperandStack(padding);
+		toppilha->empilharOperando(padding);
 	} else {
-		cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << entry.tag << endl;
+		cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << ponteiroCpInfo->GetTag() << endl;
 		exit(1);
 	}
 	
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-*/
+
 }
 void ExecutionEngine::i_iload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
