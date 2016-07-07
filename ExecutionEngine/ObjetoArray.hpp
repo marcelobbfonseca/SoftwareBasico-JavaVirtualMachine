@@ -6,6 +6,8 @@
 #include "Erro.hpp"
 #include <vector>
 #include <stdint.h>
+#include <stack>
+#include <assert.h>
 
 using namespace std;
 
@@ -24,8 +26,10 @@ class ObjetoArray: public Objeto
 		Valor ObterValor(uint32_t posicao) const;
 		void AlterarElementoDaPosicao(uint32_t posicao, Valor valor);
 		TipoObjeto ObterTipoObjeto(void);
+                void popularSubArray(TipoDado tipoDado, stack<int> count);
+                void empilhaValor(Valor valor);
 	private:
-		TipoDado tipoDado;
+		TipoDado tipo;
 		vector<Valor> elementos;
 };
 
