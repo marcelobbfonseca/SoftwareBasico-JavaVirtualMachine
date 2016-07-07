@@ -14,7 +14,7 @@
 
 ExecutionEngine::ExecutionEngine(void)
 {
-
+	inicializaInstrucoes();
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
