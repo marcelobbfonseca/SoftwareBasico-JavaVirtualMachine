@@ -25,13 +25,14 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 		nomeComExtensao+= ".class";
 	}
 	classes[nomeSemExtensao] = classLoader->CarregarClasse(nomeComExtensao);
-
 	// adicionando <clinit> da classe (se existir) na stack frame.
 	static bool primeiraVez= true;//se for a primeira classe a ser carregada, deixa a execution engine carregar o clinit
+	cout<< "chegou ate aqui" << endl;
 	if(!primeiraVez)
 	{
 		if(MetodoExiste(nomeSemExtensao, "<clinit>", "()V"))
 		{
+	cout<< "chegou ate aqui3" << endl;
 			//pseudocodigo:
 			string clinit= "<clinit>";
 			string V= "()V";
@@ -39,7 +40,10 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 			empilharFrame(novoFrame);
 		}
 	}
+	cout<< "chegou ate aqui2" << endl;
 	primeiraVez= false;
+	if(classes[nomeSemExtensao]== NULL)
+	printf("deu ruim\n");
 	return classes[nomeSemExtensao];
 }
 

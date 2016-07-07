@@ -38,13 +38,37 @@ Frame::Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo)
 
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {
+#ifdef DEBUG
+	cout<< "Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)"<< endl;
+#endif
 	pc=0;
+#ifdef DEBUG
+	cout<< "\t1"<< endl;
+#endif
 	objeto=NULL;
+#ifdef DEBUG
+	cout<< "\t2"<< endl;
+#endif
 	method_info *metodoAux = BuscarMetodo(javaClass, nomeMetodo, descritor, runtimeDataArea);
+#ifdef DEBUG
+	cout<< "\t3"<< endl;
+#endif
 	assert(metodoAux != NULL);
+#ifdef DEBUG
+	cout<< "\t4"<< endl;
+#endif
 	metodo= metodoAux;
+#ifdef DEBUG
+	cout<< "\t5"<< endl;
+#endif
 	assert(metodo->FlagAtivada(METHOD_STATIC));
-	pegarAtributos();
+#ifdef DEBUG
+	cout<< "\t6"<< endl;
+#endif
+	pegarAtributos(javaClass);
+#ifdef DEBUG
+	cout<< "Retornando"<< endl;
+#endif
 }
 
 Frame::Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
@@ -62,27 +86,62 @@ Frame::Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetod
 	pegarAtributos();
 }
 
-
-void Frame::pegarAtributos()
+Frame::Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
 {
-	if(objeto->ObterTipoObjeto() != TipoObjeto::INSTANCIA)
-	{
-		throw new Erro ("Isso não é uma instância de objeto!", "Frame", "pegarAtributos");
+	pc =0;
+	this->objeto= objeto;
+	for (unsigned int cont = 0; cont < argumentos.size(); cont++) {
+		variaveisLocais[cont] = argumentos[cont];
 	}
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)objeto)->ObterJavaClass()->getConstantPool();
+	
+	metodo = BuscarMetodo(javaClass, nomeDoMetodo, descritorMetodo, runtimeDataArea);
+	assert(metodo != NULL);
+	assert(!metodo->FlagAtivada(METHOD_STATIC));
+	
+	pegarAtributos();
+}
+
+void Frame::pegarAtributos(JavaClass *classe)
+{
+	if(objeto == NULL && classe == NULL)
+	{
+		throw new Erro ("javaClass e objeto não instanciado", "Frame", "pegarAtributos");
+	}
+	JavaClass *javaClass= (classe ==NULL)? ((ObjetoInstancia*)objeto)->ObterJavaClass() : classe;
+#ifdef DEBUG
+	cout<< "Frame::pegarAtributos()" << endl;
+#endif
+	if(objeto != NULL)
+	{
+		if(objeto->ObterTipoObjeto() != TipoObjeto::INSTANCIA)
+		{
+			throw new Erro ("Isso não é uma instância de objeto!", "Frame", "pegarAtributos");
+		}
+	}
+#ifdef DEBUG
+	cout<< "\t1"<< endl;
+#endif
+	vector<cp_info*> constantPool = javaClass->getConstantPool();
+#ifdef DEBUG
+	cout<< "\t2"<< endl;
+#endif
 	cout<<"pegando atributos" << endl;
+#ifdef DEBUG
+	cout<< "\t3"<< endl;
+#endif
 	vector<attribute_info *> attributesAux = metodo->getAttributes();
+#ifdef DEBUG
+	cout<< "\t4"<< endl;
+#endif
 	cout<<"pegando atributos" << endl;
-	if(objeto == NULL)
-	{
-		throw new Erro("objeto == NULL", "Frame", "pegarAtributos");
-	}
-	if(((ObjetoInstancia*)objeto)->ObterJavaClass() == NULL)
-	{
-		throw new Erro("objeto->javaClass == NULL", "Frame", "pegarAtributos");
-	}
+#ifdef DEBUG
+	cout<< "\t5"<< endl;
+#endif
 	codeAttribute = NULL;
 	exceptionsAttribute = NULL;
+#ifdef DEBUG
+	cout<< "\t6"<< endl;
+#endif
 
 	for (int i = 0; i < metodo->getAttributesCount(); i++) {
 
@@ -103,6 +162,9 @@ void Frame::pegarAtributos()
 			if (codeAttribute != NULL) break;
 		}
 	}
+#ifdef DEBUG
+	cout<< "Retornando"<< endl;
+#endif
 }
 
 Valor Frame::getValorVariavelLocal(uint32_t indice) {

@@ -32,7 +32,8 @@ class Frame{
 		// Obter um ponteiro para a pool de constantes referente ao frame atual.
 		cp_info *cpInfo;
 
-		void pegarAtributos();
+//		void pegarAtributos();
+		void pegarAtributos(JavaClass *classe= NULL);
 		method_info* BuscarMetodo(JavaClass*, string nome, string descritor, RuntimeDataArea *runtimeDataArea);
 
 	public:
@@ -40,7 +41,7 @@ class Frame{
 		Frame(Objeto *objeto, string nomeMetodo, string descritorMetodo);
 		Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea);
 		Frame(ObjetoInstancia *objeto, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
-
+		Frame(ObjetoInstancia *objeto, JavaClass *javaClass, string nomeDoMetodo, string descritorMetodo, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea);
 
 		Valor getValorVariavelLocal(uint32_t indice);
 		void mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice);
