@@ -1784,12 +1784,12 @@ void ExecutionEngine::i_i2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == tipoDado::INT);
+	assert(valor1.tipo == TipoDado::INT);
 	
 	Valor valor2;
-	valor2.tipo = tipoDado::DOUBLE;
+	valor2.tipo = TipoDado::DOUBLE;
 	Valor padding;
-	padding.tipo = tipoDado::PADDING;
+	padding.tipo = TipoDado::PADDING;
 	toppilha->empilharOperando(padding);
 	
 	int32_t num1;
@@ -1807,10 +1807,10 @@ void ExecutionEngine::i_l2i(){
 	
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	assert(valor1.tipo == tipoDado::LONG);
+	assert(valor1.tipo == TipoDado::LONG);
 	
 	Valor valor2;
-	valor2.tipo = tipoDado::INT;
+	valor2.tipo = TipoDado::INT;
 	
 	int64_t num1;
 	int32_t num2;
@@ -1827,10 +1827,10 @@ void ExecutionEngine::i_l2f(){
 	
 	Valor valor1 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
-	assert(valor1.tipo == tipoDado::LONG);
+	assert(valor1.tipo == TipoDado::LONG);
 	
 	Valor valor2;
-	valor2.tipo = tipoDado::FLOAT;
+	valor2.tipo = TipoDado::FLOAT;
 	
 	int64_t num1;
 	int32_t num2;
@@ -1846,10 +1846,10 @@ void ExecutionEngine::i_l2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
-	assert(valor1.tipo == tipoDado::LONG);
+	assert(valor1.tipo == TipoDado::LONG);
 	
 	Valor valor2;
-	valor2.tipo = tipoDado::DOUBLE;
+	valor2.tipo = TipoDado::DOUBLE;
 	
 	int64_t num1, num2;
 	
