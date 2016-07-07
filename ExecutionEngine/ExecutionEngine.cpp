@@ -2464,7 +2464,7 @@ void ExecutionEngine::i_if_acmpeq(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2);
+		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} else {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
