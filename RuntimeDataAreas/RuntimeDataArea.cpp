@@ -24,7 +24,12 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	{
 		nomeComExtensao+= ".class";
 	}
-	classes[nomeSemExtensao] = classLoader->CarregarClasse(nomeComExtensao);
+	JavaClass *temp=classLoader->CarregarClasse(nomeComExtensao);
+	if(temp == NULL)
+	{
+		return NULL;
+	}
+	classes[nomeSemExtensao] = temp;
 	// adicionando <clinit> da classe (se existir) na stack frame.
 	static bool primeiraVez= true;//se for a primeira classe a ser carregada, deixa a execution engine carregar o clinit
 	cout<< "chegou ate aqui" << endl;

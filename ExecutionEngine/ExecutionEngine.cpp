@@ -2999,7 +2999,99 @@ void ExecutionEngine::i_getstatic() {
 
 }
 
-void ExecutionEngine::i_putstatic(){}
+void ExecutionEngine::i_putstatic()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	uint16_t indiceDoField;
+	memcpy(&indiceDoField, &(instrucoes[1]), 2);
+	indiceDoField= InverterEndianess<uint16_t>(indiceDoField);
+	//verificando se estou acessando um elemento do tipo esperado na constant pool
+	if(classe->getConstantPool()[indiceDoMetodo]-1->GetTag() != CONSTANT_Fieldref)
+	{
+		throw new Erro("Esperado CONSTANT_Fieldref na constant pool", "ExecutionEngine", "i_putstatic");
+	}
+	//sendo válido, acesso o mesmo
+	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool()[indiceDoField-1];
+	//verificando se estou acessando um elemento do tipo esperado na constant pool
+	if(classe->getConstantPool()[cpCampo->GetNameAndTypeIndex()-1]->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "i_putstatic");
+	}
+	//sendo válido, acesso o mesmo
+	CONSTANT_NameAndType_info *assinaturaDoCampo= (CONSTANT_NameAndType_info*)classe->getConstantPool()[cpCampo->GetNameAndTypeIndex()-1];
+	//pegando o nome das coisas
+	string nomeDaClasse = classe->getUTF8(cpCampo->GetClassIndex());
+	string nomeDoField = classe->getUTF8(assinaturaDoCampo->GetNameIndex());
+	string descritor = classe->getUTF8(assinaturaDoCampo->GetDescriptorIndex());
+	
+	//agora carreguemos a classe da qual queremos mexer no campo estático
+	JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+	//agora vamos buscar o field que queremos na hierarquia de classes
+	
+	while(classeAlvo != NULL)
+	{
+		if(!classeAlvo->FieldExiste(nomeDoField))//enquanto nao for a classe que tem o campo
+		{
+			if(classeAlvo->ObterSuperClasse() != 0)
+			{
+				string nomeDaClassePai= classeAlvo->getUTF8(classeAlvo->ObterSuperClasse());
+				classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClassePai);
+			}
+			else
+			{
+				classeAlvo= NULL;
+			}
+		}
+		else//achamos o que queriamos
+		{
+			break;
+		}
+	}
+	
+	if(classeAlvo == NULL)
+	{
+		throw new Erro("NoSuchFieldError");
+	}
+	//verificando se teve alguma classe que pediu para rodar um clinit
+	if(topoDaPilhaDeFrames != runtimeDataArea->topoPilha())
+	{//se sim interrompe a execução da instrução sem alterar o pc para que os clinits inicializem os campos estaticos
+		return;
+	}
+	//se chegou aqui está tudo de boas e podemos continuar
+	Valor campo= topoDaPilhaDeFrames->desempilhaOperando();
+	if(campo.tipo== LONG || campo.tipo == DOUBLE)
+	{//retirar preenchimento
+		topoDaPilhaDeFrames->desempilhaOperando();
+	}
+	switch(descritor[0])
+	{//OBS: Aqui não estamos trdução de tipos detalhada aqui:https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html#jvms-6.5.putstatic
+	//estamos supondo que o javac nao fez merda
+		case ('C'):
+		{
+			campo.tipo= CHAR;
+			break;
+		}
+		case ('Z'):
+		{
+			campo.tipo= BOOLEAN;
+			break;
+		}
+		case ('B'):
+		{
+			campo.tipo= BYTE;
+			break;
+		}
+		case ('S'):
+		{
+			campo.tipo= SHORT;
+		}
+	}
+	classeAlvo->ColocarValorNoField(nomeDoField, campo);
+	topoDaPilhaDeFrames->incrementaPC(3);
+}
 void ExecutionEngine::i_getfield(){}
 void ExecutionEngine::i_putfield()
 {
