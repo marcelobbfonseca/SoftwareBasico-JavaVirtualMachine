@@ -3064,6 +3064,9 @@ void ExecutionEngine::i_invokevirtual()
 	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
 	string nomeDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetNameIndex());
 	string descritorDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetDescriptorIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()7" << endl;
+#endif
 	
 	if(nomeDaClasse.find("java/") != string::npos)
 	{//Provavelmente estamos tratando de um print
@@ -3071,7 +3074,13 @@ void ExecutionEngine::i_invokevirtual()
 		{
 			if(descritorDoMetodo != "()V")
 			{
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()8" << endl;
+#endif
 				Valor valorQueSeraImpresso= topoDaPilha->desempilhaOperando();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()9" << endl;
+#endif
 				switch(valorQueSeraImpresso.tipo)
 				{
 					case(BOOLEAN):
@@ -3129,12 +3138,24 @@ void ExecutionEngine::i_invokevirtual()
 					}
 					case(REFERENCE):
 					{
-						if(((Objeto*)valorQueSeraImpresso.dado)->ObterTipoObjeto() != STRING)
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()10" << endl;
+#endif
+						if(((Objeto*)valorQueSeraImpresso.dado)->ObterTipoObjeto() != TipoObjeto::STRING)
 						{
 							throw new Erro("String esperado quando deve imprimir referencias", "ExecutionEngine", "invokevirtual");
 						}
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()11" << endl;
+#endif
 						ObjetoString *stringPtr;
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()12" << endl;
+#endif
 						memcpy(&stringPtr, &(valorQueSeraImpresso.dado), sizeof(ObjetoString *));
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()13" << endl;
+#endif
 						printf("%s", stringPtr->ObterString().c_str());
 						break;
 					}
@@ -3143,6 +3164,10 @@ void ExecutionEngine::i_invokevirtual()
 						throw new Erro("Tentou-se imprimir um tipo de dado invalido");
 					}
 				}
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()14" << endl;
+#endif
+
 			}
 			if(nomeDoMetodo == "println")
 			{
@@ -3211,6 +3236,9 @@ void ExecutionEngine::i_invokevirtual()
 	}
 	else
 	{
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokevirtual()15" << endl;
+#endif
 		uint16_t numeroDeargumentos;
 		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++)//pula o abre parenteses
 		{
