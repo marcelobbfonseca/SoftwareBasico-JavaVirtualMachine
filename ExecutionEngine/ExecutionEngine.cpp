@@ -3336,7 +3336,99 @@ void ExecutionEngine::i_invokespecial(){
 
 }
 void ExecutionEngine::i_invokestatic(){
-	Frame *topoDailha= runtimeDataArea->topoPilha();
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+
+	stack<Valor> pilhaDeOperandosDeBackUp= topoDaPilhaDeFrames->retornaPilhaOperandos();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+
+	uint16_t indiceDoMetodo;
+	memcpy(&indiceDoMetodo, &(instrucoes[1]), 2);
+	indiceDoMetodo= InverterEndianess<uint16_t>(indiceDoMetodo);
+	
+	if(classe->getConstantPool()[indiceDoMetodo]->GetTag() != CONSTANT_Methodref)
+	{
+		throw new Erro("Esperado CONSTANT_Methodref na constant pool", "ExecutionEngine", "i_invokestatic");
+	}
+	
+	CONSTANT_Methodref_info* cpMetodo= (CONSTANT_Methodref_info*)classe->getConstantPool()[indiceDoMetodo];
+	string nomeDaClasse= classe->getUTF8(cpMetodo->GetClassIndex());
+	
+	if(classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()]->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "i_invokestatic");
+	}
+	
+	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*) classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()];
+	string nomeDoMetodo = classe->getUTF8(cpAssinatura->GetNameIndex());
+	string descritorDoMetodo = classe->getUTF8(cpAssinatura->GetDescriptorIndex());
+	
+	if(nomeDoMetodo == "registerNatives" && nomeDaClasse== "java/lang/Object")
+	{
+		topoDaPilhaDeFrames->incrementaPC(3);
+		return;
+	}
+	if(nomeDaClasse.find("java/") != string::npos)
+	{
+		string mensagemDeErro= "Tentando chamar metodo estatico invalido: ";
+		mensagemDeErro+= nomeDoMetodo;
+		throw new Erro(mensagemDeErro.c_str(), "ExecutionEngine", "invokestatic");
+	}
+	else
+	{//identificar a quantidade de argumentos
+		uint16_t numeroDeArgumentos;
+		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++)//pula o abre parenteses
+		{
+			char indicadorDeTipo= descritorDoMetodo[cont];
+			if(indicadorDeTipo == 'J' || indicadorDeTipo == 'D')
+			{
+				numeroDeArgumentos+= 2;
+			}
+			else if(indicadorDeTipo == 'L')
+			{
+				numeroDeArgumentos++;
+				while(descritorDoMetodo[++cont] != ';');
+			}
+			else if(indicadorDeTipo == '[')
+			{
+				if(descritorDoMetodo[++cont] == 'L')
+				{
+					while(descritorDoMetodo[++cont] != ';');
+				}
+			}
+			else
+			{
+				numeroDeArgumentos++;
+			}
+		}
+		//agora que sabemos a quantidade de arqumentos, vamos remover os argumentos da pilha e colocar no futuro vetor de variaveis locais
+		vector<Valor> argumentos;
+		Valor temp;
+		for(int cont =0; cont < numeroDeArgumentos; cont++)
+		{
+			temp= topoDaPilhaDeFrames->desempilhaOperando();
+			if(temp.tipo == PADDING)
+			{
+				argumentos.insert(argumentos.begin()+1, temp);
+			}
+			else
+			{
+				argumentos.insert(argumentos.begin(), temp);
+			}
+		}
+		JavaClass *classeDaQualChamaremosOMetodo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+		Frame* novoFrame= new Frame(classeDaQualChamaremosOMetodo, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		//verificase se o clinit foi adicionado.
+		//TODO: verificar se aqui devemos relamente devemos jogar tudo que fizemos fora ou apenas adicionar o novo frame no inicio+1 da pilha de frames, mas para isso temos que mudar a pilha de frames para uma lista ou vetor
+		if(topoDaPilhaDeFrames != runtimeDataArea->topoPilha())
+		{
+			topoDaPilhaDeFrames->setaPilhaOperandos(pilhaDeOperandosDeBackUp);
+			delete novoFrame;
+			return;
+		}
+		runtimeDataArea->pilhaJVM.push(*novoFrame);
+	}
+	topoDaPilhaDeFrames->incrementaPC(3);
 }
 void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
