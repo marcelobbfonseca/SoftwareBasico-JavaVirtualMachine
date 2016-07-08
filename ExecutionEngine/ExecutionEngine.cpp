@@ -3040,6 +3040,7 @@ void ExecutionEngine::i_invokevirtual()
 #endif
 	uint16_t indiceMetodo;
 	memcpy(&indiceMetodo, &(instrucoes[1]), 2);
+	indiceMetodo= InverterEndianess<uint16_t>(indiceMetodo);
 	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
 #ifdef DEBUG
 	cout<< "ExecutionEngine::i_invokevirtual()4" << endl;
