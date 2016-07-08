@@ -37,8 +37,11 @@ JavaClass::JavaClass(string nomeArquivo)
 	FILE *arq= fopen(nomeArquivo.c_str(), "rb");
 	if(arq == NULL)
 	{
-		throw(new Erro("Arquivo informado nao e um .class!"));
-	} 					//enderecos de atributos do java class
+		string errMsg= "Erro na abertura do arquivo '";
+		errMsg += nomeArquivo;
+		errMsg += "'";
+		throw new Erro(errMsg.c_str());
+	}					//enderecos de atributos do java class
 	Leitura::LerAtributo(&magic, 4, arq);
 	if(magic != 0xcafebabe)
 	{
