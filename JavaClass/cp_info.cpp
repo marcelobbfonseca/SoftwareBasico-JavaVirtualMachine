@@ -4,11 +4,9 @@
 #include<string.h>
 #include<iostream>
 #include<math.h>
+#include<stdio.h>
 
 //#define DEBUG
-#ifdef DEBUG
-#include<stdio.h>
-#endif
 
 CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 {
@@ -266,30 +264,17 @@ void CONSTANT_String_info::ExibirInformacoes(JavaClass *javaClass)
 void CONSTANT_Integer_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Integer" << endl;
-	cout << "\t\tbytes = " << bytes << "\t\t//" << GetNumero() << endl;
+	cout << "\t\tbytes = 0x";
+	printf("%.8x", bytes);
+	cout<< "\t\t//" << GetNumero() << endl;
 }
 
 void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Float" <<endl;
 	cout << "\t\tbytes = 0x";
-	uint8_t *ptr= (uint8_t *) &bytes ;
-	for(int cont =0;  cont < 4 ; cont++)
-	{
-		cout<< hex << (int)ptr[cont] << dec;
-	}
-
-/*	if(EhLittleEndian())
-	{
-		uint32_t numeroInvertido= InverterEndianess<uint32_t>(bytes);
-		float *fl= (float *) &numeroInvertido;
-		cout << "\t\t//"<< (*fl);
-	}
-	else
-	{*/
-//		float *aux = (float *) &bytes;
-//		cout << "\t\t// " << (*aux);
-//	}
+	uint32_t *ptr= (uint32_t *) &bytes ;
+	cout << hex << *ptr << dec;
 	cout << "\t\t//";
 	printf("%f", GetNumero());
 	cout << endl;
@@ -298,27 +283,56 @@ void CONSTANT_Float_info::ExibirInformacoes(JavaClass *javaClass)
 void CONSTANT_Long_info:: ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Long" << endl;
+	int64_t invertido;
+	uint8_t *ptr;
+	ptr= (uint8_t*)&invertido;
+	memcpy(ptr, &high_bytes, 4);
+	memcpy(&(ptr[4]), &low_bytes, 4);
+	invertido= InverterEndianess<uint64_t>(invertido);
 	cout << "\t\thigh_bytes = 0x";
-	uint32_t invertido = InverterEndianess<uint32_t>(high_bytes);
-	cout << hex << invertido << dec << endl;
-	cout << "\t\tlow_bytes = 0x";
-	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
-	cout << hex << invertido2 << dec << endl;
-	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << "\t\t//" << GetNumero() << endl;
+	for(int cont =0; cont < 4; cont++)
+	{
+		printf("%.2hhx", ptr[cont]);
+	}
+	cout << endl << "\t\tlow_bytes = 0x";
+	for(int cont =4; cont < 8; cont++)
+	{
+		printf("%.2hhx", ptr[cont]);
+	}
+	cout << endl << "\t\tNumero representado: 0x";
+	for(int cont =0; cont < 8; cont++)
+	{
+		printf("%.2hhx", ptr[cont]);
+	}
+	cout << "\t\t//" << GetNumero() << endl;
+
 }
 
 void CONSTANT_Double_info:: ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "Double" << endl;
-//	cout << "\t\thigh_bytes = 0x";
-//	uint32_t invertido = InverterEndianess<uint32_t>(high_bytes);
-//	cout << hex << invertido << dec << endl;
-//	cout << "\t\tlow_bytes = 0x";
-//	uint32_t invertido2= InverterEndianess<uint32_t>(low_bytes);
-//	cout << hex << invertido2 << dec << endl;
-	cout << "\t\tNumero representado: 0x" << hex << high_bytes <<low_bytes << dec << "\t\t//";
-	printf("%f", GetNumero());
-	cout<< endl;
+	int64_t invertido;
+	uint8_t *ptr;
+	ptr= (uint8_t*)&invertido;
+	memcpy(ptr, &high_bytes, 4);
+	memcpy(&(ptr[4]), &low_bytes, 4);
+	invertido= InverterEndianess<uint64_t>(invertido);
+	cout << "\t\thigh_bytes = 0x";
+	for(int cont =0; cont < 4; cont++)
+	{
+		printf("%.2hhx", ptr[cont]);
+	}
+	cout << endl << "\t\tlow_bytes = 0x";
+	for(int cont =4; cont < 8; cont++)
+	{
+		printf("%.2hhx", ptr[cont]);
+	}
+	cout << endl << "\t\tNumero representado: 0x";
+	for(int cont =0; cont < 8; cont++)
+	{
+		printf("%.2hhx", ptr[cont]);
+	}
+	cout << "\t\t//" << GetNumero() << endl;
 }
 
 void CONSTANT_NameAndType_info::ExibirInformacoes(JavaClass *javaClass)
@@ -332,16 +346,12 @@ void CONSTANT_Utf8_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "UTF8" << endl;
 	cout << "\t\tlenght = " << lenght << endl;
-	cout << "\t\tbytes = " << hex;
-//	int widthAnterior = cout.width(2);
-//	char fillAnterior = cout.fill('0');
+	cout << "\t\tbytes = ";
 	for(int cont = 0; cont < lenght; cont++)
 	{
 		cout << bytes[cont];
 	}
-//	cout.width(widthAnterior);
-//	cout.fill(fillAnterior);
-	cout << dec <<endl;
+	cout <<endl;
 }
 
 void CONSTANT_MethodHandle_info::ExibirInformacoes(JavaClass *javaClass)

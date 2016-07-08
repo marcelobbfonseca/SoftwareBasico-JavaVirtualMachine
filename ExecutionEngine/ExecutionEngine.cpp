@@ -540,9 +540,7 @@ void ExecutionEngine::i_ldc(){
 	}
 	else
 	{
-
-		cerr << "CP invalido em i_LDC: " << constantPool[index -1]->GetTag() << endl;
-		exit(1);
+		throw new Erro("CP invalido em i_LDC", "ExecutionEngine", "i_ldc");
 	}
 	
 	topo->empilharOperando(valor);
@@ -3266,8 +3264,7 @@ void ExecutionEngine::i_invokespecial(){
 	// fim dos casos especiais
 	
 	if (className.find("java/") != string::npos) {
-		cerr << "Tentando invocar metodo especial invalido: " << methodName << endl;
-		exit(1);
+		throw new Erro("Tentando invocar metodo especial invalido", "ExecutionEngine","invokespecial");
 	} else {
 		uint16_t nargs = 0; // numero de argumentos contidos na pilha de operandos
 		uint16_t i = 1; // pulando o primeiro '('
@@ -3316,10 +3313,6 @@ void ExecutionEngine::i_invokespecial(){
 		}
 		newFrame = runtimeDataArea->topoPilha();
 	}
-
-
-
-
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
 }
@@ -3336,8 +3329,7 @@ void ExecutionEngine::i_arraylength(){
 	Valor arrayref = toppilha->desempilhaOperando();
 
 	if ((Objeto*)arrayref.dado == NULL) {
-		cerr << "NullPointerException" << endl;
-		exit(1);
+		throw new Erro("NullPointerException");
 	} 
 	
 	Valor length;
@@ -3497,6 +3489,7 @@ void ExecutionEngine::i_multianewarray(){
 			tipoDado = TipoDado::BOOLEAN;
 			break;
 		default:
+			throw new Erro("Descritor invalido em multianewarray", "ExecutionEngine", "i_multianewarray");
 			cerr << "Descritor invalido em multianewarray" << endl;
 			exit(1);
 	}

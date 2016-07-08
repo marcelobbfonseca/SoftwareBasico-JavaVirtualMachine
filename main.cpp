@@ -14,7 +14,7 @@ void ExibirMensagemDeAjuda(void);
 int main(int argc, char **argv)
 {
 //pedido de ajuda
-	if(AnalisadorArgumentos::EncontrarArgumento("--help", argc, argv) != -1)
+	if((AnalisadorArgumentos::EncontrarArgumento("--help", argc, argv) != -1) || argc ==1)
 	{
 		ExibirMensagemDeAjuda();
 	}
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		MostrarGokuNaCapivara();
 	}
 //Chamando apenas o exibidor
-	else if(AnalisadorArgumentos::EncontrarArgumento("--exibir-informacoes", argc, argv) != -1)
+	else if((AnalisadorArgumentos::EncontrarArgumento("--exibir-informacoes", argc, argv) != -1) || (AnalisadorArgumentos::EncontrarArgumento("-info", argc, argv) != -1) )
 	{
 		std::string caminho = argv[1];
 		try{
@@ -65,9 +65,10 @@ void ExibirMensagemDeAjuda(void)
 {
 	std::cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << std::endl;
 	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classeComMain.class] *[argumentosParaMain]\t\tpara rodar um arquivo .class" << std::endl;
+	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] -info\t\tpara ver as informacoes do .class informado" << std::endl;
 	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] --exibir-informacoes\t\tpara ver as informacoes do .class informado" << std::endl;
 	std::cout << "No linux, a sintaxe de uso  ./JVM.out [classe.class] --help\t\t\tpara ver essa mensagem de erro" << std::endl;
-	std::cout << "Este programa tem os poderes do goku na capivara." << std::endl;
+//	std::cout << "Este programa tem os poderes do goku na capivara." << std::endl;
 }
 
 

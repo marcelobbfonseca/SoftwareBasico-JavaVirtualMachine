@@ -59,6 +59,7 @@ class JavaClass
 		Valor getValorDoField(string nomeDoField);
 		bool FieldExiste(string nomeDoField);
 		uint16_t ObterSuperClasse(void);
+		void ExibirVersaoJavaSE(uint16_t major, uint16_t minor) const;
 	private:
 		//!Assinatura do tipo de arquivo
 		/*!

@@ -37,7 +37,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	FILE *arq= fopen(nomeArquivo.c_str(), "rb");
 	if(arq == NULL)
 	{
-		throw(new Erro("Falha na abertura do arquivo!"));
+		throw(new Erro("Arquivo informado nao e um .class!"));
 	} 					//enderecos de atributos do java class
 	Leitura::LerAtributo(&magic, 4, arq);
 	if(magic != 0xcafebabe)
@@ -135,11 +135,14 @@ cout << "Attributes count = " << attributes_count << endl;
 	fclose(arq);
 	//verificação se o nome do arquivo é igual ao nome da classe
 	string nomeArquivoSemCaminhoNemExtensao= StringUtilidades::RemoverCaminhoEExtensao(nomeArquivo, ".class");
-	if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
+	if(this->NomeDaClasse() != "")
 	{
-		char erro[200];
-		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
-		throw new Erro(erro, "JavaClass", "JavaClass");
+		if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
+		{
+			char erro[200];
+			sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
+			throw new Erro(erro, "JavaClass", "JavaClass");
+		}
 	}
 	//inicialização dos fields estáticos para tempo de execução
 	for(unsigned int cont =0; cont < fields.size(); cont++)
@@ -232,25 +235,20 @@ void JavaClass::ExibirInformacoes(void)
 	cout << "Bem vindo ao trabalho de SB do grupo MAFRJODEMA. Boa sorte tentando pronunciar isso =D" << endl;
 	cout << "-----------------------------------------------------------------" << endl;
 	cout <<"Magic:\t\t\t0x"<< hex << magic <<  endl << dec;
-	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Minor version:\t\t\t" << minor_version << endl;
 	cout << "Major version:\t\t\t" << major_version << endl;
 	cout << "Versão do .class: \t\t" << major_version << "." << minor_version << endl;
-	cout << "-----------------------------------------------------------------" << endl;
+	cout << "Versão do java SE: \t\t";
+	ExibirVersaoJavaSE(major_version, minor_version);
+	cout << endl;
 	cout << "constant_pool_count:\t\t" << constant_pool_count <<endl;
 	cout << "Constant pool:\t" << endl;
-	cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 
 	for(unsigned int cont= 0; cont < constant_pool.size() ; cont++)
 	{
 		cout  << tabs << "#" << cont+1 << " = ";
 		(*(constant_pool[cont])).ExibirInformacoes(this);
-		if(cont != constant_pool.size()-1)
-		{
-			cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
-		}
 	}
-	cout << "-----------------------------------------------------------------" << endl;
 	cout<< "access_flags:\t\t\t" << hex << access_flags << dec << endl;
 	if(access_flags & 0x0001)
 	{
@@ -284,10 +282,16 @@ void JavaClass::ExibirInformacoes(void)
 	{
 		cout << "\t\tACC_ENUM" << endl;
 	}
-	cout << "-----------------------------------------------------------------" << endl;
-	cout << "This class =\t\t" << this_class << endl;
-	cout << "Super class =\t\t" << super_class << endl;
-	cout << "-----------------------------------------------------------------" << endl;
+	cout << "This class =\t\t" << this_class << "\t\t//" << getUTF8(this_class) << endl;
+	cout << "Super class =\t\t" << super_class;
+	if(super_class != 0)
+	{
+		cout << "\t\t//" << getUTF8(super_class) << endl;
+	}
+	else
+	{
+		cout << "\t\t//Object" << endl;
+	}
 	cout << "Interfaces count =\t" << interfaces_count << endl;
 	if(interfaces_count > 0)
 	{
@@ -297,52 +301,37 @@ void JavaClass::ExibirInformacoes(void)
 			cout << "\t\t#" << cont << "\t" << interfaces[cont] << getUTF8(interfaces[cont]) << endl;
 		}
 	}
-	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Fields count =\t\t" << fields_count << endl;
 	if(fields_count > 0)
 	{
 		cout << "Fields:" << endl;
-		cout << "-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(unsigned int cont= 0; cont < fields.size() ; cont++)
 		{
 			cout << "\tField[" << cont << "]:" << endl;;
 			fields[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
-			if(cont != fields.size()-1)
-			{
-				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
-			}
 		}
 	}
-	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Methods count =\t\t" << methods_count << endl;
 	if(methods_count > 0)
 	{
 		cout << "Methods:" << endl;
-		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(int cont= 0; cont < methods_count ; cont++)
 		{
 			cout << "\tMethod[" << cont << "]:" << endl;;
 			methods[cont].ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
 			if(cont != methods_count-1)
 			{
-				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 			}
 		}
 	}
-	cout << "-----------------------------------------------------------------" << endl;
 	cout << "Attributes count =\t\t" << attributes_count << endl;
 	if(attributes_count > 0)
 	{
 		cout << "Attributes:" << endl;
-		cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
 		for(unsigned int cont= 0; cont < attributes.size() ; cont++)
 		{
 			cout << "\t\t\tAttribute[" << cont << "]:" << endl;;
 			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), this );
-			if(cont != attributes.size()-1)
-			{
-				cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
-			}
 		}
 	}
 	cout << "-----------------------------------------------------------------" << endl;
@@ -524,5 +513,31 @@ uint16_t JavaClass::ObterSuperClasse(void)
 {
 	return super_class;
 }
+
+void JavaClass::ExibirVersaoJavaSE(uint16_t major, uint16_t minor) const
+{
+	if(major == 45 && minor == 3)
+	{
+		cout << "1.1";
+	}
+	else if(major == 49 && minor == 0)
+	{
+		cout << "5.0";
+	}
+	else if(major == 50 && minor == 0)
+	{
+		cout << "6";
+	}
+	else if(major == 51 && minor == 0)
+	{
+		cout << "7";
+	}
+	else if(major == 52 && minor == 0)
+	{
+		cout << "8";
+	}
+}
+
+
 
 

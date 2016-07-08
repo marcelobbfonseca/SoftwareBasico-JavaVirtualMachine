@@ -102,15 +102,10 @@ void method_info::ExibirInformacoes(string tabs, JavaClass *javaClass)
 	if(attributes.size() > 0)
 	{
 		cout << tabs << "Attributes:"<<endl;
-		cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
 		for(int cont =0; cont < attributes_count; cont++)
 		{
 			cout << tabs << "\tAttributes[" << cont << "]:" << endl;
 			attributes[cont]->ExibirInformacoes( ( (tabs + "\t") +"\t" ), javaClass );
-			if(cont < attributes_count -1)
-			{
-				cout << "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -   -" << endl;
-			}
 		}
 	}
 }

@@ -140,9 +140,7 @@ void Frame::pegarAtributos(JavaClass *classe)
 Valor Frame::getValorVariavelLocal(uint32_t indice) {
 
 	if (indice >= codeAttribute->getMaxLocals()) {
-
-		cerr <<"Tentativa de acesso a variavel local inexistente" << endl;
-		exit(1);
+		throw new Erro("Tentativa de acesso a variavel local inexistente", "Frame", "getValorVariaavelLocal");
 
 	}
 
@@ -152,10 +150,7 @@ Valor Frame::getValorVariavelLocal(uint32_t indice) {
 void Frame::mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice) {
 
 	if (indice >= codeAttribute->getMaxLocals()) {
-
-		cerr << "Tentativa de alteração de variavel local inexistente" << endl;
-		exit(1);
-
+		throw new Erro("Tentativa de alteração de variavel local inexistente", "Frame", "mudarVariavelLocal");
 	}
 
 	variaveisLocais[indice] = valorDaVariavel;
@@ -171,10 +166,7 @@ void Frame::empilharOperando(Valor operando) {
 Valor Frame::desempilhaOperando() {
 
 	if (pilhaOperandos.size() == 0) {
-
-		cerr << "IndexOutOfBoundsException(Valor Frame::desempilhaOperando()" << endl;
-		exit(1);
-
+		throw new Erro("IndexOutOfBoundsException(Valor Frame::desempilhaOperando()");
 	}
 
 	Valor topo = pilhaOperandos.top();

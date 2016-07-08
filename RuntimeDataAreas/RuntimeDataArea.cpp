@@ -81,8 +81,7 @@ Frame RuntimeDataArea::desempilharFrame()
 {
 	if (pilhaJVM.size() == 0)
 	{
-		cerr << "IndexOutOfBoundsException" << endl;
-		exit(1);
+		throw new Erro("IndexOutOfBoundsException");
 	}
 	Frame topo = pilhaJVM.top();
 	pilhaJVM.pop();
