@@ -4,7 +4,7 @@
 #include<iostream>
 #include<map>
 #include"JavaClass.hpp"
-#include"Tipos.h"
+#include"Tipos.hpp"
 
 class DadosDaInstancia{
 	public:

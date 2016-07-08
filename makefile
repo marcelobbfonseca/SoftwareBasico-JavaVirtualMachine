@@ -19,7 +19,7 @@ ExecutionEngine.o: ExecutionEngine/ExecutionEngine.cpp ExecutionEngine/Execution
 	$(compilador) ExecutionEngine/uniao.cpp $(flags) $(INC_HPP) -o ExecutionEngine.o -c
 JavaClass.o: JavaClass/attribute_info.cpp JavaClass/attribute_info.hpp JavaClass/cp_info.cpp JavaClass/cp_info.hpp JavaClass/field_info.cpp JavaClass/field_info.hpp JavaClass/JavaClass.cpp JavaClass/JavaClass.hpp JavaClass/method_info.cpp JavaClass/method_info.hpp
 	$(compilador) JavaClass/uniao.cpp $(flags) $(INC_HPP) -o JavaClass.o -c
-RuntimeDataArea.o: RuntimeDataAreas/DadosDaInstancia.cpp RuntimeDataAreas/DadosDaInstancia.hpp RuntimeDataAreas/Frame.cpp RuntimeDataAreas/Frame.hpp RuntimeDataAreas/RuntimeDataArea.cpp RuntimeDataAreas/RuntimeDataArea.hpp RuntimeDataAreas/Tipos.h
+RuntimeDataArea.o: RuntimeDataAreas/DadosDaInstancia.cpp RuntimeDataAreas/DadosDaInstancia.hpp RuntimeDataAreas/Frame.cpp RuntimeDataAreas/Frame.hpp RuntimeDataAreas/RuntimeDataArea.cpp RuntimeDataAreas/RuntimeDataArea.hpp RuntimeDataAreas/Tipos.hpp RuntimeDataAreas/Tipos.cpp
 	$(compilador) RuntimeDataAreas/uniao.cpp $(flags) $(INC_HPP) -o RuntimeDataArea.o -c
 mainJVM.o: JVM.hpp JVM.cpp main.cpp
 	$(compilador) uniao.cpp $(flags) $(INC_HPP) -o mainJVM.o -c

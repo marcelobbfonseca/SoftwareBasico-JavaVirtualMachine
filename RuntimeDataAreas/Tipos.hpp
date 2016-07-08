@@ -2,6 +2,7 @@
 #define TIPOS_H
 
 #include<stdint.h>
+#include<string>
 #define TIPODADO
 enum TipoDado {
 	BOOLEAN,
@@ -23,5 +24,7 @@ struct Valor {
 	uint64_t dado;
 };
 typedef struct Valor Valor;
+
+std::string ObterStringTipo(TipoDado tipo);
 
 #endif

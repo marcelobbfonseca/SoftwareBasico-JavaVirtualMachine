@@ -1418,16 +1418,73 @@ void ExecutionEngine::i_dstore_0(){
 }
 
 void ExecutionEngine::i_dstore_1(){
-	//double
+	Valor val;
+	val.tipo = DOUBLE;
+	val.dado= 1;
+	StoreValor(val);
+
+	val.tipo = PADDING;
+	val.dado= 2;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dstore_2(){}
+void ExecutionEngine::i_dstore_2(){
+	Valor val;
+	val.tipo = DOUBLE;
+	val.dado= 2;
+	StoreValor(val);
+
+	val.tipo = PADDING;
+	val.dado= 3;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_dstore_3(){
-	//double
+	Valor val;
+	val.tipo = DOUBLE;
+	val.dado= 3;
+	StoreValor(val);
+
+	val.tipo = PADDING;
+	val.dado= 4;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_astore_0(){}
-void ExecutionEngine::i_astore_1(){}
-void ExecutionEngine::i_astore_2(){}
-void ExecutionEngine::i_astore_3(){}
+void ExecutionEngine::i_astore_0(){
+	Valor val;
+	val.tipo = REFERENCE;
+	val.dado= 0;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_astore_1(){
+	Valor val;
+	val.tipo = REFERENCE;
+	val.dado= 1;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_astore_2(){
+	Valor val;
+	val.tipo = REFERENCE;
+	val.dado= 2;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::i_astore_3(){
+	Valor val;
+	val.tipo = REFERENCE;
+	val.dado= 3;
+	StoreValor(val);
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
 void ExecutionEngine::i_iastore(){}
 void ExecutionEngine::i_lastore(){}
 void ExecutionEngine::i_fastore(){}
@@ -3854,5 +3911,26 @@ void ExecutionEngine::i_jsr_w(){
 
 	topo->incrementaPC(offsetSalto);
 
+}
+
+void ExecutionEngine::StoreValor(Valor val)
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	
+	Valor valorDaPilha= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorDaPilha.tipo != val.tipo)
+	{
+		string errMsg= "Tentativa de store de um valor com tipo incorreto.\t";
+		errMsg+= "Esperado: ";
+		errMsg+= ObterStringTipo(val.tipo);
+		errMsg+= "\tFornecido: ";
+		errMsg+= ObterStringTipo(valorDaPilha.tipo);
+		throw new Erro(errMsg, "ExecutionEngine", "StoreValor");
+	}
+	topoDaPilhaDeFrames->mudarVariavelLocal(valorDaPilha, val.dado);
 
 }
+
+
+
+

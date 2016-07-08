@@ -9,7 +9,7 @@
 #include"field_info.hpp"
 #include"method_info.hpp"
 #include"attribute_info.hpp"
-#include"Tipos.h"
+#include"Tipos.hpp"
 
 using namespace std;
 

@@ -3,7 +3,7 @@
 #include <map>
 #include<cassert>
 #include <stack>
-#include "Tipos.h"
+#include "Tipos.hpp"
 #include "method_info.hpp"
 #include "JavaClass.hpp"
 #include "DadosDaInstancia.hpp"
