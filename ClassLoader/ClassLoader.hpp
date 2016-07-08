@@ -15,6 +15,7 @@ class ClassLoader
 	private:
 		std::map<std::string, JavaClass *> classesCarregadas;
 		RuntimeDataArea *runtimeDataArea;
+		string caminho;
 	public:
 		JavaClass* CarregarClasse(string nomeClasse);
 		ClassLoader();

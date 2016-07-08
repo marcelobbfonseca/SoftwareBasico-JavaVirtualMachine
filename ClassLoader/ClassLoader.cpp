@@ -11,6 +11,15 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	//gerar dados da classe retornar o DadosDaClasse
 	return classesCarregadas[nomeClasse];
 */
+	static bool primeiraVezQueCarrega= true;
+	if(primeiraVezQueCarrega)
+	{
+		if(nomeClasse.find('\\') != string::npos || nomeClasse.find('/') != string::npos)
+		{
+			
+		}
+		primeiraVezQueCarrega= false;
+	}
 	JavaClass *retorno;
 	try
 	{
@@ -30,7 +39,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 
 ClassLoader::ClassLoader(void)
 {
-	
+	caminho = "";
 }
 
 void ClassLoader::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)

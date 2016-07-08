@@ -15,21 +15,23 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	{
 		nomeSemExtensao= StringUtilidades::RemoverNoFinal(nomeSemExtensao, ".class");
 	}
-	if(classes.count(nomeSemExtensao) >0)
-	{
-		return classes[nomeSemExtensao];
-	}
 	string nomeComExtensao= nomeDaClasse;
 	if (!StringUtilidades::TerminaCom(nomeComExtensao, ".class") )
 	{
 		nomeComExtensao+= ".class";
+	}
+	string nomeSemExtensaoNemCaminho = nomeDaClasse;
+	nomeSemExtensaoNemCaminho = StringUtilidades::RemoverCaminhoEExtensao(nomeSemExtensaoNemCaminho, ".class");
+	if(classes.count(nomeSemExtensaoNemCaminho) >0)
+	{
+		return classes[nomeSemExtensaoNemCaminho];
 	}
 	JavaClass *temp=classLoader->CarregarClasse(nomeComExtensao);
 	if(temp == NULL)
 	{
 		return NULL;
 	}
-	classes[nomeSemExtensao] = temp;
+	classes[nomeSemExtensaoNemCaminho] = temp;
 	// adicionando <clinit> da classe (se existir) na stack frame.
 	static bool primeiraVez= true;//se for a primeira classe a ser carregada, deixa a execution engine carregar o clinit
 	cout<< "chegou ate aqui" << endl;
@@ -47,9 +49,9 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	}
 	cout<< "chegou ate aqui2" << endl;
 	primeiraVez= false;
-	if(classes[nomeSemExtensao]== NULL)
+	if(classes[nomeSemExtensaoNemCaminho]== NULL)
 	printf("deu ruim\n");
-	return classes[nomeSemExtensao];
+	return classes[nomeSemExtensaoNemCaminho];
 }
 
 void RuntimeDataArea::SetClassLoader(ClassLoader *classLoader)
