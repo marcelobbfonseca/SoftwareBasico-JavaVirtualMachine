@@ -3,6 +3,7 @@
 #include "ObjetoString.hpp"
 #include "ObjetoInstancia.hpp"
 #include "Erro.hpp"
+#include "Endian.hpp"
 #include <string.h>
 #include <inttypes.h>
 #include <cmath>
@@ -3335,7 +3336,7 @@ void ExecutionEngine::i_invokespecial(){
 
 }
 void ExecutionEngine::i_invokestatic(){
-
+	Frame *topoDailha= runtimeDataArea->topoPilha();
 }
 void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
