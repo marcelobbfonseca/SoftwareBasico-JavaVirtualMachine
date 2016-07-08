@@ -37,7 +37,7 @@ JavaClass::JavaClass(string nomeArquivo)
 	FILE *arq= fopen(nomeArquivo.c_str(), "rb");
 	if(arq == NULL)
 	{
-		throw(new Erro("Falha na abertura do arquivo!"));
+		throw(new Erro("Arquivo informado nao e um .class!"));
 	} 					//enderecos de atributos do java class
 	Leitura::LerAtributo(&magic, 4, arq);
 	if(magic != 0xcafebabe)
@@ -135,11 +135,14 @@ cout << "Attributes count = " << attributes_count << endl;
 	fclose(arq);
 	//verificação se o nome do arquivo é igual ao nome da classe
 	string nomeArquivoSemCaminhoNemExtensao= StringUtilidades::RemoverCaminhoEExtensao(nomeArquivo, ".class");
-	if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
+	if(this->NomeDaClasse() != "")
 	{
-		char erro[200];
-		sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
-		throw new Erro(erro, "JavaClass", "JavaClass");
+		if(this->NomeDaClasse()!= nomeArquivoSemCaminhoNemExtensao)
+		{
+			char erro[200];
+			sprintf(erro, "Nome da classe diferente do nome do arquivo!\tArquivo: %s\tclasse:%s", NomeDaClasse().c_str(), nomeArquivoSemCaminhoNemExtensao.c_str());
+			throw new Erro(erro, "JavaClass", "JavaClass");
+		}
 	}
 	//inicialização dos fields estáticos para tempo de execução
 	for(unsigned int cont =0; cont < fields.size(); cont++)
@@ -280,7 +283,15 @@ void JavaClass::ExibirInformacoes(void)
 		cout << "\t\tACC_ENUM" << endl;
 	}
 	cout << "This class =\t\t" << this_class << "\t\t//" << getUTF8(this_class) << endl;
-	cout << "Super class =\t\t" << super_class << "\t\t//" << getUTF8(super_class) << endl;
+	cout << "Super class =\t\t" << super_class;
+	if(super_class != 0)
+	{
+		cout << "\t\t//" << getUTF8(super_class) << endl;
+	}
+	else
+	{
+		cout << "\t\t//Object" << endl;
+	}
 	cout << "Interfaces count =\t" << interfaces_count << endl;
 	if(interfaces_count > 0)
 	{
