@@ -563,8 +563,9 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	}
 	else
 	{
-		cerr << "CP invalido em i_LDC: " << constantPool[index -1]->GetTag() << endl;
-		exit(1);
+		string errMsg= "CP invalido em i_LDC: ";
+		errMsg+= std::ToString(constantPool[index -1]->GetTag());
+		throw new Erro(errMsg, "ExecutionEngine", "i_ldc");
 	}
 	
 	topo->empilharOperando(valor);
