@@ -568,8 +568,10 @@ void ExecutionEngine::i_ldc(){
 	topo->incrementaPC(2);
 
 }
+void ExecutionEngine::i_ldc_w(){}
 
-void ExecutionEngine::i_ldc_w(){ //em construcao
+
+void ExecutionEngine::i_ldc2_w(){ //em construcao
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
