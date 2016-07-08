@@ -560,9 +560,8 @@ void ExecutionEngine::i_iload(){
 	int16_t index = (int16_t)byte1;
 	//Verifica se a funcao i_wide foi chamada anteriormente
 	if(isWide) {
-
-                //Copia byte[1] concatenado com byte[2] para index
-                memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
+		//Copia byte[1] concatenado com byte[2] para index
+		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		isWide = false;
 
@@ -738,7 +737,7 @@ void ExecutionEngine::i_iload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-        if(!(valor.tipo == TipoDado::INT)){
+		if(!(valor.tipo == TipoDado::INT)){
 		
 		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_1");
 
@@ -2450,7 +2449,7 @@ void ExecutionEngine::i_ifeq(){
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} 
-         else {
+		 else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2474,7 +2473,7 @@ void ExecutionEngine::i_ifne(){
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
-        else {
+		else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2497,7 +2496,7 @@ void ExecutionEngine::i_iflt(){
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
-        else {
+		else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2519,7 +2518,7 @@ void ExecutionEngine::i_ifge(){
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} 
-         else {
+		 else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2615,7 +2614,7 @@ void ExecutionEngine::i_if_icmpne(){
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} 
-        else{
+		else{
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2640,7 +2639,7 @@ void ExecutionEngine::i_if_icmplt(){
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
-        else {
+		else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -3291,7 +3290,7 @@ void ExecutionEngine::i_multianewarray(){
 	TipoDado tipoDado;
 	int i = 0;
 	while (className[i] == '[') i++;
-        // em caso de ser uma referência ([[[Ljava/lang/String;)
+		// em caso de ser uma referência ([[[Ljava/lang/String;)
 	string multiArrayType = className.substr(i+1, className.size()-i-2); 
 
 	switch (className[i]) {
