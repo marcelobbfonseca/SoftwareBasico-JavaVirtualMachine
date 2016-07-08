@@ -1,4 +1,5 @@
 #include"DadosDaInstancia.hpp"
+#include"Erro.hpp"
 #include<string.h>
 
 DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
@@ -7,9 +8,7 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 
 	if (javaClass->FlagAtivada(JAVA_CLASS_ABSTRACT))
 	{
-		// Não pode instanciar se for classe abstrata
-		cerr << "Erro de instanciamento" << endl;
-		exit(1);
+		throw new Erro("Tentou-se instanciar uma classe abstrata", "DadosDaInstancia", "DadosDaInstancia");
 	}
 
 	for (int i = 0; i < javaClass->getFieldsCount(); i++)
@@ -91,8 +90,7 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 
 Valor DadosDaInstancia::getValorDoField(string nomeField){
 	if (fieldsInstancia.count(nomeField) ==  0) {
-		cerr << "Field não existente" << endl;
-		exit(1);
+		throw new Erro("Field não existente", "DadosDaInstancia", "getValorDoField");
 	}
 
 	return fieldsInstancia[nomeField];
