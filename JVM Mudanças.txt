@@ -1,0 +1,12 @@
+- ldw_2 só exibe 32bits										Feito!
+- 64bits precisam mostrar high e low						Feito!
+- verificar a impressao do linenumbertable e linenumber		Feito!
+- diminuir o gatilho pro exibidor							Feito!
+- tratar outras versões										Feito!
+- remover atributos que nao sao da versao 46				Feito!
+
+- resto da JVM
+- dormir
+- passar em OAC												Feito!
+- torcer pro cruzeiro continuar ganhando
+ 
