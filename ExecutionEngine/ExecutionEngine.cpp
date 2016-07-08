@@ -478,6 +478,7 @@ void ExecutionEngine::i_dconst_1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+//push byte pra stack de operando
 void ExecutionEngine::i_bipush(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -496,6 +497,7 @@ void ExecutionEngine::i_bipush(){
 void ExecutionEngine::i_sipush(){
 
 }
+//Push item from run-time constant pool
 void ExecutionEngine::i_ldc(){
 
 	//usa no helloworld
@@ -546,11 +548,57 @@ void ExecutionEngine::i_ldc(){
 
 }
 
-void ExecutionEngine::i_ldc_w(){
+void ExecutionEngine::i_ldc_w(){ //em construcao
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+ 
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	uint16_t index = (byte1 << 8) | byte2;
+
+	//vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+	
+	//
+	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
+	vector<cp_info*> constantPool = classe->getConstantPool();
+	cp_info *ponteiroCpInfo = constantPool[index - 1];
+	//
+
+	Valor valor;
+	
+	if (ponteiroCpInfo->GetTag() == CONSTANT_Long) {
+
+//		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Long_info*)ponteiroCpInfo)->Get- 1];		
+//		valor.dado = (long)utf8Entry;
+
+		valor.tipo = TipoDado::LONG;
+		
+		Valor padding;
+		padding.tipo = TipoDado::PADDING;
+		
+		toppilha->empilharOperando(padding);
+	} else if (ponteiroCpInfo->GetTag() == CONSTANT_Double) {
+		
+//		CONSTANT_Utf8_info* utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Double_info*)ponteiroCpInfo)->GetNumero() - 1];
+//		valor.dado = (double) utf8Entry;
+
+		valor.tipo = TipoDado::DOUBLE;
+		
+		Valor padding;
+		padding.tipo = TipoDado::PADDING;
+		
+		toppilha->empilharOperando(padding);
+	} else {
+		cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << ponteiroCpInfo->GetTag() << endl;
+		exit(1);
+	}
+	
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
 
-void ExecutionEngine::i_ldc2_w() {}
 void ExecutionEngine::i_iload(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -558,10 +606,12 @@ void ExecutionEngine::i_iload(){
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	int16_t index = (int16_t)byte1;
+
 	//Verifica se a funcao i_wide foi chamada anteriormente
 	if(isWide) {
 		//Copia byte[1] concatenado com byte[2] para index
 		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
+
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		isWide = false;
 
@@ -2789,7 +2839,120 @@ void ExecutionEngine::i_return(){
 	runtimeDataArea->desempilharFrame();
 
 }
-void ExecutionEngine::i_getstatic() {}
+
+/*	*	*	*	*	*	*	*	*	*	*	*	*	*
+get a static field value of a class, where the 		*
+field is identified by field reference in the 		*
+constant pool index (indexbyte1 << 8 + indexbyte2)	*
+*	*	*	*	*	*	*	*	*	*	*	*	*	*/
+void ExecutionEngine::i_getstatic() {
+	//usa no helloworld
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic" << endl;
+#endif
+	Frame *toppilha = runtimeDataArea->topoPilha();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic1" << endl;
+#endif
+	vector<cp_info*> constantPool;
+	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
+	constantPool = classe->getConstantPool();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic2" << endl;
+#endif
+	uint8_t *code = toppilha->getCode();
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic3" << endl;
+#endif
+
+	//argumentos da instrucao
+	uint8_t byte1 = code[1];
+	uint8_t byte2 = code[2];
+	
+	uint16_t campoIndex = (byte1 << 8) | byte2;
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic4" << endl;
+#endif
+
+	//consulta a field. percorre os fields do java
+	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic5" << endl;
+#endif
+	string className = classe->getUTF8(fieldRef->GetClassIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic6" << endl;
+#endif
+	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic7" << endl;
+#endif
+	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex());
+	string campoDescriptor = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_getstatic8" << endl;
+#endif
+	if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		return;
+	}	
+
+
+	JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
+
+	while (classRuntime != NULL) {
+		if (classRuntime->FieldExiste(campoName) == false) {
+			if (classRuntime->ObterSuperClasse()) {
+				classRuntime = NULL;
+			} else {
+
+				string superClassName = classRuntime->getUTF8(classRuntime->ObterSuperClasse());
+				classRuntime = runtimeDataArea->CarregarClasse(superClassName);
+	  		  
+	  
+			}
+		} else {
+			break;
+		}
+	}// fim while classRuntime   
+	
+	if (classRuntime == NULL) {
+		cerr << "NoSuchFieldError" << endl;
+		exit(1);
+	}
+	if (runtimeDataArea->topoPilha() != toppilha)
+   		return;
+
+	Valor valorStatico = classRuntime->getValorDoField(campoName);
+	
+	switch (valorStatico.tipo) {
+		case TipoDado::BOOLEAN:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		case TipoDado::BYTE:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		case TipoDado::SHORT:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		case TipoDado::INT:
+			valorStatico.tipo = TipoDado::INT;
+			break;
+		default:
+			break;
+	}
+	if (valorStatico.tipo == TipoDado::DOUBLE || valorStatico.tipo == TipoDado::LONG) {
+		Valor padding;
+		padding.tipo = TipoDado::PADDING;
+		toppilha->empilharOperando(padding);
+	}
+
+	toppilha->empilharOperando(valorStatico);
+
+	runtimeDataArea->topoPilha()->incrementaPC(3);
+
+}
+
 void ExecutionEngine::i_putstatic(){}
 void ExecutionEngine::i_getfield(){}
 void ExecutionEngine::i_putfield()
