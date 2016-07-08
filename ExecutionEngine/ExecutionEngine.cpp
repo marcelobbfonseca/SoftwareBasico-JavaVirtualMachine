@@ -7,6 +7,24 @@
 #include <inttypes.h>
 #include <cmath>
 
+// Check ruindos
+#if _WIN32 || _WIN64
+	#if _WIN64
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
+// Check GCC
+#if __GNUC__
+	#if __x86_64__ || __ppc64__
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
+
 #define DEBUG
 #ifdef DEBUG
 	#include"Opcode.hpp"
@@ -611,6 +629,7 @@ void ExecutionEngine::i_iload(){
 	if(isWide) {
 		//Copia byte[1] concatenado com byte[2] para index
 		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
+		index= Inverterendianess<int16_t>(index);//nao esquecer de inerter o endian;
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		isWide = false;
@@ -3316,7 +3335,7 @@ void ExecutionEngine::i_invokespecial(){
 
 }
 void ExecutionEngine::i_invokestatic(){
-	//a
+
 }
 void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
