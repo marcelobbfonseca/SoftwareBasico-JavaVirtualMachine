@@ -537,17 +537,21 @@ void ExecutionEngine::i_ldc(){
 	if(ponteiroCpInfo->GetTag() == CONSTANT_String)
 	{
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
-														
 		string utf8String = utf8Entry->GetString();
-		
-			valor.tipo = TipoDado::REFERENCE;
+#ifdef DEBUG
+cout<<"chegou i_ldc" << endl;
+#endif
+		valor.tipo = TipoDado::REFERENCE;
 		ObjetoString * temp = new ObjetoString(utf8String);
-			memcpy(&(valor.dado), temp, sizeof(void*));
+		memcpy(&(valor.dado), temp, sizeof(void*));
+#ifdef DEBUG
+cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
+#endif
 	}
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
 	{
-				valor.tipo = TipoDado::INT;
-			valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
+		valor.tipo = TipoDado::INT;
+		valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
 	} 
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Float)
 	{
@@ -559,7 +563,6 @@ void ExecutionEngine::i_ldc(){
 	}
 	else
 	{
-
 		cerr << "CP invalido em i_LDC: " << constantPool[index -1]->GetTag() << endl;
 		exit(1);
 	}
