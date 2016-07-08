@@ -630,7 +630,7 @@ void ExecutionEngine::i_iload(){
 	if(isWide) {
 		//Copia byte[1] concatenado com byte[2] para index
 		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
-		index= Inverterendianess<int16_t>(index);//nao esquecer de inerter o endian;
+		index= InverterEndianess<int16_t>(index);//nao esquecer de inerter o endian;
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		isWide = false;
