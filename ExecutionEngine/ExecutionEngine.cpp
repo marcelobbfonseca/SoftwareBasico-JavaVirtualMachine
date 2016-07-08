@@ -3124,7 +3124,7 @@ void ExecutionEngine::i_putstatic()
 		topoDaPilhaDeFrames->desempilhaOperando();
 	}
 	switch(descritor[0])
-	{//OBS: Aqui não estamos trdução de tipos detalhada aqui:https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html#jvms-6.5.putstatic
+	{//OBS: Aqui não estamos trdução de tipos citada aqui:https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html#jvms-6.5.putstatic
 	//estamos supondo que o javac nao fez merda
 		case ('C'):
 		{
@@ -3925,6 +3925,7 @@ void ExecutionEngine::StoreValor(Valor val)
 		errMsg+= ObterStringTipo(val.tipo);
 		errMsg+= "\tFornecido: ";
 		errMsg+= ObterStringTipo(valorDaPilha.tipo);
+//		cerr<< errMsg;
 		throw new Erro(errMsg, "ExecutionEngine", "StoreValor");
 	}
 	topoDaPilhaDeFrames->mudarVariavelLocal(valorDaPilha, val.dado);
