@@ -611,9 +611,8 @@ void ExecutionEngine::i_iload(){
 
 	//Verifica se a funcao i_wide foi chamada anteriormente
 	if(isWide) {
-
-                //Copia byte[1] concatenado com byte[2] para index
-                memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
+		//Copia byte[1] concatenado com byte[2] para index
+		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		isWide = false;
@@ -626,7 +625,9 @@ void ExecutionEngine::i_iload(){
 
 	}
 
-	if( !( (int16_t) (toppilha->tamanhoVetorVariaveis() ) > index ) ){
+
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "i_iload");
 
@@ -657,7 +658,7 @@ void ExecutionEngine::i_lload(){
 
 	}
 
-	if( !( (int16_t)(toppilha->tamanhoVetorVariaveis()) > index + 1)){
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
 		throw new Erro("Tamanho do vetor de variáveis menor que o index + 1", "ExecutionEngine", "i_lload");
 
@@ -692,7 +693,8 @@ void ExecutionEngine::i_fload(){
 	else {
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 	}
-	if( !( (int16_t) (topPilha->tamanhoVetorVariaveis()) > index) ){
+
+	if(((int16_t)(topPilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_fload");
 
@@ -720,7 +722,8 @@ void ExecutionEngine::i_dload(){
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 
 	}
-	if( !( (int16_t)(toppilha->tamanhoVetorVariaveis()) > index + 1)){
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "i_dload");
 	
@@ -755,7 +758,8 @@ void ExecutionEngine::i_aload(){
 	else {
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 	}
-	if(!( (int16_t)(toppilha->tamanhoVetorVariaveis()) > index)){
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_aload");
 
@@ -789,7 +793,7 @@ void ExecutionEngine::i_iload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-        if(!(valor.tipo == TipoDado::INT)){
+		if(!(valor.tipo == TipoDado::INT)){
 		
 		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_1");
 
@@ -2500,7 +2504,7 @@ void ExecutionEngine::i_ifeq(){
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} 
-         else {
+		 else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2524,7 +2528,7 @@ void ExecutionEngine::i_ifne(){
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
-        else {
+		else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2547,7 +2551,7 @@ void ExecutionEngine::i_iflt(){
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
-        else {
+		else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2569,7 +2573,7 @@ void ExecutionEngine::i_ifge(){
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} 
-         else {
+		 else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2665,7 +2669,7 @@ void ExecutionEngine::i_if_icmpne(){
 		uint16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} 
-        else{
+		else{
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -2690,7 +2694,7 @@ void ExecutionEngine::i_if_icmplt(){
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
-        else {
+		else {
 
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -3340,7 +3344,9 @@ void ExecutionEngine::i_invokespecial(){
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
 }
-void ExecutionEngine::i_invokestatic(){}
+void ExecutionEngine::i_invokestatic(){
+	//a
+}
 void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
 void ExecutionEngine::i_newarray(){}
@@ -3479,7 +3485,7 @@ void ExecutionEngine::i_multianewarray(){
 	TipoDado tipoDado;
 	int i = 0;
 	while (className[i] == '[') i++;
-        // em caso de ser uma referência ([[[Ljava/lang/String;)
+		// em caso de ser uma referência ([[[Ljava/lang/String;)
 	string multiArrayType = className.substr(i+1, className.size()-i-2); 
 
 	switch (className[i]) {
