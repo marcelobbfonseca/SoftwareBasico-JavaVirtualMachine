@@ -2,7 +2,6 @@
 #define CP_INFO_HPP
 
 #include <stdint.h>
-#include <stdio.h>
 #include <string>
 #include "JavaClass.hpp"
 

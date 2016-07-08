@@ -3150,10 +3150,6 @@ void ExecutionEngine::i_invokespecial(){
 		}
 		newFrame = runtimeDataArea->topoPilha();
 	}
-
-
-
-
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
 }

@@ -4,11 +4,9 @@
 #include<string.h>
 #include<iostream>
 #include<math.h>
+#include<stdio.h>
 
 //#define DEBUG
-#ifdef DEBUG
-#include<stdio.h>
-#endif
 
 CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 {
@@ -348,16 +346,12 @@ void CONSTANT_Utf8_info::ExibirInformacoes(JavaClass *javaClass)
 {
 	cout << "UTF8" << endl;
 	cout << "\t\tlenght = " << lenght << endl;
-	cout << "\t\tbytes = " << hex;
-//	int widthAnterior = cout.width(2);
-//	char fillAnterior = cout.fill('0');
+	cout << "\t\tbytes = ";
 	for(int cont = 0; cont < lenght; cont++)
 	{
 		cout << bytes[cont];
 	}
-//	cout.width(widthAnterior);
-//	cout.fill(fillAnterior);
-	cout << dec <<endl;
+	cout <<endl;
 }
 
 void CONSTANT_MethodHandle_info::ExibirInformacoes(JavaClass *javaClass)
