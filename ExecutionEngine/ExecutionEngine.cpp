@@ -574,7 +574,7 @@ void ExecutionEngine::i_iload(){
 
 	}
 
-	if(!((int16_t)(toppilha->tamanhoVetorVariaveis())) > index){
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "i_iload");
 
@@ -605,7 +605,7 @@ void ExecutionEngine::i_lload(){
 
 	}
 
-	if(!((int16_t)(toppilha->tamanhoVetorVariaveis())) > index + 1){
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
 		throw new Erro("Tamanho do vetor de variáveis menor que o index + 1", "ExecutionEngine", "i_lload");
 
@@ -640,7 +640,7 @@ void ExecutionEngine::i_fload(){
 	else {
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 	}
-	if(!((int16_t)(topPilha->tamanhoVetorVariaveis())) > index){
+	if(((int16_t)(topPilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_fload");
 
@@ -668,7 +668,7 @@ void ExecutionEngine::i_dload(){
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 
 	}
-	if(!((int16_t)(toppilha->tamanhoVetorVariaveis())) > index + 1){
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "i_dload");
 	
@@ -703,7 +703,7 @@ void ExecutionEngine::i_aload(){
 	else {
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 	}
-	if(!((int16_t)(toppilha->tamanhoVetorVariaveis())) > index){
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_aload");
 
