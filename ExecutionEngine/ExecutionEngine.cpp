@@ -82,7 +82,7 @@ void ExecutionEngine::Play(string classComMain)
 	do
 	{
 #ifdef DEBUG
-	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->pilhaJVM.size() << endl;
+	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->ObterTamanhoDaPilhaDeFrames() << endl;
 #endif
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
 #ifdef DEBUG
@@ -97,7 +97,7 @@ void ExecutionEngine::Play(string classComMain)
 #endif
 
 	}
-	while(runtimeDataArea->pilhaJVM.size() > 0);
+	while(runtimeDataArea->ObterTamanhoDaPilhaDeFrames() > 0);
 #ifdef DEBUG
 	cout<< "ExecutionEngine::Play10" << endl;
 #endif
@@ -3447,7 +3447,7 @@ void ExecutionEngine::i_invokevirtual()
 			delete novoFrame;
 			return;
 		}
-		runtimeDataArea->pilhaJVM.push(*novoFrame);
+		runtimeDataArea->empilharFrame(novoFrame);
 	}
 	topoDaPilha->incrementaPC(3);
 }
@@ -3635,7 +3635,7 @@ void ExecutionEngine::i_invokestatic(){
 			delete novoFrame;
 			return;
 		}
-		runtimeDataArea->pilhaJVM.push(*novoFrame);
+		runtimeDataArea->empilharFrame(novoFrame);
 	}
 	topoDaPilhaDeFrames->incrementaPC(3);
 }

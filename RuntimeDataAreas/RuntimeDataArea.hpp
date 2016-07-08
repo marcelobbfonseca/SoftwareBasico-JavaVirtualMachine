@@ -25,18 +25,18 @@ class RuntimeDataArea
 		map<string, JavaClass*> classes;
 		ClassLoader *classLoader;
 		ExecutionEngine *executionEngine;
-
+		stack<Frame*> pilhaJVM;
 		//a descobrir
 	public:
-		stack<Frame> pilhaJVM;
 		RuntimeDataArea();
 		void SetClassLoader(ClassLoader *classLoader);
 		void SetExecutionEngine(ExecutionEngine *executionEngine);
 		bool MetodoExiste(string nomeClasse, string nomeMetodo, string descritor);
 		void empilharFrame(Frame *frame);
+		int ObterTamanhoDaPilhaDeFrames(void);
 		JavaClass* CarregarClasse(const string &nomeDaClasse);
 		Frame *topoPilha();
-		Frame desempilharFrame();
+		void desempilharFrame();
 
 		//a descobrir
 };

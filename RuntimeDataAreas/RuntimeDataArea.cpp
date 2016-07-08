@@ -72,7 +72,7 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 	printf("\tframe= %p", (void*)frame);
 	cout <<endl;
 #endif
-	this->pilhaJVM.push(*frame);
+	this->pilhaJVM.push(frame);
 #ifdef DEBUG
 	cout<< "Retornando" << endl;
 #endif
@@ -81,18 +81,19 @@ void RuntimeDataArea::empilharFrame(Frame *frame)
 
 Frame *RuntimeDataArea::topoPilha()
 {
-	return &(this->pilhaJVM.top());
+	return (this->pilhaJVM.top());
 }
 
-Frame RuntimeDataArea::desempilharFrame()
+void RuntimeDataArea::desempilharFrame()
 {
 	if (pilhaJVM.size() == 0)
 	{
 		throw new Erro("IndexOutOfBoundsException");
 	}
-	Frame topo = pilhaJVM.top();
+	Frame* topo = pilhaJVM.top();
 	pilhaJVM.pop();
-	return topo;
+	delete topo;
+	return;
 }
 
 bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string descritor)
@@ -107,5 +108,10 @@ bool RuntimeDataArea::MetodoExiste(string nomeClasse, string nomeMetodo, string 
 		return ( (classes[nomeSemExtensao])->getMetodo(nomeMetodo, descritor) ) != NULL;
 	}
 	return false;
+}
+
+int RuntimeDataArea::ObterTamanhoDaPilhaDeFrames(void)
+{
+	return pilhaJVM.size();
 }
 
