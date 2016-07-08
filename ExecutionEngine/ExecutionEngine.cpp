@@ -3003,13 +3003,13 @@ void ExecutionEngine::i_putstatic()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
-	uint8_t instrucoes= topoDaPilhaDeFrames->getCode();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
 	
 	uint16_t indiceDoField;
 	memcpy(&indiceDoField, &(instrucoes[1]), 2);
 	indiceDoField= InverterEndianess<uint16_t>(indiceDoField);
 	//verificando se estou acessando um elemento do tipo esperado na constant pool
-	if(classe->getConstantPool()[indiceDoMetodo]-1->GetTag() != CONSTANT_Fieldref)
+	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
 	{
 		throw new Erro("Esperado CONSTANT_Fieldref na constant pool", "ExecutionEngine", "i_putstatic");
 	}

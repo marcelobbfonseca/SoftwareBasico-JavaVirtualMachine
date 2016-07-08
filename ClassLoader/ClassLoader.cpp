@@ -22,7 +22,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 		cerr<< "---------------------------------------------------------------" << endl;
 		cerr<< "Erro no carregamento da classe " << nomeClasse << endl;
 		cerr<< err->GetMensagem() << endl;
-		cerr<< "Supondo que esta tudo bem..." << endl
+		cerr<< "Supondo que esta tudo bem..." << endl;
 		cerr<< "---------------------------------------------------------------" << endl;
 	}
 	return NULL;
