@@ -4,6 +4,7 @@
 - diminuir o gatilho pro exibidor							Feito!
 - tratar outras versões										Feito!
 - remover atributos que nao sao da versao 46				Feito!
+- Colocar negócio para redirecionar saída para arquivo
 
 - resto da JVM
 - dormir

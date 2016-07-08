@@ -3152,7 +3152,9 @@ void ExecutionEngine::i_invokespecial(){
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
 }
-void ExecutionEngine::i_invokestatic(){}
+void ExecutionEngine::i_invokestatic(){
+	//a
+}
 void ExecutionEngine::i_invokeinterface(){}
 void ExecutionEngine::i_new(){}
 void ExecutionEngine::i_newarray(){}
