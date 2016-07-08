@@ -559,7 +559,9 @@ void ExecutionEngine::i_ldc(){
 	}
 	else
 	{
-		throw new Erro("CP invalido em i_LDC", "ExecutionEngine", "i_ldc");
+
+		cerr << "CP invalido em i_LDC: " << constantPool[index -1]->GetTag() << endl;
+		exit(1);
 	}
 	
 	topo->empilharOperando(valor);
@@ -570,7 +572,7 @@ void ExecutionEngine::i_ldc(){
 void ExecutionEngine::i_ldc_w(){ //em construcao
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
- 
+
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
@@ -643,6 +645,8 @@ void ExecutionEngine::i_iload(){
 
 	}
 
+
+
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "i_iload");
@@ -709,6 +713,7 @@ void ExecutionEngine::i_fload(){
 	else {
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 	}
+
 	if(((int16_t)(topPilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_fload");
@@ -737,6 +742,7 @@ void ExecutionEngine::i_dload(){
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 
 	}
+
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "i_dload");
@@ -772,6 +778,7 @@ void ExecutionEngine::i_aload(){
 	else {
 		runtimeDataArea->topoPilha()->incrementaPC(2);
 	}
+
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
 		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_aload");
@@ -786,7 +793,6 @@ void ExecutionEngine::i_aload(){
 	
 	toppilha->empilharOperando(valor);
 }
-
 void ExecutionEngine::i_iload_0(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -1064,7 +1070,6 @@ void ExecutionEngine::i_dload_3(){
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-
 }
 void ExecutionEngine::i_aload_0(){
 	//usa na mainvazia
@@ -2867,52 +2872,71 @@ constant pool index (indexbyte1 << 8 + indexbyte2)	*
 *	*	*	*	*	*	*	*	*	*	*	*	*	*/
 void ExecutionEngine::i_getstatic() {
 	//usa no helloworld
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic" << endl;
-#endif
+	#endif
+	
 	Frame *toppilha = runtimeDataArea->topoPilha();
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic1" << endl;
-#endif
+	#endif
+	
 	vector<cp_info*> constantPool;
+	
 	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
+	
+
 	constantPool = classe->getConstantPool();
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic2" << endl;
-#endif
+	#endif
+	
 	uint8_t *code = toppilha->getCode();
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic3" << endl;
-#endif
+	#endif
 
 	//argumentos da instrucao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	
 	uint16_t campoIndex = (byte1 << 8) | byte2;
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic4" << endl;
-#endif
+	#endif
 
 	//consulta a field. percorre os fields do java
 	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
-#ifdef DEBUG
+
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic5" << endl;
-#endif
+	#endif
+	
 	string className = classe->getUTF8(fieldRef->GetClassIndex());
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic6" << endl;
-#endif
+	#endif
+	
 	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
-#ifdef DEBUG
+	
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic7" << endl;
-#endif
-	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex());
-	string campoDescriptor = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex());
-#ifdef DEBUG
+	#endif
+	
+	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex()); //pega o nome da field ou campo
+	string campoDescricao = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex()); //pega o field descriptor
+
+	#ifdef DEBUG
 	cout<< "ExecutionEngine::i_getstatic8" << endl;
-#endif
-	if (className == "java/lang/System" && campoDescriptor == "Ljava/io/PrintStream;" ) {
+	#endif
+	
+	if (campoDescricao == "Ljava/io/PrintStream;" && className == "java/lang/System" ) {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 		return;
 	}	
@@ -2945,30 +2969,30 @@ void ExecutionEngine::i_getstatic() {
 
 	Valor valorStatico = classRuntime->getValorDoField(campoName);
 	
+	//bolean, byte, short e int sao empilhados como int. long e double empilham o padding antes
 	switch (valorStatico.tipo) {
 		case TipoDado::BOOLEAN:
-			valorStatico.tipo = TipoDado::INT;
-			break;
 		case TipoDado::BYTE:
-			valorStatico.tipo = TipoDado::INT;
-			break;
 		case TipoDado::SHORT:
-			valorStatico.tipo = TipoDado::INT;
-			break;
 		case TipoDado::INT:
+
 			valorStatico.tipo = TipoDado::INT;
 			break;
-		default:
+
+		case TipoDado::DOUBLE:
+		case TipoDado::LONG:
+
+			Valor padding;
+			padding.tipo = TipoDado::PADDING;
+			toppilha->empilharOperando(padding);
 			break;
-	}
-	if (valorStatico.tipo == TipoDado::DOUBLE || valorStatico.tipo == TipoDado::LONG) {
-		Valor padding;
-		padding.tipo = TipoDado::PADDING;
-		toppilha->empilharOperando(padding);
-	}
+
+		default:
+			puts("deu ruim");
+			exit(0);
+	}//fim switch valor estatico
 
 	toppilha->empilharOperando(valorStatico);
-
 	runtimeDataArea->topoPilha()->incrementaPC(3);
 
 }
@@ -3283,7 +3307,8 @@ void ExecutionEngine::i_invokespecial(){
 	// fim dos casos especiais
 	
 	if (className.find("java/") != string::npos) {
-		throw new Erro("Tentando invocar metodo especial invalido", "ExecutionEngine","invokespecial");
+		cerr << "Tentando invocar metodo especial invalido: " << methodName << endl;
+		exit(1);
 	} else {
 		uint16_t nargs = 0; // numero de argumentos contidos na pilha de operandos
 		uint16_t i = 1; // pulando o primeiro '('
@@ -3332,6 +3357,10 @@ void ExecutionEngine::i_invokespecial(){
 		}
 		newFrame = runtimeDataArea->topoPilha();
 	}
+
+
+
+
 	runtimeDataArea->topoPilha()->incrementaPC(3);	  
 
 }
@@ -3442,7 +3471,8 @@ void ExecutionEngine::i_arraylength(){
 	Valor arrayref = toppilha->desempilhaOperando();
 
 	if ((Objeto*)arrayref.dado == NULL) {
-		throw new Erro("NullPointerException");
+		cerr << "NullPointerException" << endl;
+		exit(1);
 	} 
 	
 	Valor length;
@@ -3602,7 +3632,6 @@ void ExecutionEngine::i_multianewarray(){
 			tipoDado = TipoDado::BOOLEAN;
 			break;
 		default:
-			throw new Erro("Descritor invalido em multianewarray", "ExecutionEngine", "i_multianewarray");
 			cerr << "Descritor invalido em multianewarray" << endl;
 			exit(1);
 	}
