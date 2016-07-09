@@ -7,6 +7,7 @@
 #include <string.h>
 #include <inttypes.h>
 #include <cmath>
+#include <string>
 
 // Check ruindos
 #if _WIN32 || _WIN64
@@ -564,7 +565,7 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	else
 	{
 		string errMsg= "CP invalido em i_LDC: ";
-		errMsg+= std::ToString(constantPool[index -1]->GetTag());
+		errMsg+= std::to_string(constantPool[index -1]->GetTag());
 		throw new Erro(errMsg, "ExecutionEngine", "i_ldc");
 	}
 	
@@ -3559,20 +3560,20 @@ void ExecutionEngine::i_invokestatic(){
 	memcpy(&indiceDoMetodo, &(instrucoes[1]), 2);
 	indiceDoMetodo= InverterEndianess<uint16_t>(indiceDoMetodo);
 	
-	if(classe->getConstantPool()[indiceDoMetodo]->GetTag() != CONSTANT_Methodref)
+	if(classe->getConstantPool()[indiceDoMetodo-1]->GetTag() != CONSTANT_Methodref)
 	{
 		throw new Erro("Esperado CONSTANT_Methodref na constant pool", "ExecutionEngine", "i_invokestatic");
 	}
 	
-	CONSTANT_Methodref_info* cpMetodo= (CONSTANT_Methodref_info*)classe->getConstantPool()[indiceDoMetodo];
+	CONSTANT_Methodref_info* cpMetodo= (CONSTANT_Methodref_info*)classe->getConstantPool()[indiceDoMetodo-1];
 	string nomeDaClasse= classe->getUTF8(cpMetodo->GetClassIndex());
 	
-	if(classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()]->GetTag() != CONSTANT_NameAndType)
+	if(classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()-1]->GetTag() != CONSTANT_NameAndType)
 	{
 		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "i_invokestatic");
 	}
 	
-	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*) classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()];
+	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*) classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()-1];
 	string nomeDoMetodo = classe->getUTF8(cpAssinatura->GetNameIndex());
 	string descritorDoMetodo = classe->getUTF8(cpAssinatura->GetDescriptorIndex());
 	
