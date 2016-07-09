@@ -3997,7 +3997,39 @@ void ExecutionEngine::i_invokeinterface()
 	topoDaPilhaDeFrames->incrementaPC(5);
 
 }
-void ExecutionEngine::i_new(){}
+void ExecutionEngine::i_new(){
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	JavaClass *classe = topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	uint16_t indiceDaClasse;
+	memcpy(&indiceDaClasse, &(instrucoes[1]), 2);
+	indiceDaClasse= InverterEndianess<uint16_t> (indiceDaClasse);
+	
+	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
+	}
+	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
+	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
+	
+	Objeto *obj;
+	if(nomeDaClasse != "java/lang/String")
+	{
+		JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+		obj= new ObjetoInstancia(classeAlvo);
+	}
+	else
+	{
+		obj= new ObjetoString();
+	}
+	Valor referenciaProObjeto;
+	referenciaProObjeto.tipo= REFERENCE;
+	memcpy(&(referenciaProObjeto.dado), &obj, sizeof(void*));
+	
+	topoDaPilhaDeFrames->empilharOperando(referenciaProObjeto);
+	topoDaPilhaDeFrames->incrementaPC(3);
+}
 void ExecutionEngine::i_newarray(){}
 void ExecutionEngine::i_anewarray(){}
 
