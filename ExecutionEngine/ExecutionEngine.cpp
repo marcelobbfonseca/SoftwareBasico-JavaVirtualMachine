@@ -321,7 +321,7 @@ void ExecutionEngine::i_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-
+	
 }
 
 void ExecutionEngine::i_aconst_null(){
