@@ -17,7 +17,7 @@ class ObjetoArray: public Objeto
 	public:
 		ObjetoArray(TipoDado tipo);
 		~ObjetoArray();
-		TipoDado TipoElementosDaArray(void) const;
+		TipoDado TipoElementosDoArray(void) const;
 		void InserirValor(Valor queSeraInserido);
 		Valor RemoverValorDaPosicao(uint32_t posicao);
 		Valor RemoverNoFinal(void);
