@@ -1819,7 +1819,7 @@ void ExecutionEngine::i_fastore(){
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_lastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_fastore");
 						
 		}
 
@@ -1901,13 +1901,14 @@ void ExecutionEngine::i_dastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_dastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
 	
 	topo->incrementaPC(1);
 }
+
 void ExecutionEngine::i_aastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
@@ -1955,7 +1956,7 @@ void ExecutionEngine::i_aastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_aastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
@@ -2033,7 +2034,7 @@ void ExecutionEngine::i_castore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INT)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_castore");
 						
 		}
 
@@ -2041,18 +2042,18 @@ void ExecutionEngine::i_castore(){
 
 	if(!(indice.tipo == TipoDado::INT)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_castore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_castore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_castore");
 						
 		}
 
@@ -2077,13 +2078,14 @@ void ExecutionEngine::i_castore(){
 
 }
 void ExecutionEngine::i_sastore(){
-		Frame *topo = runtimeDataArea->topoPilha();
+
+	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INT)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_sastore");
 						
 		}
 
@@ -2091,18 +2093,18 @@ void ExecutionEngine::i_sastore(){
 
 	if(!(indice.tipo == TipoDado::INT)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_sastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_sastore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_sastore");
 						
 		}
 
@@ -2275,7 +2277,29 @@ void ExecutionEngine::i_dup2_x2(){
 	topoDoFrame->incrementaPC(1);
 
 }
-void ExecutionEngine::i_swap(){}
+void ExecutionEngine::i_swap(){
+    
+    Frame *topo = runtimeDataArea->topoPilha();
+
+	Valor op_1 = topo->desempilhaOperando();
+	Valor op_2 = topo->desempilhaOperando();
+
+	if(op_1.tipo == TipoDado::LONG || op_1.tipo == TipoDado::DOUBLE){
+
+		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
+						
+		}
+    if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
+
+		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
+						
+		}
+
+	topo->empilharOperando(op_1);
+	topo->empilharOperando(op_2);
+
+	topo->incrementaPC(1);
+}
 void ExecutionEngine::i_iadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -3768,7 +3792,52 @@ void ExecutionEngine::i_tableswitch()
 		topoDaPilhaDeFrames->incrementaPC(defaulti);
 	}
 }
-void ExecutionEngine::i_lookupswitch(){}
+void ExecutionEngine::i_lookupswitch()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint8_t preenchimento= 4-(topoDaPilhaDeFrames->getPC()+1)%4;
+	if(preenchimento == 4)
+	{
+		preenchimento = 0;
+	}
+	
+	int32_t defaulti;
+	memcpy(&defaulti, &(instrucoes[preenchimento+1]), 4);
+	defaulti= InverterEndianess<int32_t> (defaulti);
+	int32_t paresN;
+	memcpy(&paresN, &(instrucoes[preenchimento+5]), 4);
+	paresN= InverterEndianess<int32_t> (paresN);
+	
+	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorChave.tipo != INT)
+	{
+		throw new Erro("Esperado valor do tipo INT", "ExecutionEngine", "i_lookupswitch");
+	}
+	
+	uint32_t indiceDeBase= preenchimento+9;
+	int32_t chave;
+	memcpy(&chave, &(valorChave.dado), 4);
+	bool achou= false;
+	int32_t acerto, deslocamento;
+	
+	for(int cont =0 ; cont < paresN; cont++)
+	{
+		acerto= (instrucoes[indiceDeBase] << 24) | (instrucoes[indiceDeBase+1] << 16) |(instrucoes[indiceDeBase+2]) | instrucoes[indiceDeBase+3];
+		if(acerto == chave)
+		{
+			deslocamento = (instrucoes[indiceDeBase+4] << 24) | (instrucoes[indiceDeBase+1+5] << 16) | (instrucoes[indiceDeBase+6]) | instrucoes[indiceDeBase+7];
+			topoDaPilhaDeFrames->incrementaPC(deslocamento);
+			achou = true;
+			break;
+		}
+		indiceDeBase += 8;
+	}
+	if(!achou)
+	{
+		topoDaPilhaDeFrames->incrementaPC(defaulti);
+	}
+}
 //aceita byte, bool e short
 void ExecutionEngine::i_ireturn(){
 	//desempinha a funcao e empilha o valor de retorno na nova frame
