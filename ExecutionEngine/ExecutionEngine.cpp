@@ -1739,14 +1739,34 @@ void ExecutionEngine::i_lastore(){
 	Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor valor = topo->desempilhaOperando();
-	assert(valor.tipo == TipoDado::LONG);
+	if(!(valor.tipo == TipoDado::LONG)){
+							
+		throw new Erro("Valor não é um long", "ExecutionEngine", "i_lastore");
+						
+	}
 	Valor pad = topo->desempilhaOperando();
-	assert(pad.tipo == TipoDado::PADDING);
+	if(!(pad.tipo == TipoDado::PADDING)){
+							
+		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_lastore");
+						
+	}
 	Valor indice = topo->desempilhaOperando();
-	assert(indice.tipo == TipoDado::INT);
+	if(!(indice.tipo == TipoDado::INT)){
+							
+		throw new Erro("Valor não é um int", "ExecutionEngine", "i_lastore");
+						
+	}
 	Valor referenciaArr = topo->desempilhaOperando();
-	assert(referenciaArr.tipo == TipoDado::REFERENCE);
-	assert(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY);
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_lastore");
+						
+	}
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_lastore");
+						
+		}
 
 	ObjetoArray *array;
 	array = (ObjetoArray *) referenciaArr.dado;
@@ -1761,16 +1781,187 @@ void ExecutionEngine::i_lastore(){
 		exit(2);
 	}
 
-	assert(valor.tipo == array->TipoElementosDoArray());
+	if(!(valor.tipo == array->TipoElementosDoArray())){
+							
+			throw new Erro("tipo errado", "ExecutionEngine", "i_lastore");
+						
+		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
 
 	topo->incrementaPC(1);
 
 }
 
-void ExecutionEngine::i_fastore(){}
-void ExecutionEngine::i_dastore(){}
-void ExecutionEngine::i_aastore(){}
+void ExecutionEngine::i_fastore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::FLOAT)){
+							
+			throw new Erro("Valor não é um float", "ExecutionEngine", "i_fastore");
+						
+		}
+
+	Valor indice = topo->desempilhaOperando();
+
+	if(!(indice.tipo == TipoDado::INT)){
+							
+			throw new Erro("Valor não é um int", "ExecutionEngine", "i_fastore");
+						
+		}
+	Valor referenciaArr = topo->desempilhaOperando();
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_fastore");
+						
+		}
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_lastore");
+						
+		}
+
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+
+		cerr << "NullPointerException" << endl;
+		exit(1);
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+
+	if(!(valor.tipo == array->TipoElementosDoArray())){
+							
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+						
+		}
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+	
+	topo->incrementaPC(1);
+
+}
+void ExecutionEngine::i_dastore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::DOUBLE)){
+							
+			throw new Erro("Valor não é um DOUBLE", "ExecutionEngine", "i_dastore");
+						
+		}
+
+	Valor indice = topo->desempilhaOperando();
+
+	if(!(indice.tipo == TipoDado::INT)){
+							
+			throw new Erro("Valor não é um inteiro", "ExecutionEngine", "i_dastore");
+						
+		}
+	Valor pad = topo->desempilhaOperando();
+	if(!(pad.tipo == TipoDado::PADDING)){
+							
+		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
+						
+	}
+	Valor referenciaArr = topo->desempilhaOperando();
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_dastore");
+						
+		}
+
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_dastore");
+						
+		}
+
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+
+		cerr << "NullPointerException" << endl;
+		exit(1);
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+
+	if(!(valor.tipo == array->TipoElementosDoArray())){
+							
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+						
+		}
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+	
+	topo->incrementaPC(1);
+}
+void ExecutionEngine::i_aastore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_aastore");
+						
+		}
+
+	Valor indice = topo->desempilhaOperando();
+
+	if(!(indice.tipo == TipoDado::INT)){
+							
+			throw new Erro("Valor não é um int", "ExecutionEngine", "i_aastore");
+						
+		}
+	Valor referenciaArr = topo->desempilhaOperando();
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_aastore");
+						
+		}
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_aastore");
+						
+		}
+
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+
+		cerr << "NullPointerException" << endl;
+		exit(1);
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+
+	if(!(valor.tipo == array->TipoElementosDoArray())){
+							
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+						
+		}
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+	
+	topo->incrementaPC(1);
+}
 void ExecutionEngine::i_bastore(){}
 void ExecutionEngine::i_castore(){}
 void ExecutionEngine::i_sastore(){}

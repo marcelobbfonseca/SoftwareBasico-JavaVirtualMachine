@@ -86,11 +86,11 @@ DadosDaInstancia::DadosDaInstancia(JavaClass *javaClass)
 	}
 }
 
-
-
 Valor DadosDaInstancia::getValorDoField(string nomeField){
 	if (fieldsInstancia.count(nomeField) ==  0) {
+
 		throw new Erro("Field não existente", "DadosDaInstancia", "getValorDoField");
+
 	}
 
 	return fieldsInstancia[nomeField];
