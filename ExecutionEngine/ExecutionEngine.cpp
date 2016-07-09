@@ -585,47 +585,49 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	topo->incrementaPC(2);
 
 }
+
 void ExecutionEngine::i_ldc_w(){
 	
-/*	Frame *topo = runtimeDataArea->topoPilha();
+	Frame *topo = runtimeDataArea->topoPilha();
 	
-	Value value;
+	Valor valor;
 	uint8_t *code = topo->getCode();
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	uint16_t index = (byte1 << 8) | byte2;
 	
-	JavaClass *classe= (topo->getObjeto()== NULL )? topo->ObterJavaClass();
+	JavaClass *classe= topo->ObterJavaClass();
 
 	vector<cp_info*> constantPool = classe->getConstantPool();
 	
 	cp_info *ponteiroCpInfo = constantPool[index - 1];
 	
-	if(ponteiroCpInfo->getTag == CONSTANT_String)
+	if(ponteiroCpInfo->GetTag() == CONSTANT_String)
 	{
-		CONSTANT_Utf8_info utf8Pos = (CONSTANT_Utf8_info) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
-
-		assert(utf8Entry.tag == CONSTANT_Utf8);
-		string utf8Pos = utf8Entry->GetString();
-		
+		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
+		string utf8String = utf8Entry->GetString();
+#ifdef DEBUG
+cout<<"chegou i_ldc" << endl;
+#endif
+		valor.tipo = TipoDado::REFERENCE;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		memcpy(&(valor.dado), &temp, sizeof(void*));
-
+#ifdef DEBUG
+cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
+#endif
 	}
-	else if (entry.tag == CONSTANT_Integer)
+	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
 	{
-
-		value.tipo = ValueType::INT;
+		valor.tipo = TipoDado::INT;
 		valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
-
-	}
-	else if (entry.tag == CONSTANT_Float)
+	} 
+	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Float)
 	{
-
 		float numero = ((CONSTANT_Float_info*)constantPool[index -1])->GetNumero();
+		
 		valor.tipo = TipoDado::FLOAT;
 		valor.dado = numero;
-
+		
 	}
 	else
 	{
@@ -636,9 +638,7 @@ void ExecutionEngine::i_ldc_w(){
 	
 	topo->empilharOperando(valor);
 	topo->incrementaPC(3);
-	*/
 }
-
 
 void ExecutionEngine::i_ldc2_w(){ 
 
