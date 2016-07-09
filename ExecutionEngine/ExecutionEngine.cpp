@@ -2415,7 +2415,41 @@ void ExecutionEngine::i_lxor(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iinc(){}
+void ExecutionEngine::i_iinc(){ //testar
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	uint8_t *code = toppilha->getCode();
+	uint8_t index = 0;
+
+	if (isWide) {
+		index = (code[1] << 8) | code[2];
+	} 
+    else {
+		index = index + code[1];
+	}
+
+	Valor variavelLocal = toppilha->getValorVariavelLocal(index);
+
+	int32_t i;
+    if (isWide) {
+        uint16_t incremento = (code[3] << 8) | code[4];
+        i = (int32_t) (int16_t) incremento;
+    } else {
+        i = (int32_t) (int8_t) code[2];
+    }
+    variavelLocal.dado = variavelLocal.dado + i; 
+
+	toppilha->mudarVariavelLocal(variavelLocal, index);
+	
+	if(isWide)
+		runtimeDataArea->topoPilha()->incrementaPC(5);
+	else
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+
+	isWide = false;	
+
+
+}
 void ExecutionEngine::i_i2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 #ifdef DEBUG_EE
