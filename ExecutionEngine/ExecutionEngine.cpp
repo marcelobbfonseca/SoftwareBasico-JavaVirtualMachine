@@ -321,7 +321,7 @@ void ExecutionEngine::i_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-
+	
 }
 
 void ExecutionEngine::i_aconst_null(){
@@ -3486,11 +3486,78 @@ void ExecutionEngine::i_jsr(){
 void ExecutionEngine::i_ret(){}
 void ExecutionEngine::i_tableswitch(){}
 void ExecutionEngine::i_lookupswitch(){}
-void ExecutionEngine::i_ireturn(){}
-void ExecutionEngine::i_lreturn(){}
-void ExecutionEngine::i_freturn(){}
-void ExecutionEngine::i_dreturn(){}
-void ExecutionEngine::i_areturn(){}
+//aceita byte, bool e short
+void ExecutionEngine::i_ireturn(){
+	//desempinha a funcao e empilha o valor de retorno na nova frame
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser inteiro
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+	
+	if (returnValor.tipo != TipoDado::INT)
+		throw new Erro("Esperado tipo inteiro em ireturn");
+	
+
+	//so n destruí aqui o antigo mas deboas
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	novoTopDoFrame->empilharOperando(returnValor);
+}
+void ExecutionEngine::i_lreturn(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser long
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+	
+	if (returnValor.tipo != TipoDado::LONG)
+		throw new Erro("Esperado tipo inteiro em ireturn");
+
+
+	//so n destruí aqui o antigo mas deboas
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	Valor padd;
+	padd.dado = TipoDado::PADDING;
+
+	novoTopDoFrame->empilharOperando(padd);
+	novoTopDoFrame->empilharOperando(returnValor);
+
+}
+void ExecutionEngine::i_freturn(){
+
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser float
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+	
+	if (returnValor.tipo != TipoDado::FLOAT)
+		throw new Erro("Esperado tipo inteiro em ireturn");	
+
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	novoTopDoFrame->empilharOperando(returnValor);
+}
+void ExecutionEngine::i_dreturn(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser double
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	if (returnValor.tipo != TipoDado::DOUBLE)
+		throw new Erro("Esperado tipo inteiro em ireturn");
+
+	//so n destruí aqui o antigo mas deboas
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	Valor padd;
+	padd.dado = TipoDado::PADDING;
+
+	novoTopDoFrame->empilharOperando(padd);
+	novoTopDoFrame->empilharOperando(returnValor);
+}
+void ExecutionEngine::i_areturn(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser reference
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	if (returnValor.tipo != TipoDado::REFERENCE)
+		throw new Erro("Esperado tipo inteiro em ireturn");
+
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	novoTopDoFrame->empilharOperando(returnValor);
+}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	runtimeDataArea->desempilharFrame();
@@ -3619,8 +3686,8 @@ void ExecutionEngine::i_getstatic() {
 			toppilha->empilharOperando(padding);
 			break;
 
-		default:
-			puts("deu ruim");
+		default://se for reference?
+			cerr << "deu ruim" << endl;
 			exit(0);
 	}//fim switch valor estatico
 
@@ -4435,7 +4502,67 @@ void ExecutionEngine::i_newarray()
 	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
 	topoDaPilhaDeFrames->incrementaPC(2);
 }
-void ExecutionEngine::i_anewarray(){}
+void ExecutionEngine::i_anewarray()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	
+	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
+	if(tamanhoDoFuturoArray.tipo != INT)
+	{
+		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_anewarray");
+	}
+	if(tamanhoDoFuturoArray.dado < 0)
+	{
+		throw new Erro("NegativeArraySizeException");
+	}
+	
+	uint16_t indiceDaClasse;
+	memcpy(&indiceDaClasse, &(instrucoes[1]), 2);
+	indiceDaClasse= InverterEndianess<uint16_t>(indiceDaClasse);
+	
+	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Class", "ExecutionEngine", "i_anewarray");
+	}
+	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
+	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
+	
+	if(nomeDaClasse != "java/lang/String")
+	{
+		int cont=0;
+		while(nomeDaClasse[cont] == '[')
+		{
+			cont++;
+		}
+		if(nomeDaClasse[cont == 'L'])
+		{
+			runtimeDataArea->CarregarClasse(nomeDaClasse.substr(cont+1, nomeDaClasse.size()-cont -2));
+		}
+	}
+	
+	ObjetoArray *arrayQueSeraCriado= new ObjetoArray(REFERENCE);
+	void *null= NULL;
+//	memcpy(&temp, &(tamanhoDoFuturoArray.dado), 4);
+	
+	Valor referenciaProArray;
+	referenciaProArray.tipo = REFERENCE;
+	memcpy(&(referenciaProArray.dado), &arrayQueSeraCriado, sizeof(void*));
+	
+	Valor ponteiroNULL;
+	ponteiroNULL.tipo= REFERENCE;
+	memcpy(&(ponteiroNULL.dado), &null, sizeof(void*));
+	
+	for(unsigned int cont =0 ; cont < tamanhoDoFuturoArray.dado; cont++)
+	{
+		arrayQueSeraCriado->empilhaValor(ponteiroNULL);
+	}
+	
+	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
+	topoDaPilhaDeFrames->incrementaPC(3);
+	
+}
 
 void ExecutionEngine::i_arraylength(){
 
