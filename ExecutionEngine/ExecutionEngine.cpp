@@ -4097,7 +4097,91 @@ void ExecutionEngine::i_new(){
 	topoDaPilhaDeFrames->empilharOperando(referenciaProObjeto);
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_newarray(){}
+void ExecutionEngine::i_newarray()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
+	if(tamanhoDoFuturoArray.tipo != INT)
+	{
+		throw new Erro("Esperado encontrar um valor do tipo int");
+	}
+	ObjetoArray *arrayQueSeraCriado;
+	int32_t temp;
+	memcpy(&temp, &(tamanhoDoFuturoArray.dado), 4);
+	if(temp < 0)
+	{
+		throw new Erro("NegativeArraySizeException");
+	}
+	
+	Valor elementoDoArray;
+	elementoDoArray.dado =0;
+	
+	
+	uint8_t tipoDoArray = instrucoes[1];
+	switch(tipoDoArray)
+	{
+		case(4):
+		{
+			arrayQueSeraCriado = new ObjetoArray(BOOLEAN);
+			elementoDoArray.tipo= BOOLEAN;
+			break;
+		}
+		case(5):
+		{
+			arrayQueSeraCriado = new ObjetoArray(CHAR);
+			elementoDoArray.tipo= CHAR;
+			break;
+		}
+		case(6):
+		{
+			arrayQueSeraCriado = new ObjetoArray(FLOAT);
+			elementoDoArray.tipo= FLOAT;
+			break;
+		}
+		case(7):
+		{
+			arrayQueSeraCriado = new ObjetoArray(DOUBLE);
+			elementoDoArray.tipo= DOUBLE;
+			break;
+		}
+		case(8):
+		{
+			arrayQueSeraCriado = new ObjetoArray(BYTE);
+			elementoDoArray.tipo= BYTE;
+			break;
+		}
+		case(9):
+		{
+			arrayQueSeraCriado = new ObjetoArray(SHORT);
+			elementoDoArray.tipo= SHORT;
+			break;
+		}
+		case(10):
+		{
+			arrayQueSeraCriado = new ObjetoArray(INT);
+			elementoDoArray.tipo= INT;
+			break;
+		}
+		case(11):
+		{
+			arrayQueSeraCriado = new ObjetoArray(LONG);
+			elementoDoArray.tipo= LONG;
+		}
+	}
+	for(unsigned int cont = 0; cont < tamanhoDoFuturoArray.dado; cont++)
+	{
+		arrayQueSeraCriado->InserirValor(elementoDoArray);
+	}
+	
+	Valor referenciaProArray;
+	referenciaProArray.tipo= REFERENCE;
+	memcpy(&(referenciaProArray.dado), &arrayQueSeraCriado, sizeof(void*));
+	
+	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
+	topoDaPilhaDeFrames->incrementaPC(2);
+}
 void ExecutionEngine::i_anewarray(){}
 
 void ExecutionEngine::i_arraylength(){
