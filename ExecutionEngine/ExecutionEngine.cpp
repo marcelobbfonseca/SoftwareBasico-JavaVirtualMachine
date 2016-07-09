@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include <cmath>
 #include <string>
+#include <memory>
 
 // Check ruindos
 #if _WIN32 || _WIN64
@@ -3983,11 +3984,14 @@ void ExecutionEngine::i_ireturn(){
 	
 	if (returnValor.tipo != TipoDado::INT)
 		throw new Erro("Esperado tipo inteiro em ireturn");
-	
 
+	//testar
+	runtimeDataArea->desempilharFrame();
 	//so n destruí aqui o antigo mas deboas
+	
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
+
 }
 void ExecutionEngine::i_lreturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
@@ -3995,9 +3999,10 @@ void ExecutionEngine::i_lreturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 	
 	if (returnValor.tipo != TipoDado::LONG)
-		throw new Erro("Esperado tipo inteiro em ireturn");
+		throw new Erro("Esperado tipo inteiro em i_lreturn");
 
-
+	
+	runtimeDataArea->desempilharFrame();
 	//so n destruí aqui o antigo mas deboas
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	Valor padd;
@@ -4016,6 +4021,8 @@ void ExecutionEngine::i_freturn(){
 	if (returnValor.tipo != TipoDado::FLOAT)
 		throw new Erro("Esperado tipo inteiro em ireturn");	
 
+	runtimeDataArea->desempilharFrame();
+
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
 }
@@ -4028,6 +4035,8 @@ void ExecutionEngine::i_dreturn(){
 		throw new Erro("Esperado tipo inteiro em ireturn");
 
 	//so n destruí aqui o antigo mas deboas
+	runtimeDataArea->desempilharFrame();
+
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	Valor padd;
 	padd.dado = TipoDado::PADDING;
@@ -4041,7 +4050,9 @@ void ExecutionEngine::i_areturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 
 	if (returnValor.tipo != TipoDado::REFERENCE)
-		throw new Erro("Esperado tipo inteiro em ireturn");
+		throw new Erro("Esperado tipo inteiro em areturn");
+
+	runtimeDataArea->desempilharFrame();
 
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
@@ -4139,8 +4150,8 @@ void ExecutionEngine::i_getstatic() {
 
 				string superClassName = classRuntime->getUTF8(classRuntime->ObterSuperClasse());
 				classRuntime = runtimeDataArea->CarregarClasse(superClassName);
-	  		  
-	  
+			
+	
 			}
 		} else {
 			break;
@@ -4152,7 +4163,7 @@ void ExecutionEngine::i_getstatic() {
 		exit(1);
 	}
 	if (runtimeDataArea->topoPilha() != toppilha)
-   		return;
+		return;
 
 	Valor valorStatico = classRuntime->getValorDoField(campoName);
 	
@@ -4277,94 +4288,121 @@ void ExecutionEngine::i_putstatic()
 	classeAlvo->ColocarValorNoField(nomeDoField, campo);
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_getfield(){
-/*
-	Frame *topoDaFrame = runtimeDataArea->topoPilha();
-
-	cp_info *constantPool = *(topoDaFrame->getConstantPool());
-
-	uint8_t *code = topoDaFrame->getCode();
-
-	uint8_t byte_1 = code[1];
-	uint8_t byte_2 = code[2];
-
-	uint16_t fieldIndex = (byte_1 << 8) | byte_2; 
-
-	cp_info fieldConstantPool = constantPool[fieldIndex-1];
-*/
-	/*
-    CONSTANT_Fieldref_info fieldRef = fieldCP.info.fieldref_info;
-
-    string className = getFormattedConstant(constantPool, fieldRef.class_index);
-
-    cp_info nameAndTypeCP = constantPool[fieldRef.name_and_type_index-1];
-    assert(nameAndTypeCP.tag == CONSTANT_NameAndType); // precisa ser um nameAndType
-
-    CONSTANT_NameAndType_info fieldNameAndType = nameAndTypeCP.info.nameAndType_info;
-
-    string fieldName = getFormattedConstant(constantPool, fieldNameAndType.name_index);
-    string fieldDescriptor = getFormattedConstant(constantPool, fieldNameAndType.descriptor_index);
-
-    Value objectValue = topFrame->popTopOfOperandStack();
-    assert(objectValue.type == ValueType::REFERENCE);
-    Object *object = objectValue.data.object;
-    assert(object->objectType() == ObjectType::CLASS_INSTANCE);
-    ClassInstance *classInstance = (ClassInstance *) object;
-
-    if (!classInstance->fieldExists(fieldName)) {
-        cerr << "NoSuchFieldError" << endl;
-        exit(1);
-    }
-
-    Value fieldValue = classInstance->getValueFromField(fieldName);
-    switch (fieldValue.type) {
-        case ValueType::BOOLEAN:
-            fieldValue.type = ValueType::INT;
-            fieldValue.printType = ValueType::BOOLEAN;
-            break;
-        case ValueType::BYTE:
-            fieldValue.type = ValueType::INT;
-            fieldValue.printType = ValueType::BYTE;
-            break;
-        case ValueType::SHORT:
-            fieldValue.type = ValueType::INT;
-            fieldValue.printType = ValueType::SHORT;
-            break;
-        case ValueType::INT:
-            fieldValue.type = ValueType::INT;
-            fieldValue.printType = ValueType::INT;
-            break;
-        default:
-            break;
-    }
-    
-    if (fieldValue.type == ValueType::DOUBLE || fieldValue.type == ValueType::LONG) {
-        Value paddingValue;
-        paddingValue.type = ValueType::PADDING;
-        topFrame->pushIntoOperandStack(paddingValue);
-    }
-
-    topFrame->pushIntoOperandStack(fieldValue);
-
-    topFrame->pc += 3;*/
+void ExecutionEngine::i_getfield()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	uint16_t indiceDoField;
+	memcpy(&indiceDoField, &(instrucoes[1]), 2);
+	indiceDoField= InverterEndianess<uint16_t>(indiceDoField);
+	
+	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
+	{
+		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "i_getfield");
+	}
+	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool().at(indiceDoField-1);
+	if(classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "i_getfield");
+	}
+	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*)classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1);
+	
+	string nomeDaClasse= classe->getUTF8(cpCampo->GetClassIndex());
+	string nomeDoField= classe ->getUTF8(cpAssinatura->GetNameIndex());
+	string descritorDoField= classe-> getUTF8(cpAssinatura->GetDescriptorIndex());
+	
+	Valor valorInstancia = topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorInstancia.tipo != REFERENCE)
+	{
+		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_getfield");
+	}
+	if(((Objeto*)valorInstancia.dado)->ObterTipoObjeto() != INSTANCIA)
+	{
+		throw new Erro("Esperado instancia", "ExecutionEngine", "i_getfield");
+	}
+	
+	ObjetoInstancia *instancia= (ObjetoInstancia*)valorInstancia.dado;
+	
+	if(!instancia->CampoExiste(nomeDoField))
+	{
+		throw new Erro("NoSuchFieldError");
+	}
+	
+	Valor campo= instancia->ObterValorDoCampo(nomeDoField);
+/*	if(campo.tipo == BOOLEAN)
+	{
+		
+	}*/
+	if(campo.tipo == LONG || campo.tipo == DOUBLE)
+	{
+		Valor preenchimento;
+		preenchimento.tipo= PADDING;
+		topoDaPilhaDeFrames->empilharOperando(preenchimento);
+	}
+	topoDaPilhaDeFrames->empilharOperando(campo);
+	topoDaPilhaDeFrames-> incrementaPC(3);
 }
+
 void ExecutionEngine::i_putfield()
 {
-	/*
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
 	
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
-	uint8_t *code = toppilha->getCode();
+	uint16_t indiceDoField;
+	memcpy(&indiceDoField, &(instrucoes[1]), 2);
+	indiceDoField= InverterEndianess<uint16_t>(indiceDoField);
+	
+	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
+	{
+		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "i_putfield");
+	}
+	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool().at(indiceDoField-1);
+	if(classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "i_putfield");
+	}
+	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*)classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1);
+	
+	string nomeDaClasse= classe->getUTF8(cpCampo->GetClassIndex());
+	string nomeDoField= classe ->getUTF8(cpAssinatura->GetNameIndex());
+	string descritorDoField= classe-> getUTF8(cpAssinatura->GetDescriptorIndex());
 
-	//argumentos da instrucao
-	uint8_t byte1 = code[1];
-	uint8_t byte2 = code[2];
-	uint16_t methodIndex = (byte1 << 8) | byte2;
+	Valor valorQueSeraInserido= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorQueSeraInserido.tipo == LONG || valorQueSeraInserido.tipo == DOUBLE)
+	{
+		topoDaPilhaDeFrames->desempilhaOperando();
+	}
+	
+	Valor valorInstancia= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorInstancia.tipo != REFERENCE)
+	{
+		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_putfield");
+	}
+	if(((Objeto*)valorInstancia.dado)->ObterTipoObjeto() != INSTANCIA)
+	{
+		throw new Erro("Esperado instancia", "ExecutionEngine", "i_putfield");
+	}
+	ObjetoInstancia *instancia= (ObjetoInstancia*)valorInstancia.dado;
 
-	//...	
+	try
+	{
+		if(instancia->ObterValorDoCampo(nomeDoField).tipo != valorQueSeraInserido.tipo)
+		{
+			cout<< "WARNING! Vai colocar um valor de tipo diferente do que contém no campo \tTipoDoCampo= " << ObterStringTipo(instancia->ObterValorDoCampo(nomeDoField).tipo) << " \tTipoQueSeraInserido" << ObterStringTipo(valorQueSeraInserido.tipo) << endl;
+		}
+	}
+	catch(Erro *err)
+	{
+		cout << "WARNING! CAMPO NAO EXISTE! \tNomeCampo: " << nomeDoField << " \t da classe: " << nomeDaClasse << endl;
+	}
 
-	*/
+	
+	instancia->ColocarValorNoCampo(nomeDoField, valorQueSeraInserido);
+	
+	topoDaPilhaDeFrames->incrementaPC(3);
 
 }//fim metodo
 
