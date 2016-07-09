@@ -1819,7 +1819,7 @@ void ExecutionEngine::i_fastore(){
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_lastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_fastore");
 						
 		}
 
@@ -1901,13 +1901,14 @@ void ExecutionEngine::i_dastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_dastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
 	
 	topo->incrementaPC(1);
 }
+
 void ExecutionEngine::i_aastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
@@ -1955,7 +1956,7 @@ void ExecutionEngine::i_aastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_aastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
@@ -2033,7 +2034,7 @@ void ExecutionEngine::i_castore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INT)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_castore");
 						
 		}
 
@@ -2041,18 +2042,18 @@ void ExecutionEngine::i_castore(){
 
 	if(!(indice.tipo == TipoDado::INT)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_castore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_castore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_castore");
 						
 		}
 
@@ -2077,13 +2078,14 @@ void ExecutionEngine::i_castore(){
 
 }
 void ExecutionEngine::i_sastore(){
-		Frame *topo = runtimeDataArea->topoPilha();
+
+	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INT)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_sastore");
 						
 		}
 
@@ -2091,18 +2093,18 @@ void ExecutionEngine::i_sastore(){
 
 	if(!(indice.tipo == TipoDado::INT)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_sastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_sastore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_sastore");
 						
 		}
 
@@ -2159,7 +2161,7 @@ void ExecutionEngine::i_dup(){
 
 	Valor valor = topoDoFrame->desempilhaOperando();
 	if ((valor.tipo == TipoDado::LONG) || (valor.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup");
+		throw new Erro("Esperado tipo diferente de long ou double em dup", "ExecutionEngine", "i_dup");
 
 	topoDoFrame->empilharOperando(valor);
 	topoDoFrame->empilharOperando(valor);
@@ -2172,12 +2174,12 @@ void ExecutionEngine::i_dup_x1(){
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1","ExecutionEngine", "i_dup_x1");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1", "ExecutionEngine", "i_dup_x1");
 
 	topoDoFrame->empilharOperando(valor_1);
 	topoDoFrame->empilharOperando(valor_2);
@@ -2191,14 +2193,14 @@ void ExecutionEngine::i_dup_x2(){
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "i_dup_x2");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 
 	Valor valor_3 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "i_dup_x2");
 
 
 	topoDoFrame->empilharOperando(valor_1);
@@ -2214,12 +2216,12 @@ void ExecutionEngine::i_dup2(){
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "i_dup2");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "i_dup2");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2235,13 +2237,13 @@ void ExecutionEngine::i_dup2_x1(){
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1","ExecutionEngine", "i_dup2_x1");
 
 
 	Valor valor_3 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1", "ExecutionEngine", "i_dup2_x1");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2260,10 +2262,10 @@ void ExecutionEngine::i_dup2_x2(){
 	Valor valor_4 = topoDoFrame->desempilhaOperando();
 
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "i_dup2_x2");
 
 	if ((valor_4.tipo == TipoDado::LONG) || (valor_4.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "i_dup2_x2");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2275,7 +2277,29 @@ void ExecutionEngine::i_dup2_x2(){
 	topoDoFrame->incrementaPC(1);
 
 }
-void ExecutionEngine::i_swap(){}
+void ExecutionEngine::i_swap(){
+    
+    Frame *topo = runtimeDataArea->topoPilha();
+
+	Valor op_1 = topo->desempilhaOperando();
+	Valor op_2 = topo->desempilhaOperando();
+
+	if(op_1.tipo == TipoDado::LONG || op_1.tipo == TipoDado::DOUBLE){
+
+		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
+						
+		}
+    if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
+
+		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
+						
+		}
+
+	topo->empilharOperando(op_1);
+	topo->empilharOperando(op_2);
+
+	topo->incrementaPC(1);
+}
 void ExecutionEngine::i_iadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -2940,7 +2964,6 @@ void ExecutionEngine::i_iinc(){ //testar
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
 	isWide = false;	
-
 
 }
 void ExecutionEngine::i_i2l(){
