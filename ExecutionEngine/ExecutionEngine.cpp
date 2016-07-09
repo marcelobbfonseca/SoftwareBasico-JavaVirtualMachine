@@ -4072,7 +4072,77 @@ void ExecutionEngine::i_putstatic()
 	classeAlvo->ColocarValorNoField(nomeDoField, campo);
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_getfield(){}
+void ExecutionEngine::i_getfield(){
+/*
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+
+	cp_info *constantPool = *(topoDaFrame->getConstantPool());
+
+	uint8_t *code = topoDaFrame->getCode();
+
+	uint8_t byte_1 = code[1];
+	uint8_t byte_2 = code[2];
+
+	uint16_t fieldIndex = (byte_1 << 8) | byte_2; 
+
+	cp_info fieldConstantPool = constantPool[fieldIndex-1];
+*/
+	/*
+    CONSTANT_Fieldref_info fieldRef = fieldCP.info.fieldref_info;
+
+    string className = getFormattedConstant(constantPool, fieldRef.class_index);
+
+    cp_info nameAndTypeCP = constantPool[fieldRef.name_and_type_index-1];
+    assert(nameAndTypeCP.tag == CONSTANT_NameAndType); // precisa ser um nameAndType
+
+    CONSTANT_NameAndType_info fieldNameAndType = nameAndTypeCP.info.nameAndType_info;
+
+    string fieldName = getFormattedConstant(constantPool, fieldNameAndType.name_index);
+    string fieldDescriptor = getFormattedConstant(constantPool, fieldNameAndType.descriptor_index);
+
+    Value objectValue = topFrame->popTopOfOperandStack();
+    assert(objectValue.type == ValueType::REFERENCE);
+    Object *object = objectValue.data.object;
+    assert(object->objectType() == ObjectType::CLASS_INSTANCE);
+    ClassInstance *classInstance = (ClassInstance *) object;
+
+    if (!classInstance->fieldExists(fieldName)) {
+        cerr << "NoSuchFieldError" << endl;
+        exit(1);
+    }
+
+    Value fieldValue = classInstance->getValueFromField(fieldName);
+    switch (fieldValue.type) {
+        case ValueType::BOOLEAN:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::BOOLEAN;
+            break;
+        case ValueType::BYTE:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::BYTE;
+            break;
+        case ValueType::SHORT:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::SHORT;
+            break;
+        case ValueType::INT:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::INT;
+            break;
+        default:
+            break;
+    }
+    
+    if (fieldValue.type == ValueType::DOUBLE || fieldValue.type == ValueType::LONG) {
+        Value paddingValue;
+        paddingValue.type = ValueType::PADDING;
+        topFrame->pushIntoOperandStack(paddingValue);
+    }
+
+    topFrame->pushIntoOperandStack(fieldValue);
+
+    topFrame->pc += 3;*/
+}
 void ExecutionEngine::i_putfield()
 {
 	/*
