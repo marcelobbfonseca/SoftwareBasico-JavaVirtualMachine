@@ -1327,8 +1327,70 @@ cout << "ExecutionEngine::i_lstore \tval.dado = " << val.dado << endl;
 	StoreValor(val);
 	return;
 }
-void ExecutionEngine::i_fstore(){}
-void ExecutionEngine::i_dstore(){}
+void ExecutionEngine::i_fstore(){
+	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint16_t indice;
+	Valor val;
+	val.tipo = FLOAT;
+	if(isWide)
+	{
+		memcpy(&indice, &(instrucoes[1]), 2);
+		indice= InverterEndianess<uint16_t>(indice);
+		memcpy(&(val.dado), &indice, 2);
+		StoreValor(val);
+		topoDaPilhaDeFrames->incrementaPC(3);
+	}
+	else
+	{
+#ifdef DEBUG
+cout << "ExecutionEngine::i_istore" << endl;
+#endif
+		memcpy(&indice, &(instrucoes[1]), 1);
+		val.dado= indice;
+#ifdef DEBUG
+cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
+#endif
+		StoreValor(val);
+		topoDaPilhaDeFrames->incrementaPC(2);
+	}
+	return;
+
+}
+void ExecutionEngine::i_dstore(){
+	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint16_t indice;
+	Valor val;
+	val.tipo = DOUBLE;
+	topoDaPilhaDeFrames->getCode();//dando pop do preenchimento
+	if(isWide)
+	{
+		memcpy(&indice, &(instrucoes[1]), 2);
+		indice= InverterEndianess<uint16_t>(indice);
+		memcpy(&(val.dado), &indice, 2);
+		StoreValor(val);
+		topoDaPilhaDeFrames->incrementaPC(3);
+	}
+	else
+	{
+#ifdef DEBUG
+cout << "ExecutionEngine::i_lstore" << endl;
+#endif
+		memcpy(&indice, &(instrucoes[1]), 1);
+		val.dado= indice;
+#ifdef DEBUG
+cout << "ExecutionEngine::i_lstore \tval.dado = " << val.dado << endl;
+#endif
+		StoreValor(val);
+		topoDaPilhaDeFrames->incrementaPC(2);
+	}
+	//como é um long devemos colocar preenchimento
+	val.tipo= PADDING;
+	val.dado= (val.dado)+1;
+	StoreValor(val);
+	return;
+}
 
 void ExecutionEngine::i_astore(){
 
