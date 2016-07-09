@@ -1208,7 +1208,7 @@ void ExecutionEngine::i_iaload(){
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
-	if (num > array->ObterTamanho() || num < 0) {
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
@@ -1256,7 +1256,7 @@ void ExecutionEngine::i_faload(){
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
-	if (num > array->ObterTamanho() || num < 0) {
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_faload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
@@ -1306,7 +1306,7 @@ void ExecutionEngine::i_aaload(){
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
-	if (num > array->ObterTamanho() || num < 0) {
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
 		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_aaload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
@@ -1699,7 +1699,40 @@ void ExecutionEngine::i_iastore(){
 	topo->mudarVariavelLocal(valor, indice);
 
 }
-void ExecutionEngine::i_lastore(){}
+void ExecutionEngine::i_lastore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	Valor valor = topo->desempilhaOperando();
+	assert(valor.tipo == TipoDado::LONG);
+	Valor pad = topo->desempilhaOperando();
+	assert(pad.tipo == TipoDado::PADDING);
+	Valor indice = topo->desempilhaOperando();
+	assert(indice.tipo == TipoDado::INT);
+	Valor referenciaArr = topo->desempilhaOperando();
+	assert(referenciaArr.tipo == TipoDado::REFERENCE);
+	assert(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY);
+
+	ObjetoArray *array;
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+		cerr << "NullPointerException" << endl;
+		exit(1);
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+
+	assert(valor.tipo == array->TipoElementosDoArray());
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+
+	topo->incrementaPC(1);
+
+}
+
 void ExecutionEngine::i_fastore(){}
 void ExecutionEngine::i_dastore(){}
 void ExecutionEngine::i_aastore(){}
