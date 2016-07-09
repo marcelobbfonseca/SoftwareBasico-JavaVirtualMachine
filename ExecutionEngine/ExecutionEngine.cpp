@@ -1671,7 +1671,34 @@ void ExecutionEngine::i_astore_3(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iastore(){}
+
+void ExecutionEngine::i_iastore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+
+	Valor valor = topo->desempilhaOperando();
+	assert(valor.tipo == TipoDado::REFERENCE);
+
+	uint8_t *code = topo->getCode();
+	uint8_t byte1 = code[1];
+	int16_t indice = (int16_t)byte1;
+
+	if (isWide) {
+
+		isWide = false;		
+		uint8_t byte2 = code[2];
+		indice = (byte1 << 8) | byte2;
+		topo->incrementaPC(3);
+		
+	} 
+    else {
+		topo->incrementaPC(2);
+	}
+
+	assert(((int16_t)(topo->tamanhoVetorVariaveis()) > indice));
+	topo->mudarVariavelLocal(valor, indice);
+
+}
 void ExecutionEngine::i_lastore(){}
 void ExecutionEngine::i_fastore(){}
 void ExecutionEngine::i_dastore(){}
