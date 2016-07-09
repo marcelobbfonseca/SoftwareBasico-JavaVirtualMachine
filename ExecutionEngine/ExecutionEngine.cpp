@@ -3424,11 +3424,16 @@ void ExecutionEngine::i_jsr(){
 void ExecutionEngine::i_ret(){}
 void ExecutionEngine::i_tableswitch(){}
 void ExecutionEngine::i_lookupswitch(){}
+//aceita byte, bool e short
 void ExecutionEngine::i_ireturn(){
 	//desempinha a funcao e empilha o valor de retorno na nova frame
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser inteiro
 	Valor returnValor = topoDaFrame->desempilhaOperando();
+	
+	if (returnValor.tipo != TipoDado::INT)
+		throw new Erro("Esperado tipo inteiro em ireturn");
+	
 
 	//so n destruí aqui o antigo mas deboas
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
@@ -3438,6 +3443,10 @@ void ExecutionEngine::i_lreturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser long
 	Valor returnValor = topoDaFrame->desempilhaOperando();
+	
+	if (returnValor.tipo != TipoDado::LONG)
+		throw new Erro("Esperado tipo inteiro em ireturn");
+
 
 	//so n destruí aqui o antigo mas deboas
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
@@ -3453,6 +3462,9 @@ void ExecutionEngine::i_freturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser float
 	Valor returnValor = topoDaFrame->desempilhaOperando();
+	
+	if (returnValor.tipo != TipoDado::FLOAT)
+		throw new Erro("Esperado tipo inteiro em ireturn");	
 
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
@@ -3461,6 +3473,9 @@ void ExecutionEngine::i_dreturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser double
 	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	if (returnValor.tipo != TipoDado::DOUBLE)
+		throw new Erro("Esperado tipo inteiro em ireturn");
 
 	//so n destruí aqui o antigo mas deboas
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
@@ -3474,6 +3489,9 @@ void ExecutionEngine::i_areturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser reference
 	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	if (returnValor.tipo != TipoDado::REFERENCE)
+		throw new Erro("Esperado tipo inteiro em ireturn");
 
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
@@ -3606,8 +3624,8 @@ void ExecutionEngine::i_getstatic() {
 			toppilha->empilharOperando(padding);
 			break;
 
-		default:
-			puts("deu ruim");
+		default://se for reference?
+			cerr << "deu ruim" << endl;
 			exit(0);
 	}//fim switch valor estatico
 
