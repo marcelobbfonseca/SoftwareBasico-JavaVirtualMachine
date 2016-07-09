@@ -4182,7 +4182,67 @@ void ExecutionEngine::i_newarray()
 	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
 	topoDaPilhaDeFrames->incrementaPC(2);
 }
-void ExecutionEngine::i_anewarray(){}
+void ExecutionEngine::i_anewarray()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	
+	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
+	if(tamanhoDoFuturoArray.tipo != INT)
+	{
+		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_anewarray");
+	}
+	if(tamanhoDoFuturoArray.dado < 0)
+	{
+		throw new Erro("NegativeArraySizeException");
+	}
+	
+	uint16_t indiceDaClasse;
+	memcpy(&indiceDaClasse, &(instrucoes[1]), 2);
+	indiceDaClasse= InverterEndianess<uint16_t>(indiceDaClasse);
+	
+	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Class", "ExecutionEngine", "i_anewarray");
+	}
+	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
+	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
+	
+	if(nomeDaClasse != "java/lang/String")
+	{
+		int cont=0;
+		while(nomeDaClasse[cont] == '[')
+		{
+			cont++;
+		}
+		if(nomeDaClasse[cont == 'L'])
+		{
+			runtimeDataArea->CarregarClasse(nomeDaClasse.substr(cont+1, nomeDaClasse.size()-cont -2));
+		}
+	}
+	
+	ObjetoArray *arrayQueSeraCriado= new ObjetoArray(REFERENCE);
+	void *null= NULL;
+//	memcpy(&temp, &(tamanhoDoFuturoArray.dado), 4);
+	
+	Valor referenciaProArray;
+	referenciaProArray.tipo = REFERENCE;
+	memcpy(&(referenciaProArray.dado), &arrayQueSeraCriado, sizeof(void*));
+	
+	Valor ponteiroNULL;
+	ponteiroNULL.tipo= REFERENCE;
+	memcpy(&(ponteiroNULL.dado), &null, sizeof(void*));
+	
+	for(unsigned int cont =0 ; cont < tamanhoDoFuturoArray.dado; cont++)
+	{
+		arrayQueSeraCriado->empilhaValor(ponteiroNULL);
+	}
+	
+	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
+	topoDaPilhaDeFrames->incrementaPC(3);
+	
+}
 
 void ExecutionEngine::i_arraylength(){
 
