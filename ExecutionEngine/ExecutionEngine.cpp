@@ -2161,7 +2161,7 @@ void ExecutionEngine::i_dup(){
 
 	Valor valor = topoDoFrame->desempilhaOperando();
 	if ((valor.tipo == TipoDado::LONG) || (valor.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup");
+		throw new Erro("Esperado tipo diferente de long ou double em dup", "ExecutionEngine", "i_dup");
 
 	topoDoFrame->empilharOperando(valor);
 	topoDoFrame->empilharOperando(valor);
@@ -2174,12 +2174,12 @@ void ExecutionEngine::i_dup_x1(){
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1","ExecutionEngine", "i_dup_x1");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1", "ExecutionEngine", "i_dup_x1");
 
 	topoDoFrame->empilharOperando(valor_1);
 	topoDoFrame->empilharOperando(valor_2);
@@ -2193,14 +2193,14 @@ void ExecutionEngine::i_dup_x2(){
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "i_dup_x2");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 
 	Valor valor_3 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "i_dup_x2");
 
 
 	topoDoFrame->empilharOperando(valor_1);
@@ -2216,12 +2216,12 @@ void ExecutionEngine::i_dup2(){
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "i_dup2");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "i_dup2");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2237,13 +2237,13 @@ void ExecutionEngine::i_dup2_x1(){
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1","ExecutionEngine", "i_dup2_x1");
 
 
 	Valor valor_3 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1", "ExecutionEngine", "i_dup2_x1");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2262,10 +2262,10 @@ void ExecutionEngine::i_dup2_x2(){
 	Valor valor_4 = topoDoFrame->desempilhaOperando();
 
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "i_dup2_x2");
 
 	if ((valor_4.tipo == TipoDado::LONG) || (valor_4.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "i_dup2_x2");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2964,7 +2964,6 @@ void ExecutionEngine::i_iinc(){ //testar
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 
 	isWide = false;	
-
 
 }
 void ExecutionEngine::i_i2l(){
@@ -3748,7 +3747,51 @@ void ExecutionEngine::i_jsr(){
 	runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 }
 void ExecutionEngine::i_ret(){}
-void ExecutionEngine::i_tableswitch(){}
+void ExecutionEngine::i_tableswitch()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint8_t preenchimento= 4-(topoDaPilhaDeFrames->getPC()+1)%4;
+	if(preenchimento == 4)
+	{
+		preenchimento = 0;
+	}
+	
+	int32_t defaulti, low, high;
+	memcpy(&defaulti, &(instrucoes[preenchimento+1]), 4);
+	defaulti= InverterEndianess<int32_t>(defaulti);
+	memcpy(&low, &(instrucoes[preenchimento+5]), 4);
+	low= InverterEndianess<int32_t>(low);
+	memcpy(&high, &(instrucoes[preenchimento+9]), 4);
+	high= InverterEndianess<int32_t>(high);
+	
+	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorChave.tipo != INT)
+	{
+		throw new Erro("Esperado valor do tipo INT", "ExecutionEngine", "i_tableswitch");
+	}
+	uint32_t indiceDeBase= preenchimento+13;
+	int32_t chave, deslocamentos= high - low +1;
+	memcpy(&chave, &(valorChave.dado), 4);
+	bool achou= false;
+	for(int cont =0; cont < deslocamentos; cont++)
+	{
+		if(chave == low)
+		{
+			int32_t deslocamento;
+			deslocamento= (instrucoes[indiceDeBase] << 24) | (instrucoes[indiceDeBase+1] << 16) | (instrucoes[indiceDeBase+2] << 8) | instrucoes[indiceDeBase+3];
+			topoDaPilhaDeFrames->incrementaPC(deslocamento);
+			achou = true;
+			break;
+		}
+		indiceDeBase+=4;
+		low++;
+	}
+	if(!achou)
+	{//apenas avança o pc o tamanho da instrucao
+		topoDaPilhaDeFrames->incrementaPC(defaulti);
+	}
+}
 void ExecutionEngine::i_lookupswitch(){}
 //aceita byte, bool e short
 void ExecutionEngine::i_ireturn(){
