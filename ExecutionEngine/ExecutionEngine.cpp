@@ -1389,6 +1389,46 @@ void ExecutionEngine::i_caload(){
 }
 void ExecutionEngine::i_saload(){
 
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor indice = topo->desempilhaOperando();
+	if(!(indice.tipo == TipoDado::INT)){
+
+		throw new Erro("o operando deve ser INT.", "ExecutionEngine", "i_saload");
+		
+	}
+
+	Valor arrayref = topo->desempilhaOperando();
+
+	if(!(arrayref.tipo == TipoDado::REFERENCE)){
+		
+		throw new Erro("o operando deve ser uma referencia.", "ExecutionEngine", "i_saload");
+		
+	}
+	if(!(((Objeto*)arrayref.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+		
+		throw new Erro("a referencia deve ser para um array.", "ExecutionEngine", "i_saload");
+		
+	}
+
+	array = (ObjetoArray *) arrayref.dado;
+
+	if (array == NULL) {
+		cerr << "NullPointerException" << endl;
+		exit(1);
+	}
+
+	if (indice.dado > array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+	
+	Valor shortOp = array->ObterValor(indice.dado);
+	shortOp.tipo = TipoDado::INT;
+	
+	topo->empilharOperando(shortOp);
+	topo->incrementaPC(1);
 
 
 }
