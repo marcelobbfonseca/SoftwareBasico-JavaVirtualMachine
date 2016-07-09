@@ -3233,11 +3233,60 @@ void ExecutionEngine::i_jsr(){
 void ExecutionEngine::i_ret(){}
 void ExecutionEngine::i_tableswitch(){}
 void ExecutionEngine::i_lookupswitch(){}
-void ExecutionEngine::i_ireturn(){}
-void ExecutionEngine::i_lreturn(){}
-void ExecutionEngine::i_freturn(){}
-void ExecutionEngine::i_dreturn(){}
-void ExecutionEngine::i_areturn(){}
+void ExecutionEngine::i_ireturn(){
+	//desempinha a funcao e empilha o valor de retorno na nova frame
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser inteiro
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	//so n destruí aqui o antigo mas deboas
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	novoTopDoFrame->empilharOperando(returnValor);
+}
+void ExecutionEngine::i_lreturn(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser long
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	//so n destruí aqui o antigo mas deboas
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	Valor padd;
+	padd.dado = TipoDado::PADDING;
+
+	novoTopDoFrame->empilharOperando(padd);
+	novoTopDoFrame->empilharOperando(returnValor);
+
+}
+void ExecutionEngine::i_freturn(){
+
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser float
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	novoTopDoFrame->empilharOperando(returnValor);
+}
+void ExecutionEngine::i_dreturn(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser double
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	//so n destruí aqui o antigo mas deboas
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	Valor padd;
+	padd.dado = TipoDado::PADDING;
+
+	novoTopDoFrame->empilharOperando(padd);
+	novoTopDoFrame->empilharOperando(returnValor);
+}
+void ExecutionEngine::i_areturn(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+	//valor deve ser reference
+	Valor returnValor = topoDaFrame->desempilhaOperando();
+
+	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
+	novoTopDoFrame->empilharOperando(returnValor);
+}
 void ExecutionEngine::i_return(){
 	//usa no mainvazia
 	runtimeDataArea->desempilharFrame();
