@@ -3856,7 +3856,7 @@ void ExecutionEngine::i_invokeinterface()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 
-	stack<Valor> pilhaDeOperandosDeBackUp= topoDaPilhaDeFrames->retornaPilhaOperandos();
+	stack<Valor> pilhaDeOperandosDeReserva= topoDaPilhaDeFrames->retornaPilhaOperandos();
 	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
 	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
 	
@@ -3914,13 +3914,48 @@ void ExecutionEngine::i_invokeinterface()
 				numeroDeArgumentos++;
 			}
 		}
-		
-//		vector<>
+		vector<Valor> argumentos;
+		Valor temp;
+		for(int cont =0; cont < numeroDeArgumentos; cont++)
+		{
+			temp= topoDaPilhaDeFrames->desempilhaOperando();
+			if(temp.tipo == PADDING)
+			{
+				argumentos.insert(argumentos.begin()+1, temp);
+			}
+			else
+			{
+				argumentos.insert(argumentos.begin(), temp);
+			}
+		}
+		Valor valorQueArmazenaObjeto= topoDaPilhaDeFrames->desempilhaOperando();
+		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		{
+			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "i_invokeinterface");
+		}
+		argumentos.insert(argumentos.begin(), valorQueArmazenaObjeto);
+		Objeto *obj= (Objeto*) valorQueArmazenaObjeto.dado;
+		if(obj->ObterTipoObjeto() != INSTANCIA)
+		{
+			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "i_invokeinterface");
+		}
+		ObjetoInstancia *instancia= (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
+		runtimeDataArea->CarregarClasse(nomeDaClasse);
+		Frame *novoFrame= new Frame(instancia, instancia->ObterJavaClass(), nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		if(runtimeDataArea->topoPilha() != topoDaPilhaDeFrames)
+		{
+			topoDaPilhaDeFrames->setaPilhaOperandos(pilhaDeOperandosDeReserva);
+			delete novoFrame;
+			return;
+		}
+		runtimeDataArea->empilharFrame(novoFrame);
 	}
 	else
 	{
 		throw new Erro("Tentaram chamar um metodo de interface nao implementado", "ExecutionEngine", "i_invokeinterface");
 	}
+	topoDaPilhaDeFrames->incrementaPC(5);
+
 }
 void ExecutionEngine::i_new(){}
 void ExecutionEngine::i_newarray(){}
