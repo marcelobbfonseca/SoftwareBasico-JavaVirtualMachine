@@ -3815,7 +3815,34 @@ void ExecutionEngine::i_jsr(){
 	toppilha->empilharOperando(enderecoRetorno);
 	runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 }
-void ExecutionEngine::i_ret(){}
+void ExecutionEngine::i_ret(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha(); 
+	
+	uint8_t *code = topoDaFrame->getCode();
+	
+	uint8_t byte_1 = code[1]; //vai ser o index do vetor das variaveis local
+	uint16_t index = (uint16_t) byte_1;
+
+	if(isWide){
+		uint8_t byte_2 = code[2];
+		index = (byte_1 << 8) | byte_2;
+	}
+	if( !((int16_t)(topoDaFrame->tamanhoVetorVariaveis()) > index) ) //size of Local Variable
+		throw new Erro("Nao eh maior que o indice","ExecutionEngine","i_ret");
+
+	Valor valor = topoDaFrame->getValorVariavelLocal(index);
+
+
+	if(valor.tipo != TipoDado::RETURN_ADDR)
+		throw new Erro("valor nao é endereco de retorno","ExecutionEngine","i_ret");
+
+
+	topoDaFrame->mudarVariavelLocal(valor, index);
+
+	topoDaFrame->alteraPC(valor.dado);
+	isWide = false;
+	return;
+}
 void ExecutionEngine::i_tableswitch()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
@@ -3861,7 +3888,52 @@ void ExecutionEngine::i_tableswitch()
 		topoDaPilhaDeFrames->incrementaPC(defaulti);
 	}
 }
-void ExecutionEngine::i_lookupswitch(){}
+void ExecutionEngine::i_lookupswitch()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint8_t preenchimento= 4-(topoDaPilhaDeFrames->getPC()+1)%4;
+	if(preenchimento == 4)
+	{
+		preenchimento = 0;
+	}
+	
+	int32_t defaulti;
+	memcpy(&defaulti, &(instrucoes[preenchimento+1]), 4);
+	defaulti= InverterEndianess<int32_t> (defaulti);
+	int32_t paresN;
+	memcpy(&paresN, &(instrucoes[preenchimento+5]), 4);
+	paresN= InverterEndianess<int32_t> (paresN);
+	
+	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorChave.tipo != INT)
+	{
+		throw new Erro("Esperado valor do tipo INT", "ExecutionEngine", "i_lookupswitch");
+	}
+	
+	uint32_t indiceDeBase= preenchimento+9;
+	int32_t chave;
+	memcpy(&chave, &(valorChave.dado), 4);
+	bool achou= false;
+	int32_t acerto, deslocamento;
+	
+	for(int cont =0 ; cont < paresN; cont++)
+	{
+		acerto= (instrucoes[indiceDeBase] << 24) | (instrucoes[indiceDeBase+1] << 16) |(instrucoes[indiceDeBase+2]) | instrucoes[indiceDeBase+3];
+		if(acerto == chave)
+		{
+			deslocamento = (instrucoes[indiceDeBase+4] << 24) | (instrucoes[indiceDeBase+1+5] << 16) | (instrucoes[indiceDeBase+6]) | instrucoes[indiceDeBase+7];
+			topoDaPilhaDeFrames->incrementaPC(deslocamento);
+			achou = true;
+			break;
+		}
+		indiceDeBase += 8;
+	}
+	if(!achou)
+	{
+		topoDaPilhaDeFrames->incrementaPC(defaulti);
+	}
+}
 //aceita byte, bool e short
 void ExecutionEngine::i_ireturn(){
 	//desempinha a funcao e empilha o valor de retorno na nova frame
@@ -4165,7 +4237,77 @@ void ExecutionEngine::i_putstatic()
 	classeAlvo->ColocarValorNoField(nomeDoField, campo);
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_getfield(){}
+void ExecutionEngine::i_getfield(){
+/*
+	Frame *topoDaFrame = runtimeDataArea->topoPilha();
+
+	cp_info *constantPool = *(topoDaFrame->getConstantPool());
+
+	uint8_t *code = topoDaFrame->getCode();
+
+	uint8_t byte_1 = code[1];
+	uint8_t byte_2 = code[2];
+
+	uint16_t fieldIndex = (byte_1 << 8) | byte_2; 
+
+	cp_info fieldConstantPool = constantPool[fieldIndex-1];
+*/
+	/*
+    CONSTANT_Fieldref_info fieldRef = fieldCP.info.fieldref_info;
+
+    string className = getFormattedConstant(constantPool, fieldRef.class_index);
+
+    cp_info nameAndTypeCP = constantPool[fieldRef.name_and_type_index-1];
+    assert(nameAndTypeCP.tag == CONSTANT_NameAndType); // precisa ser um nameAndType
+
+    CONSTANT_NameAndType_info fieldNameAndType = nameAndTypeCP.info.nameAndType_info;
+
+    string fieldName = getFormattedConstant(constantPool, fieldNameAndType.name_index);
+    string fieldDescriptor = getFormattedConstant(constantPool, fieldNameAndType.descriptor_index);
+
+    Value objectValue = topFrame->popTopOfOperandStack();
+    assert(objectValue.type == ValueType::REFERENCE);
+    Object *object = objectValue.data.object;
+    assert(object->objectType() == ObjectType::CLASS_INSTANCE);
+    ClassInstance *classInstance = (ClassInstance *) object;
+
+    if (!classInstance->fieldExists(fieldName)) {
+        cerr << "NoSuchFieldError" << endl;
+        exit(1);
+    }
+
+    Value fieldValue = classInstance->getValueFromField(fieldName);
+    switch (fieldValue.type) {
+        case ValueType::BOOLEAN:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::BOOLEAN;
+            break;
+        case ValueType::BYTE:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::BYTE;
+            break;
+        case ValueType::SHORT:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::SHORT;
+            break;
+        case ValueType::INT:
+            fieldValue.type = ValueType::INT;
+            fieldValue.printType = ValueType::INT;
+            break;
+        default:
+            break;
+    }
+    
+    if (fieldValue.type == ValueType::DOUBLE || fieldValue.type == ValueType::LONG) {
+        Value paddingValue;
+        paddingValue.type = ValueType::PADDING;
+        topFrame->pushIntoOperandStack(paddingValue);
+    }
+
+    topFrame->pushIntoOperandStack(fieldValue);
+
+    topFrame->pc += 3;*/
+}
 void ExecutionEngine::i_putfield()
 {
 	/*
