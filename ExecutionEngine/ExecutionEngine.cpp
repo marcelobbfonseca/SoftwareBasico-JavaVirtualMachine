@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include <cmath>
 #include <string>
+#include <memory>
 
 // Check ruindos
 #if _WIN32 || _WIN64
@@ -3874,11 +3875,14 @@ void ExecutionEngine::i_ireturn(){
 	
 	if (returnValor.tipo != TipoDado::INT)
 		throw new Erro("Esperado tipo inteiro em ireturn");
-	
 
+	//testar
+	runtimeDataArea->desempilharFrame();
 	//so n destruí aqui o antigo mas deboas
+	
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
+
 }
 void ExecutionEngine::i_lreturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
@@ -3886,9 +3890,10 @@ void ExecutionEngine::i_lreturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 	
 	if (returnValor.tipo != TipoDado::LONG)
-		throw new Erro("Esperado tipo inteiro em ireturn");
+		throw new Erro("Esperado tipo inteiro em i_lreturn");
 
-
+	
+	runtimeDataArea->desempilharFrame();
 	//so n destruí aqui o antigo mas deboas
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	Valor padd;
@@ -3907,6 +3912,8 @@ void ExecutionEngine::i_freturn(){
 	if (returnValor.tipo != TipoDado::FLOAT)
 		throw new Erro("Esperado tipo inteiro em ireturn");	
 
+	runtimeDataArea->desempilharFrame();
+
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
 }
@@ -3919,6 +3926,8 @@ void ExecutionEngine::i_dreturn(){
 		throw new Erro("Esperado tipo inteiro em ireturn");
 
 	//so n destruí aqui o antigo mas deboas
+	runtimeDataArea->desempilharFrame();
+
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	Valor padd;
 	padd.dado = TipoDado::PADDING;
@@ -3932,7 +3941,9 @@ void ExecutionEngine::i_areturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 
 	if (returnValor.tipo != TipoDado::REFERENCE)
-		throw new Erro("Esperado tipo inteiro em ireturn");
+		throw new Erro("Esperado tipo inteiro em areturn");
+
+	runtimeDataArea->desempilharFrame();
 
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
