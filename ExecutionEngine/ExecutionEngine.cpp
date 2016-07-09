@@ -2127,8 +2127,33 @@ void ExecutionEngine::i_sastore(){
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_pop(){}
-void ExecutionEngine::i_pop2(){}
+void ExecutionEngine::i_pop(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo != TipoDado::LONG)){
+							
+			throw new Erro("Valor nao pode ser um long", "ExecutionEngine", "i_pop");
+						
+		}
+
+	if(!(valor.tipo != TipoDado::DOUBLE)){
+							
+			throw new Erro("Valor nçao pode ser double", "ExecutionEngine", "i_pop");
+						
+		}
+
+	topo->incrementaPC(1);
+}
+void ExecutionEngine::i_pop2(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	topo->desempilhaOperando();
+	topo->desempilhaOperando();
+
+	topo->incrementaPC(1);
+
+}
 void ExecutionEngine::i_dup(){}
 void ExecutionEngine::i_dup_x1(){}
 void ExecutionEngine::i_dup_x2(){}
