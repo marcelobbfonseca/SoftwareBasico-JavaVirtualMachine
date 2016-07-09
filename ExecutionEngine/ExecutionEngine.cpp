@@ -1298,6 +1298,7 @@ void ExecutionEngine::i_daload(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+
 void ExecutionEngine::i_aaload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -1320,9 +1321,77 @@ void ExecutionEngine::i_aaload(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_baload(){}
-void ExecutionEngine::i_caload(){}
-void ExecutionEngine::i_saload(){}
+void ExecutionEngine::i_baload(){
+
+Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_aaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_aaload");
+	}
+
+	Valor op = array->ObterValor(index.dado);
+	if(!(op.tipo == TipoDado::BOOLEAN || op.tipo == TipoDado::BYTE)){
+
+		throw new Erro("o operando deve ser BOOLEAN ou BYTE.", "ExecutionEngine", "i_baload");
+		
+	}
+	
+	op.tipo = TipoDado::INT;
+
+	toppilha->empilharOperando(op);
+	toppilha->incrementaPC(1);
+}
+
+void ExecutionEngine::i_caload(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();	
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_caload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_caload");
+	}
+
+	Valor op = array->ObterValor(index.dado);
+	if(!(op.tipo == TipoDado::BOOLEAN || op.tipo == TipoDado::BYTE)){
+
+		throw new Erro("o operando deve ser BOOLEAN ou BYTE.", "ExecutionEngine", "i_caload");
+		
+	}
+
+	op.tipo = TipoDado::INT;
+	
+	toppilha->empilharOperando(op);
+	toppilha->incrementaPC(1);
+
+}
+void ExecutionEngine::i_saload(){
+
+
+
+}
 void ExecutionEngine::i_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
@@ -3746,7 +3815,34 @@ void ExecutionEngine::i_jsr(){
 	toppilha->empilharOperando(enderecoRetorno);
 	runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 }
-void ExecutionEngine::i_ret(){}
+void ExecutionEngine::i_ret(){
+	Frame *topoDaFrame = runtimeDataArea->topoPilha(); 
+	
+	uint8_t *code = topoDaFrame->getCode();
+	
+	uint8_t byte_1 = code[1]; //vai ser o index do vetor das variaveis local
+	uint16_t index = (uint16_t) byte_1;
+
+	if(isWide){
+		uint8_t byte_2 = code[2];
+		index = (byte_1 << 8) | byte_2;
+	}
+	if( !((int16_t)(topoDaFrame->tamanhoVetorVariaveis()) > index) ) //size of Local Variable
+		throw new Erro("Nao eh maior que o indice","ExecutionEngine","i_ret");
+
+	Valor valor = topoDaFrame->getValorVariavelLocal(index);
+
+
+	if(valor.tipo != TipoDado::RETURN_ADDR)
+		throw new Erro("valor nao é endereco de retorno","ExecutionEngine","i_ret");
+
+
+	topoDaFrame->mudarVariavelLocal(valor, index);
+
+	topoDaFrame->alteraPC(valor.dado);
+	isWide = false;
+	return;
+}
 void ExecutionEngine::i_tableswitch()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
