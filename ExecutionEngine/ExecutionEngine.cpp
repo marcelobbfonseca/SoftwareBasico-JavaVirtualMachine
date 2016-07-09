@@ -544,7 +544,7 @@ cout<<"chegou i_ldc" << endl;
 #endif
 		valor.tipo = TipoDado::REFERENCE;
 		ObjetoString * temp = new ObjetoString(utf8String);
-		memcpy(&(valor.dado), temp, sizeof(void*));
+		memcpy(&(valor.dado), &temp, sizeof(void*));
 #ifdef DEBUG
 cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 #endif
