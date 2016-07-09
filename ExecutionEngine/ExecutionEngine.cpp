@@ -576,7 +576,7 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 void ExecutionEngine::i_ldc_w(){}
 
 
-void ExecutionEngine::i_ldc2_w(){ //em construcao
+void ExecutionEngine::i_ldc2_w(){ 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -584,22 +584,16 @@ void ExecutionEngine::i_ldc2_w(){ //em construcao
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
 	uint16_t index = (byte1 << 8) | byte2;
-
-	//vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
 	
-	//
 	JavaClass *classe= (toppilha->getObjeto()== NULL )? toppilha->ObterJavaClass(): ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass();
 	vector<cp_info*> constantPool = classe->getConstantPool();
 	cp_info *ponteiroCpInfo = constantPool[index - 1];
-	//
-
+	
 	Valor valor;
 	
 	if (ponteiroCpInfo->GetTag() == CONSTANT_Long) {
-
-//		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Long_info*)ponteiroCpInfo)->Get- 1];		
-//		valor.dado = (long)utf8Entry;
-
+		int64_t num= ((CONSTANT_Long_info*)ponteiroCpInfo)->GetNumero();
+		memcpy(&(valor.dado), &num, 8);
 		valor.tipo = TipoDado::LONG;
 		
 		Valor padding;
@@ -608,9 +602,8 @@ void ExecutionEngine::i_ldc2_w(){ //em construcao
 		toppilha->empilharOperando(padding);
 	} else if (ponteiroCpInfo->GetTag() == CONSTANT_Double) {
 		
-//		CONSTANT_Utf8_info* utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_Double_info*)ponteiroCpInfo)->GetNumero() - 1];
-//		valor.dado = (double) utf8Entry;
-
+		double num= ((CONSTANT_Double_info*)ponteiroCpInfo)->GetNumero();
+		memcpy(&(valor.dado), &num, 8);
 		valor.tipo = TipoDado::DOUBLE;
 		
 		Valor padding;
@@ -618,12 +611,13 @@ void ExecutionEngine::i_ldc2_w(){ //em construcao
 		
 		toppilha->empilharOperando(padding);
 	} else {
-		cerr << "ldc2_w tentando acessar um elemento da CP invalido: " << ponteiroCpInfo->GetTag() << endl;
-		exit(1);
+		string strErr= "ldc2_w tentando acessar um elemento da CP invalido: ";
+		strErr+= to_string(ponteiroCpInfo->GetTag());
+		throw new Erro(strErr.c_str(), "ExecutionEngine", "ldc2_w");
 	}
 	
 	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
+	runtimeDataArea->topoPilha()->incrementaPC(3);
 
 }
 
