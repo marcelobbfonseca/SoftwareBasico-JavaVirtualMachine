@@ -10,6 +10,8 @@ public class numeros
 		float temporarioFloat= -50.456f;
 		int temporarioInt =190;
 		long temporarioLong= 550;
+		numeros n= new numeros();
+		n.incrementaEdecrementa();
 	}
 	public void incrementaEdecrementa()
 	{
