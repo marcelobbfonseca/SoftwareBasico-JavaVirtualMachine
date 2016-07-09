@@ -3825,7 +3825,76 @@ void ExecutionEngine::i_invokestatic(){
 	}
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_invokeinterface(){}
+void ExecutionEngine::i_invokeinterface()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+
+	stack<Valor> pilhaDeOperandosDeBackUp= topoDaPilhaDeFrames->retornaPilhaOperandos();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	uint16_t indiceDoMetodo;
+	memcpy(&indiceDoMetodo, &(instrucoes[1]), 2);
+	indiceDoMetodo= InverterEndianess<uint16_t>(indiceDoMetodo);
+	
+	if(classe->getConstantPool().at(indiceDoMetodo-1)->GetTag() != CONSTANT_Methodref)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
+	}
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokeinterface()5" << endl;
+#endif
+	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)classe->getConstantPool().at(indiceDoMetodo-1);
+#ifdef DEBUG
+	cout<< "ExecutionEngine::i_invokeinterface()6" << endl;
+#endif
+	string nomeDaClasse= classe->getUTF8(metodo->GetClassIndex());
+	if(classe->getConstantPool().at(metodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "i_invokeinterface");
+	}
+	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) classe->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
+	string nomeDoMetodo= classe->getUTF8(assinaturaDoMetodo->GetNameIndex());
+	string descritorDoMetodo= classe->getUTF8(assinaturaDoMetodo->GetDescriptorIndex());
+	
+	if(nomeDaClasse.find("java/") == string::npos)
+	{
+		uint16_t numeroDeArgumentos;
+		char infoTipo;
+		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++ )
+		{
+			infoTipo= descritorDoMetodo[cont];
+			if(infoTipo == 'L')
+			{
+				numeroDeArgumentos++;
+				while(descritorDoMetodo[++cont]!= ';'){};
+			}
+			else if(infoTipo == 'J' || infoTipo == 'D')
+			{
+				numeroDeArgumentos+=2;
+			}
+			else if(infoTipo == '[')
+			{
+				numeroDeArgumentos++;
+				while(descritorDoMetodo[++cont]== '['){};
+				if(descritorDoMetodo[cont] == 'L')
+				{
+					while(descritorDoMetodo[++cont] != ';'){};
+				}
+			}
+			else
+			{
+				numeroDeArgumentos++;
+			}
+		}
+		
+//		vector<>
+	}
+	else
+	{
+		throw new Erro("Tentaram chamar um metodo de interface nao implementado", "ExecutionEngine", "i_invokeinterface");
+	}
+}
 void ExecutionEngine::i_new(){}
 void ExecutionEngine::i_newarray(){}
 void ExecutionEngine::i_anewarray(){}
