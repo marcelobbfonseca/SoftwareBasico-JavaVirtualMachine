@@ -523,7 +523,7 @@ void ExecutionEngine::i_sipush(){
 
 	Valor valor;
 	valor.tipo = TipoDado::INT;
-	valor.dado = (int32_t) num; // convertendo para inteiro e estendendo o sinal
+	valor.dado = (int32_t) num;
 
 	toppilha->empilharOperando(valor);
 
@@ -1264,7 +1264,37 @@ void ExecutionEngine::i_aaload(){
 void ExecutionEngine::i_baload(){}
 void ExecutionEngine::i_caload(){}
 void ExecutionEngine::i_saload(){}
-void ExecutionEngine::i_istore(){}
+void ExecutionEngine::i_istore(){
+	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint16_t indice;
+	Valor val;
+	val.tipo = INT;
+	if(isWide)
+	{
+		memcpy(&indice, &(instrucoes[1]), 2);
+		indice= InverterEndianess<uint16_t>(indice);
+		memcpy(&(val.dado), &indice, 2);
+		StoreValor(val);
+		topoDaPilhaDeFrames->incrementaPC(3);
+	}
+	else
+	{
+#ifdef DEBUG
+cout << "ExecutionEngine::i_istore" << endl;
+#endif
+		memcpy(&indice, &(instrucoes[1]), 1);
+		val.dado= indice;
+//		memcpy(&(val.dado), &indice, 1);
+//		val.dado= InverterEndianess<uint32_t>(indice);
+#ifdef DEBUG
+cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
+#endif
+		StoreValor(val);
+		topoDaPilhaDeFrames->incrementaPC(2);
+	}
+	return;
+}
 void ExecutionEngine::i_lstore(){}
 void ExecutionEngine::i_fstore(){}
 void ExecutionEngine::i_dstore(){}
