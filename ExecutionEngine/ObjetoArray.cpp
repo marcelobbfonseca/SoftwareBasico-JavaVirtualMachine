@@ -130,4 +130,9 @@ void ObjetoArray::empilhaValor(Valor valor) {
 
 }
 
+TipoDado ObjetoArray::TipoElementosDoArray(void) const
+{
+	return tipo;
+}
+
 
