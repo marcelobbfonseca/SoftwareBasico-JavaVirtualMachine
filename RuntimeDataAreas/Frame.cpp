@@ -252,6 +252,9 @@ uint32_t Frame::tamanhoCode() {
 void Frame::incrementaPC(int32_t offset){
 	pc = pc + offset;
 }
+void Frame::alteraPC(int32_t novoPC){
+	pc = novoPC;
+}
 
 int32_t Frame::getPC(){
 

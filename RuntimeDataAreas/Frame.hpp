@@ -53,6 +53,7 @@ class Frame{
 		uint16_t tamanhoVetorVariaveis();
 		uint32_t tamanhoCode();
 		void incrementaPC(int32_t);
+		void alteraPC(int32_t);
 		int32_t getPC();
 		Objeto *getObjeto();
 		JavaClass *ObterJavaClass(void);
