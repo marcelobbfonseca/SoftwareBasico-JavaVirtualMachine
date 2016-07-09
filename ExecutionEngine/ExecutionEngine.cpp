@@ -515,7 +515,19 @@ void ExecutionEngine::i_bipush(){
 
 }
 void ExecutionEngine::i_sipush(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	uint8_t *code = toppilha->getCode();
+	int16_t num;
+	memcpy(&num, &(code[1]), 2);
+	num = InverterEndianess<int16_t>(num);
 
+	Valor valor;
+	valor.tipo = TipoDado::INT;
+	valor.dado = (int32_t) num; // convertendo para inteiro e estendendo o sinal
+
+	toppilha->empilharOperando(valor);
+
+	toppilha->incrementaPC(3);
 }
 //Push item from run-time constant pool
 void ExecutionEngine::i_ldc(){
