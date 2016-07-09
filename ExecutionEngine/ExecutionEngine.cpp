@@ -2606,7 +2606,41 @@ void ExecutionEngine::i_lxor(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iinc(){}
+void ExecutionEngine::i_iinc(){ //testar
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	uint8_t *code = toppilha->getCode();
+	uint8_t index = 0;
+
+	if (isWide) {
+		index = (code[1] << 8) | code[2];
+	} 
+    else {
+		index = index + code[1];
+	}
+
+	Valor variavelLocal = toppilha->getValorVariavelLocal(index);
+
+	int32_t i;
+    if (isWide) {
+        uint16_t incremento = (code[3] << 8) | code[4];
+        i = (int32_t) (int16_t) incremento;
+    } else {
+        i = (int32_t) (int8_t) code[2];
+    }
+    variavelLocal.dado = variavelLocal.dado + i; 
+
+	toppilha->mudarVariavelLocal(variavelLocal, index);
+	
+	if(isWide)
+		runtimeDataArea->topoPilha()->incrementaPC(5);
+	else
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+
+	isWide = false;	
+
+
+}
 void ExecutionEngine::i_i2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 #ifdef DEBUG_EE
@@ -4221,8 +4255,124 @@ void ExecutionEngine::i_invokeinterface()
 	topoDaPilhaDeFrames->incrementaPC(5);
 
 }
-void ExecutionEngine::i_new(){}
-void ExecutionEngine::i_newarray(){}
+void ExecutionEngine::i_new(){
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	JavaClass *classe = topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	uint16_t indiceDaClasse;
+	memcpy(&indiceDaClasse, &(instrucoes[1]), 2);
+	indiceDaClasse= InverterEndianess<uint16_t> (indiceDaClasse);
+	
+	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
+	}
+	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
+	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
+	
+	Objeto *obj;
+	if(nomeDaClasse != "java/lang/String")
+	{
+		JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+		obj= new ObjetoInstancia(classeAlvo);
+	}
+	else
+	{
+		obj= new ObjetoString();
+	}
+	Valor referenciaProObjeto;
+	referenciaProObjeto.tipo= REFERENCE;
+	memcpy(&(referenciaProObjeto.dado), &obj, sizeof(void*));
+	
+	topoDaPilhaDeFrames->empilharOperando(referenciaProObjeto);
+	topoDaPilhaDeFrames->incrementaPC(3);
+}
+void ExecutionEngine::i_newarray()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	
+	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
+	if(tamanhoDoFuturoArray.tipo != INT)
+	{
+		throw new Erro("Esperado encontrar um valor do tipo int");
+	}
+	ObjetoArray *arrayQueSeraCriado;
+	int32_t temp;
+	memcpy(&temp, &(tamanhoDoFuturoArray.dado), 4);
+	if(temp < 0)
+	{
+		throw new Erro("NegativeArraySizeException");
+	}
+	
+	Valor elementoDoArray;
+	elementoDoArray.dado =0;
+	
+	
+	uint8_t tipoDoArray = instrucoes[1];
+	switch(tipoDoArray)
+	{
+		case(4):
+		{
+			arrayQueSeraCriado = new ObjetoArray(BOOLEAN);
+			elementoDoArray.tipo= BOOLEAN;
+			break;
+		}
+		case(5):
+		{
+			arrayQueSeraCriado = new ObjetoArray(CHAR);
+			elementoDoArray.tipo= CHAR;
+			break;
+		}
+		case(6):
+		{
+			arrayQueSeraCriado = new ObjetoArray(FLOAT);
+			elementoDoArray.tipo= FLOAT;
+			break;
+		}
+		case(7):
+		{
+			arrayQueSeraCriado = new ObjetoArray(DOUBLE);
+			elementoDoArray.tipo= DOUBLE;
+			break;
+		}
+		case(8):
+		{
+			arrayQueSeraCriado = new ObjetoArray(BYTE);
+			elementoDoArray.tipo= BYTE;
+			break;
+		}
+		case(9):
+		{
+			arrayQueSeraCriado = new ObjetoArray(SHORT);
+			elementoDoArray.tipo= SHORT;
+			break;
+		}
+		case(10):
+		{
+			arrayQueSeraCriado = new ObjetoArray(INT);
+			elementoDoArray.tipo= INT;
+			break;
+		}
+		case(11):
+		{
+			arrayQueSeraCriado = new ObjetoArray(LONG);
+			elementoDoArray.tipo= LONG;
+		}
+	}
+	for(unsigned int cont = 0; cont < tamanhoDoFuturoArray.dado; cont++)
+	{
+		arrayQueSeraCriado->InserirValor(elementoDoArray);
+	}
+	
+	Valor referenciaProArray;
+	referenciaProArray.tipo= REFERENCE;
+	memcpy(&(referenciaProArray.dado), &arrayQueSeraCriado, sizeof(void*));
+	
+	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
+	topoDaPilhaDeFrames->incrementaPC(2);
+}
 void ExecutionEngine::i_anewarray(){}
 
 void ExecutionEngine::i_arraylength(){
