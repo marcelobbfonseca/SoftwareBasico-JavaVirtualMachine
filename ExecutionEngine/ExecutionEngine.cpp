@@ -3769,7 +3769,52 @@ void ExecutionEngine::i_tableswitch()
 		topoDaPilhaDeFrames->incrementaPC(defaulti);
 	}
 }
-void ExecutionEngine::i_lookupswitch(){}
+void ExecutionEngine::i_lookupswitch()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
+	uint8_t preenchimento= 4-(topoDaPilhaDeFrames->getPC()+1)%4;
+	if(preenchimento == 4)
+	{
+		preenchimento = 0;
+	}
+	
+	int32_t defaulti;
+	memcpy(&defaulti, &(instrucoes[preenchimento+1]), 4);
+	defaulti= InverterEndianess<int32_t> (defaulti);
+	int32_t paresN;
+	memcpy(&paresN, &(instrucoes[preenchimento+5]), 4);
+	paresN= InverterEndianess<int32_t> (paresN);
+	
+	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorChave.tipo != INT)
+	{
+		throw new Erro("Esperado valor do tipo INT", "ExecutionEngine", "i_lookupswitch");
+	}
+	
+	uint32_t indiceDeBase= preenchimento+9;
+	int32_t chave;
+	memcpy(&chave, &(valorChave.dado), 4);
+	bool achou= false;
+	int32_t acerto, deslocamento;
+	
+	for(int cont =0 ; cont < paresN; cont++)
+	{
+		acerto= (instrucoes[indiceDeBase] << 24) | (instrucoes[indiceDeBase+1] << 16) |(instrucoes[indiceDeBase+2]) | instrucoes[indiceDeBase+3];
+		if(acerto == chave)
+		{
+			deslocamento = (instrucoes[indiceDeBase+4] << 24) | (instrucoes[indiceDeBase+1+5] << 16) | (instrucoes[indiceDeBase+6]) | instrucoes[indiceDeBase+7];
+			topoDaPilhaDeFrames->incrementaPC(deslocamento);
+			achou = true;
+			break;
+		}
+		indiceDeBase += 8;
+	}
+	if(!achou)
+	{
+		topoDaPilhaDeFrames->incrementaPC(defaulti);
+	}
+}
 //aceita byte, bool e short
 void ExecutionEngine::i_ireturn(){
 	//desempinha a funcao e empilha o valor de retorno na nova frame
