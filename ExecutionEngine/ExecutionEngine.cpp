@@ -1967,12 +1967,127 @@ void ExecutionEngine::i_castore(){}
 void ExecutionEngine::i_sastore(){}
 void ExecutionEngine::i_pop(){}
 void ExecutionEngine::i_pop2(){}
-void ExecutionEngine::i_dup(){}
-void ExecutionEngine::i_dup_x1(){}
-void ExecutionEngine::i_dup_x2(){}
-void ExecutionEngine::i_dup2(){}
-void ExecutionEngine::i_dup2_x1(){}
-void ExecutionEngine::i_dup2_x2(){}
+void ExecutionEngine::i_dup(){
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+
+	Valor valor = topoDoFrame->desempilhaOperando();
+	if ((valor.tipo == TipoDado::LONG) || (valor.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup");
+
+	topoDoFrame->empilharOperando(valor);
+	topoDoFrame->empilharOperando(valor);
+
+	topoDoFrame->incrementaPC(1);
+}
+void ExecutionEngine::i_dup_x1(){
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+
+	Valor valor_1 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1");
+
+	Valor valor_2 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1");
+
+	topoDoFrame->empilharOperando(valor_1);
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+
+	topoDoFrame->incrementaPC(1);
+}
+void ExecutionEngine::i_dup_x2(){
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+
+	Valor valor_1 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2");
+
+	Valor valor_2 = topoDoFrame->desempilhaOperando();
+
+	Valor valor_3 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2");
+
+
+	topoDoFrame->empilharOperando(valor_1);
+	topoDoFrame->empilharOperando(valor_3);
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+
+	topoDoFrame->incrementaPC(1);
+}
+void ExecutionEngine::i_dup2(){
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+
+	Valor valor_1 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup2");
+
+	Valor valor_2 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup2");
+
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+
+	topoDoFrame->incrementaPC(1);
+}
+void ExecutionEngine::i_dup2_x1(){
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+
+	Valor valor_1 = topoDoFrame->desempilhaOperando();
+	Valor valor_2 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1");
+
+
+	Valor valor_3 = topoDoFrame->desempilhaOperando();
+	
+	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1");
+
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+	topoDoFrame->empilharOperando(valor_3);
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+
+	topoDoFrame->incrementaPC(1);
+}
+void ExecutionEngine::i_dup2_x2(){
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+
+	Valor valor_1 = topoDoFrame->desempilhaOperando();
+	Valor valor_2 = topoDoFrame->desempilhaOperando();
+	Valor valor_3 = topoDoFrame->desempilhaOperando();
+	Valor valor_4 = topoDoFrame->desempilhaOperando();
+
+	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2");
+
+	if ((valor_4.tipo == TipoDado::LONG) || (valor_4.tipo == TipoDado::DOUBLE))
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2");
+
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+	topoDoFrame->empilharOperando(valor_4);
+	topoDoFrame->empilharOperando(valor_3);
+	topoDoFrame->empilharOperando(valor_2);
+	topoDoFrame->empilharOperando(valor_1);
+
+	topoDoFrame->incrementaPC(1);
+
+}
 void ExecutionEngine::i_swap(){}
 void ExecutionEngine::i_iadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
