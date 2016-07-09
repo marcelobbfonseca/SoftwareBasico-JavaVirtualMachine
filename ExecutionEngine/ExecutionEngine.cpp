@@ -1962,11 +1962,198 @@ void ExecutionEngine::i_aastore(){
 	
 	topo->incrementaPC(1);
 }
-void ExecutionEngine::i_bastore(){}
-void ExecutionEngine::i_castore(){}
-void ExecutionEngine::i_sastore(){}
-void ExecutionEngine::i_pop(){}
-void ExecutionEngine::i_pop2(){}
+void ExecutionEngine::i_bastore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::INT)){
+							
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+						
+		}
+
+	Valor indice = topo->desempilhaOperando();
+
+	if(!(indice.tipo == TipoDado::INT)){
+							
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+						
+		}
+	Valor referenciaArr = topo->desempilhaOperando();
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+						
+		}
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+						
+		}
+
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+
+		cerr << "NullPointerException" << endl;
+		exit(1);
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+
+	if (array->TipoElementosDoArray() == TipoDado::BOOLEAN) {
+
+		valor.dado = (valor.dado != 0) ? true : false;
+		valor.tipo = TipoDado::BOOLEAN;
+
+	} 
+    else {
+
+		valor.dado = (uint8_t) valor.dado;
+		valor.tipo = TipoDado::BYTE;
+
+	}
+	
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+	topo->incrementaPC(1);
+
+}
+
+void ExecutionEngine::i_castore(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::INT)){
+							
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+						
+		}
+
+	Valor indice = topo->desempilhaOperando();
+
+	if(!(indice.tipo == TipoDado::INT)){
+							
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+						
+		}
+	Valor referenciaArr = topo->desempilhaOperando();
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+						
+		}
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+						
+		}
+
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+
+		cerr << "NullPointerException" << endl;
+		exit(1);
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+	valor.dado = (uint8_t) valor.dado;
+	valor.tipo = TipoDado::CHAR;
+	
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+	topo->incrementaPC(1);
+
+}
+void ExecutionEngine::i_sastore(){
+		Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::INT)){
+							
+			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+						
+		}
+
+	Valor indice = topo->desempilhaOperando();
+
+	if(!(indice.tipo == TipoDado::INT)){
+							
+			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+						
+		}
+	Valor referenciaArr = topo->desempilhaOperando();
+	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+							
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+						
+		}
+	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+							
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+						
+		}
+
+	array = (ObjetoArray *) referenciaArr.dado;
+
+	if (array == NULL) {
+
+		cerr << "NullPointerException" << endl;
+		exit(1);
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+		cerr << "ArrayIndexOutOfBoundsException" << endl;
+		exit(2);
+	}
+
+	valor.dado = (int16_t) valor.dado;
+	valor.tipo = TipoDado::SHORT;
+	array->AlterarElementoDaPosicao(indice.dado, valor);
+	
+	topo->incrementaPC(1);
+
+}
+void ExecutionEngine::i_pop(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	Valor valor = topo->desempilhaOperando();
+	if(!(valor.tipo != TipoDado::LONG)){
+							
+			throw new Erro("Valor nao pode ser um long", "ExecutionEngine", "i_pop");
+						
+		}
+
+	if(!(valor.tipo != TipoDado::DOUBLE)){
+							
+			throw new Erro("Valor nçao pode ser double", "ExecutionEngine", "i_pop");
+						
+		}
+
+	topo->incrementaPC(1);
+}
+void ExecutionEngine::i_pop2(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	topo->desempilhaOperando();
+	topo->desempilhaOperando();
+
+	topo->incrementaPC(1);
+
+}
 void ExecutionEngine::i_dup(){}
 void ExecutionEngine::i_dup_x1(){}
 void ExecutionEngine::i_dup_x2(){}
