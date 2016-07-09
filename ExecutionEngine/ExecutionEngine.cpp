@@ -1298,6 +1298,7 @@ void ExecutionEngine::i_daload(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+
 void ExecutionEngine::i_aaload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -1320,9 +1321,77 @@ void ExecutionEngine::i_aaload(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_baload(){}
-void ExecutionEngine::i_caload(){}
-void ExecutionEngine::i_saload(){}
+void ExecutionEngine::i_baload(){
+
+Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_aaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_aaload");
+	}
+
+	Valor op = array->ObterValor(index.dado);
+	if(!(op.tipo == TipoDado::BOOLEAN || op.tipo == TipoDado::BYTE)){
+
+		throw new Erro("o operando deve ser BOOLEAN ou BYTE.", "ExecutionEngine", "i_baload");
+		
+	}
+	
+	op.tipo = TipoDado::INT;
+
+	toppilha->empilharOperando(op);
+	toppilha->incrementaPC(1);
+}
+
+void ExecutionEngine::i_caload(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();	
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_caload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_caload");
+	}
+
+	Valor op = array->ObterValor(index.dado);
+	if(!(op.tipo == TipoDado::BOOLEAN || op.tipo == TipoDado::BYTE)){
+
+		throw new Erro("o operando deve ser BOOLEAN ou BYTE.", "ExecutionEngine", "i_caload");
+		
+	}
+
+	op.tipo = TipoDado::INT;
+	
+	toppilha->empilharOperando(op);
+	toppilha->incrementaPC(1);
+
+}
+void ExecutionEngine::i_saload(){
+
+
+
+}
 void ExecutionEngine::i_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
