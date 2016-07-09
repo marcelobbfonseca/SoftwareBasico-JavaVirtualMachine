@@ -4293,23 +4293,65 @@ void ExecutionEngine::i_getfield()
 	topoDaPilhaDeFrames->empilharOperando(campo);
 	topoDaPilhaDeFrames-> incrementaPC(3);
 }
+
 void ExecutionEngine::i_putfield()
 {
-	/*
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
 	
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
-	uint8_t *code = toppilha->getCode();
+	uint16_t indiceDoField;
+	memcpy(&indiceDoField, &(instrucoes[1]), 2);
+	indiceDoField= InverterEndianess<uint16_t>(indiceDoField);
+	
+	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
+	{
+		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "i_putfield");
+	}
+	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool().at(indiceDoField-1);
+	if(classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "i_putfield");
+	}
+	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*)classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1);
+	
+	string nomeDaClasse= classe->getUTF8(cpCampo->GetClassIndex());
+	string nomeDoField= classe ->getUTF8(cpAssinatura->GetNameIndex());
+	string descritorDoField= classe-> getUTF8(cpAssinatura->GetDescriptorIndex());
 
-	//argumentos da instrucao
-	uint8_t byte1 = code[1];
-	uint8_t byte2 = code[2];
-	uint16_t methodIndex = (byte1 << 8) | byte2;
+	Valor valorQueSeraInserido= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorQueSeraInserido.tipo == LONG || valorQueSeraInserido.tipo == DOUBLE)
+	{
+		topoDaPilhaDeFrames->desempilhaOperando();
+	}
+	
+	Valor valorInstancia= topoDaPilhaDeFrames->desempilhaOperando();
+	if(valorInstancia.tipo != REFERENCE)
+	{
+		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_putfield");
+	}
+	if(((Objeto*)valorInstancia.dado)->ObterTipoObjeto() != INSTANCIA)
+	{
+		throw new Erro("Esperado instancia", "ExecutionEngine", "i_putfield");
+	}
+	ObjetoInstancia *instancia= (ObjetoInstancia*)valorInstancia.dado;
 
-	//...	
+	try
+	{
+		if(instancia->ObterValorDoCampo(nomeDoField).tipo != valorQueSeraInserido.tipo)
+		{
+			cout<< "WARNING! Vai colocar um valor de tipo diferente do que contém no campo \tTipoDoCampo= " << ObterStringTipo(instancia->ObterValorDoCampo(nomeDoField).tipo) << " \tTipoQueSeraInserido" << ObterStringTipo(valorQueSeraInserido.tipo) << endl;
+		}
+	}
+	catch(Erro *err)
+	{
+		cout << "WARNING! CAMPO NAO EXISTE! \tNomeCampo: " << nomeDoField << " \t da classe: " << nomeDaClasse << endl;
+	}
 
-	*/
+	
+	instancia->ColocarValorNoCampo(nomeDoField, valorQueSeraInserido);
+	
+	topoDaPilhaDeFrames->incrementaPC(3);
 
 }//fim metodo
 
