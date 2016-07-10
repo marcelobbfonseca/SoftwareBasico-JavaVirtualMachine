@@ -1576,6 +1576,7 @@ cout << "ExecutionEngine::i_fstore \tval.dado = " << val.dado << endl;
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
+
 	return;
 
 }
@@ -2878,6 +2879,16 @@ void ExecutionEngine::i_lshl(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
+	if(!(valor2.tipo == TipoDado::INT)){
+
+		throw new Erro("O segundo operando deve ser um inteiro.","ExecutionEngine","i_ldiv");
+
+	}
+	if(!(valor1.tipo == TipoDado::LONG)){
+
+		throw new Erro("O segundo operando deve ser um LONG.","ExecutionEngine","i_ldiv");
+
+	}
 	int64_t num1, num2;
 
 	memcpy(&num1,&valor1.dado,8);
