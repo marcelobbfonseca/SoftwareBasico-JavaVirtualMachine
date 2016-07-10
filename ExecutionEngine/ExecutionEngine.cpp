@@ -1914,39 +1914,6 @@ void ExecutionEngine::i_iastore(){
 	topo->incrementaPC(1);
 
 }
-	/*Frame *topo = runtimeDataArea->topoPilha();
-
-	Valor valor = topo->desempilhaOperando();
-	if(valor.tipo != TipoDado::REFERENCE)
-	{
-		throw new Erro("Esperado uma referencia da pilha", "ExecutionEngine", "i_iastore");
-	}
-
-	uint8_t *code = topo->getCode();
-	uint8_t byte1 = code[1];
-	int16_t indice = (int16_t)byte1;
-
-	if (isWide) {
-
-		isWide = false;		
-		uint8_t byte2 = code[2];
-		indice = (byte1 << 8) | byte2;
-		topo->incrementaPC(3);
-		
-	} 
-	else {
-		topo->incrementaPC(2);
-	}
-
-	if((int16_t)(topo->tamanhoVetorVariaveis()) <= indice)
-	{
-		string errMsg= "Indice invalido! \t indice: ";
-		errMsg+= indice;
-		errMsg+= " \t Tamanho de vetor de variaveis locais: ";
-		errMsg+= topo->tamanhoVetorVariaveis();
-		throw new Erro(errMsg.c_str(), "ExecutionEngine", "i_iastore");
-	}
-	topo->mudarVariavelLocal(valor, indice);*/
 
 void ExecutionEngine::i_lastore(){
 
@@ -2073,6 +2040,13 @@ void ExecutionEngine::i_dastore(){
 						
 		}
 
+	Valor pad = topo->desempilhaOperando();
+	if(!(pad.tipo == TipoDado::PADDING)){
+							
+		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
+						
+	}
+	
 	Valor indice = topo->desempilhaOperando();
 
 	if(!(indice.tipo == TipoDado::INT)){
@@ -2080,12 +2054,7 @@ void ExecutionEngine::i_dastore(){
 			throw new Erro("Valor não é um inteiro", "ExecutionEngine", "i_dastore");
 						
 		}
-	Valor pad = topo->desempilhaOperando();
-	if(!(pad.tipo == TipoDado::PADDING)){
-							
-		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
-						
-	}
+
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
 							
