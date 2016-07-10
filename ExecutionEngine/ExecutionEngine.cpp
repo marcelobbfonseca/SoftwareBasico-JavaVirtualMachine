@@ -1480,6 +1480,7 @@ void ExecutionEngine::i_istore(){
 		memcpy(&(val.dado), &aux, 8);
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
+		isWide= false;
 	}
 	else
 	{
@@ -1572,6 +1573,7 @@ void ExecutionEngine::i_fstore(){
 		memcpy(&(val.dado), &indice, 2);
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
+		isWide=false;
 	}
 	else
 	{
@@ -1606,6 +1608,7 @@ void ExecutionEngine::i_dstore(){
 		val.dado= indice;
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
+		isWide= false;
 	}
 	else
 	{
