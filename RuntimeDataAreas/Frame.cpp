@@ -29,7 +29,16 @@ Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeD
 #ifdef DEBUG
 	cout<< "\t5"<< endl;
 #endif
-	assert(metodo->FlagAtivada(METHOD_STATIC));
+	if(!metodo->FlagAtivada(METHOD_STATIC))
+	{
+		string errMsg= "Tentado invocar método não estático \tclasse: ";
+		errMsg+= javaClass->getUTF8(javaClass->ObterEstaClasse());
+		errMsg+=  "\tmetodo: ";
+		errMsg+= nomeMetodo;
+		errMsg += " \tdescritor: ";
+		errMsg+= descritor;
+		throw new Erro(errMsg, "Frame", "Frame(JavaClass*, string, string, RuntimeDataArea*)");
+	}
 #ifdef DEBUG
 	cout<< "\t6"<< endl;
 #endif

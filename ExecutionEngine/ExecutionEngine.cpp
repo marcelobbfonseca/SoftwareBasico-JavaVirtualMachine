@@ -4663,7 +4663,13 @@ void ExecutionEngine::i_invokevirtual()
 		}
 		else
 		{
-			throw new Erro("Metodo que esta tentando invocar um metodo desconhecido", "ExecutionEngine", "invokevirtual");
+			string errMsg = "Metodo que esta tentando invocar um metodo desconhecido \tclasse: ";
+			errMsg+= nomeDaClasse;
+			errMsg+= " \tmetodo: ";
+			errMsg+= nomeDoMetodo;
+			errMsg+= " \tdescritor: ";
+			errMsg+= descritorDoMetodo;
+			throw new Erro(errMsg, "ExecutionEngine", "invokevirtual");
 		}
 	}
 	else
