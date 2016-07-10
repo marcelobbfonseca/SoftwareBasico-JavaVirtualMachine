@@ -1858,8 +1858,60 @@ void ExecutionEngine::i_astore_3(){
 }
 
 void ExecutionEngine::i_iastore(){
-
+	
 	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor op = topo->desempilhaOperando();
+	if(!(op.tipo == TipoDado::INT)){
+
+		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
+
+	}
+	Valor indice = topo->desempilhaOperando();
+	if(!(indice.tipo == TipoDado::INT)){
+
+		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
+
+	}
+	Valor referArr = topo->desempilhaOperando();
+	if(referArr.tipo != TipoDado::REFERENCE){
+
+		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
+
+	}
+	if(!(((Objeto*)referArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+
+		throw new Erro("objeto não é um array", "ExecutionEngine", "i_iastore");
+
+	}
+
+	array = (ObjetoArray*) referArr.dado;
+
+	if (array == NULL) {
+
+		throw new Erro("NullPointerException", "ExecutionEngine", "i_iastore");
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+
+		throw new Erro("ArrayIndesxOutOfBoundException", "ExecutionEngine", "i_iastore");
+
+	}
+	
+	if(op.tipo != array->TipoElementosDoArray()){
+
+		throw new Erro("Operando não é do tipo dos elementos do array", "ExecutionEngine", "i_iastore");
+
+	}	
+	
+	array->AlterarElementoDaPosicao(indice.dado, op);
+	
+	topo->incrementaPC(1);
+
+}
+	/*Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor valor = topo->desempilhaOperando();
 	if(valor.tipo != TipoDado::REFERENCE)
@@ -1891,9 +1943,8 @@ void ExecutionEngine::i_iastore(){
 		errMsg+= topo->tamanhoVetorVariaveis();
 		throw new Erro(errMsg.c_str(), "ExecutionEngine", "i_iastore");
 	}
-	topo->mudarVariavelLocal(valor, indice);
+	topo->mudarVariavelLocal(valor, indice);*/
 
-}
 void ExecutionEngine::i_lastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
