@@ -29,6 +29,8 @@
 #endif
 
 //#define DEBUG_EE
+//#define DEBUG_EE_INVOKEVIRTUAL
+#define DEBUG_EE_EMPILHAR_FRAME
 #define MINI_DEBUG
 #ifdef DEBUG_EE
 	#include"Opcode.hpp"
@@ -321,7 +323,16 @@ void ExecutionEngine::inicializaInstrucoes() {
 void ExecutionEngine::i_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
+#define BREAK_NOP
+#ifdef BREAK_NOP
+	static int nopCount=0;
+	nopCount++;
+#endif
 	runtimeDataArea->topoPilha()->incrementaPC(1);
+#define BREAK_NOP
+#ifdef BREAK_NOP
+	throw new Erro("Break no NOP");
+#endif
 	
 }
 
@@ -614,13 +625,13 @@ void ExecutionEngine::i_ldc_w(){
 	{
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
 		string utf8String = utf8Entry->GetString();
-#ifdef DEBUG
+#ifdef DEBUG_EE
 cout<<"chegou i_ldc" << endl;
 #endif
 		valor.tipo = TipoDado::REFERENCE;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		memcpy(&(valor.dado), &temp, sizeof(void*));
-#ifdef DEBUG
+#ifdef DEBUG_EE
 cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 #endif
 	}
@@ -3836,7 +3847,7 @@ void ExecutionEngine::i_goto(){
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
-	uint16_t offsetPC = (byte1 << 8) | byte2;
+	int16_t offsetPC = (byte1 << 8) | byte2;
 	runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 }
 void ExecutionEngine::i_jsr(){
@@ -4168,7 +4179,7 @@ void ExecutionEngine::i_getstatic() {
 	Valor valorStatico = classRuntime->getValorDoField(campoName);
 	
 	//bolean, byte, short e int sao empilhados como int. long e double empilham o padding antes
-	switch (valorStatico.tipo) {
+/*	switch (valorStatico.tipo) {
 		case TipoDado::BOOLEAN:
 		case TipoDado::BYTE:
 		case TipoDado::SHORT:
@@ -4180,16 +4191,23 @@ void ExecutionEngine::i_getstatic() {
 		case TipoDado::DOUBLE:
 		case TipoDado::LONG:
 
-			Valor padding;
-			padding.tipo = TipoDado::PADDING;
-			toppilha->empilharOperando(padding);
+			Valor preenchimento;
+			preenchimento.tipo = PADDING;
+			toppilha->empilharOperando(preenchimento);
 			break;
 
 		default://se for reference?
 			cerr << "deu ruim" << endl;
 			exit(0);
 	}//fim switch valor estatico
+*/
 
+	if(valorStatico.tipo == DOUBLE || valorStatico.tipo == LONG)
+	{
+			Valor preenchimento;
+			preenchimento.tipo = PADDING;
+			toppilha->empilharOperando(preenchimento);
+	}
 	toppilha->empilharOperando(valorStatico);
 	runtimeDataArea->topoPilha()->incrementaPC(3);
 
@@ -4408,37 +4426,37 @@ void ExecutionEngine::i_putfield()
 
 void ExecutionEngine::i_invokevirtual()
 {
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_INVOKEVIRTUAL
 		cout<< "ExecutionEngine::i_invokevirtual()" << endl;
 	#endif
 		Frame *topoDaPilha= runtimeDataArea->topoPilha();
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_INVOKEVIRTUAL
 		cout<< "ExecutionEngine::i_invokevirtual()1" << endl;
 	#endif
 		stack<Valor> pilhaDeOperandosDeReserva= topoDaPilha->retornaPilhaOperandos();
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_INVOKEVIRTUAL
 		cout<< "ExecutionEngine::i_invokevirtual()2" << endl;
 	#endif
 		uint8_t *instrucoes=topoDaPilha->getCode();
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_INVOKEVIRTUAL
 		cout<< "ExecutionEngine::i_invokevirtual()3" << endl;
 	#endif
 	uint16_t indiceMetodo;
 	memcpy(&indiceMetodo, &(instrucoes[1]), 2);
 	indiceMetodo= InverterEndianess<uint16_t>(indiceMetodo);
 	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_INVOKEVIRTUAL
 		cout<< "ExecutionEngine::i_invokevirtual()4" << endl;
 	#endif
 	if(javaClass->getConstantPool().at(indiceMetodo-1)->GetTag() != CONSTANT_Methodref)
 	{
 		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokevirtual");
 	}
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()5" << endl;
 #endif
 	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)javaClass->getConstantPool().at(indiceMetodo-1);
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()6" << endl;
 #endif
 	string nomeDaClasse= javaClass->getUTF8(metodo->GetClassIndex());
@@ -4449,7 +4467,7 @@ void ExecutionEngine::i_invokevirtual()
 	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
 	string nomeDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetNameIndex());
 	string descritorDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetDescriptorIndex());
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()7" << endl;
 #endif
 	
@@ -4459,11 +4477,11 @@ void ExecutionEngine::i_invokevirtual()
 		{
 			if(descritorDoMetodo != "()V")
 			{
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()8" << endl;
 #endif
 				Valor valorQueSeraImpresso= topoDaPilha->desempilhaOperando();
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()9" << endl;
 #endif
 				switch(valorQueSeraImpresso.tipo)
@@ -4523,22 +4541,22 @@ void ExecutionEngine::i_invokevirtual()
 					}
 					case(REFERENCE):
 					{
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()10" << endl;
 #endif
 						if(((Objeto*)valorQueSeraImpresso.dado)->ObterTipoObjeto() != TipoObjeto::STRING)
 						{
 							throw new Erro("String esperado quando deve imprimir referencias", "ExecutionEngine", "invokevirtual");
 						}
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()11" << endl;
 #endif
 						ObjetoString *stringPtr;
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()12" << endl;
 #endif
 						memcpy(&stringPtr, &(valorQueSeraImpresso.dado), sizeof(ObjetoString *));
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()13" << endl;
 #endif
 						printf("%s", stringPtr->ObterString().c_str());
@@ -4549,7 +4567,7 @@ void ExecutionEngine::i_invokevirtual()
 						throw new Erro("Tentou-se imprimir um tipo de dado invalido");
 					}
 				}
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()14" << endl;
 #endif
 
@@ -4621,7 +4639,7 @@ void ExecutionEngine::i_invokevirtual()
 	}
 	else
 	{
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()15" << endl;
 #endif
 		uint16_t numeroDeargumentos;
@@ -4675,8 +4693,8 @@ void ExecutionEngine::i_invokevirtual()
 			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "Invokevirtual");
 		}
 		ObjetoInstancia *instancia= (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
-		runtimeDataArea->CarregarClasse(nomeDaClasse);
-		Frame *novoFrame= new Frame(instancia, javaClass, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+		Frame *novoFrame= new Frame(instancia, classeAlvo, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
 		if(runtimeDataArea->topoPilha() != topoDaPilha)
 		{
 			topoDaPilha->setaPilhaOperandos(pilhaDeOperandosDeReserva);
@@ -4684,6 +4702,9 @@ void ExecutionEngine::i_invokevirtual()
 			return;
 		}
 		runtimeDataArea->empilharFrame(novoFrame);
+		#ifdef DEBUG_EE_EMPILHAR_FRAME
+		cout<< "Frame empilhado! classe: " << classeAlvo->getUTF8(classeAlvo->ObterEstaClasse()) << " \tmetodo: " << nomeDoMetodo << " \tdescritor: " << descritorDoMetodo << endl;
+		#endif
 	}
 	topoDaPilha->incrementaPC(3);
 }
@@ -4797,6 +4818,9 @@ void ExecutionEngine::i_invokespecial(){
 			return;
 		}
 		runtimeDataArea->empilharFrame(novoFrame);
+		#ifdef DEBUG_EE_EMPILHAR_FRAME
+		cout<< "Frame empilhado! classe: " << classeAlvo->getUTF8(classeAlvo->ObterEstaClasse()) << " \tmetodo: " << nomeDoMetodo << " \tdescritor: " << descritorDoMetodo << endl;
+		#endif
 	}
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
@@ -4893,6 +4917,9 @@ void ExecutionEngine::i_invokestatic(){
 			return;
 		}
 		runtimeDataArea->empilharFrame(novoFrame);
+		#ifdef DEBUG_EE_EMPILHAR_FRAME
+		cout<< "Frame empilhado! classe: " << classeDaQualChamaremosOMetodo->getUTF8(classeDaQualChamaremosOMetodo->ObterEstaClasse()) << " \tmetodo: " << nomeDoMetodo << " \tdescritor: " << descritorDoMetodo << endl;
+		#endif
 	}
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
@@ -4912,11 +4939,11 @@ void ExecutionEngine::i_invokeinterface()
 	{
 		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
 	}
-#ifdef DEBUG
+#ifdef DEBUG_EE
 	cout<< "ExecutionEngine::i_invokeinterface()5" << endl;
 #endif
 	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)classe->getConstantPool().at(indiceDoMetodo-1);
-#ifdef DEBUG
+#ifdef DEBUG_EE
 	cout<< "ExecutionEngine::i_invokeinterface()6" << endl;
 #endif
 	string nomeDaClasse= classe->getUTF8(metodo->GetClassIndex());
@@ -4984,8 +5011,12 @@ void ExecutionEngine::i_invokeinterface()
 			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "i_invokeinterface");
 		}
 		ObjetoInstancia *instancia= (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
-		runtimeDataArea->CarregarClasse(nomeDaClasse);
-		Frame *novoFrame= new Frame(instancia, instancia->ObterJavaClass(), nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+		Frame *novoFrame= new Frame(instancia, classeAlvo, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		if(classeAlvo != instancia->ObterJavaClass())
+		{
+			cout<< "Ue"<< endl;
+		}
 		if(runtimeDataArea->topoPilha() != topoDaPilhaDeFrames)
 		{
 			topoDaPilhaDeFrames->setaPilhaOperandos(pilhaDeOperandosDeReserva);
@@ -4993,6 +5024,9 @@ void ExecutionEngine::i_invokeinterface()
 			return;
 		}
 		runtimeDataArea->empilharFrame(novoFrame);
+		#ifdef DEBUG_EE_EMPILHAR_FRAME
+		cout<< "Frame empilhado! classe: " << classeAlvo->getUTF8(classeAlvo->ObterEstaClasse()) << " \tmetodo: " << nomeDoMetodo << " \tdescritor: " << descritorDoMetodo << endl;
+		#endif
 	}
 	else
 	{
@@ -5252,7 +5286,7 @@ void ExecutionEngine::i_checkcast()
 				if(classeTemp->ObterSuperClasse() != 0)
 				{//se tiver dando dau(entrando em loop) troque essa linha
 					string nomeDaSuperClasse= classeTemp->getUTF8(classeTemp->ObterEstaClasse());
-#ifdef DEBUG
+#ifdef MINI_DEBUG
 cout<< "se estiver entrando em loop aqui no i_checkcast faça a substituicao"<< endl;
 #endif
 					//por essa
@@ -5546,31 +5580,46 @@ void ExecutionEngine::StoreValor(Valor val)
 
 
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
-	puts(":) aloooooooooo");
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_StoreValor 0 \t indice = " << val.dado << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
 	Valor valorDaPilha= topoDaPilhaDeFrames->desempilhaOperando();
-	puts(":) aloooooooooo 2");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 1" << endl;
+#endif
 
 	if(valorDaPilha.tipo != val.tipo)
 	{
-		puts(":) aloooooooooo 3");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 2" << endl;
+#endif
 		string errMsg= "Tentativa de store de um valor com tipo incorreto.\t";
 		errMsg+= "Esperado: ";
-		puts(":) aloooooooooo 4");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 3" << endl;
+#endif
 		errMsg+= ObterStringTipo(val.tipo);
-		puts(":) aloooooooooo 5");	
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 4" << endl;
+#endif
 		errMsg+= "\tFornecido: ";
 		errMsg+= ObterStringTipo(valorDaPilha.tipo);
-		puts(":) aloooooooooo 6");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 5" << endl;
+#endif
 //		cerr<< errMsg;
 		throw new Erro(errMsg, "ExecutionEngine", "StoreValor");
-		puts(":) aloooooooooo 7");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 6" << endl;
+#endif
 	}
-	puts(":) aloooooooooo 8");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 7" << endl;
+#endif
 	topoDaPilhaDeFrames->mudarVariavelLocal(valorDaPilha, val.dado);
-	puts(":) aloooooooooo 9");
+#ifdef DEBUG_EE
+cout << "ExecutionEngine::i_StoreValor 8" << endl;
+#endif
 
 }
 

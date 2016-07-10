@@ -1,7 +1,7 @@
 #include "Frame.hpp"
 #include "Erro.hpp"
 
-#define DEBUG
+//#define DEBUG
 //Construtor para métodos estáticos
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {

@@ -1,7 +1,8 @@
 #include"UtilidadesParaString.hpp"
 #include"RuntimeDataArea.hpp"
 
-#define DEBUG
+#define DEBUG_RDA
+//#define DEBUG_RDA_CARREGAR_CLASSE
 
 RuntimeDataArea::RuntimeDataArea(void)
 {
@@ -34,12 +35,16 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	classes[nomeSemExtensaoNemCaminho] = temp;
 	// adicionando <clinit> da classe (se existir) na stack frame.
 	static bool primeiraVez= true;//se for a primeira classe a ser carregada, deixa a execution engine carregar o clinit
-	cout<< "chegou ate aqui" << endl;
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "RuntimeDataArea::CarregarClasse(const string &nomeDaClasse) 0" << endl;
+	#endif
 	if(!primeiraVez)
 	{
 		if(MetodoExiste(nomeSemExtensao, "<clinit>", "()V"))
 		{
-	cout<< "chegou ate aqui3" << endl;
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "RuntimeDataArea::CarregarClasse(const string &nomeDaClasse) 1" << endl;
+	#endif
 			//pseudocodigo:
 			string clinit= "<clinit>";
 			string V= "()V";
@@ -47,7 +52,9 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 			empilharFrame(novoFrame);
 		}
 	}
-	cout<< "chegou ate aqui2" << endl;
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "RuntimeDataArea::CarregarClasse(const string &nomeDaClasse) 2" << endl;
+	#endif
 	primeiraVez= false;
 	if(classes[nomeSemExtensaoNemCaminho]== NULL)
 	printf("deu ruim\n");
@@ -66,15 +73,15 @@ void RuntimeDataArea::SetExecutionEngine(ExecutionEngine *executionEngine)
 
 void RuntimeDataArea::empilharFrame(Frame *frame)
 {
-#ifdef DEBUG
+#ifdef DEBUG_RDA
 	printf("RuntimeDataArea::empilharFrame");
 	cout <<endl;
 	printf("\tframe= %p", (void*)frame);
 	cout <<endl;
 #endif
 	this->pilhaJVM.push(frame);
-#ifdef DEBUG
-	cout<< "Retornando" << endl;
+#ifdef DEBUG_RDA
+	cout<< "Retornando do empilharFrame" << endl;
 #endif
 
 }
@@ -93,6 +100,9 @@ void RuntimeDataArea::desempilharFrame()
 	Frame* topo = pilhaJVM.top();
 	pilhaJVM.pop();
 	delete topo;
+#ifdef DEBUG_RDA
+	cout<< "FrameSendoDesempilhado. Numero de frames apos desempilhar: " << pilhaJVM.size() << endl;
+#endif
 	return;
 }
 
