@@ -3901,7 +3901,7 @@ void ExecutionEngine::i_jsr(){
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
-	uint16_t offsetPC = (byte1 << 8) | byte2;
+	int16_t offsetPC = (byte1 << 8) | byte2;
 	
 	Valor enderecoRetorno;
 	enderecoRetorno.tipo = TipoDado::RETURN_ADDR;
@@ -5097,7 +5097,7 @@ void ExecutionEngine::i_new(){
 	
 	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_new");
 	}
 	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
 	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
@@ -5127,7 +5127,7 @@ void ExecutionEngine::i_newarray()
 	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
 	if(tamanhoDoFuturoArray.tipo != INT)
 	{
-		throw new Erro("Esperado encontrar um valor do tipo int");
+		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_newarray");
 	}
 	ObjetoArray *arrayQueSeraCriado;
 	int32_t temp;
