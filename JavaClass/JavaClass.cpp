@@ -517,6 +517,11 @@ uint16_t JavaClass::ObterSuperClasse(void)
 	return super_class;
 }
 
+uint16_t JavaClass::ObterEstaClasse(void)
+{
+	return this_class;
+}
+
 void JavaClass::ExibirVersaoJavaSE(uint16_t major, uint16_t minor) const
 {
 	if(major == 45 && minor == 3)

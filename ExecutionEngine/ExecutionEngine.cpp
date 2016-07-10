@@ -5141,8 +5141,96 @@ void ExecutionEngine::i_arraylength(){
 void ExecutionEngine::i_athrow(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_checkcast(){
-
+void ExecutionEngine::i_checkcast()
+{
+	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
+	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
+	
+	uint16_t indiceDaCp;
+	memcpy(&indiceDaCp, &(instrucoes[1]), 2);
+	indiceDaCp= InverterEndianess<uint16_t>(indiceDaCp);
+	
+	if(classe->getConstantPool().at(indiceDaCp-1)->GetTag() != CONSTANT_Class)
+	{
+		throw new Erro("Esperado CONSTANT_Class", "ExecutionEngine", "i_checkcast");
+	}
+	
+	string nomeDaClasse= classe->getUTF8(indiceDaCp);
+	
+	Valor valorRefProObjeto= topoDaPilhaDeFrames->desempilhaOperando();
+	
+	if(valorRefProObjeto.tipo != REFERENCE)
+	{
+		throw new Erro("Esperado valor do tipo referencia");
+	}
+	Valor valorDoResultado;
+	valorDoResultado.tipo = INT;
+	
+	if(((Objeto*)valorRefProObjeto.dado) == NULL)
+	{
+		throw new Erro("ClassCastException");
+	}
+	if(((Objeto*)valorRefProObjeto.dado)->ObterTipoObjeto() == INSTANCIA)
+	{
+		ObjetoInstancia *instancia= (ObjetoInstancia*)valorRefProObjeto.dado;
+		JavaClass *classeAlvo=  instancia->ObterJavaClass();
+		string nomeDaClasseAtual;
+		
+		bool naoAchou= true;
+		while(naoAchou)
+		{
+			JavaClass *classeTemp= classeAlvo;
+			nomeDaClasseAtual= classeTemp->getUTF8(classeTemp->ObterEstaClasse());
+			if(nomeDaClasseAtual == nomeDaClasse)
+			{
+				naoAchou=false;
+			}
+			else
+			{
+				if(classeTemp->ObterSuperClasse() != 0)
+				{//se tiver dando dau(entrando em loop) troque essa linha
+					string nomeDaSuperClasse= classeTemp->getUTF8(classeTemp->ObterEstaClasse());
+#ifdef DEBUG
+cout<< "se estiver entrando em loop aqui no i_checkcast faça a substituicao"<< endl;
+#endif
+					//por essa
+//					string nomeDaSuperClasse= classeTemp->getUTF8(classeTemp->ObterSuperClasse());
+					//fim da observação
+					classeAlvo= runtimeDataArea->CarregarClasse(nomeDaSuperClasse);
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		valorDoResultado.dado= naoAchou? 0 : 1;
+	}
+	else if(((Objeto*)valorRefProObjeto.dado)->ObterTipoObjeto() == STRING)
+	{
+		if(nomeDaClasse == "java/lang/String" || nomeDaClasse == "java/lang/Object")
+		{
+			valorDoResultado.dado= 1;
+		}
+		else
+		{
+			valorDoResultado.dado= 0;
+		}
+	}
+	else//então é um array
+	{
+		if(nomeDaClasse == "java/lang/Object")
+		{
+			valorDoResultado.dado= 1;
+		}
+		else
+		{
+			valorDoResultado.dado= 0;
+		}
+	}
+	topoDaPilhaDeFrames->empilharOperando(valorDoResultado);
+	topoDaPilhaDeFrames->incrementaPC(3);
 }
 
 void ExecutionEngine::i_instanceof(){
