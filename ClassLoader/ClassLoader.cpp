@@ -16,9 +16,20 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	{
 		if(nomeClasse.find('\\') != string::npos || nomeClasse.find('/') != string::npos)
 		{
-			
+			caminho= nomeClasse;
+			while(caminho[caminho.length()-1] == '/' || caminho[caminho.length()-1] == '\\')
+			{
+				caminho= caminho.substr(0, caminho.length()-1);
+			}
 		}
 		primeiraVezQueCarrega= false;
+	}
+	else
+	{
+		if(nomeClasse.find("java/")== string::npos)
+		{
+			nomeClasse= caminho + nomeClasse;
+		}
 	}
 	JavaClass *retorno;
 	try
