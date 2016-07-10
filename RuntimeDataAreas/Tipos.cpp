@@ -14,7 +14,5 @@ std::string ObterStringTipo(TipoDado tipo)
 	if(tipo==LONG)return "LONG";
 	if(tipo==DOUBLE)return "DOUBLE";
 	if(tipo==PADDING)return "PADDING";
-	int8_t *ptr= NULL;
-	*ptr=0;
 	throw new Erro("ObterStringTipo recebeu um tipo invalido");
 }
