@@ -1457,14 +1457,15 @@ void ExecutionEngine::i_saload(){
 void ExecutionEngine::i_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
-	uint16_t indice;
 	Valor val;
 	val.tipo = INT;
 	if(isWide)
 	{
+		int16_t indice;
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
-		memcpy(&(val.dado), &indice, 2);
+		int64_t aux= indice; 
+		memcpy(&(val.dado), &aux, 8);
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
 	}
@@ -1473,8 +1474,10 @@ void ExecutionEngine::i_istore(){
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_istore" << endl;
 #endif
+		int8_t indice;
 		memcpy(&indice, &(instrucoes[1]), 1);
-		val.dado= indice;
+		int64_t aux= indice;
+		memcpy(&(val.dado), &aux, 8);
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
 #endif
@@ -1555,6 +1558,7 @@ void ExecutionEngine::i_fstore(){
 	{
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
+		val.dado=0;
 		memcpy(&(val.dado), &indice, 2);
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
@@ -1562,12 +1566,12 @@ void ExecutionEngine::i_fstore(){
 	else
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_istore" << endl;
+cout << "ExecutionEngine::i_fstore" << endl;
 #endif
 		memcpy(&indice, &(instrucoes[1]), 1);
 		val.dado= indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
+cout << "ExecutionEngine::i_fstore \tval.dado = " << val.dado << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
