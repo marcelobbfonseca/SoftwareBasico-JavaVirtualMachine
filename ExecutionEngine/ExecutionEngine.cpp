@@ -3153,6 +3153,7 @@ void ExecutionEngine::i_i2l(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+//converte de int para float
 void ExecutionEngine::i_i2f(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -3380,7 +3381,7 @@ void ExecutionEngine::i_i2b(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_i2c(){
+void ExecutionEngine::i_i2c(){ //da segfault
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3389,16 +3390,17 @@ void ExecutionEngine::i_i2c(){
 	valor2.tipo = TipoDado::CHAR;
 	
 	int32_t num1=0; 
-	int8_t num2=0;
+	int16_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
-	num2 = (int8_t) num1;
-	memcpy(&valor2.dado,&num2,1);
+	num2 = (int16_t) num1;
+	memcpy(&valor2.dado,&num2,2);
 	
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_i2s(){
+//converte de int para short
+void ExecutionEngine::i_i2s(){ 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3410,7 +3412,7 @@ void ExecutionEngine::i_i2s(){
 	int16_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
-	num2 = (int8_t) num1;
+	num2 = (int16_t) num1;
 	memcpy(&valor2.dado,&num2,2);
 	
 	toppilha->empilharOperando(valor2);
