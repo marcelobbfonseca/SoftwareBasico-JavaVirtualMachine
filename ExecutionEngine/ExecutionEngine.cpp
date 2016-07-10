@@ -1506,7 +1506,7 @@ void ExecutionEngine::i_lstore(){
 	#endif
 
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
-	uint16_t indice;
+	int16_t indice;
 	Valor val;
 	val.tipo = TipoDado::LONG;
 	topoDaPilhaDeFrames->getCode();//dando pop do preenchimento
@@ -1514,7 +1514,7 @@ void ExecutionEngine::i_lstore(){
 	{
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
-		val.dado= indice;
+		val.dado= (int64_t)indice;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_lstore 0 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
@@ -1528,7 +1528,7 @@ cout << "ExecutionEngine::i_lstore 0 \t indice = " << indice << " \ttamanhpilha=
 cout << "ExecutionEngine::i_lstore 1" << endl;
 #endif
 		//aux para expansao de tipo
-		uint8_t aux=0;
+		int8_t aux=0;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
 		val.dado= indice;
@@ -1578,7 +1578,9 @@ void ExecutionEngine::i_fstore(){
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_fstore" << endl;
 #endif
-		memcpy(&indice, &(instrucoes[1]), 1);
+		int8_t aux;
+		memcpy(&aux, &(instrucoes[1]), 1);
+		indice= aux;
 		val.dado= indice;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_fstore \tval.dado = " << val.dado << endl;
@@ -1601,7 +1603,7 @@ void ExecutionEngine::i_dstore(){
 	{
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
-		memcpy(&(val.dado), &indice, 2);
+		val.dado= indice;
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
 	}
@@ -1610,7 +1612,9 @@ void ExecutionEngine::i_dstore(){
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_dstore" << endl;
 #endif
-		memcpy(&indice, &(instrucoes[1]), 1);
+		uint8_t aux;
+		memcpy(&aux, &(instrucoes[1]), 1);
+		indice= aux;
 		val.dado= indice;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_dstore \tval.dado = " << val.dado << endl;
@@ -2847,8 +2851,8 @@ void ExecutionEngine::i_fneg(){
 	
 	int32_t num;
 	memcpy(&num,&valor.dado,4);
+	num= ((num & 0x80000000)^0x80000000)|(num & 0x7FFFFFFF);
 	
-	num = -num;
 	memcpy(&valor.dado,&num,4);
 	
 	toppilha->empilharOperando(valor);
@@ -2859,7 +2863,7 @@ void ExecutionEngine::i_dneg(){
 	
 	Valor valor = toppilha->desempilhaOperando();
 	
-	int64_t num;
+	double num;
 	memcpy(&num,&valor.dado,8);
 	
 	num = -num;
@@ -3178,7 +3182,7 @@ void ExecutionEngine::i_i2d(){
 	toppilha->empilharOperando(padding);
 	
 	int32_t num1;
-	int64_t num2;
+	double num2;
 	
 	memcpy(&num1,&valor1.dado,4);
 	num2 = (double) num1;
@@ -3233,7 +3237,8 @@ void ExecutionEngine::i_l2d(){
 	Valor valor2;
 	valor2.tipo = TipoDado::DOUBLE;
 	
-	int64_t num1, num2;
+	int64_t num1;
+	double num2;
 	
 	memcpy(&num1,&valor1.dado,8);
 	num2 = (double) num1;
@@ -3250,7 +3255,8 @@ void ExecutionEngine::i_f2i(){
 	Valor valor2;
 	valor2.tipo = TipoDado::INT;
 	
-	int32_t num1, num2;
+	float num1;
+	int num2;
 	
 	memcpy(&num1,&valor1.dado,4);
 	num2 = (int32_t) num1;
@@ -3270,7 +3276,7 @@ void ExecutionEngine::i_f2l(){
 	padding.tipo = TipoDado::PADDING;
 	toppilha->empilharOperando(padding);
 	
-	int32_t num1;
+	float num1;
 	int64_t num2;
 	
 	memcpy(&num1,&valor1.dado,4);
@@ -3291,8 +3297,8 @@ void ExecutionEngine::i_f2d(){
 	padding.tipo = TipoDado::PADDING;
 	toppilha->empilharOperando(padding);
 	
-	int32_t num1;
-	int64_t num2;
+	float num1;
+	double num2;
 	
 	memcpy(&num1,&valor1.dado,4);
 	num2 = (double) num1;
@@ -3310,7 +3316,7 @@ void ExecutionEngine::i_d2i(){
 	Valor valor2;
 	valor2.tipo = TipoDado::INT;
 	
-	int64_t num1;
+	double num1;
 	int32_t num2;
 	
 	memcpy(&num1,&valor1.dado,8);
