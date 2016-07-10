@@ -28,9 +28,10 @@
 	#endif
 #endif
 
-//#define DEBUG_EE
+#define DEBUG_EE
 //#define DEBUG_EE_INVOKEVIRTUAL
 #define DEBUG_EE_EMPILHAR_FRAME
+#define DEBUG_EE_STORE_VALOR
 #define MINI_DEBUG
 #ifdef DEBUG_EE
 	#include"Opcode.hpp"
@@ -435,7 +436,7 @@ void ExecutionEngine::i_lconst_0(){
 
 	Valor valor;
 	valor.tipo = TipoDado::LONG;
-	valor.dado = (uint32_t)0;
+	valor.dado = (uint64_t)0;
 
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
@@ -453,7 +454,7 @@ void ExecutionEngine::i_lconst_1(){
 
 	Valor valor;
 	valor.tipo = TipoDado::LONG;
-	valor.dado = (uint32_t)1;
+	valor.dado = (int64_t)1;
 
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
@@ -476,7 +477,9 @@ void ExecutionEngine::i_fconst_1(){
 
 	Valor valor;
 	valor.tipo = TipoDado::FLOAT;
-	valor.dado = 1;
+	float num=1.0;
+	valor.dado = 0;
+	memcpy(&(valor.dado), &num, 4);
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -486,7 +489,9 @@ void ExecutionEngine::i_fconst_2(){
 
 	Valor valor;
 	valor.tipo = TipoDado::FLOAT;
-	valor.dado = (uint32_t)2;
+	float num=2.0;
+	valor.dado = 0;
+	memcpy(&(valor.dado), &num, 4);
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -496,6 +501,7 @@ void ExecutionEngine::i_dconst_0(){
 
 	Valor pad;
 	pad.tipo = TipoDado::PADDING;
+	pad.dado=0;
 
 	Valor valor;
 	valor.tipo = TipoDado::DOUBLE;
@@ -513,6 +519,7 @@ void ExecutionEngine::i_dconst_1(){
 
 	Valor pad;
 	pad.tipo = TipoDado::PADDING;
+	pad.dado=0;
 
 	Valor valor;
 	valor.tipo = TipoDado::DOUBLE;
@@ -691,6 +698,7 @@ void ExecutionEngine::i_ldc2_w(){
 		
 		Valor padding;
 		padding.tipo = TipoDado::PADDING;
+		padding.dado= 0;
 		
 		toppilha->empilharOperando(padding);
 	} else if (ponteiroCpInfo->GetTag() == CONSTANT_Double) {
@@ -701,6 +709,7 @@ void ExecutionEngine::i_ldc2_w(){
 		
 		Valor padding;
 		padding.tipo = TipoDado::PADDING;
+		padding.dado= 0;
 		
 		toppilha->empilharOperando(padding);
 	} else {
@@ -786,7 +795,8 @@ void ExecutionEngine::i_lload(){
 	}
 	
 	Valor pad;
-	pad.dado = TipoDado::PADDING;
+	pad.tipo = TipoDado::PADDING;
+	pad.dado = 0;
 	
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
@@ -1496,16 +1506,13 @@ void ExecutionEngine::i_lstore(){
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
 	uint16_t indice;
 	Valor val;
-	val.tipo = LONG;
+	val.tipo = TipoDado::LONG;
 	topoDaPilhaDeFrames->getCode();//dando pop do preenchimento
 	if(isWide)
 	{
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
-		
-	//	memcpy(&(val.dado), &indice, 2);
-	//	val.dado= InverterEndianess<uint16_t>(indice);
-		val.dado = indice;
+		val.dado= indice;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_lstore 0 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
@@ -1535,14 +1542,15 @@ cout << "ExecutionEngine::i_lstore 3 " << val.dado << endl;
 #endif
 
 	//como é um long devemos colocar preenchimento
-	val.tipo= PADDING;
-	val.dado= (val.dado)+1;
+	Valor val2;
+	val2.tipo= TipoDado::PADDING;
+	val2.dado= (val.dado)+1;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 3,5 valdado:" << val.dado << endl;
+cout << "ExecutionEngine::i_lstore 3,5 valdado:" << val2.dado << endl;
 #endif
-	StoreValor(val);
+	StoreValor(val2);
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 4 " << val.dado << endl;
+cout << "ExecutionEngine::i_lstore 4 " << val2.dado << endl;
 #endif
 
 
@@ -5619,8 +5627,9 @@ void ExecutionEngine::StoreValor(Valor val)
 cout << "ExecutionEngine::i_StoreValor 0 \t indice = " << val.dado << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
 	Valor valorDaPilha= topoDaPilhaDeFrames->desempilhaOperando();
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_STORE_VALOR
 cout << "ExecutionEngine::i_StoreValor 1" << endl;
+cout << ObterStringTipo(valorDaPilha.tipo) << endl;
 #endif
 
 	if(valorDaPilha.tipo != val.tipo)
