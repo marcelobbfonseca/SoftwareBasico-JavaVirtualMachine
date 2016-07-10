@@ -343,7 +343,7 @@ void ExecutionEngine::i_aconst_null(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	Valor valor;
 	valor.tipo = TipoDado::REFERENCE;
-	valor.dado = (uint32_t)NULL;
+	valor.dado = (uint64_t)NULL;
 	toppilha->empilharOperando(valor);
 }
 
@@ -353,7 +353,10 @@ void ExecutionEngine::i_iconst_m1(){
 
 	Valor valor;
 	valor.tipo = TipoDado::INT;
-	valor.dado = (uint32_t)-1;
+	valor.dado=0;
+	int32_t m1= -1;
+	memcpy(&(valor.dado), &m1, 4);
+//	valor.dado = (uint32_t)-1;
 
 	toppilha->empilharOperando(valor);
 
@@ -473,7 +476,7 @@ void ExecutionEngine::i_fconst_1(){
 
 	Valor valor;
 	valor.tipo = TipoDado::FLOAT;
-	valor.dado = (uint32_t)1;
+	valor.dado = 1;
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -497,6 +500,7 @@ void ExecutionEngine::i_dconst_0(){
 	Valor valor;
 	valor.tipo = TipoDado::DOUBLE;
 	double temp = 0;
+	valor.dado=0;
 	memcpy(&valor.dado, &temp, 8/*sizeof(double)*/);
 
 	toppilha->empilharOperando(pad);
@@ -513,6 +517,7 @@ void ExecutionEngine::i_dconst_1(){
 	Valor valor;
 	valor.tipo = TipoDado::DOUBLE;
 	double temp =1;
+	valor.dado=0;
 	memcpy(&valor.dado, &temp, 8/*sizeof(double)*/);
 
 	toppilha->empilharOperando(pad);
@@ -545,7 +550,7 @@ void ExecutionEngine::i_sipush(){
 
 	Valor valor;
 	valor.tipo = TipoDado::INT;
-	valor.dado = (int32_t) num;
+	valor.dado = num;
 
 	toppilha->empilharOperando(valor);
 
@@ -578,6 +583,7 @@ cout<<"chegou i_ldc" << endl;
 #endif
 		valor.tipo = TipoDado::REFERENCE;
 		ObjetoString * temp = new ObjetoString(utf8String);
+		valor.dado=0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
 #ifdef DEBUG_EE
 cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
@@ -633,6 +639,7 @@ cout<<"chegou i_ldc" << endl;
 #endif
 		valor.tipo = TipoDado::REFERENCE;
 		ObjetoString * temp = new ObjetoString(utf8String);
+		valor.dado=0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
 #ifdef DEBUG_EE
 cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
@@ -1450,14 +1457,15 @@ void ExecutionEngine::i_saload(){
 void ExecutionEngine::i_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
-	uint16_t indice;
 	Valor val;
 	val.tipo = INT;
 	if(isWide)
 	{
+		int16_t indice;
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
-		memcpy(&(val.dado), &indice, 2);
+		int64_t aux= indice; 
+		memcpy(&(val.dado), &aux, 8);
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
 	}
@@ -1466,8 +1474,10 @@ void ExecutionEngine::i_istore(){
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_istore" << endl;
 #endif
+		int8_t indice;
 		memcpy(&indice, &(instrucoes[1]), 1);
-		val.dado= indice;
+		int64_t aux= indice;
+		memcpy(&(val.dado), &aux, 8);
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
 #endif
@@ -1548,6 +1558,7 @@ void ExecutionEngine::i_fstore(){
 	{
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
+		val.dado=0;
 		memcpy(&(val.dado), &indice, 2);
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
@@ -1555,12 +1566,12 @@ void ExecutionEngine::i_fstore(){
 	else
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_istore" << endl;
+cout << "ExecutionEngine::i_fstore" << endl;
 #endif
 		memcpy(&indice, &(instrucoes[1]), 1);
 		val.dado= indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
+cout << "ExecutionEngine::i_fstore \tval.dado = " << val.dado << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
