@@ -2668,7 +2668,11 @@ void ExecutionEngine::i_ldiv(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	toppilha->desempilhaOperando(); //padding
 	Valor valor1 = toppilha->desempilhaOperando();
-	
+
+	if(!((valor2.tipo == TipoDado::LONG) || (valor1.tipo == TipoDado::LONG))){
+		throw new Erro("Os operandos devem ser um long","ExecutionEngine","i_ldiv");
+	}
+
 	int64_t num1, num2;
 	memcpy(&num1,&valor1.dado,8);
 	memcpy(&num2,&valor2.dado,8);
