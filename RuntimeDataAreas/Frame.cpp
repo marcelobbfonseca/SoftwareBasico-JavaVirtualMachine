@@ -189,7 +189,8 @@ Valor Frame::getValorVariavelLocal(uint32_t indice) {
 }
 
 void Frame::mudarVariavelLocal(Valor valorDaVariavel, uint32_t indice) {
-
+	cout<< indice<<endl;
+	cout << codeAttribute->getMaxLocals()<< endl;
 	if (indice >= codeAttribute->getMaxLocals()) {
 		throw new Erro("Tentativa de alteração de variavel local inexistente", "Frame", "mudarVariavelLocal");
 	}

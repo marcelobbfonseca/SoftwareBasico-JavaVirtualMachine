@@ -42,6 +42,7 @@
 ExecutionEngine::ExecutionEngine(void)
 {
 	inicializaInstrucoes();
+	isWide= false;
 }
 
 void ExecutionEngine::SetRuntimeDataArea(RuntimeDataArea *runtimeDataArea)
@@ -323,15 +324,17 @@ void ExecutionEngine::inicializaInstrucoes() {
 void ExecutionEngine::i_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
-#define BREAK_NOP
+//#define BREAK_NOP
 #ifdef BREAK_NOP
 	static int nopCount=0;
 	nopCount++;
 #endif
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-#define BREAK_NOP
 #ifdef BREAK_NOP
-	throw new Erro("Break no NOP");
+	if(nopCount >10)
+	{
+		throw new Erro("Break no NOP");
+	}
 #endif
 	
 }
@@ -4642,7 +4645,7 @@ void ExecutionEngine::i_invokevirtual()
 #ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()15" << endl;
 #endif
-		uint16_t numeroDeargumentos;
+		uint16_t numeroDeargumentos=0;
 		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++)//pula o abre parenteses
 		{
 			char indicadorDeTipo= descritorDoMetodo[cont];
