@@ -1862,7 +1862,10 @@ void ExecutionEngine::i_iastore(){
 	Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor valor = topo->desempilhaOperando();
-	assert(valor.tipo == TipoDado::REFERENCE);
+	if(valor.tipo != TipoDado::REFERENCE)
+	{
+		throw new Erro("Esperado uma referencia da pilha", "ExecutionEngine", "i_iastore");
+	}
 
 	uint8_t *code = topo->getCode();
 	uint8_t byte1 = code[1];
@@ -1876,11 +1879,18 @@ void ExecutionEngine::i_iastore(){
 		topo->incrementaPC(3);
 		
 	} 
-    else {
+	else {
 		topo->incrementaPC(2);
 	}
 
-	assert(((int16_t)(topo->tamanhoVetorVariaveis()) > indice));
+	if((int16_t)(topo->tamanhoVetorVariaveis()) <= indice)
+	{
+		string errMsg= "Indice invalido! \t indice: ";
+		errMsg+= indice;
+		errMsg+= " \t Tamanho de vetor de variaveis locais: ";
+		errMsg+= topo->tamanhoVetorVariaveis();
+		throw new Erro(errMsg.c_str(), "ExecutionEngine", "i_iastore");
+	}
 	topo->mudarVariavelLocal(valor, indice);
 
 }
@@ -2164,7 +2174,7 @@ void ExecutionEngine::i_bastore(){
 		valor.tipo = TipoDado::BOOLEAN;
 
 	} 
-    else {
+	else {
 
 		valor.dado = (uint8_t) valor.dado;
 		valor.tipo = TipoDado::BYTE;
@@ -2428,8 +2438,8 @@ void ExecutionEngine::i_dup2_x2(){
 
 }
 void ExecutionEngine::i_swap(){
-    
-    Frame *topo = runtimeDataArea->topoPilha();
+	
+	Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor op_1 = topo->desempilhaOperando();
 	Valor op_2 = topo->desempilhaOperando();
@@ -2439,7 +2449,7 @@ void ExecutionEngine::i_swap(){
 		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
 						
 		}
-    if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
+	if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
 
 		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
 						
@@ -3105,20 +3115,20 @@ void ExecutionEngine::i_iinc(){ //testar
 	if (isWide) {
 		index = (code[1] << 8) | code[2];
 	} 
-    else {
+	else {
 		index = index + code[1];
 	}
 
 	Valor variavelLocal = toppilha->getValorVariavelLocal(index);
 
 	int32_t i;
-    if (isWide) {
-        uint16_t incremento = (code[3] << 8) | code[4];
-        i = (int32_t) (int16_t) incremento;
-    } else {
-        i = (int32_t) (int8_t) code[2];
-    }
-    variavelLocal.dado = variavelLocal.dado + i; 
+	if (isWide) {
+		uint16_t incremento = (code[3] << 8) | code[4];
+		i = (int32_t) (int16_t) incremento;
+	} else {
+		i = (int32_t) (int8_t) code[2];
+	}
+	variavelLocal.dado = variavelLocal.dado + i; 
 
 	toppilha->mudarVariavelLocal(variavelLocal, index);
 	
@@ -3153,6 +3163,7 @@ void ExecutionEngine::i_i2l(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+//converte de int para float
 void ExecutionEngine::i_i2f(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -3380,7 +3391,7 @@ void ExecutionEngine::i_i2b(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_i2c(){
+void ExecutionEngine::i_i2c(){ //da segfault
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3389,16 +3400,17 @@ void ExecutionEngine::i_i2c(){
 	valor2.tipo = TipoDado::CHAR;
 	
 	int32_t num1=0; 
-	int8_t num2=0;
+	int16_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
-	num2 = (int8_t) num1;
-	memcpy(&valor2.dado,&num2,1);
+	num2 = (int16_t) num1;
+	memcpy(&valor2.dado,&num2,2);
 	
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_i2s(){
+//converte de int para short
+void ExecutionEngine::i_i2s(){ 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3410,7 +3422,7 @@ void ExecutionEngine::i_i2s(){
 	int16_t num2=0;
 	
 	memcpy(&num1,&valor1.dado,4);
-	num2 = (int8_t) num1;
+	num2 = (int16_t) num1;
 	memcpy(&valor2.dado,&num2,2);
 	
 	toppilha->empilharOperando(valor2);
@@ -5097,7 +5109,7 @@ void ExecutionEngine::i_new(){
 	
 	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_new");
 	}
 	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
 	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
@@ -5127,7 +5139,7 @@ void ExecutionEngine::i_newarray()
 	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
 	if(tamanhoDoFuturoArray.tipo != INT)
 	{
-		throw new Erro("Esperado encontrar um valor do tipo int");
+		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_newarray");
 	}
 	ObjetoArray *arrayQueSeraCriado;
 	int32_t temp;
@@ -5468,8 +5480,8 @@ void ExecutionEngine::i_wide(){
 
 }
 
-void ExecutionEngine::i_multianewarray(){
-
+void ExecutionEngine::i_multianewarray()
+{
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = topo->ObterJavaClass()->getConstantPool();
