@@ -4690,96 +4690,117 @@ void ExecutionEngine::i_invokevirtual()
 
 void ExecutionEngine::i_invokespecial(){ 
 	//usa no mainvazia
-	Frame *toppilha = runtimeDataArea->topoPilha();
+	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	
-	stack<Valor> operandStackBackup = toppilha->retornaPilhaOperandos();
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getConstantPool();
+	stack<Valor> pilhaDeOperandosDeReserva = topoDaPilhaDeFrames->retornaPilhaOperandos();
+	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
 	
-	uint8_t *code = toppilha->getCode();
-	
+	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
 	//argumentos da instrucao
-	uint8_t byte1 = code[1];
-	uint8_t byte2 = code[2];
-	uint16_t methodIndex = (byte1 << 8) | byte2;
+	uint16_t indiceDoMetodo;
+	memcpy(&indiceDoMetodo, &(instrucoes[1]), 2);
+	indiceDoMetodo= InverterEndianess<uint16_t>(indiceDoMetodo);
 	
-
-	CONSTANT_Methodref_info *methodInfo = (CONSTANT_Methodref_info*) constantPool[methodIndex-1]; 
-	string className = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(methodInfo->GetClassIndex());
-
-	CONSTANT_NameAndType_info *nameAndTypeCP = (CONSTANT_NameAndType_info *)constantPool[methodInfo->GetNameAndTypeIndex()-1];
-	string methodName = ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetNameIndex());
-
-	string methodDescriptor =  ((ObjetoInstancia*)toppilha->getObjeto())->ObterJavaClass()->getUTF8(nameAndTypeCP->GetDescriptorIndex());
-
-	// casos especiais
-	if ((className == "java/lang/Object" || className == "java/lang/String") && methodName == "<init>") {
-		if (className == "java/lang/String") {
-			toppilha->desempilhaOperando();
+	if(classe->getConstantPool().at(indiceDoMetodo-1)->GetTag() != CONSTANT_Methodref)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "invokespecial");
+	}
+	CONSTANT_Methodref_info *cpMetodo= (CONSTANT_Methodref_info*)classe->getConstantPool().at(indiceDoMetodo-1);
+	if(classe->getConstantPool().at(cpMetodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
+	{
+		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "invokespecial");
+	}
+	CONSTANT_NameAndType_info *assinatura= (CONSTANT_NameAndType_info*)classe->getConstantPool().at(cpMetodo->GetNameAndTypeIndex()-1);
+	
+	string nomeDaClasse= classe->getUTF8(cpMetodo->GetClassIndex());
+	string nomeDoMetodo= classe->getUTF8(assinatura->GetNameIndex());
+	string descritorDoMetodo= classe->getUTF8(assinatura->GetDescriptorIndex());
+	
+	if(nomeDoMetodo == "<init>" && (nomeDaClasse== "java/lang/Object" || nomeDaClasse == "java/lang/String"))
+	{
+		if(nomeDaClasse == "java/lang/string")
+		{
+			topoDaPilhaDeFrames->desempilhaOperando();
 		}
-		
-		runtimeDataArea->topoPilha()->incrementaPC(3);
+		topoDaPilhaDeFrames->incrementaPC(3);
 		return;
 	}
-	// fim dos casos especiais
+
 	
-	if (className.find("java/") != string::npos) {
-		cerr << "Tentando invocar metodo especial invalido: " << methodName << endl;
-		exit(1);
-	} else {
-		uint16_t nargs = 0; // numero de argumentos contidos na pilha de operandos
-		uint16_t i = 1; // pulando o primeiro '('
-		while (methodDescriptor[i] != ')') {
-			char baseType = methodDescriptor[i];
-			if (baseType == 'D' || baseType == 'J') {
-				nargs += 2;
-			} else if (baseType == 'L') {
-				nargs++;
-				while (methodDescriptor[++i] != ';');
-			} else if (baseType == '[') {
-				nargs++;
-				while (methodDescriptor[++i] == '[');
-				if (methodDescriptor[i] == 'L') while (methodDescriptor[++i] != ';');
-			} else {
-				nargs++;
+	if (nomeDaClasse.find("java/") == string::npos)
+	{
+		uint16_t numeroDeArgumentos = 0;
+		char indicadorDeTipo;
+		for(int cont =1 ; descritorDoMetodo[cont] != ')'; cont++)
+		{
+			indicadorDeTipo= descritorDoMetodo[cont];
+			if (indicadorDeTipo == '[')
+			{
+				numeroDeArgumentos++;
+				while (descritorDoMetodo[++cont] == '[');
+				if (descritorDoMetodo[cont] == 'L')
+				{
+					while (descritorDoMetodo[++cont] != ';')
+					{};
+				}
 			}
-			i++;
+			else if (indicadorDeTipo == 'J' || indicadorDeTipo == 'D')
+			{
+				numeroDeArgumentos += 2;
+			}
+			else if(indicadorDeTipo == 'L')
+			{
+				numeroDeArgumentos++;
+				while (descritorDoMetodo[++cont] != ';')
+				{};
+			}
+			else
+			{
+				numeroDeArgumentos++;
+			}
 		}
 
-		vector<Valor> args;
-		for (int i = 0; i < nargs; i++) {
-			Valor valor = toppilha->desempilhaOperando();
-			if (valor.tipo == TipoDado::PADDING) {
-				args.insert(args.begin() + 1, valor); // adicionando o padding após o valor double/long.
-			} else {
-				args.insert(args.begin(), valor);
+		vector<Valor> argumentos;
+		for (int cont = 0; cont  < numeroDeArgumentos; cont++)
+		{
+			Valor temp = topoDaPilhaDeFrames->desempilhaOperando();
+			if (temp.tipo == PADDING)
+			{
+				argumentos.insert(argumentos.begin() + 1, temp);
+			}
+			else
+			{
+				argumentos.insert(argumentos.begin(), temp);
 			}
 		}
 
-		Valor objectValor = toppilha->desempilhaOperando();
-		args.insert(args.begin(), objectValor);
-
-		Objeto *objeto = (Objeto*)objectValor.dado;
-
-		ObjetoInstancia *instance = (ObjetoInstancia *) objeto;
-
-		JavaClass *classRuntime = runtimeDataArea->CarregarClasse(className);
-
-		Frame *newFrame = new Frame(instance,classRuntime, methodName, methodDescriptor,args,runtimeDataArea);
-
-		if (runtimeDataArea->topoPilha() != toppilha) {
-			toppilha->setaPilhaOperandos(operandStackBackup);
-			delete newFrame;
+		Valor valorQueArmazenaObjeto = topoDaPilhaDeFrames->desempilhaOperando();
+		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		{
+			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "Invokespecial");
+		}
+		argumentos.insert(argumentos.begin(), valorQueArmazenaObjeto);//adiciono o objeto com primeiro elemento na lista de argumentos
+		Objeto *obj= (Objeto*) valorQueArmazenaObjeto.dado;
+		if(obj->ObterTipoObjeto() != INSTANCIA)
+		{
+			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "Invokespecial");
+		}
+		ObjetoInstancia *instancia = (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
+		JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
+		
+		Frame *novoFrame= new Frame(instancia, classeAlvo, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
+		
+		if(runtimeDataArea->topoPilha() != topoDaPilhaDeFrames)
+		{
+			topoDaPilhaDeFrames->setaPilhaOperandos(pilhaDeOperandosDeReserva);
+			delete novoFrame;
 			return;
 		}
-		newFrame = runtimeDataArea->topoPilha();
+		runtimeDataArea->empilharFrame(novoFrame);
 	}
-
-
-
-
-	runtimeDataArea->topoPilha()->incrementaPC(3);	  
-
+	topoDaPilhaDeFrames->incrementaPC(3);
 }
+
 void ExecutionEngine::i_invokestatic(){
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 
