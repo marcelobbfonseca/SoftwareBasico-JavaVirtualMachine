@@ -1333,7 +1333,7 @@ void ExecutionEngine::i_daload(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 
-void ExecutionEngine::i_aaload(){
+void ExecutionEngine::i_aaload(){ //Load reference from array 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
@@ -1862,10 +1862,7 @@ void ExecutionEngine::i_iastore(){
 	Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor valor = topo->desempilhaOperando();
-	if(valor.tipo != TipoDado::REFERENCE)
-	{
-		throw new Erro("Esperado uma referencia da pilha", "ExecutionEngine", "i_iastore");
-	}
+	assert(valor.tipo == TipoDado::REFERENCE);
 
 	uint8_t *code = topo->getCode();
 	uint8_t byte1 = code[1];
@@ -1879,18 +1876,11 @@ void ExecutionEngine::i_iastore(){
 		topo->incrementaPC(3);
 		
 	} 
-	else {
+    else {
 		topo->incrementaPC(2);
 	}
 
-	if((int16_t)(topo->tamanhoVetorVariaveis()) <= indice)
-	{
-		string errMsg= "Indice invalido! \t indice: ";
-		errMsg+= indice;
-		errMsg+= " \t Tamanho de vetor de variaveis locais: ";
-		errMsg+= topo->tamanhoVetorVariaveis();
-		throw new Erro(errMsg.c_str(), "ExecutionEngine", "i_iastore");
-	}
+	assert(((int16_t)(topo->tamanhoVetorVariaveis()) > indice));
 	topo->mudarVariavelLocal(valor, indice);
 
 }
@@ -2174,7 +2164,7 @@ void ExecutionEngine::i_bastore(){
 		valor.tipo = TipoDado::BOOLEAN;
 
 	} 
-	else {
+    else {
 
 		valor.dado = (uint8_t) valor.dado;
 		valor.tipo = TipoDado::BYTE;
@@ -2438,8 +2428,8 @@ void ExecutionEngine::i_dup2_x2(){
 
 }
 void ExecutionEngine::i_swap(){
-	
-	Frame *topo = runtimeDataArea->topoPilha();
+    
+    Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor op_1 = topo->desempilhaOperando();
 	Valor op_2 = topo->desempilhaOperando();
@@ -2449,7 +2439,7 @@ void ExecutionEngine::i_swap(){
 		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
 						
 		}
-	if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
+    if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
 
 		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
 						
@@ -3115,20 +3105,20 @@ void ExecutionEngine::i_iinc(){ //testar
 	if (isWide) {
 		index = (code[1] << 8) | code[2];
 	} 
-	else {
+    else {
 		index = index + code[1];
 	}
 
 	Valor variavelLocal = toppilha->getValorVariavelLocal(index);
 
 	int32_t i;
-	if (isWide) {
-		uint16_t incremento = (code[3] << 8) | code[4];
-		i = (int32_t) (int16_t) incremento;
-	} else {
-		i = (int32_t) (int8_t) code[2];
-	}
-	variavelLocal.dado = variavelLocal.dado + i; 
+    if (isWide) {
+        uint16_t incremento = (code[3] << 8) | code[4];
+        i = (int32_t) (int16_t) incremento;
+    } else {
+        i = (int32_t) (int8_t) code[2];
+    }
+    variavelLocal.dado = variavelLocal.dado + i; 
 
 	toppilha->mudarVariavelLocal(variavelLocal, index);
 	
@@ -3373,6 +3363,7 @@ void ExecutionEngine::i_d2f(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+//converte de inteiro para byte
 void ExecutionEngine::i_i2b(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -5480,8 +5471,8 @@ void ExecutionEngine::i_wide(){
 
 }
 
-void ExecutionEngine::i_multianewarray()
-{
+void ExecutionEngine::i_multianewarray(){
+
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
