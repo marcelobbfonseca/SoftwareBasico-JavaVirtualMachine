@@ -131,6 +131,6 @@ vector<attribute_info *> method_info::getAttributes(void)
 
 bool method_info::FlagAtivada(MethodFlag flag)
 {
-	return ( (access_flags & flag) != 0);
+	return ( (this->access_flags & flag) != 0);
 }
 
