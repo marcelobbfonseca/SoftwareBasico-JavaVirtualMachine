@@ -532,7 +532,7 @@ void ExecutionEngine::i_dconst_1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-//push byte pra stack de operando
+//push byte pra pilha de operando
 void ExecutionEngine::i_bipush(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -3771,7 +3771,7 @@ void ExecutionEngine::i_if_icmplt(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;
+		int16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
@@ -3795,7 +3795,7 @@ void ExecutionEngine::i_if_icmpge(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;
+		int16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} else {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
@@ -3816,7 +3816,7 @@ void ExecutionEngine::i_if_icmpgt(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;
+		int16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 
 	} 
@@ -3840,7 +3840,7 @@ void ExecutionEngine::i_if_icmple(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;
+		int16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} else {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
@@ -3860,7 +3860,7 @@ void ExecutionEngine::i_if_acmpeq(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;
+		int16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} else {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
@@ -3880,7 +3880,7 @@ void ExecutionEngine::i_if_acmpne(){
 		uint8_t *code = toppilha->getCode();
 		uint8_t byte1 = code[1];
 		uint8_t byte2 = code[2];
-		uint16_t offsetPC = (byte1 << 8) | byte2;
+		int16_t offsetPC = (byte1 << 8) | byte2;
 		runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 	} else {
 		runtimeDataArea->topoPilha()->incrementaPC(3);
@@ -3901,7 +3901,7 @@ void ExecutionEngine::i_jsr(){
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	uint8_t byte2 = code[2];
-	uint16_t offsetPC = (byte1 << 8) | byte2;
+	int16_t offsetPC = (byte1 << 8) | byte2;
 	
 	Valor enderecoRetorno;
 	enderecoRetorno.tipo = TipoDado::RETURN_ADDR;
@@ -5472,7 +5472,7 @@ void ExecutionEngine::i_multianewarray(){
 
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
-	vector<cp_info*> constantPool = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getConstantPool();
+	vector<cp_info*> constantPool = topo->ObterJavaClass()->getConstantPool();
 
 	uint8_t *code = topo->getCode();
 	uint8_t byte1 = code[1];
@@ -5483,7 +5483,7 @@ void ExecutionEngine::i_multianewarray(){
 
 	CONSTANT_Class_info *classInfo = (CONSTANT_Class_info*)constantPool[classIndex-1];
 	
-	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(classInfo->GetNameIndex());
+	string className = topo->ObterJavaClass()->getUTF8(classInfo->GetNameIndex());
 
 	// obter o tipo dentro de className:
 	TipoDado tipoDado;
