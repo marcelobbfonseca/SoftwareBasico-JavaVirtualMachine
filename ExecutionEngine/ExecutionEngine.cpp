@@ -861,7 +861,8 @@ void ExecutionEngine::i_dload(){
 	}
 	
 	Valor pad;
-	pad.dado = TipoDado::PADDING;
+	pad.tipo = TipoDado::PADDING;
+	pad.dado = 0;
 	
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
@@ -956,7 +957,7 @@ void ExecutionEngine::i_lload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(valor.tipo != TipoDado::PADDING){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_0");
 
@@ -964,7 +965,7 @@ void ExecutionEngine::i_lload_0(){
 	toppilha->empilharOperando(valor);
 
 	valor = toppilha->getValorVariavelLocal(0);
-	if(!(valor.tipo == TipoDado::LONG)){
+	if(valor.tipo != TipoDado::LONG){
 	
 			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "i_lload_0");
 
@@ -1323,7 +1324,8 @@ void ExecutionEngine::i_daload(){
 	}
 	
 	Valor padding;
-	padding.dado = TipoDado::PADDING;
+	padding.tipo = TipoDado::PADDING;
+	padding.dado = 0;
 	
 	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(array->ObterValor(num));
