@@ -3,7 +3,6 @@
 JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 {
 	static bool primeiraVezQueCarrega= true;
-	string nomeQueSeraUsado= nomeClasse;
 	if(primeiraVezQueCarrega)
 	{
 		if(nomeClasse.find('\\') != string::npos || nomeClasse.find('/') != string::npos)
@@ -20,13 +19,13 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	{
 		if(nomeClasse.find("java/")== string::npos)
 		{
-			nomeQueSeraUsado= caminho + nomeQueSeraUsado;
+			nomeClasse= caminho + nomeClasse;
 		}
 	}
 	JavaClass *retorno;
 	try
 	{
-		retorno= new JavaClass(nomeQueSeraUsado);
+		retorno= new JavaClass(nomeClasse);
 		return retorno;
 	}
 	catch(Erro *err1)
@@ -36,17 +35,16 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 			retorno= new JavaClass(nomeClasse);
 			return retorno;
 		}
-		catch(Erro* err2)
-		{
-			cerr<< "---------------------------------------------------------------" << endl;
-			cerr<< "Erro no carregamento da classe " << nomeQueSeraUsado << endl;
-			cerr<< err1->GetMensagem() << endl << endl;
-			cerr<< "Supondo que esta tudo bem. Farei uma segunda tentativa na pasta do excutavel" << endl << endl;
-			cerr<< "Erro no carregamento da classe " << nomeClasse << endl;
-			cerr<< err2->GetMensagem() << endl;
-			cerr<< "Supondo que esta tudo bem..." << endl;
-			cerr<< "---------------------------------------------------------------" << endl;
-		}
+	catch(Erro* err2)
+	{
+		cerr<< "---------------------------------------------------------------" << endl;
+		cerr<< "Erro no carregamento da classe " << nomeQueSeraUsado << endl;
+		cerr<< err1->GetMensagem() << endl << endl;
+		cerr<< "Supondo que esta tudo bem. Farei uma segunda tentativa na pasta do excutavel" << endl << endl;
+		cerr<< "Erro no carregamento da classe " << nomeClasse << endl;
+		cerr<< err2->GetMensagem() << endl;
+		cerr<< "Supondo que esta tudo bem..." << endl;
+		cerr<< "---------------------------------------------------------------" << endl;
 	}
 	return NULL;
 }

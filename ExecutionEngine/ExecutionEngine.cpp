@@ -3527,7 +3527,7 @@ void ExecutionEngine::i_fcmpl(){
 	memcpy(&resultado.dado,&num3,4);
 	
 	toppilha->empilharOperando(resultado);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
+	toppilha->incrementaPC(1);
 }
 void ExecutionEngine::i_fcmpg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
