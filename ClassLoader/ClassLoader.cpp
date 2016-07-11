@@ -29,6 +29,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	{
 //		cout<<"Arquivo que tentaremos abrir: " << nomeQueSeraUsado << endl;
 		retorno= new JavaClass(nomeQueSeraUsado);
+		cout<<"Terminour de ler o arquivo!" << endl;
 		return retorno;
 	}
 	catch(Erro *err1)

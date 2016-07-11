@@ -159,76 +159,86 @@ cout << "Attributes lidos!" << endl;
 			throw new Erro(erro, "JavaClass", "JavaClass");
 		}
 	}
+#ifdef DEBUG_JAVACLASS
+	cout<< "Terminou de checar o nome arquivo" << endl;
+	cout << "fields size: " << fields.size() << endl;
+#endif
 	//inicialização dos fields estáticos para tempo de execução
-	for(unsigned int cont =0; cont < fields.size(); cont++)
+	if(fields.size()>0)
 	{
-		field_info field= fields[cont];
-		if(field.FlagAtivada(FIELD_STATIC) && !field.FlagAtivada(FIELD_FINAL))//estática e não final
+		for(unsigned int cont =0; cont < fields.size(); cont++)
 		{
-			string nomeField= getUTF8(field.getNameIndex());
-			string descritorDoField= getUTF8(field.getDescriptorIndex());
-			char tipoField = descritorDoField[0];
-			Valor valor;
-			switch(tipoField)
+	#ifdef DEBUG_JAVACLASS
+		cout<< "cont = " << cont << endl;
+	#endif
+			field_info field= fields[cont];
+			if(field.FlagAtivada(FIELD_STATIC) && !field.FlagAtivada(FIELD_FINAL))//estática e não final
 			{
-				case('B'):
+				string nomeField= getUTF8(field.getNameIndex());
+				string descritorDoField= getUTF8(field.getDescriptorIndex());
+				char tipoField = descritorDoField[0];
+				Valor valor;
+				switch(tipoField)
 				{
-					valor.tipo= TipoDado::BYTE;
-					valor.dado = 0;
-					break;
+					case('B'):
+					{
+						valor.tipo= TipoDado::BYTE;
+						valor.dado = 0;
+						break;
+					}
+					case('C'):
+					{
+						valor.tipo= TipoDado::CHAR;
+						valor.dado= 0;
+						break;
+					}
+					case('D'):
+					{
+						valor.tipo= TipoDado::DOUBLE;
+						double aux=0;
+						memcpy(&(valor.dado), &aux, 8);
+						break;//tratar daqui a pouco nesse mesmo método
+					}
+					case('F'):
+					{
+						valor.tipo= TipoDado::FLOAT;
+						float aux =0;
+						memcpy(&(valor.dado), &aux, 4);
+						break;
+					}
+					case('I'):
+					{
+						valor.tipo= TipoDado::INTEIRO;
+						valor.dado= 0;
+						break;
+					}
+					case('J'):
+					{
+						valor.tipo= TipoDado::LONG;
+						valor.dado= 0;
+						break;//tratar daqui a pouco nesse mesmo método
+					}
+					case('S'):
+					{
+						valor.tipo= TipoDado::SHORT;
+						valor.dado= 0;
+						break;
+					}
+					case('Z'):
+					{
+						valor.tipo= TipoDado::BOOLEANO;
+						valor.dado= 0;
+						break;
+					}
+					default:
+					{
+						valor.tipo= TipoDado::REFERENCIA;
+						void *aux= NULL;
+						memcpy(&(valor.dado), &aux, sizeof(void*));
+					}
 				}
-				case('C'):
-				{
-					valor.tipo= TipoDado::CHAR;
-					valor.dado= 0;
-					break;
-				}
-				case('D'):
-				{
-					valor.tipo= TipoDado::DOUBLE;
-					double aux=0;
-					memcpy(&(valor.dado), &aux, 8);
-					break;//tratar daqui a pouco nesse mesmo método
-				}
-				case('F'):
-				{
-					valor.tipo= TipoDado::FLOAT;
-					float aux =0;
-					memcpy(&(valor.dado), &aux, 4);
-					break;
-				}
-				case('I'):
-				{
-					valor.tipo= TipoDado::INTEIRO;
-					valor.dado= 0;
-					break;
-				}
-				case('J'):
-				{
-					valor.tipo= TipoDado::LONG;
-					valor.dado= 0;
-					break;//tratar daqui a pouco nesse mesmo método
-				}
-				case('S'):
-				{
-					valor.tipo= TipoDado::SHORT;
-					valor.dado= 0;
-					break;
-				}
-				case('Z'):
-				{
-					valor.tipo= TipoDado::BOOLEANO;
-					valor.dado= 0;
-					break;
-				}
-				default:
-				{
-					valor.tipo= TipoDado::REFERENCIA;
-					void *aux= NULL;
-					memcpy(&(valor.dado), &aux, sizeof(void*));
-				}
+				camposEstaticos[nomeField]= valor;
 			}
-			camposEstaticos[nomeField]= valor;
 		}
 	}
 }

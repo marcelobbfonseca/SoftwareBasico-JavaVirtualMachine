@@ -27,12 +27,32 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 	{
 		return classes[nomeSemExtensaoNemCaminho];
 	}
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "RuntimeDataArea: pedindo prar abrir o arquivo" << endl;
+	#endif
 	JavaClass *temp=classLoader->CarregarClasse(nomeComExtensao);
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "RuntimeDataArea: Arquivo aberto" << endl;
+	#endif
 	if(temp == NULL)
 	{
 		return NULL;
 	}
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "RuntimeDataArea: Atribuindo no map" << endl;
+	if(temp== NULL)
+		cout << "Temp nulo" << endl;
+	else
+		cout<< "de boas"<< endl;
+	if(classes.count(nomeSemExtensaoNemCaminho) >0)
+		cout << "ue" << endl;
+	else
+		cout<< "okay"<< endl;
+	#endif
 	classes[nomeSemExtensaoNemCaminho] = temp;
+	#ifdef DEBUG_RDA_CARREGAR_CLASSE
+	cout<< "Terminou de atribuir" << endl;
+	#endif
 	// adicionando <clinit> da classe (se existir) na stack frame.
 	static bool primeiraVez= true;//se for a primeira classe a ser carregada, deixa a execution engine carregar o clinit
 	#ifdef DEBUG_RDA_CARREGAR_CLASSE

@@ -344,18 +344,18 @@ void ExecutionEngine::inicializaInstrucoes() {
 void ExecutionEngine::java_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
-//#define BREAK_NOP
-#ifdef BREAK_NOP
-	static int nopCount=0;
-	nopCount++;
-#endif
+	//#define BREAK_NOP
+	#ifdef BREAK_NOP
+		static int nopCount=0;
+		nopCount++;
+	#endif
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-#ifdef BREAK_NOP
+	#ifdef BREAK_NOP
 	if(nopCount >10)
 	{
 		throw new Erro("Break no NOP");
 	}
-#endif
+	#endif
 	
 }
 
@@ -376,7 +376,7 @@ void ExecutionEngine::java_iconst_m1(){ // Push the int constant i onto the oper
 	valor.dado=0;
 	int32_t m1= -1;
 	memcpy(&(valor.dado), &m1, 4);
-//	valor.dado = (uint32_t)-1;
+	//	valor.dado = (uint32_t)-1;
 
 	toppilha->empilharOperando(valor);
 
@@ -460,7 +460,6 @@ void ExecutionEngine::java_lconst_0(){ //Push the long constant 0 onto the opera
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
-
 
 }
 void ExecutionEngine::java_lconst_1(){//Push the long constant 1 onto the operand stack. 
@@ -604,16 +603,16 @@ void ExecutionEngine::java_ldc(){
 	{
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
 		string utf8String = utf8Entry->GetString();
-#ifdef DEBUG_EE
-cout<<"chegou java_ldc" << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout<<"chegou java_ldc" << endl;
+	#endif
 		valor.tipo = TipoDado::REFERENCIA;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		valor.dado = 0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
-#ifdef DEBUG_EE
-cout<<"java_ldc\tvalor.dado= " << temp->ObterString() << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout<<"java_ldc\tvalor.dado= " << temp->ObterString() << endl;
+	#endif
 	}
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
 	{
