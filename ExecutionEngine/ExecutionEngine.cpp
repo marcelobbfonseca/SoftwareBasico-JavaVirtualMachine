@@ -1861,17 +1861,26 @@ void ExecutionEngine::i_astore_3(){
 }
 
 void ExecutionEngine::i_iastore(){
-
+	
 	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
 
-	Valor valor = topo->desempilhaOperando();
-	assert(valor.tipo == TipoDado::REFERENCE);
+	Valor op = topo->desempilhaOperando();
+	if(!(op.tipo == TipoDado::INT)){
 
-	uint8_t *code = topo->getCode();
-	uint8_t byte1 = code[1];
-	int16_t indice = (int16_t)byte1;
+		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
 
-	if (isWide) {
+	}
+	Valor indice = topo->desempilhaOperando();
+	if(!(indice.tipo == TipoDado::INT)){
+
+		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
+
+	}
+	Valor referArr = topo->desempilhaOperando();
+	if(referArr.tipo != TipoDado::REFERENCE){
+
+		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
 
 		isWide = false;		
 		uint8_t byte2 = code[2];
@@ -1882,11 +1891,38 @@ void ExecutionEngine::i_iastore(){
     else {
 		topo->incrementaPC(2);
 	}
+	if(!(((Objeto*)referArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 
-	assert(((int16_t)(topo->tamanhoVetorVariaveis()) > indice));
-	topo->mudarVariavelLocal(valor, indice);
+		throw new Erro("objeto não é um array", "ExecutionEngine", "i_iastore");
+
+	}
+
+	array = (ObjetoArray*) referArr.dado;
+
+	if (array == NULL) {
+
+		throw new Erro("NullPointerException", "ExecutionEngine", "i_iastore");
+
+	}
+
+	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
+
+		throw new Erro("ArrayIndesxOutOfBoundException", "ExecutionEngine", "i_iastore");
+
+	}
+	
+	if(op.tipo != array->TipoElementosDoArray()){
+
+		throw new Erro("Operando não é do tipo dos elementos do array", "ExecutionEngine", "i_iastore");
+
+	}	
+	
+	array->AlterarElementoDaPosicao(indice.dado, op);
+	
+	topo->incrementaPC(1);
 
 }
+
 void ExecutionEngine::i_lastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
@@ -2012,6 +2048,13 @@ void ExecutionEngine::i_dastore(){
 						
 		}
 
+	Valor pad = topo->desempilhaOperando();
+	if(!(pad.tipo == TipoDado::PADDING)){
+							
+		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
+						
+	}
+	
 	Valor indice = topo->desempilhaOperando();
 
 	if(!(indice.tipo == TipoDado::INT)){
@@ -2019,12 +2062,7 @@ void ExecutionEngine::i_dastore(){
 			throw new Erro("Valor não é um inteiro", "ExecutionEngine", "i_dastore");
 						
 		}
-	Valor pad = topo->desempilhaOperando();
-	if(!(pad.tipo == TipoDado::PADDING)){
-							
-		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
-						
-	}
+
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
 							
