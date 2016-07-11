@@ -7,8 +7,6 @@
 #include"Easter.hpp"
 #include"JVM.hpp"
 
-#define JVM_NAO_FEITA
-
 void ExibirMensagemDeAjuda(void);
 
 int main(int argc, char **argv)

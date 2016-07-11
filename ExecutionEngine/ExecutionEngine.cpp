@@ -28,14 +28,14 @@
 	#endif
 #endif
 
-#define DEBUG_LLOAD_2
-#define DEBUG_EE
+//#define DEBUG_LLOAD_2
+//#define DEBUG_EE
 //#define DEBUG_EE_GET_STATIC
 //#define DEBUG_EE_PLAY
 //#define DEBUG_EE_INVOKEVIRTUAL
-#define DEBUG_EE_EMPILHAR_FRAME
-#define DEBUG_EE_STORE_VALOR
-#define MINI_DEBUG
+//#define DEBUG_EE_EMPILHAR_FRAME
+//#define DEBUG_EE_STORE_VALOR
+//#define MINI_DEBUG
 #ifdef DEBUG_EE
 	#include"Opcode.hpp"
 #endif
@@ -5132,7 +5132,9 @@ void ExecutionEngine::java_invokeinterface()
 		Frame *novoFrame= new Frame(instancia, classeAlvo, nomeDoMetodo, descritorDoMetodo, argumentos, runtimeDataArea);
 		if(classeAlvo != instancia->ObterJavaClass())
 		{
+		#ifdef DEBUG_EE_EMPILHAR_FRAME
 			cout<< "Ue"<< endl;
+		#endif
 		}
 		if(runtimeDataArea->topoPilha() != topoDaPilhaDeFrames)
 		{
@@ -5536,8 +5538,9 @@ void ExecutionEngine::java_wide(){
 }
 
 void ExecutionEngine::java_multianewarray(){
-
+#ifdef DEBUG_EE
 	cout<<"Consertar ExecutionEngine::java_multianewarray" << endl;
+#endif
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = topo->ObterJavaClass()->getConstantPool();
 
@@ -5726,7 +5729,6 @@ cout << "ExecutionEngine::java_StoreValor 4" << endl;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::java_StoreValor 5" << endl;
 #endif
-//		cerr<< errMsg;
 		throw new Erro(errMsg, "ExecutionEngine", "StoreValor");
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::java_StoreValor 6" << endl;

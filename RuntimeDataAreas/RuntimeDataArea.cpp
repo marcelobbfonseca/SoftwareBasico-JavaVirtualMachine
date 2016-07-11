@@ -1,7 +1,7 @@
 #include"UtilidadesParaString.hpp"
 #include"RuntimeDataArea.hpp"
 
-#define DEBUG_RDA
+//#define DEBUG_RDA
 //#define DEBUG_RDA_CARREGAR_CLASSE
 
 RuntimeDataArea::RuntimeDataArea(void)

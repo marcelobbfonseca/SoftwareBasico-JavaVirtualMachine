@@ -1,5 +1,5 @@
 compilador = g++
-flags = -Wall -pedantic -g -std=c++11 -static
+flags = -Wall -pedantic -g -std=c++11
 arquivoSaida = -o JVM.out
 INC_HPP = -IClassesAuxiliares -IClassLoader -IJavaClass -IExecutionEngine -IRuntimeDataAreas
 executavel: ClassesAuxiliares.o ClassLoader.o ExecutionEngine.o JavaClass.o RuntimeDataArea.o mainJVM.o
