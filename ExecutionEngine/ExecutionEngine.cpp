@@ -1902,9 +1902,6 @@ void ExecutionEngine::i_iastore(){
 		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
 		
 	} 
-    else {
-		topo->incrementaPC(2);
-	}
 	if(!(((Objeto*)referArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 
 		throw new Erro("objeto não é um array", "ExecutionEngine", "i_iastore");
@@ -2362,7 +2359,7 @@ void ExecutionEngine::i_pop2(){
 
 }
 void ExecutionEngine::i_dup(){
-	Frame *topoDoFrame = runtimeDataArea->topoPilha();
+	Frame *topoDoFrame = runtimeDataArea->topoPilha();dup
 
 	Valor valor = topoDoFrame->desempilhaOperando();
 	if ((valor.tipo == TipoDado::LONG) || (valor.tipo == TipoDado::DOUBLE))
