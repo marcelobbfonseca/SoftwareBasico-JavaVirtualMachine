@@ -1019,7 +1019,7 @@ void ExecutionEngine::java_lload_2(){
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
+		cout << "Valor recebido: " << ObterStringTipo(valor.tipo) << endl;
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_2");
 
 	}
@@ -1744,11 +1744,20 @@ void ExecutionEngine::java_lstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::LONG)){
 
-	
+		throw new Erro("Valor não é um LONG", "ExecutionEngine", "java_lstore");
+
+	}
 	toppilha->mudarVariavelLocal(valor, 2);
 
 	valor = toppilha->desempilhaOperando();
+	if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+
+		throw new Erro("Valor não é um preenchimento", "ExecutionEngine", "java_lstore");
+
+	}
+
 	toppilha->mudarVariavelLocal(valor, 3);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
