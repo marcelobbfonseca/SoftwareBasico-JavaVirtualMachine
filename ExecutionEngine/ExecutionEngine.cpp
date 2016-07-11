@@ -90,6 +90,7 @@ void ExecutionEngine::Play(string classComMain)
 #endif
 
 	do
+	
 	{
 #ifdef DEBUG_EE
 	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->ObterTamanhoDaPilhaDeFrames() << endl;
