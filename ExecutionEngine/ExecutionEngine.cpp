@@ -90,11 +90,11 @@ void ExecutionEngine::Play(string classComMain)
 #ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play4" << endl;
 #endif
+	if(javaClass->getMetodo("<clinit>","()V") != NULL)
+	{
 #ifdef DEBUG_EE
 	cout<< "Empilhando clinit da main" << endl;
 #endif
-	if(javaClass->getMetodo("<clinit>","()V") != NULL)
-	{
 #ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play5" << endl;
 #endif

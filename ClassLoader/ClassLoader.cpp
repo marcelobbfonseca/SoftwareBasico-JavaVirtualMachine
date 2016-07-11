@@ -3,6 +3,7 @@
 JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 {
 	static bool primeiraVezQueCarrega= true;
+	string nomeQueSeraUsado= nomeClasse;
 	if(primeiraVezQueCarrega)
 	{
 		if(nomeClasse.find('\\') != string::npos || nomeClasse.find('/') != string::npos)
@@ -20,22 +21,29 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	{
 		if(nomeClasse.find("java/")== string::npos)
 		{
-			nomeClasse= caminho + nomeClasse;
+			nomeQueSeraUsado= caminho + nomeQueSeraUsado;
 		}
 	}
 	JavaClass *retorno;
 	try
 	{
-		retorno= new JavaClass(nomeClasse);
+		retorno= new JavaClass(nomeQueSeraUsado);
 		return retorno;
 	}
-	catch(Erro *err)
+	catch(Erro *)
 	{
-		cerr<< "---------------------------------------------------------------" << endl;
-		cerr<< "Erro no carregamento da classe " << nomeClasse << endl;
-		cerr<< err->GetMensagem() << endl;
-		cerr<< "Supondo que esta tudo bem..." << endl;
-		cerr<< "---------------------------------------------------------------" << endl;
+		try
+		{
+			retorno= new JavaClass(nomeClasse);
+		}
+		catch(Erro* err)
+		{
+			cerr<< "---------------------------------------------------------------" << endl;
+			cerr<< "Erro no carregamento da classe " << nomeClasse << endl;
+			cerr<< err->GetMensagem() << endl;
+			cerr<< "Supondo que esta tudo bem..." << endl;
+			cerr<< "---------------------------------------------------------------" << endl;
+		}
 	}
 	return NULL;
 }
