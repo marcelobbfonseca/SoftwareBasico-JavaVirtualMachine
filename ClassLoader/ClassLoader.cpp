@@ -35,6 +35,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 		try
 		{
 			retorno= new JavaClass(nomeClasse);
+			return retorno;
 		}
 		catch(Erro* err)
 		{
