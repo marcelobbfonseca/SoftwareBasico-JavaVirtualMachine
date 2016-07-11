@@ -27,6 +27,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	JavaClass *retorno;
 	try
 	{
+		cout<<"Arquivo que tentaremos abrir: " << nomeQueSeraUsado << endl;
 		retorno= new JavaClass(nomeQueSeraUsado);
 		return retorno;
 	}
@@ -34,6 +35,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	{
 		try
 		{
+		cout<<"Arquivo que tentaremos abrir: " << nomeClasse << endl;
 			retorno= new JavaClass(nomeClasse);
 			return retorno;
 		}

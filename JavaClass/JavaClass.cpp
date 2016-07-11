@@ -27,7 +27,7 @@
 
 //o define EH_NUMERO informa que os bytes lidos devem ser invertidos, pois devem são numeros que devem ser armazenados em little endian
 
-//#define DEBUG
+#define DEBUG_JAVACLASS
 
 using namespace std;
 
@@ -56,16 +56,14 @@ JavaClass::JavaClass(string nomeArquivo)
 		throw new Erro(errMsg, "JavaClass", "JavaClass");
 	}
 	Leitura::LerAtributo(&constant_pool_count, 2, arq);
-
+#ifdef DEBUG_JAVACLASS
+cout<< "Começando a ler constant pool de " << constant_pool_count-1 << " elementos" << endl;
+#endif
 	for(int cont=0; cont < constant_pool_count-1; cont++)
 	{
 		try
 		{
 			cp_info *cpInfo = cp_info::LerCpInfo(arq);
-#ifdef DEBUG
-string tabs = "\t";
-//cpInfo->ExibirInformacoes(this);
-#endif
 			constant_pool.push_back(cpInfo);
 		}
 		catch(CONSTANT_Long_info *longInfo)
@@ -82,52 +80,62 @@ string tabs = "\t";
 			constant_pool.push_back(naoUsavel);
 			cont++;
 		}
+#ifdef DEBUG_JAVACLASS
+cout<< "Elemento " << cont+1 << " lido" << endl;
+
+cout<< "lidos " << ftell(arq) << " bytes do arquivo." << endl;
+#endif
 	}
+#ifdef DEBUG_JAVACLASS
+cout<< "Constant Pool lida!" << endl;
+#endif
 
 	Leitura::LerAtributo(&access_flags, 2, arq);
 	Leitura::LerAtributo(&this_class, 2, arq);
 	Leitura::LerAtributo(&super_class, 2, arq);
 	Leitura::LerAtributo(&interfaces_count, 2, arq);
 
+#ifdef DEBUG_JAVACLASS
+cout<< "Comecando a ler as " << interfaces_count <<" interfaces" << endl;
+#endif
 	uint16_t aux_interface;
 	for(int cont=0; cont < interfaces_count; cont++)
 	{
 		Leitura::LerAtributo(&aux_interface, 2, arq);
 		interfaces.push_back(aux_interface);
 	}
+#ifdef DEBUG_JAVACLASS
+cout<< "insterfaces lidas!" << endl;
+#endif
 
 	Leitura::LerAtributo(&fields_count, 2, arq);
-#ifdef DEBUG
+#ifdef DEBUG_JAVACLASS
 cout<< "Começando a ler os " << fields_count <<" fields." << endl;
 #endif
 	for(int cont=0; cont < fields_count; cont++)
 	{
 		field_info *fieldInfo = new field_info(arq, constant_pool);
 		fields.push_back(*fieldInfo);
-#ifdef DEBUG
+#ifdef DEBUG_JAVACLASS
 cout<< "Lido field" << endl;
 #endif
 	}
 
 	Leitura::LerAtributo(&methods_count, 2, arq);
-#ifdef DEBUG
+#ifdef DEBUG_JAVACLASS
 cout<< "Começando a ler os " << methods_count <<" methods." << endl;
 #endif
 	for(int cont=0; cont < methods_count; cont++)
 	{
 		method_info *methodInfo = new method_info(arq, constant_pool);
-#ifdef DEBUG
-string tabs = "\t";
-//methodInfo->ExibirInformacoes(tabs, this);
-#endif
 		methods.push_back(*methodInfo);
-#ifdef DEBUG
-cout<< "Lido method" << endl;
-#endif
 	}
+#ifdef DEBUG_JAVACLASS
+cout<< "Lido methods!" << endl;
+#endif
 
 	Leitura::LerAtributo(&attributes_count, 2, arq);
-#ifdef DEBUG
+#ifdef DEBUG_JAVACLASS
 cout << "Attributes count = " << attributes_count << endl;
 #endif
 	for(int cont=0; cont < attributes_count; cont++)
@@ -135,6 +143,10 @@ cout << "Attributes count = " << attributes_count << endl;
 		attribute_info *attributesInfo = attribute_info::LerAtributeInfo(arq, constant_pool);
 		attributes.push_back(attributesInfo);
 	}
+#ifdef DEBUG_JAVACLASS
+cout << "Attributes lidos!" << endl;
+#endif
+
 	fclose(arq);
 	//verificação se o nome do arquivo é igual ao nome da classe
 	string nomeArquivoSemCaminhoNemExtensao= StringUtilidades::RemoverCaminhoEExtensao(nomeArquivo, ".class");

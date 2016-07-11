@@ -1,0 +1,22 @@
+----------------------------------------------------------
+[ERRO]
+	Na classe 'ExecutionEngine' metodo 'Invokevirtual'
+
+		Esperava-se um objeto do tipo instancia
+
+francisco@AndersPC:~/Dropbox/UnB/10o. semestre/SB/JVM/Git$ ./JVM.out Exemplos/testation/objects/testeChaMetObj.class 
+----------------------------------------------------------
+[ERRO]
+	Na classe 'ExecutionEngine' metodo 'java_lload_2'
+
+		O tipo do dado não é um pad
+
+francisco@AndersPC:~/Dropbox/UnB/10o. semestre/SB/JVM/Git$ ./JVM.out Exemplos/testation/while/Fibonacci.class 
+----------------------------------------------------------
+[ERRO]
+	Na classe 'ExecutionEngine' metodo 'java_aload_0'
+
+		O tipo do dado não é um uma referencia 	 tipo: BOOLEANO
+
+francisco@AndersPC:~/Dropbox/UnB/10o. semestre/SB/JVM/Git$ ./JVM.out Exemplos/testation/Belote/Belote.class
+
