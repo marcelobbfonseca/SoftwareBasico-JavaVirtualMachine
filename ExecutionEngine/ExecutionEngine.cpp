@@ -3504,7 +3504,7 @@ void ExecutionEngine::i_fcmpl(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	int64_t num1, num2;
+	float num1, num2;
 	int32_t num3;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);
@@ -3527,7 +3527,7 @@ void ExecutionEngine::i_fcmpl(){
 	memcpy(&resultado.dado,&num3,4);
 	
 	toppilha->empilharOperando(resultado);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
+	toppilha->incrementaPC(1);
 }
 void ExecutionEngine::i_fcmpg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
@@ -3535,7 +3535,7 @@ void ExecutionEngine::i_fcmpg(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	int64_t num1, num2;
+	float num1, num2;
 	int32_t num3;
 	memcpy(&num1,&valor1.dado,4);
 	memcpy(&num2,&valor2.dado,4);

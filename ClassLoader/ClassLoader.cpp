@@ -29,11 +29,21 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 		retorno= new JavaClass(nomeClasse);
 		return retorno;
 	}
-	catch(Erro *err)
+	catch(Erro *err1)
+	{
+		try
+		{
+			retorno= new JavaClass(nomeClasse);
+			return retorno;
+		}
+	catch(Erro* err2)
 	{
 		cerr<< "---------------------------------------------------------------" << endl;
+		cerr<< "Erro no carregamento da classe " << nomeQueSeraUsado << endl;
+		cerr<< err1->GetMensagem() << endl << endl;
+		cerr<< "Supondo que esta tudo bem. Farei uma segunda tentativa na pasta do excutavel" << endl << endl;
 		cerr<< "Erro no carregamento da classe " << nomeClasse << endl;
-		cerr<< err->GetMensagem() << endl;
+		cerr<< err2->GetMensagem() << endl;
 		cerr<< "Supondo que esta tudo bem..." << endl;
 		cerr<< "---------------------------------------------------------------" << endl;
 	}
