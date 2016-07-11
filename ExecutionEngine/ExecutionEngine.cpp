@@ -341,31 +341,8 @@ void ExecutionEngine::inicializaInstrucoes() {
 
 }
 
-void ExecutionEngine::java_nop(){
-	//anda uma posição e faz nada
-	//incrementa pc + 1
-	//#define BREAK_NOP
-	#ifdef BREAK_NOP
-		static int nopCount=0;
-		nopCount++;
-	#endif
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-	#ifdef BREAK_NOP
-	if(nopCount >10)
-	{
-		throw new Erro("Break no NOP");
-	}
-	#endif
-	
-}
 
-void ExecutionEngine::java_aconst_null(){ //Push the null object reference onto the operand stack. 
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	Valor valor;
-	valor.tipo = TipoDado::REFERENCIA;
-	valor.dado = (uint64_t)NULL;
-	toppilha->empilharOperando(valor);
-}
+
 
 void ExecutionEngine::java_iconst_m1(){ // Push the int constant i onto the operand stack. 
 
@@ -381,6 +358,13 @@ void ExecutionEngine::java_iconst_m1(){ // Push the int constant i onto the oper
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_aconst_null(){ //Push the null object reference onto the operand stack. 
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	Valor valor;
+	valor.tipo = TipoDado::REFERENCIA;
+	valor.dado = (uint64_t)NULL;
+	toppilha->empilharOperando(valor);
 }
 void ExecutionEngine::java_iconst_0(){ //Push the int constant 0 onto the operand stack. 
 
@@ -549,6 +533,23 @@ void ExecutionEngine::java_dconst_1(){//Push the double constant 1 onto the oper
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_nop(){
+	//anda uma posição e faz nada
+	//incrementa pc + 1
+	//#define BREAK_NOP
+	#ifdef BREAK_NOP
+		static int nopCount=0;
+		nopCount++;
+	#endif
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+	#ifdef BREAK_NOP
+	if(nopCount >10)
+	{
+		throw new Erro("Break no NOP");
+	}
+	#endif
+	
 }
 //push byte pra pilha de operando
 void ExecutionEngine::java_bipush(){
@@ -741,763 +742,6 @@ void ExecutionEngine::java_ldc2_w(){
 
 }
 
-void ExecutionEngine::java_iload(){
-
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	
-	uint8_t *code = toppilha->getCode();
-	uint8_t byte1 = code[1];
-	int16_t index = (int16_t)byte1;
-
-	//Verifica se a funcao java_wide foi chamada anteriormente
-	if(isWide) {
-		//Copia byte[1] concatenado com byte[2] para index
-		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
-		index= InverterEndianess<int16_t>(index);//nao esquecer de inerter o endian;
-
-		runtimeDataArea->topoPilha()->incrementaPC(3);
-		isWide = false;
-
-	}
-
-	else {
-
-		runtimeDataArea->topoPilha()->incrementaPC(2);
-
-	}
-
-
-
-	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
-
-		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "java_iload");
-
-	}
-	Valor valor = toppilha->getValorVariavelLocal(index);
-	
-	toppilha->empilharOperando(valor);
-}
-void ExecutionEngine::java_lload(){
-
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	
-	uint8_t *code = toppilha->getCode();
-	uint8_t byte1 = code[1];
-	int16_t index = (int16_t)byte1;
-	//Verifica se a função chamada anteriormente é um wide
-	if(isWide) {
-
-		uint16_t byte2 = code[2];
-		index = (byte1 << 8) | byte2;
-		runtimeDataArea->topoPilha()->incrementaPC(3);
-		isWide = false;
-
-	}
-	else {
-
-		runtimeDataArea->topoPilha()->incrementaPC(2);
-
-	}
-
-	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
-
-		throw new Erro("Tamanho do vetor de variáveis menor que o index + 1", "ExecutionEngine", "java_lload");
-
-	}
-
-	Valor valor = toppilha->getValorVariavelLocal(index);
-	if(!(valor.tipo == TipoDado::LONG)){
-
-		throw new Erro("valor.tipo diferente de LONG", "ExecutionEngine", "java_lload");
-
-	}
-	
-	Valor pad;
-	pad.tipo = TipoDado::PREENCHIMENTO;
-	pad.dado = 0;
-	
-	toppilha->empilharOperando(pad);
-	toppilha->empilharOperando(valor);
-}
-void ExecutionEngine::java_fload(){
-	Frame *topPilha = runtimeDataArea->topoPilha();
-	
-	uint8_t *code = topPilha->getCode();
-	uint8_t byte1 = code[1];
-	int16_t index = (int16_t)byte1;
-	//Verifica se java_wide foi chamada anteriormente
-	if(isWide) {
-		uint16_t byte2 = code[2];
-		index = (byte1 << 8) | byte2;
-		runtimeDataArea->topoPilha()->incrementaPC(3);
-		isWide = false;
-	}
-	else {
-		runtimeDataArea->topoPilha()->incrementaPC(2);
-	}
-
-	if(((int16_t)(topPilha->tamanhoVetorVariaveis())) <= index){
-
-		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "java_fload");
-
-	}
-
-	Valor valor = topPilha->getValorVariavelLocal(index);
-	
-	topPilha->empilharOperando(valor);
-}
-void ExecutionEngine::java_dload(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	
-	uint8_t *code = toppilha->getCode();
-	uint8_t byte1 = code[1];
-	int16_t index = (int16_t)byte1;
-	//Verifica se java_wide foi chamada
-	if(isWide) {
-		uint16_t byte2 = code[2];
-		index = (byte1 << 8) | byte2;
-		runtimeDataArea->topoPilha()->incrementaPC(3);
-		isWide = false;
-	}
-	else {
-
-		runtimeDataArea->topoPilha()->incrementaPC(2);
-
-	}
-
-	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
-
-		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "java_dload");
-	
-	}
-
-	Valor valor = toppilha->getValorVariavelLocal(index);
-	if(!(valor.tipo == TipoDado::DOUBLE)){
-
-		throw new Erro("Tipo de dado diferente de DOUBLE ", "ExecutionEngine", "java_dload");
-
-	}
-	
-	Valor pad;
-	pad.tipo = TipoDado::PREENCHIMENTO;
-	pad.dado = 0;
-	
-	toppilha->empilharOperando(pad);
-	toppilha->empilharOperando(valor);
-}
-void ExecutionEngine::java_aload(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	
-	uint8_t *code = toppilha->getCode();
-	uint8_t byte1 = code[1];
-	int16_t index = (int16_t)byte1;
-	//Verifica se java_wide foi chamada anteriormente
-	if(isWide) {
-		uint16_t byte2 = code[2];
-		index = (byte1 << 8) | byte2;
-		runtimeDataArea->topoPilha()->incrementaPC(3);
-		isWide = false;
-	}
-	else {
-		runtimeDataArea->topoPilha()->incrementaPC(2);
-	}
-
-	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
-
-		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "java_aload");
-
-	}
-		
-	Valor valor = toppilha->getValorVariavelLocal(index);
-	if(!(valor.tipo == TipoDado::REFERENCIA)){
-
-		throw new Erro("O tipo do dado não é uma referencia", "ExecutionEngine", "java_aload");
-	}
-	
-	toppilha->empilharOperando(valor);
-}
-void ExecutionEngine::java_iload_0(){
-
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(0);
-	if(!(valor.tipo == TipoDado::INTEIRO)){
-		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_0");
-
-	}
-		
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_iload_1(){
-
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(1);
-		if(!(valor.tipo == TipoDado::INTEIRO)){
-		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_1");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_iload_2(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::INTEIRO)){
-		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_2");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_iload_3(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::INTEIRO)){
-		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_3");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_lload_0(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(valor.tipo != TipoDado::PREENCHIMENTO){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_0");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(0);
-	if(valor.tipo != TipoDado::LONG){
-	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_0");
-
-	}
-		
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_lload_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_1");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(1);
-	if(!(valor.tipo == TipoDado::LONG)){
-	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_1");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_lload_2(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(3);
-#ifdef DEBUG_LLOAD_2
-	cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
-#endif
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_2");
-
-	}
-#ifdef DEBUG_LLOAD_2
-	cout<< "Empilhando " << ObterStringTipo(valor.tipo) << endl;
-#endif
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(2);
-#ifdef DEBUG_LLOAD_2
-	cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
-#endif
-	if(!(valor.tipo == TipoDado::LONG)){
-	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_2");
-
-	}
-#ifdef DEBUG_LLOAD_2
-	cout<< "Empilhando " << ObterStringTipo(valor.tipo) << endl;
-#endif
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_lload_3(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(4);
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_3");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(3);
-	if(!(valor.tipo == TipoDado::LONG)){
-	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_3");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_fload_0(){
-
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(0);
-	 if(!(valor.tipo == TipoDado::FLOAT)){
-		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_0");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1)
-;	
-}
-void ExecutionEngine::java_fload_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::FLOAT)){
-		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_1");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);	
-}
-void ExecutionEngine::java_fload_2(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::FLOAT)){
-		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_2");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);		
-}
-void ExecutionEngine::java_fload_3(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::FLOAT)){
-		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_3");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);	
-}
-void ExecutionEngine::java_dload_0(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_0");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(0);
-	 if(!(valor.tipo == TipoDado::DOUBLE)){
-		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_0");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}	
-void ExecutionEngine::java_dload_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_1");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::DOUBLE)){
-		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_1");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_dload_2(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_2");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::DOUBLE)){
-		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_2");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_dload_3(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(4);
-	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_3");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::DOUBLE)){
-		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_3");
-
-	}
-	toppilha->empilharOperando(valor);
-
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_aload_0(){
-	//usa na mainvazia
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(0);
-	 if(!(valor.tipo == TipoDado::REFERENCIA)){
-		string errMsg= "O tipo do dado não é um uma referencia \t tipo: ";
-		errMsg+= ObterStringTipo(valor.tipo);
-		throw new Erro(errMsg, "ExecutionEngine", "java_aload_0");
-
-	}
-
-	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_aload_1(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::REFERENCIA)){
-		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_1");
-
-	}
-
-	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_aload_2(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::REFERENCIA)){
-		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_2");
-
-	}
-
-	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_aload_3(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-
-	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::REFERENCIA)){
-		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_3");
-
-	}
-
-	toppilha->empilharOperando(valor);
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_iaload(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-		 if(!(index.tipo == TipoDado::INTEIRO)){
-		
-		throw new Erro("O tipo do dado não é um int", "ExecutionEngine", "java_iload");
-
-	}
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_iaload");
-	}
-	int32_t num;
-	memcpy(&num, &(index.dado), 4);
-	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_iaload");
-	}
-	toppilha->empilharOperando(array->ObterValor(num));
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_laload(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-	
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_laload");
-	}
-	int64_t num;
-	memcpy(&num, &(index.dado), 8);
-	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_laload");
-	}
-	
-	Valor padding;
-	padding.dado = TipoDado::PREENCHIMENTO;
-	
-	toppilha->empilharOperando(padding);
-	toppilha->empilharOperando(array->ObterValor(num));
-	
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_faload(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-	
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_faload");
-	}
-	int32_t num;
-	memcpy(&num, &(index.dado), 4);
-	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_faload");
-	}
-	toppilha->empilharOperando(array->ObterValor(num));
-	
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_daload(){
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-
-	
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_daload");
-	}
-	int64_t num;
-	memcpy(&num, &(index.dado), 8);
-	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_daload");
-	}
-	
-	Valor padding;
-	padding.tipo = TipoDado::PREENCHIMENTO;
-	padding.dado = 0;
-	
-	toppilha->empilharOperando(padding);
-	toppilha->empilharOperando(array->ObterValor(num));
-	
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-
-void ExecutionEngine::java_aaload(){ //Load reference from array 
-	Frame *toppilha = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-	
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_aaload");
-	}
-	int32_t num;
-	memcpy(&num, &(index.dado), 4);
-	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_aaload");
-	}
-	toppilha->empilharOperando(array->ObterValor(num));
-	
-	runtimeDataArea->topoPilha()->incrementaPC(1);
-}
-void ExecutionEngine::java_baload(){
-
-Frame *toppilha = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-	
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_aaload");
-	}
-	int32_t num;
-	memcpy(&num, &(index.dado), 4);
-	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_aaload");
-	}
-
-	Valor op = array->ObterValor(index.dado);
-	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
-
-		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "java_baload");
-		
-	}
-	
-	op.tipo = TipoDado::INTEIRO;
-
-	toppilha->empilharOperando(op);
-	toppilha->incrementaPC(1);
-}
-
-void ExecutionEngine::java_caload(){
-
-	Frame *toppilha = runtimeDataArea->topoPilha();	
-	ObjetoArray *array;
-	
-	Valor index = toppilha->desempilhaOperando();
-	
-	Valor arrayref = toppilha->desempilhaOperando();
-	
-	array = (ObjetoArray*)(arrayref.dado);
-	
-	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_caload");
-	}
-	int32_t num;
-	memcpy(&num, &(index.dado), 4);
-	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_caload");
-	}
-
-	Valor op = array->ObterValor(index.dado);
-	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
-
-		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "java_caload");
-		
-	}
-
-	op.tipo = TipoDado::INTEIRO;
-	
-	toppilha->empilharOperando(op);
-	toppilha->incrementaPC(1);
-
-}
-void ExecutionEngine::java_saload(){
-
-	Frame *topo = runtimeDataArea->topoPilha();
-	ObjetoArray *array;
-
-	Valor indice = topo->desempilhaOperando();
-	if(!(indice.tipo == TipoDado::INTEIRO)){
-
-		throw new Erro("o operando deve ser INTEIRO.", "ExecutionEngine", "java_saload");
-		
-	}
-
-	Valor arrayref = topo->desempilhaOperando();
-
-	if(!(arrayref.tipo == TipoDado::REFERENCIA)){
-		
-		throw new Erro("o operando deve ser uma referencia.", "ExecutionEngine", "java_saload");
-		
-	}
-	if(!(((Objeto*)arrayref.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
-		
-		throw new Erro("a referencia deve ser para um array.", "ExecutionEngine", "java_saload");
-		
-	}
-
-	array = (ObjetoArray *) arrayref.dado;
-
-	if (array == NULL) {
-
-		throw new Erro("NullPointerException");
-
-	}
-
-	if (indice.dado > array->ObterTamanho() || indice.dado < 0) {
-
-		throw new Erro("ArrayIndexOutOfBoundsException");
-
-	}
-	
-	Valor shortOp = array->ObterValor(indice.dado);
-	shortOp.tipo = TipoDado::INTEIRO;
-	
-	topo->empilharOperando(shortOp);
-	topo->incrementaPC(1);
-
-
-}
 void ExecutionEngine::java_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
@@ -1516,16 +760,16 @@ void ExecutionEngine::java_istore(){
 	}
 	else
 	{
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_istore" << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_istore" << endl;
+	#endif
 		int8_t indice;
 		memcpy(&indice, &(instrucoes[1]), 1);
 		int64_t aux= indice;
 		memcpy(&(val.dado), &aux, 8);
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_istore2 \tval.dado = " << val.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_istore2 \tval.dado = " << val.dado << endl;
+	#endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
@@ -1548,45 +792,45 @@ void ExecutionEngine::java_lstore(){
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
 		val.dado= (uint64_t)indice;
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 1 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_lstore 1 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
+	#endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
 		isWide=false;
 	}
 	else
 	{
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 1" << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_lstore 1" << endl;
+	#endif
 		//aux para expansao de tipo
 		uint8_t aux=0;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
 		val.dado= (uint64_t)indice;
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 2 \tval.dado = " << val.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_lstore 2 \tval.dado = " << val.dado << endl;
+	#endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
 	
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 3 " << val.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_lstore 3 " << val.dado << endl;
+	#endif
 
 	//como é um long devemos colocar preenchimento
 	Valor val2;
 	val2.tipo= TipoDado::PREENCHIMENTO;
 	val2.dado= (val.dado)+1;
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 3,5 valdado:" << val2.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_lstore 3,5 valdado:" << val2.dado << endl;
+	#endif
 	StoreValor(val2);
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 4 " << val2.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_lstore 4 " << val2.dado << endl;
+	#endif
 
 
 	return;
@@ -1609,16 +853,16 @@ void ExecutionEngine::java_fstore(){
 	}
 	else
 	{
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_fstore" << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_fstore" << endl;
+	#endif
 		int8_t aux;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
 		val.dado= indice;
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_fstore \tval.dado = " << val.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_fstore \tval.dado = " << val.dado << endl;
+	#endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
@@ -1644,16 +888,16 @@ void ExecutionEngine::java_dstore(){
 	}
 	else
 	{
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_dstore" << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_dstore" << endl;
+	#endif
 		uint8_t aux;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
 		val.dado= indice;
-#ifdef DEBUG_EE
-cout << "ExecutionEngine::java_dstore \tval.dado = " << val.dado << endl;
-#endif
+	#ifdef DEBUG_EE
+	cout << "ExecutionEngine::java_dstore \tval.dado = " << val.dado << endl;
+	#endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
@@ -4131,7 +3375,7 @@ void ExecutionEngine::java_lreturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 	
 	if (returnValor.tipo != TipoDado::LONG)
-		throw new Erro("Esperado tipo inteiro em java_lreturn");
+		throw new Erro("Esperado tipo long em java_lreturn");
 
 	
 	runtimeDataArea->desempilharFrame();
@@ -4151,7 +3395,7 @@ void ExecutionEngine::java_freturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 	
 	if (returnValor.tipo != TipoDado::FLOAT)
-		throw new Erro("Esperado tipo inteiro em ireturn");	
+		throw new Erro("Esperado tipo float em freturn");	
 
 	runtimeDataArea->desempilharFrame();
 
@@ -4164,7 +3408,7 @@ void ExecutionEngine::java_dreturn(){
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 
 	if (returnValor.tipo != TipoDado::DOUBLE)
-		throw new Erro("Esperado tipo inteiro em ireturn");
+		throw new Erro("Esperado tipo double em dreturn");
 
 	//so n destruí aqui o antigo mas deboas
 	runtimeDataArea->desempilharFrame();
@@ -5741,6 +4985,758 @@ cout << "ExecutionEngine::java_StoreValor 8" << endl;
 
 }
 
+void ExecutionEngine::java_iload(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+
+	//Verifica se a funcao java_wide foi chamada anteriormente
+	if(isWide) {
+		//Copia byte[1] concatenado com byte[2] para index
+		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
+		index= InverterEndianess<int16_t>(index);//nao esquecer de inerter o endian;
+
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+
+	}
+
+	else {
+
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+
+	}
+
+
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
+
+		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "java_iload");
+
+	}
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::java_lload(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	//Verifica se a função chamada anteriormente é um wide
+	if(isWide) {
+
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+
+	}
+	else {
+
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+
+	}
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
+
+		throw new Erro("Tamanho do vetor de variáveis menor que o index + 1", "ExecutionEngine", "java_lload");
+
+	}
+
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	if(!(valor.tipo == TipoDado::LONG)){
+
+		throw new Erro("valor.tipo diferente de LONG", "ExecutionEngine", "java_lload");
+
+	}
+	
+	Valor pad;
+	pad.tipo = TipoDado::PREENCHIMENTO;
+	pad.dado = 0;
+	
+	toppilha->empilharOperando(pad);
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::java_fload(){
+	Frame *topPilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = topPilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	//Verifica se java_wide foi chamada anteriormente
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+
+	if(((int16_t)(topPilha->tamanhoVetorVariaveis())) <= index){
+
+		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "java_fload");
+
+	}
+
+	Valor valor = topPilha->getValorVariavelLocal(index);
+	
+	topPilha->empilharOperando(valor);
+}
+void ExecutionEngine::java_dload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	//Verifica se java_wide foi chamada
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+
+	}
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
+
+		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "java_dload");
+	
+	}
+
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	if(!(valor.tipo == TipoDado::DOUBLE)){
+
+		throw new Erro("Tipo de dado diferente de DOUBLE ", "ExecutionEngine", "java_dload");
+
+	}
+	
+	Valor pad;
+	pad.tipo = TipoDado::PREENCHIMENTO;
+	pad.dado = 0;
+	
+	toppilha->empilharOperando(pad);
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::java_aload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	
+	uint8_t *code = toppilha->getCode();
+	uint8_t byte1 = code[1];
+	int16_t index = (int16_t)byte1;
+	//Verifica se java_wide foi chamada anteriormente
+	if(isWide) {
+		uint16_t byte2 = code[2];
+		index = (byte1 << 8) | byte2;
+		runtimeDataArea->topoPilha()->incrementaPC(3);
+		isWide = false;
+	}
+	else {
+		runtimeDataArea->topoPilha()->incrementaPC(2);
+	}
+
+	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
+
+		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "java_aload");
+
+	}
+		
+	Valor valor = toppilha->getValorVariavelLocal(index);
+	if(!(valor.tipo == TipoDado::REFERENCIA)){
+
+		throw new Erro("O tipo do dado não é uma referencia", "ExecutionEngine", "java_aload");
+	}
+	
+	toppilha->empilharOperando(valor);
+}
+void ExecutionEngine::java_iload_0(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(0);
+	if(!(valor.tipo == TipoDado::INTEIRO)){
+		
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_0");
+
+	}
+		
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_iload_1(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+		if(!(valor.tipo == TipoDado::INTEIRO)){
+		
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_1");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_iload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	 if(!(valor.tipo == TipoDado::INTEIRO)){
+		
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_2");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_iload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	 if(!(valor.tipo == TipoDado::INTEIRO)){
+		
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_3");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_lload_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	 if(valor.tipo != TipoDado::PREENCHIMENTO){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_0");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(0);
+	if(valor.tipo != TipoDado::LONG){
+	
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_0");
+
+	}
+		
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_lload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_1");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(1);
+	if(!(valor.tipo == TipoDado::LONG)){
+	
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_1");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_lload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	#ifdef DEBUG_LLOAD_2
+		cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
+	#endif
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_2");
+
+	}
+	#ifdef DEBUG_LLOAD_2
+		cout<< "Empilhando " << ObterStringTipo(valor.tipo) << endl;
+	#endif
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(2);
+	#ifdef DEBUG_LLOAD_2
+		cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
+	#endif
+	if(!(valor.tipo == TipoDado::LONG)){
+	
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_2");
+
+	}
+	#ifdef DEBUG_LLOAD_2
+		cout<< "Empilhando " << ObterStringTipo(valor.tipo) << endl;
+	#endif
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_lload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(4);
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_3");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(3);
+	if(!(valor.tipo == TipoDado::LONG)){
+	
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_3");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_fload_0(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(0);
+	 if(!(valor.tipo == TipoDado::FLOAT)){
+		
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_0");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1)
+;	
+}
+void ExecutionEngine::java_fload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	 if(!(valor.tipo == TipoDado::FLOAT)){
+		
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_1");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);	
+}
+void ExecutionEngine::java_fload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	 if(!(valor.tipo == TipoDado::FLOAT)){
+		
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_2");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);		
+}
+void ExecutionEngine::java_fload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	 if(!(valor.tipo == TipoDado::FLOAT)){
+		
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_3");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);	
+}
+void ExecutionEngine::java_dload_0(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_0");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(0);
+	 if(!(valor.tipo == TipoDado::DOUBLE)){
+		
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_0");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}	
+void ExecutionEngine::java_dload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_1");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(1);
+	 if(!(valor.tipo == TipoDado::DOUBLE)){
+		
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_1");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_dload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_2");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(2);
+	 if(!(valor.tipo == TipoDado::DOUBLE)){
+		
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_2");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_dload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(4);
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
+		
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_3");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	valor = toppilha->getValorVariavelLocal(3);
+	 if(!(valor.tipo == TipoDado::DOUBLE)){
+		
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_3");
+
+	}
+	toppilha->empilharOperando(valor);
+
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_aload_0(){
+	//usa na mainvazia
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(0);
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
+		string errMsg= "O tipo do dado não é um uma referencia \t tipo: ";
+		errMsg+= ObterStringTipo(valor.tipo);
+		throw new Erro(errMsg, "ExecutionEngine", "java_aload_0");
+
+	}
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_aload_1(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(1);
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
+		
+		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_1");
+
+	}
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_aload_2(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(2);
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
+		
+		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_2");
+
+	}
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_aload_3(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+
+	Valor valor = toppilha->getValorVariavelLocal(3);
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
+		
+		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_3");
+
+	}
+
+	toppilha->empilharOperando(valor);
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_iaload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+		 if(!(index.tipo == TipoDado::INTEIRO)){
+		
+		throw new Erro("O tipo do dado não é um int", "ExecutionEngine", "java_iload");
+
+	}
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_iaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_iaload");
+	}
+	toppilha->empilharOperando(array->ObterValor(num));
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_laload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_laload");
+	}
+	int64_t num;
+	memcpy(&num, &(index.dado), 8);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_laload");
+	}
+	
+	Valor padding;
+	padding.dado = TipoDado::PREENCHIMENTO;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(array->ObterValor(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_faload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_faload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_faload");
+	}
+	toppilha->empilharOperando(array->ObterValor(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_daload(){
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_daload");
+	}
+	int64_t num;
+	memcpy(&num, &(index.dado), 8);
+	if (num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_daload");
+	}
+	
+	Valor padding;
+	padding.tipo = TipoDado::PREENCHIMENTO;
+	padding.dado = 0;
+	
+	toppilha->empilharOperando(padding);
+	toppilha->empilharOperando(array->ObterValor(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_aaload(){ //Load reference from array 
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_aaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_aaload");
+	}
+	toppilha->empilharOperando(array->ObterValor(num));
+	
+	runtimeDataArea->topoPilha()->incrementaPC(1);
+}
+void ExecutionEngine::java_baload(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_aaload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_aaload");
+	}
+
+	Valor op = array->ObterValor(index.dado);
+	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
+
+		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "java_baload");
+		
+	}
+	
+	op.tipo = TipoDado::INTEIRO;
+
+	toppilha->empilharOperando(op);
+	toppilha->incrementaPC(1);
+}
+void ExecutionEngine::java_caload(){
+
+	Frame *toppilha = runtimeDataArea->topoPilha();	
+	ObjetoArray *array;
+	
+	Valor index = toppilha->desempilhaOperando();
+	
+	Valor arrayref = toppilha->desempilhaOperando();
+	
+	array = (ObjetoArray*)(arrayref.dado);
+	
+	if (array == NULL) {
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_caload");
+	}
+	int32_t num;
+	memcpy(&num, &(index.dado), 4);
+	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_caload");
+	}
+
+	Valor op = array->ObterValor(index.dado);
+	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
+
+		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "java_caload");
+		
+	}
+
+	op.tipo = TipoDado::INTEIRO;
+	
+	toppilha->empilharOperando(op);
+	toppilha->incrementaPC(1);
+}
+void ExecutionEngine::java_saload(){
+
+	Frame *topo = runtimeDataArea->topoPilha();
+	ObjetoArray *array;
+
+	Valor indice = topo->desempilhaOperando();
+	if(!(indice.tipo == TipoDado::INTEIRO)){
+
+		throw new Erro("o operando deve ser INTEIRO.", "ExecutionEngine", "java_saload");
+		
+	}
+
+	Valor arrayref = topo->desempilhaOperando();
+
+	if(!(arrayref.tipo == TipoDado::REFERENCIA)){
+		
+		throw new Erro("o operando deve ser uma referencia.", "ExecutionEngine", "java_saload");
+		
+	}
+	if(!(((Objeto*)arrayref.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
+		
+		throw new Erro("a referencia deve ser para um array.", "ExecutionEngine", "java_saload");
+		
+	}
+
+	array = (ObjetoArray *) arrayref.dado;
+
+	if (array == NULL) {
+
+		throw new Erro("NullPointerException");
+
+	}
+
+	if (indice.dado > array->ObterTamanho() || indice.dado < 0) {
+
+		throw new Erro("ArrayIndexOutOfBoundsException");
+
+	}
+	
+	Valor shortOp = array->ObterValor(indice.dado);
+	shortOp.tipo = TipoDado::INTEIRO;
+	
+	topo->empilharOperando(shortOp);
+	topo->incrementaPC(1);
+}
 
 
 
