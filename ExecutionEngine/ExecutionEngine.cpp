@@ -81,8 +81,8 @@ void ExecutionEngine::Play(string classComMain)
 #endif
 	vector<Valor>argumentos;
 	Valor argumentosDaLinhaDeComando;
-	argumentosDaLinhaDeComando.tipo= REFERENCE;
-	ObjetoArray *obj= new ObjetoArray(REFERENCE);
+	argumentosDaLinhaDeComando.tipo= REFERENCIA;
+	ObjetoArray *obj= new ObjetoArray(REFERENCIA);
 	memcpy(&(argumentosDaLinhaDeComando.dado), &obj, sizeof(void*));
 	argumentos.push_back(argumentosDaLinhaDeComando);
 	
@@ -361,7 +361,7 @@ void ExecutionEngine::i_nop(){
 void ExecutionEngine::i_aconst_null(){ //Push the null object reference onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	Valor valor;
-	valor.tipo = TipoDado::REFERENCE;
+	valor.tipo = TipoDado::REFERENCIA;
 	valor.dado = (uint64_t)NULL;
 	toppilha->empilharOperando(valor);
 }
@@ -371,7 +371,7 @@ void ExecutionEngine::i_iconst_m1(){ // Push the int constant i onto the operand
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado=0;
 	int32_t m1= -1;
 	memcpy(&(valor.dado), &m1, 4);
@@ -386,7 +386,7 @@ void ExecutionEngine::i_iconst_0(){ //Push the int constant 0 onto the operand s
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (uint32_t)0;
 
 	toppilha->empilharOperando(valor);
@@ -397,7 +397,7 @@ void ExecutionEngine::i_iconst_1(){  //Push the int constant 1 onto the operand 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (uint32_t)1;
 
 	toppilha->empilharOperando(valor);
@@ -408,7 +408,7 @@ void ExecutionEngine::i_iconst_2(){ //Push the int constant 2 onto the operand s
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (uint32_t)2;
 
 	toppilha->empilharOperando(valor);
@@ -418,7 +418,7 @@ void ExecutionEngine::i_iconst_3(){ //Push the int constant 3 onto the operand s
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (uint32_t)3;
 
 	toppilha->empilharOperando(valor);
@@ -428,7 +428,7 @@ void ExecutionEngine::i_iconst_4(){ //Push the int constant 4 onto the operand s
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (uint32_t)4;
 
 	toppilha->empilharOperando(valor);
@@ -439,7 +439,7 @@ void ExecutionEngine::i_iconst_5(){//Push the int constant 5 onto the operand st
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (uint32_t)5;
 
 	toppilha->empilharOperando(valor);
@@ -449,7 +449,7 @@ void ExecutionEngine::i_lconst_0(){ //Push the long constant 0 onto the operand 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
-	pad.tipo = TipoDado::PADDING;
+	pad.tipo = TipoDado::PREENCHIMENTO;
 	pad.dado = (uint32_t)0;
 
 	Valor valor;
@@ -467,7 +467,7 @@ void ExecutionEngine::i_lconst_1(){//Push the long constant 1 onto the operand s
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
-	pad.tipo = TipoDado::PADDING;
+	pad.tipo = TipoDado::PREENCHIMENTO;
 	pad.dado = (uint32_t)0;
 
 	Valor valor;
@@ -518,7 +518,7 @@ void ExecutionEngine::i_dconst_0(){//Push the double constant 0 onto the operand
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
-	pad.tipo = TipoDado::PADDING;
+	pad.tipo = TipoDado::PREENCHIMENTO;
 	pad.dado=0;
 
 	Valor valor;
@@ -536,7 +536,7 @@ void ExecutionEngine::i_dconst_1(){//Push the double constant 1 onto the operand
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
-	pad.tipo = TipoDado::PADDING;
+	pad.tipo = TipoDado::PREENCHIMENTO;
 	pad.dado=0;
 
 	Valor valor;
@@ -558,7 +558,7 @@ void ExecutionEngine::i_bipush(){
 	uint8_t byte = code[1];
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = (int32_t)(int8_t) byte; // convertendo para inteiro e estendendo o sinal
 
 	toppilha->empilharOperando(valor);
@@ -574,7 +574,7 @@ void ExecutionEngine::i_sipush(){
 	num = InverterEndianess<int16_t>(num);
 
 	Valor valor;
-	valor.tipo = TipoDado::INT;
+	valor.tipo = TipoDado::INTEIRO;
 	valor.dado = num;
 
 	toppilha->empilharOperando(valor);
@@ -606,7 +606,7 @@ void ExecutionEngine::i_ldc(){
 #ifdef DEBUG_EE
 cout<<"chegou i_ldc" << endl;
 #endif
-		valor.tipo = TipoDado::REFERENCE;
+		valor.tipo = TipoDado::REFERENCIA;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		valor.dado = 0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
@@ -616,7 +616,7 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	}
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
 	{
-		valor.tipo = TipoDado::INT;
+		valor.tipo = TipoDado::INTEIRO;
 		valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
 	} 
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Float)
@@ -662,7 +662,7 @@ void ExecutionEngine::i_ldc_w(){
 #ifdef DEBUG_EE
 cout<<"chegou i_ldc" << endl;
 #endif
-		valor.tipo = TipoDado::REFERENCE;
+		valor.tipo = TipoDado::REFERENCIA;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		valor.dado=0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
@@ -672,7 +672,7 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	}
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
 	{
-		valor.tipo = TipoDado::INT;
+		valor.tipo = TipoDado::INTEIRO;
 		valor.dado = ((CONSTANT_Integer_info*)constantPool[index -1])->GetNumero();
 	} 
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Float)
@@ -715,7 +715,7 @@ void ExecutionEngine::i_ldc2_w(){
 		valor.tipo = TipoDado::LONG;
 		
 		Valor padding;
-		padding.tipo = TipoDado::PADDING;
+		padding.tipo = TipoDado::PREENCHIMENTO;
 		padding.dado= 0;
 		
 		toppilha->empilharOperando(padding);
@@ -726,7 +726,7 @@ void ExecutionEngine::i_ldc2_w(){
 		valor.tipo = TipoDado::DOUBLE;
 		
 		Valor padding;
-		padding.tipo = TipoDado::PADDING;
+		padding.tipo = TipoDado::PREENCHIMENTO;
 		padding.dado= 0;
 		
 		toppilha->empilharOperando(padding);
@@ -813,7 +813,7 @@ void ExecutionEngine::i_lload(){
 	}
 	
 	Valor pad;
-	pad.tipo = TipoDado::PADDING;
+	pad.tipo = TipoDado::PREENCHIMENTO;
 	pad.dado = 0;
 	
 	toppilha->empilharOperando(pad);
@@ -879,7 +879,7 @@ void ExecutionEngine::i_dload(){
 	}
 	
 	Valor pad;
-	pad.tipo = TipoDado::PADDING;
+	pad.tipo = TipoDado::PREENCHIMENTO;
 	pad.dado = 0;
 	
 	toppilha->empilharOperando(pad);
@@ -909,7 +909,7 @@ void ExecutionEngine::i_aload(){
 	}
 		
 	Valor valor = toppilha->getValorVariavelLocal(index);
-	if(!(valor.tipo == TipoDado::REFERENCE)){
+	if(!(valor.tipo == TipoDado::REFERENCIA)){
 
 		throw new Erro("O tipo do dado não é uma referencia", "ExecutionEngine", "i_aload");
 	}
@@ -921,7 +921,7 @@ void ExecutionEngine::i_iload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(0);
-	if(!(valor.tipo == TipoDado::INT)){
+	if(!(valor.tipo == TipoDado::INTEIRO)){
 		
 		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_0");
 
@@ -936,7 +936,7 @@ void ExecutionEngine::i_iload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-		if(!(valor.tipo == TipoDado::INT)){
+		if(!(valor.tipo == TipoDado::INTEIRO)){
 		
 		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_1");
 
@@ -949,7 +949,7 @@ void ExecutionEngine::i_iload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::INT)){
+	 if(!(valor.tipo == TipoDado::INTEIRO)){
 		
 		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_2");
 
@@ -962,7 +962,7 @@ void ExecutionEngine::i_iload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::INT)){
+	 if(!(valor.tipo == TipoDado::INTEIRO)){
 		
 		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_3");
 
@@ -975,7 +975,7 @@ void ExecutionEngine::i_lload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(valor.tipo != TipoDado::PADDING){
+	 if(valor.tipo != TipoDado::PREENCHIMENTO){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_0");
 
@@ -997,7 +997,7 @@ void ExecutionEngine::i_lload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_1");
 
@@ -1018,7 +1018,7 @@ void ExecutionEngine::i_lload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_2");
 
@@ -1039,7 +1039,7 @@ void ExecutionEngine::i_lload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(4);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_3");
 
@@ -1114,7 +1114,7 @@ void ExecutionEngine::i_dload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_dload_0");
 
@@ -1135,7 +1135,7 @@ void ExecutionEngine::i_dload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_dload_1");
 
@@ -1156,7 +1156,7 @@ void ExecutionEngine::i_dload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_dload_2");
 
@@ -1177,7 +1177,7 @@ void ExecutionEngine::i_dload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(4);
-	 if(!(valor.tipo == TipoDado::PADDING)){
+	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_3");
 
@@ -1199,7 +1199,7 @@ void ExecutionEngine::i_aload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(0);
-	 if(!(valor.tipo == TipoDado::REFERENCE)){
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		string errMsg= "O tipo do dado não é um uma referencia \t tipo: ";
 		errMsg+= ObterStringTipo(valor.tipo);
 		throw new Erro(errMsg, "ExecutionEngine", "i_aload_0");
@@ -1213,7 +1213,7 @@ void ExecutionEngine::i_aload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
-	 if(!(valor.tipo == TipoDado::REFERENCE)){
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		
 		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_1");
 
@@ -1226,7 +1226,7 @@ void ExecutionEngine::i_aload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
-	 if(!(valor.tipo == TipoDado::REFERENCE)){
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		
 		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_2");
 
@@ -1239,7 +1239,7 @@ void ExecutionEngine::i_aload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
-	 if(!(valor.tipo == TipoDado::REFERENCE)){
+	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		
 		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_3");
 
@@ -1253,7 +1253,7 @@ void ExecutionEngine::i_iaload(){
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
-		 if(!(index.tipo == TipoDado::INT)){
+		 if(!(index.tipo == TipoDado::INTEIRO)){
 		
 		throw new Erro("O tipo do dado não é um int", "ExecutionEngine", "i_iload");
 
@@ -1293,7 +1293,7 @@ void ExecutionEngine::i_laload(){
 	}
 	
 	Valor padding;
-	padding.dado = TipoDado::PADDING;
+	padding.dado = TipoDado::PREENCHIMENTO;
 	
 	toppilha->empilharOperando(padding);
 	toppilha->empilharOperando(array->ObterValor(num));
@@ -1343,7 +1343,7 @@ void ExecutionEngine::i_daload(){
 	}
 	
 	Valor padding;
-	padding.tipo = TipoDado::PADDING;
+	padding.tipo = TipoDado::PREENCHIMENTO;
 	padding.dado = 0;
 	
 	toppilha->empilharOperando(padding);
@@ -1395,13 +1395,13 @@ Frame *toppilha = runtimeDataArea->topoPilha();
 	}
 
 	Valor op = array->ObterValor(index.dado);
-	if(!(op.tipo == TipoDado::BOOLEAN || op.tipo == TipoDado::BYTE)){
+	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
 
-		throw new Erro("o operando deve ser BOOLEAN ou BYTE.", "ExecutionEngine", "i_baload");
+		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "i_baload");
 		
 	}
 	
-	op.tipo = TipoDado::INT;
+	op.tipo = TipoDado::INTEIRO;
 
 	toppilha->empilharOperando(op);
 	toppilha->incrementaPC(1);
@@ -1428,13 +1428,13 @@ void ExecutionEngine::i_caload(){
 	}
 
 	Valor op = array->ObterValor(index.dado);
-	if(!(op.tipo == TipoDado::BOOLEAN || op.tipo == TipoDado::BYTE)){
+	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
 
-		throw new Erro("o operando deve ser BOOLEAN ou BYTE.", "ExecutionEngine", "i_caload");
+		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "i_caload");
 		
 	}
 
-	op.tipo = TipoDado::INT;
+	op.tipo = TipoDado::INTEIRO;
 	
 	toppilha->empilharOperando(op);
 	toppilha->incrementaPC(1);
@@ -1446,15 +1446,15 @@ void ExecutionEngine::i_saload(){
 	ObjetoArray *array;
 
 	Valor indice = topo->desempilhaOperando();
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 
-		throw new Erro("o operando deve ser INT.", "ExecutionEngine", "i_saload");
+		throw new Erro("o operando deve ser INTEIRO.", "ExecutionEngine", "i_saload");
 		
 	}
 
 	Valor arrayref = topo->desempilhaOperando();
 
-	if(!(arrayref.tipo == TipoDado::REFERENCE)){
+	if(!(arrayref.tipo == TipoDado::REFERENCIA)){
 		
 		throw new Erro("o operando deve ser uma referencia.", "ExecutionEngine", "i_saload");
 		
@@ -1478,7 +1478,7 @@ void ExecutionEngine::i_saload(){
 	}
 	
 	Valor shortOp = array->ObterValor(indice.dado);
-	shortOp.tipo = TipoDado::INT;
+	shortOp.tipo = TipoDado::INTEIRO;
 	
 	topo->empilharOperando(shortOp);
 	topo->incrementaPC(1);
@@ -1489,7 +1489,7 @@ void ExecutionEngine::i_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
 	Valor val;
-	val.tipo = INT;
+	val.tipo = INTEIRO;
 	if(isWide)
 	{
 		int16_t indice;
@@ -1565,7 +1565,7 @@ cout << "ExecutionEngine::i_lstore 3 " << val.dado << endl;
 
 	//como é um long devemos colocar preenchimento
 	Valor val2;
-	val2.tipo= TipoDado::PADDING;
+	val2.tipo= TipoDado::PREENCHIMENTO;
 	val2.dado= (val.dado)+1;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::i_lstore 3,5 valdado:" << val2.dado << endl;
@@ -1645,7 +1645,7 @@ cout << "ExecutionEngine::i_dstore \tval.dado = " << val.dado << endl;
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
 	//como é um long devemos colocar preenchimento
-	val.tipo= PADDING;
+	val.tipo= PREENCHIMENTO;
 	val.dado= (val.dado)+1;
 	StoreValor(val);
 	return;
@@ -1816,7 +1816,7 @@ void ExecutionEngine::i_dstore_1(){
 	val.dado= 1;
 	StoreValor(val);
 
-	val.tipo = PADDING;
+	val.tipo = PREENCHIMENTO;
 	val.dado= 2;
 	StoreValor(val);
 	
@@ -1828,7 +1828,7 @@ void ExecutionEngine::i_dstore_2(){
 	val.dado= 2;
 	StoreValor(val);
 
-	val.tipo = PADDING;
+	val.tipo = PREENCHIMENTO;
 	val.dado= 3;
 	StoreValor(val);
 	
@@ -1840,7 +1840,7 @@ void ExecutionEngine::i_dstore_3(){
 	val.dado= 3;
 	StoreValor(val);
 
-	val.tipo = PADDING;
+	val.tipo = PREENCHIMENTO;
 	val.dado= 4;
 	StoreValor(val);
 	
@@ -1848,7 +1848,7 @@ void ExecutionEngine::i_dstore_3(){
 }
 void ExecutionEngine::i_astore_0(){
 	Valor val;
-	val.tipo = REFERENCE;
+	val.tipo = REFERENCIA;
 	val.dado= 0;
 	StoreValor(val);
 	
@@ -1856,7 +1856,7 @@ void ExecutionEngine::i_astore_0(){
 }
 void ExecutionEngine::i_astore_1(){
 	Valor val;
-	val.tipo = REFERENCE;
+	val.tipo = REFERENCIA;
 	val.dado= 1;
 	StoreValor(val);
 	
@@ -1864,7 +1864,7 @@ void ExecutionEngine::i_astore_1(){
 }
 void ExecutionEngine::i_astore_2(){
 	Valor val;
-	val.tipo = REFERENCE;
+	val.tipo = REFERENCIA;
 	val.dado= 2;
 	StoreValor(val);
 	
@@ -1872,7 +1872,7 @@ void ExecutionEngine::i_astore_2(){
 }
 void ExecutionEngine::i_astore_3(){
 	Valor val;
-	val.tipo = REFERENCE;
+	val.tipo = REFERENCIA;
 	val.dado= 3;
 	StoreValor(val);
 	
@@ -1885,19 +1885,19 @@ void ExecutionEngine::i_iastore(){
 	ObjetoArray *array;
 
 	Valor op = topo->desempilhaOperando();
-	if(!(op.tipo == TipoDado::INT)){
+	if(!(op.tipo == TipoDado::INTEIRO)){
 
 		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
 
 	}
 	Valor indice = topo->desempilhaOperando();
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 
 		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
 
 	}
 	Valor referArr = topo->desempilhaOperando();
-	if(referArr.tipo != TipoDado::REFERENCE){
+	if(referArr.tipo != TipoDado::REFERENCIA){
 
 		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
 		
@@ -1948,19 +1948,19 @@ void ExecutionEngine::i_lastore(){
 						
 	}
 	Valor pad = topo->desempilhaOperando();
-	if(!(pad.tipo == TipoDado::PADDING)){
+	if(!(pad.tipo == TipoDado::PREENCHIMENTO)){
 							
 		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_lastore");
 						
 	}
 	Valor indice = topo->desempilhaOperando();
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 		throw new Erro("Valor não é um int", "ExecutionEngine", "i_lastore");
 						
 	}
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_lastore");
 						
@@ -2009,13 +2009,13 @@ void ExecutionEngine::i_fastore(){
 
 	Valor indice = topo->desempilhaOperando();
 
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 			throw new Erro("Valor não é um int", "ExecutionEngine", "i_fastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_fastore");
 						
@@ -2063,7 +2063,7 @@ void ExecutionEngine::i_dastore(){
 		}
 
 	Valor pad = topo->desempilhaOperando();
-	if(!(pad.tipo == TipoDado::PADDING)){
+	if(!(pad.tipo == TipoDado::PREENCHIMENTO)){
 							
 		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
 						
@@ -2071,14 +2071,14 @@ void ExecutionEngine::i_dastore(){
 	
 	Valor indice = topo->desempilhaOperando();
 
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 			throw new Erro("Valor não é um inteiro", "ExecutionEngine", "i_dastore");
 						
 		}
 
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_dastore");
 						
@@ -2120,7 +2120,7 @@ void ExecutionEngine::i_aastore(){
 	ObjetoArray *array;
 
 	Valor valor = topo->desempilhaOperando();
-	if(!(valor.tipo == TipoDado::REFERENCE)){
+	if(!(valor.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_aastore");
 						
@@ -2128,13 +2128,13 @@ void ExecutionEngine::i_aastore(){
 
 	Valor indice = topo->desempilhaOperando();
 
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 			throw new Erro("Valor não é um int", "ExecutionEngine", "i_aastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_aastore");
 						
@@ -2174,21 +2174,21 @@ void ExecutionEngine::i_bastore(){
 	ObjetoArray *array;
 
 	Valor valor = topo->desempilhaOperando();
-	if(!(valor.tipo == TipoDado::INT)){
+	if(!(valor.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "i_bastore");
 						
 		}
 
 	Valor indice = topo->desempilhaOperando();
 
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
 						
@@ -2213,10 +2213,10 @@ void ExecutionEngine::i_bastore(){
 		exit(2);
 	}
 
-	if (array->TipoElementosDoArray() == TipoDado::BOOLEAN) {
+	if (array->TipoElementosDoArray() == TipoDado::BOOLEANO) {
 
 		valor.dado = (valor.dado != 0) ? true : false;
-		valor.tipo = TipoDado::BOOLEAN;
+		valor.tipo = TipoDado::BOOLEANO;
 
 	} 
     else {
@@ -2237,21 +2237,21 @@ void ExecutionEngine::i_castore(){
 	ObjetoArray *array;
 
 	Valor valor = topo->desempilhaOperando();
-	if(!(valor.tipo == TipoDado::INT)){
+	if(!(valor.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_castore");
+			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "i_castore");
 						
 		}
 
 	Valor indice = topo->desempilhaOperando();
 
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 			throw new Erro("indice não é um int", "ExecutionEngine", "i_castore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_castore");
 						
@@ -2288,21 +2288,21 @@ void ExecutionEngine::i_sastore(){
 	ObjetoArray *array;
 
 	Valor valor = topo->desempilhaOperando();
-	if(!(valor.tipo == TipoDado::INT)){
+	if(!(valor.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um INT", "ExecutionEngine", "i_sastore");
+			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "i_sastore");
 						
 		}
 
 	Valor indice = topo->desempilhaOperando();
 
-	if(!(indice.tipo == TipoDado::INT)){
+	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
 			throw new Erro("indice não é um int", "ExecutionEngine", "i_sastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
-	if(!(referenciaArr.tipo == TipoDado::REFERENCE)){
+	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
 			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_sastore");
 						
@@ -2952,7 +2952,7 @@ void ExecutionEngine::i_lshl(){
 	Valor valor2 = toppilha->desempilhaOperando();
 	Valor valor1 = toppilha->desempilhaOperando();
 	
-	if(!(valor2.tipo == TipoDado::INT)){
+	if(!(valor2.tipo == TipoDado::INTEIRO)){
 
 		throw new Erro("O segundo operando deve ser um inteiro.","ExecutionEngine","i_ldiv");
 
@@ -3195,7 +3195,7 @@ void ExecutionEngine::i_i2l(){
 	Valor valor2;
 	valor2.tipo = TipoDado::LONG;
 	Valor padding;
-	padding.tipo = TipoDado::PADDING;
+	padding.tipo = TipoDado::PREENCHIMENTO;
 	toppilha->empilharOperando(padding);
 	//troca o int pra 64?
 	int32_t num1;
@@ -3234,7 +3234,7 @@ void ExecutionEngine::i_i2d(){
 	Valor valor2;
 	valor2.tipo = TipoDado::DOUBLE;
 	Valor padding;
-	padding.tipo = TipoDado::PADDING;
+	padding.tipo = TipoDado::PREENCHIMENTO;
 	toppilha->empilharOperando(padding);
 	
 	int32_t num1;
@@ -3254,7 +3254,7 @@ void ExecutionEngine::i_l2i(){
 	toppilha->desempilhaOperando(); //padding
 	
 	Valor valor2;
-	valor2.tipo = TipoDado::INT;
+	valor2.tipo = TipoDado::INTEIRO;
 	
 	int64_t num1;
 	int32_t num2;
@@ -3309,7 +3309,7 @@ void ExecutionEngine::i_f2i(){
 	Valor valor1 = toppilha->desempilhaOperando();
 	
 	Valor valor2;
-	valor2.tipo = TipoDado::INT;
+	valor2.tipo = TipoDado::INTEIRO;
 	
 	float num1;
 	int num2;
@@ -3329,7 +3329,7 @@ void ExecutionEngine::i_f2l(){
 	Valor valor2;
 	valor2.tipo = TipoDado::LONG;
 	Valor padding;
-	padding.tipo = TipoDado::PADDING;
+	padding.tipo = TipoDado::PREENCHIMENTO;
 	toppilha->empilharOperando(padding);
 	
 	float num1;
@@ -3350,7 +3350,7 @@ void ExecutionEngine::i_f2d(){
 	Valor valor2;
 	valor2.tipo = TipoDado::DOUBLE;
 	Valor padding;
-	padding.tipo = TipoDado::PADDING;
+	padding.tipo = TipoDado::PREENCHIMENTO;
 	toppilha->empilharOperando(padding);
 	
 	float num1;
@@ -3370,7 +3370,7 @@ void ExecutionEngine::i_d2i(){
 	toppilha->desempilhaOperando(); //padding
 	
 	Valor valor2;
-	valor2.tipo = TipoDado::INT;
+	valor2.tipo = TipoDado::INTEIRO;
 	
 	double num1;
 	int32_t num2;
@@ -3484,7 +3484,7 @@ void ExecutionEngine::i_lcmp(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	Valor resultado;
-	resultado.tipo = TipoDado::INT;
+	resultado.tipo = TipoDado::INTEIRO;
 	
 	if (num1 > num2) {
 		num3 = 1;
@@ -3510,7 +3510,7 @@ void ExecutionEngine::i_fcmpl(){
 	memcpy(&num2,&valor2.dado,4);
 	
 	Valor resultado;
-	resultado.tipo = TipoDado::INT;
+	resultado.tipo = TipoDado::INTEIRO;
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = -1;
@@ -3541,7 +3541,7 @@ void ExecutionEngine::i_fcmpg(){
 	memcpy(&num2,&valor2.dado,4);
 	
 	Valor resultado;
-	resultado.tipo = TipoDado::INT;
+	resultado.tipo = TipoDado::INTEIRO;
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = 1;
@@ -3571,7 +3571,7 @@ void ExecutionEngine::i_dcmpl(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	Valor resultado;
-	resultado.tipo = TipoDado::INT;
+	resultado.tipo = TipoDado::INTEIRO;
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = -1;
@@ -3605,7 +3605,7 @@ void ExecutionEngine::i_dcmpg(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	Valor resultado;
-	resultado.tipo = TipoDado::INT;
+	resultado.tipo = TipoDado::INTEIRO;
 	
 	if (isnan(num1) || isnan(num2)) {
 		num3 = 1;
@@ -3958,7 +3958,7 @@ void ExecutionEngine::i_jsr(){
 	int16_t offsetPC = (byte1 << 8) | byte2;
 	
 	Valor enderecoRetorno;
-	enderecoRetorno.tipo = TipoDado::RETURN_ADDR;
+	enderecoRetorno.tipo = TipoDado::ENDERECO_DE_RETORNO;
 	int64_t num;
 	num = runtimeDataArea->topoPilha()->getPC() + 3;
 	memcpy(&enderecoRetorno.dado,&num,sizeof(void*));
@@ -3984,7 +3984,7 @@ void ExecutionEngine::i_ret(){
 	Valor valor = topoDaFrame->getValorVariavelLocal(index);
 
 
-	if(valor.tipo != TipoDado::RETURN_ADDR)
+	if(valor.tipo != TipoDado::ENDERECO_DE_RETORNO)
 		throw new Erro("valor nao é endereco de retorno","ExecutionEngine","i_ret");
 
 
@@ -4013,9 +4013,9 @@ void ExecutionEngine::i_tableswitch()
 	high= InverterEndianess<int32_t>(high);
 	
 	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
-	if(valorChave.tipo != INT)
+	if(valorChave.tipo != INTEIRO)
 	{
-		throw new Erro("Esperado valor do tipo INT", "ExecutionEngine", "i_tableswitch");
+		throw new Erro("Esperado valor do tipo INTEIRO", "ExecutionEngine", "i_tableswitch");
 	}
 	uint32_t indiceDeBase= preenchimento+13;
 	int32_t chave, deslocamentos= high - low +1;
@@ -4057,9 +4057,9 @@ void ExecutionEngine::i_lookupswitch()
 	paresN= InverterEndianess<int32_t> (paresN);
 	
 	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
-	if(valorChave.tipo != INT)
+	if(valorChave.tipo != INTEIRO)
 	{
-		throw new Erro("Esperado valor do tipo INT", "ExecutionEngine", "i_lookupswitch");
+		throw new Erro("Esperado valor do tipo INTEIRO", "ExecutionEngine", "i_lookupswitch");
 	}
 	
 	uint32_t indiceDeBase= preenchimento+9;
@@ -4092,7 +4092,7 @@ void ExecutionEngine::i_ireturn(){
 	//valor deve ser inteiro
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 	
-	if (returnValor.tipo != TipoDado::INT)
+	if (returnValor.tipo != TipoDado::INTEIRO)
 		throw new Erro("Esperado tipo inteiro em ireturn");
 
 	//testar
@@ -4116,7 +4116,7 @@ void ExecutionEngine::i_lreturn(){
 	//so n destruí aqui o antigo mas deboas
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	Valor padd;
-	padd.dado = TipoDado::PADDING;
+	padd.dado = TipoDado::PREENCHIMENTO;
 
 	novoTopDoFrame->empilharOperando(padd);
 	novoTopDoFrame->empilharOperando(returnValor);
@@ -4149,7 +4149,7 @@ void ExecutionEngine::i_dreturn(){
 
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	Valor padd;
-	padd.dado = TipoDado::PADDING;
+	padd.dado = TipoDado::PREENCHIMENTO;
 
 	novoTopDoFrame->empilharOperando(padd);
 	novoTopDoFrame->empilharOperando(returnValor);
@@ -4159,7 +4159,7 @@ void ExecutionEngine::i_areturn(){
 	//valor deve ser reference
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 
-	if (returnValor.tipo != TipoDado::REFERENCE)
+	if (returnValor.tipo != TipoDado::REFERENCIA)
 		throw new Erro("Esperado tipo inteiro em areturn");
 
 	runtimeDataArea->desempilharFrame();
@@ -4279,19 +4279,19 @@ void ExecutionEngine::i_getstatic() {
 	
 	//bolean, byte, short e int sao empilhados como int. long e double empilham o padding antes
 /*	switch (valorStatico.tipo) {
-		case TipoDado::BOOLEAN:
+		case TipoDado::BOOLEANO:
 		case TipoDado::BYTE:
 		case TipoDado::SHORT:
-		case TipoDado::INT:
+		case TipoDado::INTEIRO:
 
-			valorStatico.tipo = TipoDado::INT;
+			valorStatico.tipo = TipoDado::INTEIRO;
 			break;
 
 		case TipoDado::DOUBLE:
 		case TipoDado::LONG:
 
 			Valor preenchimento;
-			preenchimento.tipo = PADDING;
+			preenchimento.tipo = PREENCHIMENTO;
 			toppilha->empilharOperando(preenchimento);
 			break;
 
@@ -4304,7 +4304,7 @@ void ExecutionEngine::i_getstatic() {
 	if(valorStatico.tipo == DOUBLE || valorStatico.tipo == LONG)
 	{
 			Valor preenchimento;
-			preenchimento.tipo = PADDING;
+			preenchimento.tipo = PREENCHIMENTO;
 			toppilha->empilharOperando(preenchimento);
 	}
 	toppilha->empilharOperando(valorStatico);
@@ -4389,7 +4389,7 @@ void ExecutionEngine::i_putstatic()
 		}
 		case ('Z'):
 		{
-			campo.tipo= BOOLEAN;
+			campo.tipo= BOOLEANO;
 			break;
 		}
 		case ('B'):
@@ -4431,7 +4431,7 @@ void ExecutionEngine::i_getfield()
 	string descritorDoField= classe-> getUTF8(cpAssinatura->GetDescriptorIndex());
 	
 	Valor valorInstancia = topoDaPilhaDeFrames->desempilhaOperando();
-	if(valorInstancia.tipo != REFERENCE)
+	if(valorInstancia.tipo != REFERENCIA)
 	{
 		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_getfield");
 	}
@@ -4448,14 +4448,14 @@ void ExecutionEngine::i_getfield()
 	}
 	
 	Valor campo= instancia->ObterValorDoCampo(nomeDoField);
-/*	if(campo.tipo == BOOLEAN)
+/*	if(campo.tipo == BOOLEANO)
 	{
 		
 	}*/
 	if(campo.tipo == LONG || campo.tipo == DOUBLE)
 	{
 		Valor preenchimento;
-		preenchimento.tipo= PADDING;
+		preenchimento.tipo= PREENCHIMENTO;
 		topoDaPilhaDeFrames->empilharOperando(preenchimento);
 	}
 	topoDaPilhaDeFrames->empilharOperando(campo);
@@ -4494,7 +4494,7 @@ void ExecutionEngine::i_putfield()
 	}
 	
 	Valor valorInstancia= topoDaPilhaDeFrames->desempilhaOperando();
-	if(valorInstancia.tipo != REFERENCE)
+	if(valorInstancia.tipo != REFERENCIA)
 	{
 		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_putfield");
 	}
@@ -4585,7 +4585,7 @@ void ExecutionEngine::i_invokevirtual()
 #endif
 				switch(valorQueSeraImpresso.tipo)
 				{
-					case(BOOLEAN):
+					case(BOOLEANO):
 					{
 						printf("%s", valorQueSeraImpresso.dado != 0 ? "true" : "true");
 						break;
@@ -4604,7 +4604,7 @@ void ExecutionEngine::i_invokevirtual()
 						printf("%hd", aux);
 						break;
 					}
-					case(INT):
+					case(INTEIRO):
 					{
 						int32_t aux;
 						memcpy(&aux, &(valorQueSeraImpresso.dado), 4);
@@ -4638,7 +4638,7 @@ void ExecutionEngine::i_invokevirtual()
 #endif
 						break;
 					}
-					case(REFERENCE):
+					case(REFERENCIA):
 					{
 #ifdef DEBUG_EE_INVOKEVIRTUAL
 	cout<< "ExecutionEngine::i_invokevirtual()10" << endl;
@@ -4680,7 +4680,7 @@ void ExecutionEngine::i_invokevirtual()
 				if(nomeDoMetodo == "lenght")
 				{
 					Valor string1= topoDaPilha->desempilhaOperando();
-					if(string1.tipo != REFERENCE)
+					if(string1.tipo != REFERENCIA)
 					{
 						throw new Erro("Esperado valor do tipo referencia para pegar comprimento da string", "ExecutionEngine", "i_invokevirtual");
 					}
@@ -4690,14 +4690,14 @@ void ExecutionEngine::i_invokevirtual()
 					}
 					ObjetoString *stringObj= (ObjetoString *)string1.dado;
 					Valor tamanhoDaString;
-					tamanhoDaString.tipo= INT;
+					tamanhoDaString.tipo= INTEIRO;
 					tamanhoDaString.dado=stringObj->ObterString().size();
 					topoDaPilha->empilharOperando(tamanhoDaString);
 				}
 				else if(nomeDoMetodo == "equals")
 				{
 					Valor string1 = topoDaPilha->desempilhaOperando();
-					if(string1.tipo != REFERENCE)
+					if(string1.tipo != REFERENCIA)
 					{
 						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
 					}
@@ -4706,7 +4706,7 @@ void ExecutionEngine::i_invokevirtual()
 						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
 					}
 					Valor string2 = topoDaPilha->desempilhaOperando();
-					if(string2.tipo != REFERENCE)
+					if(string2.tipo != REFERENCIA)
 					{
 						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na  string)", "ExecutionEngine", "i_invokevirtual");
 					}
@@ -4718,7 +4718,7 @@ void ExecutionEngine::i_invokevirtual()
 					string stringReal1= ((ObjetoString*)string1.dado)->ObterString();
 					string stringReal2= ((ObjetoString*)string2.dado)->ObterString();
 					Valor resultado;
-					resultado.tipo=BOOLEAN;
+					resultado.tipo=BOOLEANO;
 					if(stringReal1 == stringReal2)
 					{
 						resultado.dado= 0xFFFFFFFFFFFFFFFF;
@@ -4777,7 +4777,7 @@ void ExecutionEngine::i_invokevirtual()
 		for(int cont =0; cont < numeroDeargumentos; cont++)
 		{
 			temp= topoDaPilha->desempilhaOperando();
-			if(temp.tipo == PADDING)
+			if(temp.tipo == PREENCHIMENTO)
 			{
 				argumentos.insert(argumentos.begin()+1, temp);
 			}
@@ -4787,7 +4787,7 @@ void ExecutionEngine::i_invokevirtual()
 			}
 		}
 		Valor valorQueArmazenaObjeto= topoDaPilha->desempilhaOperando();
-		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		if(valorQueArmazenaObjeto.tipo != REFERENCIA)
 		{
 			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "InvokeVirtual");
 		}
@@ -4890,7 +4890,7 @@ void ExecutionEngine::i_invokespecial(){
 		for (int cont = 0; cont  < numeroDeArgumentos; cont++)
 		{
 			Valor temp = topoDaPilhaDeFrames->desempilhaOperando();
-			if (temp.tipo == PADDING)
+			if (temp.tipo == PREENCHIMENTO)
 			{
 				argumentos.insert(argumentos.begin() + 1, temp);
 			}
@@ -4901,7 +4901,7 @@ void ExecutionEngine::i_invokespecial(){
 		}
 
 		Valor valorQueArmazenaObjeto = topoDaPilhaDeFrames->desempilhaOperando();
-		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		if(valorQueArmazenaObjeto.tipo != REFERENCIA)
 		{
 			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "Invokespecial");
 		}
@@ -5002,7 +5002,7 @@ void ExecutionEngine::i_invokestatic(){
 		for(int cont =0; cont < numeroDeArgumentos; cont++)
 		{
 			temp= topoDaPilhaDeFrames->desempilhaOperando();
-			if(temp.tipo == PADDING)
+			if(temp.tipo == PREENCHIMENTO)
 			{
 				argumentos.insert(argumentos.begin()+1, temp);
 			}
@@ -5095,7 +5095,7 @@ void ExecutionEngine::i_invokeinterface()
 		for(int cont =0; cont < numeroDeArgumentos; cont++)
 		{
 			temp= topoDaPilhaDeFrames->desempilhaOperando();
-			if(temp.tipo == PADDING)
+			if(temp.tipo == PREENCHIMENTO)
 			{
 				argumentos.insert(argumentos.begin()+1, temp);
 			}
@@ -5105,7 +5105,7 @@ void ExecutionEngine::i_invokeinterface()
 			}
 		}
 		Valor valorQueArmazenaObjeto= topoDaPilhaDeFrames->desempilhaOperando();
-		if(valorQueArmazenaObjeto.tipo != REFERENCE)
+		if(valorQueArmazenaObjeto.tipo != REFERENCIA)
 		{
 			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "i_invokeinterface");
 		}
@@ -5167,7 +5167,7 @@ void ExecutionEngine::i_new(){
 		obj= new ObjetoString();
 	}
 	Valor referenciaProObjeto;
-	referenciaProObjeto.tipo= REFERENCE;
+	referenciaProObjeto.tipo= REFERENCIA;
 	memcpy(&(referenciaProObjeto.dado), &obj, sizeof(void*));
 	
 	topoDaPilhaDeFrames->empilharOperando(referenciaProObjeto);
@@ -5179,7 +5179,7 @@ void ExecutionEngine::i_newarray()
 	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
 	
 	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
-	if(tamanhoDoFuturoArray.tipo != INT)
+	if(tamanhoDoFuturoArray.tipo != INTEIRO)
 	{
 		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_newarray");
 	}
@@ -5200,8 +5200,8 @@ void ExecutionEngine::i_newarray()
 	{
 		case(4):
 		{
-			arrayQueSeraCriado = new ObjetoArray(BOOLEAN);
-			elementoDoArray.tipo= BOOLEAN;
+			arrayQueSeraCriado = new ObjetoArray(BOOLEANO);
+			elementoDoArray.tipo= BOOLEANO;
 			break;
 		}
 		case(5):
@@ -5236,8 +5236,8 @@ void ExecutionEngine::i_newarray()
 		}
 		case(10):
 		{
-			arrayQueSeraCriado = new ObjetoArray(INT);
-			elementoDoArray.tipo= INT;
+			arrayQueSeraCriado = new ObjetoArray(INTEIRO);
+			elementoDoArray.tipo= INTEIRO;
 			break;
 		}
 		case(11):
@@ -5252,7 +5252,7 @@ void ExecutionEngine::i_newarray()
 	}
 	
 	Valor referenciaProArray;
-	referenciaProArray.tipo= REFERENCE;
+	referenciaProArray.tipo= REFERENCIA;
 	memcpy(&(referenciaProArray.dado), &arrayQueSeraCriado, sizeof(void*));
 	
 	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
@@ -5265,7 +5265,7 @@ void ExecutionEngine::i_anewarray()
 	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
 	
 	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
-	if(tamanhoDoFuturoArray.tipo != INT)
+	if(tamanhoDoFuturoArray.tipo != INTEIRO)
 	{
 		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_anewarray");
 	}
@@ -5298,16 +5298,16 @@ void ExecutionEngine::i_anewarray()
 		}
 	}
 	
-	ObjetoArray *arrayQueSeraCriado= new ObjetoArray(REFERENCE);
+	ObjetoArray *arrayQueSeraCriado= new ObjetoArray(REFERENCIA);
 	void *null= NULL;
 //	memcpy(&temp, &(tamanhoDoFuturoArray.dado), 4);
 	
 	Valor referenciaProArray;
-	referenciaProArray.tipo = REFERENCE;
+	referenciaProArray.tipo = REFERENCIA;
 	memcpy(&(referenciaProArray.dado), &arrayQueSeraCriado, sizeof(void*));
 	
 	Valor ponteiroNULL;
-	ponteiroNULL.tipo= REFERENCE;
+	ponteiroNULL.tipo= REFERENCIA;
 	memcpy(&(ponteiroNULL.dado), &null, sizeof(void*));
 	
 	for(unsigned int cont =0 ; cont < tamanhoDoFuturoArray.dado; cont++)
@@ -5332,7 +5332,7 @@ void ExecutionEngine::i_arraylength(){
 	} 
 	
 	Valor length;
-	length.tipo = TipoDado::INT;
+	length.tipo = TipoDado::INTEIRO;
 	length.dado = ((ObjetoArray *) arrayref.dado)->ObterTamanho();
 	toppilha->empilharOperando(length);
 
@@ -5360,12 +5360,12 @@ void ExecutionEngine::i_checkcast()
 	
 	Valor valorRefProObjeto= topoDaPilhaDeFrames->desempilhaOperando();
 	
-	if(valorRefProObjeto.tipo != REFERENCE)
+	if(valorRefProObjeto.tipo != REFERENCIA)
 	{
 		throw new Erro("Esperado valor do tipo referencia");
 	}
 	Valor valorDoResultado;
-	valorDoResultado.tipo = INT;
+	valorDoResultado.tipo = INTEIRO;
 	
 	if(((Objeto*)valorRefProObjeto.dado) == NULL)
 	{
@@ -5449,7 +5449,7 @@ void ExecutionEngine::i_instanceof(){
 	string className = ((ObjetoInstancia*)topo->getObjeto())->ObterJavaClass()->getUTF8(cpIndex);
 
 	Valor resultValor;
-	resultValor.tipo = TipoDado::INT;
+	resultValor.tipo = TipoDado::INTEIRO;
 
 	if ((Objeto*)objectrefValue.dado == NULL) {
 		resultValor.dado = 0;
@@ -5551,7 +5551,7 @@ void ExecutionEngine::i_multianewarray(){
 			if (multiArrayType != "java/lang/String") {
 				runtimeDataArea->CarregarClasse(multiArrayType); 
 			}
-			tipoDado = TipoDado::REFERENCE;
+			tipoDado = TipoDado::REFERENCIA;
 			break;
 		case 'B':
 			tipoDado = TipoDado::BYTE;
@@ -5566,7 +5566,7 @@ void ExecutionEngine::i_multianewarray(){
 			tipoDado = TipoDado::FLOAT;
 			break;
 		case 'I':
-			tipoDado = TipoDado::INT;
+			tipoDado = TipoDado::INTEIRO;
 			break;
 		case 'J':
 			tipoDado = TipoDado::LONG;
@@ -5575,7 +5575,7 @@ void ExecutionEngine::i_multianewarray(){
 			tipoDado = TipoDado::SHORT;
 			break;
 		case 'Z':
-			tipoDado = TipoDado::BOOLEAN;
+			tipoDado = TipoDado::BOOLEANO;
 			break;
 		default:
 			cerr << "Descritor invalido em multianewarray" << endl;
@@ -5588,11 +5588,11 @@ void ExecutionEngine::i_multianewarray(){
 		count.push(dimLength.dado);
 	}
 
-	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCE : tipoDado);
+	ObjetoArray *arr = new ObjetoArray((dimensoes > 1) ? TipoDado::REFERENCIA : tipoDado);
 	arr->popularSubArray(tipoDado, count);  
 
 	Valor valorArr;
-	valorArr.tipo = TipoDado::REFERENCE;
+	valorArr.tipo = TipoDado::REFERENCIA;
 	valorArr.dado = (uint64_t)arr;
 
 	topo->empilharOperando(valorArr);
@@ -5671,7 +5671,7 @@ void ExecutionEngine::i_jsr_w(){
 	int32_t offsetSalto = (byte1 << 24) | (byte2 << 16) | (byte3 << 8)| byte4;
 
 	Valor endRetorno;
-	endRetorno.tipo = TipoDado::RETURN_ADDR;
+	endRetorno.tipo = TipoDado::ENDERECO_DE_RETORNO;
 	endRetorno.dado = topo->getPC() + 5;
 	topo->empilharOperando(endRetorno);
 

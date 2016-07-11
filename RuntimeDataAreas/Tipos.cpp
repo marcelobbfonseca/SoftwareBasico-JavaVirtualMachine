@@ -4,28 +4,28 @@
 std::string ObterStringTipo(TipoDado tipo)
 {
 
-	if(tipo==BOOLEAN)return "BOOLEAN";
+	if(tipo==BOOLEANO)return "BOOLEANO";
 	if(tipo==BYTE)return "BYTE";
 	if(tipo==CHAR)return "CHAR";
 	if(tipo==SHORT)return "SHORT";
-	if(tipo==INT)return "INT";
+	if(tipo==INTEIRO)return "INTEIRO";
 	if(tipo==FLOAT)return "FLOAT";
-	if(tipo==RETURN_ADDR)return "RETURN_ADDR";
-	if(tipo==REFERENCE)return "REFERENCE";
+	if(tipo==ENDERECO_DE_RETORNO)return "ENDERECO_DE_RETORNO";
+	if(tipo==REFERENCIA)return "REFERENCIA";
 	if(tipo==LONG)return "LONG";
 	if(tipo==DOUBLE)return "DOUBLE";
-	if(tipo==PADDING)return "PADDING";
+	if(tipo==PREENCHIMENTO)return "PREENCHIMENTO";
 
-	if(tipo==TipoDado::BOOLEAN)return "BOOLEAN";
+	if(tipo==TipoDado::BOOLEANO)return "BOOLEANO";
 	if(tipo==TipoDado::BYTE)return "BYTE";
 	if(tipo==TipoDado::CHAR)return "CHAR";
 	if(tipo==TipoDado::SHORT)return "SHORT";
-	if(tipo==TipoDado::INT)return "INT";
+	if(tipo==TipoDado::INTEIRO)return "INTEIRO";
 	if(tipo==TipoDado::FLOAT)return "FLOAT";
-	if(tipo==TipoDado::RETURN_ADDR)return "RETURN_ADDR";
-	if(tipo==TipoDado::REFERENCE)return "REFERENCE";
+	if(tipo==TipoDado::ENDERECO_DE_RETORNO)return "ENDERECO_DE_RETORNO";
+	if(tipo==TipoDado::REFERENCIA)return "REFERENCIA";
 	if(tipo==TipoDado::LONG)return "LONG";
 	if(tipo==TipoDado::DOUBLE)return "DOUBLE";
-	if(tipo==TipoDado::PADDING)return "PADDING";
+	if(tipo==TipoDado::PREENCHIMENTO)return "PREENCHIMENTO";
 	throw new Erro("ObterStringTipo recebeu um tipo invalido");
 }

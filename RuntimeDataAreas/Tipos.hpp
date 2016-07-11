@@ -5,17 +5,17 @@
 #include<string>
 #define TIPODADO
 enum TipoDado {
-	BOOLEAN,
+	BOOLEANO,
 	BYTE,
 	CHAR,
 	SHORT,
-	INT,
+	INTEIRO,
 	FLOAT,
-	RETURN_ADDR,
-	REFERENCE,
+	ENDERECO_DE_RETORNO,
+	REFERENCIA,
 	LONG,
 	DOUBLE,
-	PADDING
+	PREENCHIMENTO
 };
 typedef enum TipoDado TipoDado;
 #define VALOR
