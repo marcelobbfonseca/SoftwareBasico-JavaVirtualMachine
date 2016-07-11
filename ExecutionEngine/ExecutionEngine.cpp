@@ -4663,7 +4663,16 @@ void ExecutionEngine::i_invokevirtual()
 					}
 					default:
 					{
-						throw new Erro("Tentou-se imprimir um tipo de dado invalido");
+						string errMsg= "Tentou-se imprimir um tipo de dado invalido. \t tipo fornecido: ";
+						try
+						{
+							errMsg+= ObterStringTipo(valorQueSeraImpresso.tipo);
+						}
+						catch(Erro *)
+						{
+							errMsg+= "TIPO_DESCONHECIDO";
+						}
+						throw new Erro(errMsg, "ExecutionEngine", "invokevirtual");
 					}
 				}
 #ifdef DEBUG_EE_INVOKEVIRTUAL
