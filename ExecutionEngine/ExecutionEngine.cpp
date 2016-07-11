@@ -136,211 +136,211 @@ void ExecutionEngine::Play(string classComMain)
 
 void ExecutionEngine::inicializaInstrucoes() {
 
-	vetorDePonteirosParaFuncao[0x00] = &ExecutionEngine::i_nop;
-	vetorDePonteirosParaFuncao[0x01] = &ExecutionEngine::i_aconst_null;
-	vetorDePonteirosParaFuncao[0x02] = &ExecutionEngine::i_iconst_m1;
-	vetorDePonteirosParaFuncao[0x03] = &ExecutionEngine::i_iconst_0;
-	vetorDePonteirosParaFuncao[0x04] = &ExecutionEngine::i_iconst_1;
-	vetorDePonteirosParaFuncao[0x05] = &ExecutionEngine::i_iconst_2;
-	vetorDePonteirosParaFuncao[0x06] = &ExecutionEngine::i_iconst_3;
-	vetorDePonteirosParaFuncao[0x07] = &ExecutionEngine::i_iconst_4;
-	vetorDePonteirosParaFuncao[0x08] = &ExecutionEngine::i_iconst_5;
-	vetorDePonteirosParaFuncao[0x09] = &ExecutionEngine::i_lconst_0;
-	vetorDePonteirosParaFuncao[0x0a] = &ExecutionEngine::i_lconst_1;
-	vetorDePonteirosParaFuncao[0x0b] = &ExecutionEngine::i_fconst_0;
-	vetorDePonteirosParaFuncao[0x0c] = &ExecutionEngine::i_fconst_1;
-	vetorDePonteirosParaFuncao[0x0d] = &ExecutionEngine::i_fconst_2;
-	vetorDePonteirosParaFuncao[0x0e] = &ExecutionEngine::i_dconst_0;
-	vetorDePonteirosParaFuncao[0x0f] = &ExecutionEngine::i_dconst_1;
-	vetorDePonteirosParaFuncao[0x10] = &ExecutionEngine::i_bipush;
-	vetorDePonteirosParaFuncao[0x11] = &ExecutionEngine::i_sipush;
-	vetorDePonteirosParaFuncao[0x12] = &ExecutionEngine::i_ldc;
-	vetorDePonteirosParaFuncao[0x13] = &ExecutionEngine::i_ldc_w;
-	vetorDePonteirosParaFuncao[0x14] = &ExecutionEngine::i_ldc2_w;
-	vetorDePonteirosParaFuncao[0x15] = &ExecutionEngine::i_iload;
-	vetorDePonteirosParaFuncao[0x16] = &ExecutionEngine::i_lload;
-	vetorDePonteirosParaFuncao[0x17] = &ExecutionEngine::i_fload;
-	vetorDePonteirosParaFuncao[0x18] = &ExecutionEngine::i_dload;
-	vetorDePonteirosParaFuncao[0x19] = &ExecutionEngine::i_aload;
-	vetorDePonteirosParaFuncao[0x1a] = &ExecutionEngine::i_iload_0;
-	vetorDePonteirosParaFuncao[0x1b] = &ExecutionEngine::i_iload_1;
-	vetorDePonteirosParaFuncao[0x1c] = &ExecutionEngine::i_iload_2;
-	vetorDePonteirosParaFuncao[0x1d] = &ExecutionEngine::i_iload_3;
-	vetorDePonteirosParaFuncao[0x1e] = &ExecutionEngine::i_lload_0;
-	vetorDePonteirosParaFuncao[0x1f] = &ExecutionEngine::i_lload_1;
-	vetorDePonteirosParaFuncao[0x20] = &ExecutionEngine::i_lload_2;
-	vetorDePonteirosParaFuncao[0x21] = &ExecutionEngine::i_lload_3;
-	vetorDePonteirosParaFuncao[0x22] = &ExecutionEngine::i_fload_0;
-	vetorDePonteirosParaFuncao[0x23] = &ExecutionEngine::i_fload_1;
-	vetorDePonteirosParaFuncao[0x24] = &ExecutionEngine::i_fload_2;
-	vetorDePonteirosParaFuncao[0x25] = &ExecutionEngine::i_fload_3;
-	vetorDePonteirosParaFuncao[0x26] = &ExecutionEngine::i_dload_0;
-	vetorDePonteirosParaFuncao[0x27] = &ExecutionEngine::i_dload_1;
-	vetorDePonteirosParaFuncao[0x28] = &ExecutionEngine::i_dload_2;
-	vetorDePonteirosParaFuncao[0x29] = &ExecutionEngine::i_dload_3;
-	vetorDePonteirosParaFuncao[0x2a] = &ExecutionEngine::i_aload_0;
-	vetorDePonteirosParaFuncao[0x2b] = &ExecutionEngine::i_aload_1;
-	vetorDePonteirosParaFuncao[0x2c] = &ExecutionEngine::i_aload_2;
-	vetorDePonteirosParaFuncao[0x2d] = &ExecutionEngine::i_aload_3;
-	vetorDePonteirosParaFuncao[0x2e] = &ExecutionEngine::i_iaload;
-	vetorDePonteirosParaFuncao[0x2f] = &ExecutionEngine::i_laload;
-	vetorDePonteirosParaFuncao[0x30] = &ExecutionEngine::i_faload;
-	vetorDePonteirosParaFuncao[0x31] = &ExecutionEngine::i_daload;
-	vetorDePonteirosParaFuncao[0x32] = &ExecutionEngine::i_aaload;
-	vetorDePonteirosParaFuncao[0x33] = &ExecutionEngine::i_baload;
-	vetorDePonteirosParaFuncao[0x34] = &ExecutionEngine::i_caload;
-	vetorDePonteirosParaFuncao[0x35] = &ExecutionEngine::i_saload;
-	vetorDePonteirosParaFuncao[0x36] = &ExecutionEngine::i_istore;
-	vetorDePonteirosParaFuncao[0x37] = &ExecutionEngine::i_lstore;
-	vetorDePonteirosParaFuncao[0x38] = &ExecutionEngine::i_fstore;
-	vetorDePonteirosParaFuncao[0x39] = &ExecutionEngine::i_dstore;
-	vetorDePonteirosParaFuncao[0x3a] = &ExecutionEngine::i_astore;
-	vetorDePonteirosParaFuncao[0x3b] = &ExecutionEngine::i_istore_0;
-	vetorDePonteirosParaFuncao[0x3c] = &ExecutionEngine::i_istore_1;
-	vetorDePonteirosParaFuncao[0x3d] = &ExecutionEngine::i_istore_2;
-	vetorDePonteirosParaFuncao[0x3e] = &ExecutionEngine::i_istore_3;
-	vetorDePonteirosParaFuncao[0x3f] = &ExecutionEngine::i_lstore_0;
-	vetorDePonteirosParaFuncao[0x40] = &ExecutionEngine::i_lstore_1;
-	vetorDePonteirosParaFuncao[0x41] = &ExecutionEngine::i_lstore_2;
-	vetorDePonteirosParaFuncao[0x42] = &ExecutionEngine::i_lstore_3;
-	vetorDePonteirosParaFuncao[0x43] = &ExecutionEngine::i_fstore_0;
-	vetorDePonteirosParaFuncao[0x44] = &ExecutionEngine::i_fstore_1;
-	vetorDePonteirosParaFuncao[0x45] = &ExecutionEngine::i_fstore_2;
-	vetorDePonteirosParaFuncao[0x46] = &ExecutionEngine::i_fstore_3;
-	vetorDePonteirosParaFuncao[0x47] = &ExecutionEngine::i_dstore_0;
-	vetorDePonteirosParaFuncao[0x48] = &ExecutionEngine::i_dstore_1;
-	vetorDePonteirosParaFuncao[0x49] = &ExecutionEngine::i_dstore_2;
-	vetorDePonteirosParaFuncao[0x4a] = &ExecutionEngine::i_dstore_3;
-	vetorDePonteirosParaFuncao[0x4b] = &ExecutionEngine::i_astore_0;
-	vetorDePonteirosParaFuncao[0x4c] = &ExecutionEngine::i_astore_1;
-	vetorDePonteirosParaFuncao[0x4d] = &ExecutionEngine::i_astore_2;
-	vetorDePonteirosParaFuncao[0x4e] = &ExecutionEngine::i_astore_3;
-	vetorDePonteirosParaFuncao[0x4f] = &ExecutionEngine::i_iastore;
-	vetorDePonteirosParaFuncao[0x50] = &ExecutionEngine::i_lastore;
-	vetorDePonteirosParaFuncao[0x51] = &ExecutionEngine::i_fastore;
-	vetorDePonteirosParaFuncao[0x52] = &ExecutionEngine::i_dastore;
-	vetorDePonteirosParaFuncao[0x53] = &ExecutionEngine::i_aastore;
-	vetorDePonteirosParaFuncao[0x54] = &ExecutionEngine::i_bastore;
-	vetorDePonteirosParaFuncao[0x55] = &ExecutionEngine::i_castore;
-	vetorDePonteirosParaFuncao[0x56] = &ExecutionEngine::i_sastore;
-	vetorDePonteirosParaFuncao[0x57] = &ExecutionEngine::i_pop;
-	vetorDePonteirosParaFuncao[0x58] = &ExecutionEngine::i_pop2;
-	vetorDePonteirosParaFuncao[0x59] = &ExecutionEngine::i_dup;
-	vetorDePonteirosParaFuncao[0x5a] = &ExecutionEngine::i_dup2_x1;
-	vetorDePonteirosParaFuncao[0x5b] = &ExecutionEngine::i_dup2_x2;
-	vetorDePonteirosParaFuncao[0x5c] = &ExecutionEngine::i_dup2;
-	vetorDePonteirosParaFuncao[0x5d] = &ExecutionEngine::i_dup2_x1;
-	vetorDePonteirosParaFuncao[0x5e] = &ExecutionEngine::i_dup2_x2;
-	vetorDePonteirosParaFuncao[0x5f] = &ExecutionEngine::i_swap;
-	vetorDePonteirosParaFuncao[0x60] = &ExecutionEngine::i_iadd;
-	vetorDePonteirosParaFuncao[0x61] = &ExecutionEngine::i_ladd;
-	vetorDePonteirosParaFuncao[0x62] = &ExecutionEngine::i_fadd;
-	vetorDePonteirosParaFuncao[0x63] = &ExecutionEngine::i_dadd;
-	vetorDePonteirosParaFuncao[0x64] = &ExecutionEngine::i_isub;
-	vetorDePonteirosParaFuncao[0x65] = &ExecutionEngine::i_lsub;
-	vetorDePonteirosParaFuncao[0x66] = &ExecutionEngine::i_fsub;
-	vetorDePonteirosParaFuncao[0x67] = &ExecutionEngine::i_dsub;
-	vetorDePonteirosParaFuncao[0x68] = &ExecutionEngine::i_imul;
-	vetorDePonteirosParaFuncao[0x69] = &ExecutionEngine::i_lmul;
-	vetorDePonteirosParaFuncao[0x6a] = &ExecutionEngine::i_fmul;
-	vetorDePonteirosParaFuncao[0x6b] = &ExecutionEngine::i_dmul;
-	vetorDePonteirosParaFuncao[0x6c] = &ExecutionEngine::i_idiv;
-	vetorDePonteirosParaFuncao[0x6d] = &ExecutionEngine::i_ldiv;
-	vetorDePonteirosParaFuncao[0x6e] = &ExecutionEngine::i_fdiv;
-	vetorDePonteirosParaFuncao[0x6f] = &ExecutionEngine::i_ddiv;
-	vetorDePonteirosParaFuncao[0x70] = &ExecutionEngine::i_irem;
-	vetorDePonteirosParaFuncao[0x71] = &ExecutionEngine::i_lrem;
-	vetorDePonteirosParaFuncao[0x72] = &ExecutionEngine::i_frem;
-	vetorDePonteirosParaFuncao[0x73] = &ExecutionEngine::i_drem;
-	vetorDePonteirosParaFuncao[0x74] = &ExecutionEngine::i_ineg;
-	vetorDePonteirosParaFuncao[0x75] = &ExecutionEngine::i_lneg;
-	vetorDePonteirosParaFuncao[0x76] = &ExecutionEngine::i_fneg;
-	vetorDePonteirosParaFuncao[0x77] = &ExecutionEngine::i_dneg;
-	vetorDePonteirosParaFuncao[0x78] = &ExecutionEngine::i_ishl;
-	vetorDePonteirosParaFuncao[0x79] = &ExecutionEngine::i_lshl;
-	vetorDePonteirosParaFuncao[0x7a] = &ExecutionEngine::i_ishr;
-	vetorDePonteirosParaFuncao[0x7b] = &ExecutionEngine::i_lshr;
-	vetorDePonteirosParaFuncao[0x7c] = &ExecutionEngine::i_iushr;
-	vetorDePonteirosParaFuncao[0x7d] = &ExecutionEngine::i_lushr;
-	vetorDePonteirosParaFuncao[0x7e] = &ExecutionEngine::i_iand;
-	vetorDePonteirosParaFuncao[0x7f] = &ExecutionEngine::i_land;
-	vetorDePonteirosParaFuncao[0x80] = &ExecutionEngine::i_ior;
-	vetorDePonteirosParaFuncao[0x81] = &ExecutionEngine::i_lor;
-	vetorDePonteirosParaFuncao[0x82] = &ExecutionEngine::i_ixor;
-	vetorDePonteirosParaFuncao[0x83] = &ExecutionEngine::i_lxor;
-	vetorDePonteirosParaFuncao[0x84] = &ExecutionEngine::i_iinc;
-	vetorDePonteirosParaFuncao[0x85] = &ExecutionEngine::i_i2l;
-	vetorDePonteirosParaFuncao[0x86] = &ExecutionEngine::i_i2f;
-	vetorDePonteirosParaFuncao[0x87] = &ExecutionEngine::i_i2d;
-	vetorDePonteirosParaFuncao[0x88] = &ExecutionEngine::i_l2i;
-	vetorDePonteirosParaFuncao[0x89] = &ExecutionEngine::i_l2f;
-	vetorDePonteirosParaFuncao[0x8a] = &ExecutionEngine::i_l2d;
-	vetorDePonteirosParaFuncao[0x8b] = &ExecutionEngine::i_f2i;
-	vetorDePonteirosParaFuncao[0x8c] = &ExecutionEngine::i_f2l;
-	vetorDePonteirosParaFuncao[0x8d] = &ExecutionEngine::i_f2d;
-	vetorDePonteirosParaFuncao[0x8e] = &ExecutionEngine::i_d2i;
-	vetorDePonteirosParaFuncao[0x8f] = &ExecutionEngine::i_d2l;
-	vetorDePonteirosParaFuncao[0x90] = &ExecutionEngine::i_d2f;
-	vetorDePonteirosParaFuncao[0x91] = &ExecutionEngine::i_i2b;
-	vetorDePonteirosParaFuncao[0x92] = &ExecutionEngine::i_i2c;
-	vetorDePonteirosParaFuncao[0x93] = &ExecutionEngine::i_i2s;
-	vetorDePonteirosParaFuncao[0x94] = &ExecutionEngine::i_lcmp;
-	vetorDePonteirosParaFuncao[0x95] = &ExecutionEngine::i_fcmpl;
-	vetorDePonteirosParaFuncao[0x96] = &ExecutionEngine::i_fcmpg;
-	vetorDePonteirosParaFuncao[0x97] = &ExecutionEngine::i_dcmpl;
-	vetorDePonteirosParaFuncao[0x98] = &ExecutionEngine::i_dcmpg;
-	vetorDePonteirosParaFuncao[0x99] = &ExecutionEngine::i_ifeq;
-	vetorDePonteirosParaFuncao[0x9a] = &ExecutionEngine::i_ifne;
-	vetorDePonteirosParaFuncao[0x9b] = &ExecutionEngine::i_iflt;
-	vetorDePonteirosParaFuncao[0x9c] = &ExecutionEngine::i_ifge;
-	vetorDePonteirosParaFuncao[0x9d] = &ExecutionEngine::i_ifgt;
-	vetorDePonteirosParaFuncao[0x9e] = &ExecutionEngine::i_ifle;
-	vetorDePonteirosParaFuncao[0x9f] = &ExecutionEngine::i_if_icmpeq;
-	vetorDePonteirosParaFuncao[0xa0] = &ExecutionEngine::i_if_icmpne;
-	vetorDePonteirosParaFuncao[0xa1] = &ExecutionEngine::i_if_icmplt;
-	vetorDePonteirosParaFuncao[0xa2] = &ExecutionEngine::i_if_icmpge;
-	vetorDePonteirosParaFuncao[0xa3] = &ExecutionEngine::i_if_icmpgt;
-	vetorDePonteirosParaFuncao[0xa4] = &ExecutionEngine::i_if_icmple;
-	vetorDePonteirosParaFuncao[0xa5] = &ExecutionEngine::i_if_acmpeq;
-	vetorDePonteirosParaFuncao[0xa6] = &ExecutionEngine::i_if_acmpne;
-	vetorDePonteirosParaFuncao[0xa7] = &ExecutionEngine::i_goto;
-	vetorDePonteirosParaFuncao[0xa8] = &ExecutionEngine::i_jsr;
-	vetorDePonteirosParaFuncao[0xa9] = &ExecutionEngine::i_ret;
-	vetorDePonteirosParaFuncao[0xaa] = &ExecutionEngine::i_tableswitch;
-	vetorDePonteirosParaFuncao[0xab] = &ExecutionEngine::i_lookupswitch;
-	vetorDePonteirosParaFuncao[0xac] = &ExecutionEngine::i_ireturn;
-	vetorDePonteirosParaFuncao[0xad] = &ExecutionEngine::i_lreturn;
-	vetorDePonteirosParaFuncao[0xae] = &ExecutionEngine::i_freturn;
-	vetorDePonteirosParaFuncao[0xaf] = &ExecutionEngine::i_dreturn;
-	vetorDePonteirosParaFuncao[0xb0] = &ExecutionEngine::i_areturn;
-	vetorDePonteirosParaFuncao[0xb1] = &ExecutionEngine::i_return;
-	vetorDePonteirosParaFuncao[0xb2] = &ExecutionEngine::i_getstatic;
-	vetorDePonteirosParaFuncao[0xb3] = &ExecutionEngine::i_putstatic;
-	vetorDePonteirosParaFuncao[0xb4] = &ExecutionEngine::i_getfield;
-	vetorDePonteirosParaFuncao[0xb5] = &ExecutionEngine::i_putfield;
-	vetorDePonteirosParaFuncao[0xb6] = &ExecutionEngine::i_invokevirtual;
-	vetorDePonteirosParaFuncao[0xb7] = &ExecutionEngine::i_invokespecial;
-	vetorDePonteirosParaFuncao[0xb8] = &ExecutionEngine::i_invokestatic;
-	vetorDePonteirosParaFuncao[0xb9] = &ExecutionEngine::i_invokeinterface;
-	vetorDePonteirosParaFuncao[0xbb] = &ExecutionEngine::i_new;
-	vetorDePonteirosParaFuncao[0xbc] = &ExecutionEngine::i_newarray;
-	vetorDePonteirosParaFuncao[0xbd] = &ExecutionEngine::i_anewarray;
-	vetorDePonteirosParaFuncao[0xbe] = &ExecutionEngine::i_arraylength;
-	vetorDePonteirosParaFuncao[0xbf] = &ExecutionEngine::i_athrow;
-	vetorDePonteirosParaFuncao[0xc0] = &ExecutionEngine::i_checkcast;
-	vetorDePonteirosParaFuncao[0xc1] = &ExecutionEngine::i_instanceof;
-	vetorDePonteirosParaFuncao[0xc2] = &ExecutionEngine::i_monitorenter;
-	vetorDePonteirosParaFuncao[0xc3] = &ExecutionEngine::i_monitorexit;
-	vetorDePonteirosParaFuncao[0xc4] = &ExecutionEngine::i_wide;
-	vetorDePonteirosParaFuncao[0xc5] = &ExecutionEngine::i_multianewarray;
-	vetorDePonteirosParaFuncao[0xc6] = &ExecutionEngine::i_ifnull;
-	vetorDePonteirosParaFuncao[0xc7] = &ExecutionEngine::i_ifnonnull;
-	vetorDePonteirosParaFuncao[0xc8] = &ExecutionEngine::i_goto_w;
-	vetorDePonteirosParaFuncao[0xc9] = &ExecutionEngine::i_jsr_w;
+	vetorDePonteirosParaFuncao[0x00] = &ExecutionEngine::java_nop;
+	vetorDePonteirosParaFuncao[0x01] = &ExecutionEngine::java_aconst_null;
+	vetorDePonteirosParaFuncao[0x02] = &ExecutionEngine::java_iconst_m1;
+	vetorDePonteirosParaFuncao[0x03] = &ExecutionEngine::java_iconst_0;
+	vetorDePonteirosParaFuncao[0x04] = &ExecutionEngine::java_iconst_1;
+	vetorDePonteirosParaFuncao[0x05] = &ExecutionEngine::java_iconst_2;
+	vetorDePonteirosParaFuncao[0x06] = &ExecutionEngine::java_iconst_3;
+	vetorDePonteirosParaFuncao[0x07] = &ExecutionEngine::java_iconst_4;
+	vetorDePonteirosParaFuncao[0x08] = &ExecutionEngine::java_iconst_5;
+	vetorDePonteirosParaFuncao[0x09] = &ExecutionEngine::java_lconst_0;
+	vetorDePonteirosParaFuncao[0x0a] = &ExecutionEngine::java_lconst_1;
+	vetorDePonteirosParaFuncao[0x0b] = &ExecutionEngine::java_fconst_0;
+	vetorDePonteirosParaFuncao[0x0c] = &ExecutionEngine::java_fconst_1;
+	vetorDePonteirosParaFuncao[0x0d] = &ExecutionEngine::java_fconst_2;
+	vetorDePonteirosParaFuncao[0x0e] = &ExecutionEngine::java_dconst_0;
+	vetorDePonteirosParaFuncao[0x0f] = &ExecutionEngine::java_dconst_1;
+	vetorDePonteirosParaFuncao[0x10] = &ExecutionEngine::java_bipush;
+	vetorDePonteirosParaFuncao[0x11] = &ExecutionEngine::java_sipush;
+	vetorDePonteirosParaFuncao[0x12] = &ExecutionEngine::java_ldc;
+	vetorDePonteirosParaFuncao[0x13] = &ExecutionEngine::java_ldc_w;
+	vetorDePonteirosParaFuncao[0x14] = &ExecutionEngine::java_ldc2_w;
+	vetorDePonteirosParaFuncao[0x15] = &ExecutionEngine::java_iload;
+	vetorDePonteirosParaFuncao[0x16] = &ExecutionEngine::java_lload;
+	vetorDePonteirosParaFuncao[0x17] = &ExecutionEngine::java_fload;
+	vetorDePonteirosParaFuncao[0x18] = &ExecutionEngine::java_dload;
+	vetorDePonteirosParaFuncao[0x19] = &ExecutionEngine::java_aload;
+	vetorDePonteirosParaFuncao[0x1a] = &ExecutionEngine::java_iload_0;
+	vetorDePonteirosParaFuncao[0x1b] = &ExecutionEngine::java_iload_1;
+	vetorDePonteirosParaFuncao[0x1c] = &ExecutionEngine::java_iload_2;
+	vetorDePonteirosParaFuncao[0x1d] = &ExecutionEngine::java_iload_3;
+	vetorDePonteirosParaFuncao[0x1e] = &ExecutionEngine::java_lload_0;
+	vetorDePonteirosParaFuncao[0x1f] = &ExecutionEngine::java_lload_1;
+	vetorDePonteirosParaFuncao[0x20] = &ExecutionEngine::java_lload_2;
+	vetorDePonteirosParaFuncao[0x21] = &ExecutionEngine::java_lload_3;
+	vetorDePonteirosParaFuncao[0x22] = &ExecutionEngine::java_fload_0;
+	vetorDePonteirosParaFuncao[0x23] = &ExecutionEngine::java_fload_1;
+	vetorDePonteirosParaFuncao[0x24] = &ExecutionEngine::java_fload_2;
+	vetorDePonteirosParaFuncao[0x25] = &ExecutionEngine::java_fload_3;
+	vetorDePonteirosParaFuncao[0x26] = &ExecutionEngine::java_dload_0;
+	vetorDePonteirosParaFuncao[0x27] = &ExecutionEngine::java_dload_1;
+	vetorDePonteirosParaFuncao[0x28] = &ExecutionEngine::java_dload_2;
+	vetorDePonteirosParaFuncao[0x29] = &ExecutionEngine::java_dload_3;
+	vetorDePonteirosParaFuncao[0x2a] = &ExecutionEngine::java_aload_0;
+	vetorDePonteirosParaFuncao[0x2b] = &ExecutionEngine::java_aload_1;
+	vetorDePonteirosParaFuncao[0x2c] = &ExecutionEngine::java_aload_2;
+	vetorDePonteirosParaFuncao[0x2d] = &ExecutionEngine::java_aload_3;
+	vetorDePonteirosParaFuncao[0x2e] = &ExecutionEngine::java_iaload;
+	vetorDePonteirosParaFuncao[0x2f] = &ExecutionEngine::java_laload;
+	vetorDePonteirosParaFuncao[0x30] = &ExecutionEngine::java_faload;
+	vetorDePonteirosParaFuncao[0x31] = &ExecutionEngine::java_daload;
+	vetorDePonteirosParaFuncao[0x32] = &ExecutionEngine::java_aaload;
+	vetorDePonteirosParaFuncao[0x33] = &ExecutionEngine::java_baload;
+	vetorDePonteirosParaFuncao[0x34] = &ExecutionEngine::java_caload;
+	vetorDePonteirosParaFuncao[0x35] = &ExecutionEngine::java_saload;
+	vetorDePonteirosParaFuncao[0x36] = &ExecutionEngine::java_istore;
+	vetorDePonteirosParaFuncao[0x37] = &ExecutionEngine::java_lstore;
+	vetorDePonteirosParaFuncao[0x38] = &ExecutionEngine::java_fstore;
+	vetorDePonteirosParaFuncao[0x39] = &ExecutionEngine::java_dstore;
+	vetorDePonteirosParaFuncao[0x3a] = &ExecutionEngine::java_astore;
+	vetorDePonteirosParaFuncao[0x3b] = &ExecutionEngine::java_istore_0;
+	vetorDePonteirosParaFuncao[0x3c] = &ExecutionEngine::java_istore_1;
+	vetorDePonteirosParaFuncao[0x3d] = &ExecutionEngine::java_istore_2;
+	vetorDePonteirosParaFuncao[0x3e] = &ExecutionEngine::java_istore_3;
+	vetorDePonteirosParaFuncao[0x3f] = &ExecutionEngine::java_lstore_0;
+	vetorDePonteirosParaFuncao[0x40] = &ExecutionEngine::java_lstore_1;
+	vetorDePonteirosParaFuncao[0x41] = &ExecutionEngine::java_lstore_2;
+	vetorDePonteirosParaFuncao[0x42] = &ExecutionEngine::java_lstore_3;
+	vetorDePonteirosParaFuncao[0x43] = &ExecutionEngine::java_fstore_0;
+	vetorDePonteirosParaFuncao[0x44] = &ExecutionEngine::java_fstore_1;
+	vetorDePonteirosParaFuncao[0x45] = &ExecutionEngine::java_fstore_2;
+	vetorDePonteirosParaFuncao[0x46] = &ExecutionEngine::java_fstore_3;
+	vetorDePonteirosParaFuncao[0x47] = &ExecutionEngine::java_dstore_0;
+	vetorDePonteirosParaFuncao[0x48] = &ExecutionEngine::java_dstore_1;
+	vetorDePonteirosParaFuncao[0x49] = &ExecutionEngine::java_dstore_2;
+	vetorDePonteirosParaFuncao[0x4a] = &ExecutionEngine::java_dstore_3;
+	vetorDePonteirosParaFuncao[0x4b] = &ExecutionEngine::java_astore_0;
+	vetorDePonteirosParaFuncao[0x4c] = &ExecutionEngine::java_astore_1;
+	vetorDePonteirosParaFuncao[0x4d] = &ExecutionEngine::java_astore_2;
+	vetorDePonteirosParaFuncao[0x4e] = &ExecutionEngine::java_astore_3;
+	vetorDePonteirosParaFuncao[0x4f] = &ExecutionEngine::java_iastore;
+	vetorDePonteirosParaFuncao[0x50] = &ExecutionEngine::java_lastore;
+	vetorDePonteirosParaFuncao[0x51] = &ExecutionEngine::java_fastore;
+	vetorDePonteirosParaFuncao[0x52] = &ExecutionEngine::java_dastore;
+	vetorDePonteirosParaFuncao[0x53] = &ExecutionEngine::java_aastore;
+	vetorDePonteirosParaFuncao[0x54] = &ExecutionEngine::java_bastore;
+	vetorDePonteirosParaFuncao[0x55] = &ExecutionEngine::java_castore;
+	vetorDePonteirosParaFuncao[0x56] = &ExecutionEngine::java_sastore;
+	vetorDePonteirosParaFuncao[0x57] = &ExecutionEngine::java_pop;
+	vetorDePonteirosParaFuncao[0x58] = &ExecutionEngine::java_pop2;
+	vetorDePonteirosParaFuncao[0x59] = &ExecutionEngine::java_dup;
+	vetorDePonteirosParaFuncao[0x5a] = &ExecutionEngine::java_dup2_x1;
+	vetorDePonteirosParaFuncao[0x5b] = &ExecutionEngine::java_dup2_x2;
+	vetorDePonteirosParaFuncao[0x5c] = &ExecutionEngine::java_dup2;
+	vetorDePonteirosParaFuncao[0x5d] = &ExecutionEngine::java_dup2_x1;
+	vetorDePonteirosParaFuncao[0x5e] = &ExecutionEngine::java_dup2_x2;
+	vetorDePonteirosParaFuncao[0x5f] = &ExecutionEngine::java_swap;
+	vetorDePonteirosParaFuncao[0x60] = &ExecutionEngine::java_iadd;
+	vetorDePonteirosParaFuncao[0x61] = &ExecutionEngine::java_ladd;
+	vetorDePonteirosParaFuncao[0x62] = &ExecutionEngine::java_fadd;
+	vetorDePonteirosParaFuncao[0x63] = &ExecutionEngine::java_dadd;
+	vetorDePonteirosParaFuncao[0x64] = &ExecutionEngine::java_isub;
+	vetorDePonteirosParaFuncao[0x65] = &ExecutionEngine::java_lsub;
+	vetorDePonteirosParaFuncao[0x66] = &ExecutionEngine::java_fsub;
+	vetorDePonteirosParaFuncao[0x67] = &ExecutionEngine::java_dsub;
+	vetorDePonteirosParaFuncao[0x68] = &ExecutionEngine::java_imul;
+	vetorDePonteirosParaFuncao[0x69] = &ExecutionEngine::java_lmul;
+	vetorDePonteirosParaFuncao[0x6a] = &ExecutionEngine::java_fmul;
+	vetorDePonteirosParaFuncao[0x6b] = &ExecutionEngine::java_dmul;
+	vetorDePonteirosParaFuncao[0x6c] = &ExecutionEngine::java_idiv;
+	vetorDePonteirosParaFuncao[0x6d] = &ExecutionEngine::java_ldiv;
+	vetorDePonteirosParaFuncao[0x6e] = &ExecutionEngine::java_fdiv;
+	vetorDePonteirosParaFuncao[0x6f] = &ExecutionEngine::java_ddiv;
+	vetorDePonteirosParaFuncao[0x70] = &ExecutionEngine::java_irem;
+	vetorDePonteirosParaFuncao[0x71] = &ExecutionEngine::java_lrem;
+	vetorDePonteirosParaFuncao[0x72] = &ExecutionEngine::java_frem;
+	vetorDePonteirosParaFuncao[0x73] = &ExecutionEngine::java_drem;
+	vetorDePonteirosParaFuncao[0x74] = &ExecutionEngine::java_ineg;
+	vetorDePonteirosParaFuncao[0x75] = &ExecutionEngine::java_lneg;
+	vetorDePonteirosParaFuncao[0x76] = &ExecutionEngine::java_fneg;
+	vetorDePonteirosParaFuncao[0x77] = &ExecutionEngine::java_dneg;
+	vetorDePonteirosParaFuncao[0x78] = &ExecutionEngine::java_ishl;
+	vetorDePonteirosParaFuncao[0x79] = &ExecutionEngine::java_lshl;
+	vetorDePonteirosParaFuncao[0x7a] = &ExecutionEngine::java_ishr;
+	vetorDePonteirosParaFuncao[0x7b] = &ExecutionEngine::java_lshr;
+	vetorDePonteirosParaFuncao[0x7c] = &ExecutionEngine::java_iushr;
+	vetorDePonteirosParaFuncao[0x7d] = &ExecutionEngine::java_lushr;
+	vetorDePonteirosParaFuncao[0x7e] = &ExecutionEngine::java_iand;
+	vetorDePonteirosParaFuncao[0x7f] = &ExecutionEngine::java_land;
+	vetorDePonteirosParaFuncao[0x80] = &ExecutionEngine::java_ior;
+	vetorDePonteirosParaFuncao[0x81] = &ExecutionEngine::java_lor;
+	vetorDePonteirosParaFuncao[0x82] = &ExecutionEngine::java_ixor;
+	vetorDePonteirosParaFuncao[0x83] = &ExecutionEngine::java_lxor;
+	vetorDePonteirosParaFuncao[0x84] = &ExecutionEngine::java_iinc;
+	vetorDePonteirosParaFuncao[0x85] = &ExecutionEngine::java_i2l;
+	vetorDePonteirosParaFuncao[0x86] = &ExecutionEngine::java_i2f;
+	vetorDePonteirosParaFuncao[0x87] = &ExecutionEngine::java_i2d;
+	vetorDePonteirosParaFuncao[0x88] = &ExecutionEngine::java_l2i;
+	vetorDePonteirosParaFuncao[0x89] = &ExecutionEngine::java_l2f;
+	vetorDePonteirosParaFuncao[0x8a] = &ExecutionEngine::java_l2d;
+	vetorDePonteirosParaFuncao[0x8b] = &ExecutionEngine::java_f2i;
+	vetorDePonteirosParaFuncao[0x8c] = &ExecutionEngine::java_f2l;
+	vetorDePonteirosParaFuncao[0x8d] = &ExecutionEngine::java_f2d;
+	vetorDePonteirosParaFuncao[0x8e] = &ExecutionEngine::java_d2i;
+	vetorDePonteirosParaFuncao[0x8f] = &ExecutionEngine::java_d2l;
+	vetorDePonteirosParaFuncao[0x90] = &ExecutionEngine::java_d2f;
+	vetorDePonteirosParaFuncao[0x91] = &ExecutionEngine::java_i2b;
+	vetorDePonteirosParaFuncao[0x92] = &ExecutionEngine::java_i2c;
+	vetorDePonteirosParaFuncao[0x93] = &ExecutionEngine::java_i2s;
+	vetorDePonteirosParaFuncao[0x94] = &ExecutionEngine::java_lcmp;
+	vetorDePonteirosParaFuncao[0x95] = &ExecutionEngine::java_fcmpl;
+	vetorDePonteirosParaFuncao[0x96] = &ExecutionEngine::java_fcmpg;
+	vetorDePonteirosParaFuncao[0x97] = &ExecutionEngine::java_dcmpl;
+	vetorDePonteirosParaFuncao[0x98] = &ExecutionEngine::java_dcmpg;
+	vetorDePonteirosParaFuncao[0x99] = &ExecutionEngine::java_ifeq;
+	vetorDePonteirosParaFuncao[0x9a] = &ExecutionEngine::java_ifne;
+	vetorDePonteirosParaFuncao[0x9b] = &ExecutionEngine::java_iflt;
+	vetorDePonteirosParaFuncao[0x9c] = &ExecutionEngine::java_ifge;
+	vetorDePonteirosParaFuncao[0x9d] = &ExecutionEngine::java_ifgt;
+	vetorDePonteirosParaFuncao[0x9e] = &ExecutionEngine::java_ifle;
+	vetorDePonteirosParaFuncao[0x9f] = &ExecutionEngine::java_if_icmpeq;
+	vetorDePonteirosParaFuncao[0xa0] = &ExecutionEngine::java_if_icmpne;
+	vetorDePonteirosParaFuncao[0xa1] = &ExecutionEngine::java_if_icmplt;
+	vetorDePonteirosParaFuncao[0xa2] = &ExecutionEngine::java_if_icmpge;
+	vetorDePonteirosParaFuncao[0xa3] = &ExecutionEngine::java_if_icmpgt;
+	vetorDePonteirosParaFuncao[0xa4] = &ExecutionEngine::java_if_icmple;
+	vetorDePonteirosParaFuncao[0xa5] = &ExecutionEngine::java_if_acmpeq;
+	vetorDePonteirosParaFuncao[0xa6] = &ExecutionEngine::java_if_acmpne;
+	vetorDePonteirosParaFuncao[0xa7] = &ExecutionEngine::java_goto;
+	vetorDePonteirosParaFuncao[0xa8] = &ExecutionEngine::java_jsr;
+	vetorDePonteirosParaFuncao[0xa9] = &ExecutionEngine::java_ret;
+	vetorDePonteirosParaFuncao[0xaa] = &ExecutionEngine::java_tableswitch;
+	vetorDePonteirosParaFuncao[0xab] = &ExecutionEngine::java_lookupswitch;
+	vetorDePonteirosParaFuncao[0xac] = &ExecutionEngine::java_ireturn;
+	vetorDePonteirosParaFuncao[0xad] = &ExecutionEngine::java_lreturn;
+	vetorDePonteirosParaFuncao[0xae] = &ExecutionEngine::java_freturn;
+	vetorDePonteirosParaFuncao[0xaf] = &ExecutionEngine::java_dreturn;
+	vetorDePonteirosParaFuncao[0xb0] = &ExecutionEngine::java_areturn;
+	vetorDePonteirosParaFuncao[0xb1] = &ExecutionEngine::java_return;
+	vetorDePonteirosParaFuncao[0xb2] = &ExecutionEngine::java_getstatic;
+	vetorDePonteirosParaFuncao[0xb3] = &ExecutionEngine::java_putstatic;
+	vetorDePonteirosParaFuncao[0xb4] = &ExecutionEngine::java_getfield;
+	vetorDePonteirosParaFuncao[0xb5] = &ExecutionEngine::java_putfield;
+	vetorDePonteirosParaFuncao[0xb6] = &ExecutionEngine::java_invokevirtual;
+	vetorDePonteirosParaFuncao[0xb7] = &ExecutionEngine::java_invokespecial;
+	vetorDePonteirosParaFuncao[0xb8] = &ExecutionEngine::java_invokestatic;
+	vetorDePonteirosParaFuncao[0xb9] = &ExecutionEngine::java_invokeinterface;
+	vetorDePonteirosParaFuncao[0xbb] = &ExecutionEngine::java_new;
+	vetorDePonteirosParaFuncao[0xbc] = &ExecutionEngine::java_newarray;
+	vetorDePonteirosParaFuncao[0xbd] = &ExecutionEngine::java_anewarray;
+	vetorDePonteirosParaFuncao[0xbe] = &ExecutionEngine::java_arraylength;
+	vetorDePonteirosParaFuncao[0xbf] = &ExecutionEngine::java_athrow;
+	vetorDePonteirosParaFuncao[0xc0] = &ExecutionEngine::java_checkcast;
+	vetorDePonteirosParaFuncao[0xc1] = &ExecutionEngine::java_instanceof;
+	vetorDePonteirosParaFuncao[0xc2] = &ExecutionEngine::java_monitorenter;
+	vetorDePonteirosParaFuncao[0xc3] = &ExecutionEngine::java_monitorexit;
+	vetorDePonteirosParaFuncao[0xc4] = &ExecutionEngine::java_wide;
+	vetorDePonteirosParaFuncao[0xc5] = &ExecutionEngine::java_multianewarray;
+	vetorDePonteirosParaFuncao[0xc6] = &ExecutionEngine::java_ifnull;
+	vetorDePonteirosParaFuncao[0xc7] = &ExecutionEngine::java_ifnonnull;
+	vetorDePonteirosParaFuncao[0xc8] = &ExecutionEngine::java_goto_w;
+	vetorDePonteirosParaFuncao[0xc9] = &ExecutionEngine::java_jsr_w;
 
 }
 
-void ExecutionEngine::i_nop(){
+void ExecutionEngine::java_nop(){
 	//anda uma posição e faz nada
 	//incrementa pc + 1
 //#define BREAK_NOP
@@ -358,7 +358,7 @@ void ExecutionEngine::i_nop(){
 	
 }
 
-void ExecutionEngine::i_aconst_null(){ //Push the null object reference onto the operand stack. 
+void ExecutionEngine::java_aconst_null(){ //Push the null object reference onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	Valor valor;
 	valor.tipo = TipoDado::REFERENCIA;
@@ -366,7 +366,7 @@ void ExecutionEngine::i_aconst_null(){ //Push the null object reference onto the
 	toppilha->empilharOperando(valor);
 }
 
-void ExecutionEngine::i_iconst_m1(){ // Push the int constant i onto the operand stack. 
+void ExecutionEngine::java_iconst_m1(){ // Push the int constant i onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -381,7 +381,7 @@ void ExecutionEngine::i_iconst_m1(){ // Push the int constant i onto the operand
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_0(){ //Push the int constant 0 onto the operand stack. 
+void ExecutionEngine::java_iconst_0(){ //Push the int constant 0 onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -392,7 +392,7 @@ void ExecutionEngine::i_iconst_0(){ //Push the int constant 0 onto the operand s
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_1(){  //Push the int constant 1 onto the operand stack. 
+void ExecutionEngine::java_iconst_1(){  //Push the int constant 1 onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -404,7 +404,7 @@ void ExecutionEngine::i_iconst_1(){  //Push the int constant 1 onto the operand 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_iconst_2(){ //Push the int constant 2 onto the operand stack. 
+void ExecutionEngine::java_iconst_2(){ //Push the int constant 2 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -414,7 +414,7 @@ void ExecutionEngine::i_iconst_2(){ //Push the int constant 2 onto the operand s
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_3(){ //Push the int constant 3 onto the operand stack. 
+void ExecutionEngine::java_iconst_3(){ //Push the int constant 3 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -424,7 +424,7 @@ void ExecutionEngine::i_iconst_3(){ //Push the int constant 3 onto the operand s
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_4(){ //Push the int constant 4 onto the operand stack. 
+void ExecutionEngine::java_iconst_4(){ //Push the int constant 4 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -435,7 +435,7 @@ void ExecutionEngine::i_iconst_4(){ //Push the int constant 4 onto the operand s
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_iconst_5(){//Push the int constant 5 onto the operand stack. 
+void ExecutionEngine::java_iconst_5(){//Push the int constant 5 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -445,7 +445,7 @@ void ExecutionEngine::i_iconst_5(){//Push the int constant 5 onto the operand st
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lconst_0(){ //Push the long constant 0 onto the operand stack. 
+void ExecutionEngine::java_lconst_0(){ //Push the long constant 0 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -462,7 +462,7 @@ void ExecutionEngine::i_lconst_0(){ //Push the long constant 0 onto the operand 
 
 
 }
-void ExecutionEngine::i_lconst_1(){//Push the long constant 1 onto the operand stack. 
+void ExecutionEngine::java_lconst_1(){//Push the long constant 1 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -478,7 +478,7 @@ void ExecutionEngine::i_lconst_1(){//Push the long constant 1 onto the operand s
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_0(){//Push the float constant 0 onto the operand stack. 
+void ExecutionEngine::java_fconst_0(){//Push the float constant 0 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -489,7 +489,7 @@ void ExecutionEngine::i_fconst_0(){//Push the float constant 0 onto the operand 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_1(){//Push the float constant 1 onto the operand stack. 
+void ExecutionEngine::java_fconst_1(){//Push the float constant 1 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -502,7 +502,7 @@ void ExecutionEngine::i_fconst_1(){//Push the float constant 1 onto the operand 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_2(){
+void ExecutionEngine::java_fconst_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -514,7 +514,7 @@ void ExecutionEngine::i_fconst_2(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_0(){//Push the double constant 0 onto the operand stack. 
+void ExecutionEngine::java_dconst_0(){//Push the double constant 0 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -532,7 +532,7 @@ void ExecutionEngine::i_dconst_0(){//Push the double constant 0 onto the operand
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_1(){//Push the double constant 1 onto the operand stack. 
+void ExecutionEngine::java_dconst_1(){//Push the double constant 1 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -551,7 +551,7 @@ void ExecutionEngine::i_dconst_1(){//Push the double constant 1 onto the operand
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 //push byte pra pilha de operando
-void ExecutionEngine::i_bipush(){
+void ExecutionEngine::java_bipush(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	uint8_t *code = toppilha->getCode();
@@ -566,7 +566,7 @@ void ExecutionEngine::i_bipush(){
 	toppilha->incrementaPC(2);
 
 }
-void ExecutionEngine::i_sipush(){
+void ExecutionEngine::java_sipush(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	uint8_t *code = toppilha->getCode();
 	int16_t num;
@@ -582,7 +582,7 @@ void ExecutionEngine::i_sipush(){
 	toppilha->incrementaPC(3);
 }
 //Push item from run-time constant pool
-void ExecutionEngine::i_ldc(){
+void ExecutionEngine::java_ldc(){
 
 	//usa no helloworld
 
@@ -604,14 +604,14 @@ void ExecutionEngine::i_ldc(){
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
 		string utf8String = utf8Entry->GetString();
 #ifdef DEBUG_EE
-cout<<"chegou i_ldc" << endl;
+cout<<"chegou java_ldc" << endl;
 #endif
 		valor.tipo = TipoDado::REFERENCIA;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		valor.dado = 0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
 #ifdef DEBUG_EE
-cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
+cout<<"java_ldc\tvalor.dado= " << temp->ObterString() << endl;
 #endif
 	}
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
@@ -629,9 +629,9 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	}
 	else
 	{
-		string errMsg= "CP invalido em i_LDC: ";
+		string errMsg= "CP invalido em java_LDC: ";
 		errMsg+= std::to_string(constantPool[index -1]->GetTag());
-		throw new Erro(errMsg, "ExecutionEngine", "i_ldc");
+		throw new Erro(errMsg, "ExecutionEngine", "java_ldc");
 	}
 	
 	topo->empilharOperando(valor);
@@ -639,7 +639,7 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 
 }
 
-void ExecutionEngine::i_ldc_w(){
+void ExecutionEngine::java_ldc_w(){
 	
 	Frame *topo = runtimeDataArea->topoPilha();
 	
@@ -660,14 +660,14 @@ void ExecutionEngine::i_ldc_w(){
 		CONSTANT_Utf8_info *utf8Entry = (CONSTANT_Utf8_info*) constantPool[((CONSTANT_String_info*)ponteiroCpInfo)->GetStringIndex() - 1];
 		string utf8String = utf8Entry->GetString();
 #ifdef DEBUG_EE
-cout<<"chegou i_ldc" << endl;
+cout<<"chegou java_ldc" << endl;
 #endif
 		valor.tipo = TipoDado::REFERENCIA;
 		ObjetoString * temp = new ObjetoString(utf8String);
 		valor.dado=0;
 		memcpy(&(valor.dado), &temp, sizeof(void*));
 #ifdef DEBUG_EE
-cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
+cout<<"java_ldc\tvalor.dado= " << temp->ObterString() << endl;
 #endif
 	}
 	else if (ponteiroCpInfo->GetTag()  == CONSTANT_Integer)
@@ -685,16 +685,16 @@ cout<<"i_ldc\tvalor.dado= " << temp->ObterString() << endl;
 	}
 	else
 	{
-		string errMsg= "CP invalido em i_LDC_w: ";
+		string errMsg= "CP invalido em java_LDC_w: ";
 		errMsg+= std::to_string(constantPool[index -1]->GetTag());
-		throw new Erro(errMsg, "ExecutionEngine", "i_ldc_w");
+		throw new Erro(errMsg, "ExecutionEngine", "java_ldc_w");
 	}
 	
 	topo->empilharOperando(valor);
 	topo->incrementaPC(3);
 }
 
-void ExecutionEngine::i_ldc2_w(){ 
+void ExecutionEngine::java_ldc2_w(){ 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -741,7 +741,7 @@ void ExecutionEngine::i_ldc2_w(){
 
 }
 
-void ExecutionEngine::i_iload(){
+void ExecutionEngine::java_iload(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -749,7 +749,7 @@ void ExecutionEngine::i_iload(){
 	uint8_t byte1 = code[1];
 	int16_t index = (int16_t)byte1;
 
-	//Verifica se a funcao i_wide foi chamada anteriormente
+	//Verifica se a funcao java_wide foi chamada anteriormente
 	if(isWide) {
 		//Copia byte[1] concatenado com byte[2] para index
 		memcpy(&index, &(code[1]), 2/*sizeof(double)*/);
@@ -770,14 +770,14 @@ void ExecutionEngine::i_iload(){
 
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
-		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "i_iload");
+		throw new Erro("Tamanho do vetor de variáveis menor que o index", "ExecutionEngine", "java_iload");
 
 	}
 	Valor valor = toppilha->getValorVariavelLocal(index);
 	
 	toppilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_lload(){
+void ExecutionEngine::java_lload(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -801,14 +801,14 @@ void ExecutionEngine::i_lload(){
 
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
-		throw new Erro("Tamanho do vetor de variáveis menor que o index + 1", "ExecutionEngine", "i_lload");
+		throw new Erro("Tamanho do vetor de variáveis menor que o index + 1", "ExecutionEngine", "java_lload");
 
 	}
 
 	Valor valor = toppilha->getValorVariavelLocal(index);
 	if(!(valor.tipo == TipoDado::LONG)){
 
-		throw new Erro("valor.tipo diferente de LONG", "ExecutionEngine", "i_lload");
+		throw new Erro("valor.tipo diferente de LONG", "ExecutionEngine", "java_lload");
 
 	}
 	
@@ -819,13 +819,13 @@ void ExecutionEngine::i_lload(){
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_fload(){
+void ExecutionEngine::java_fload(){
 	Frame *topPilha = runtimeDataArea->topoPilha();
 	
 	uint8_t *code = topPilha->getCode();
 	uint8_t byte1 = code[1];
 	int16_t index = (int16_t)byte1;
-	//Verifica se i_wide foi chamada anteriormente
+	//Verifica se java_wide foi chamada anteriormente
 	if(isWide) {
 		uint16_t byte2 = code[2];
 		index = (byte1 << 8) | byte2;
@@ -838,7 +838,7 @@ void ExecutionEngine::i_fload(){
 
 	if(((int16_t)(topPilha->tamanhoVetorVariaveis())) <= index){
 
-		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_fload");
+		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "java_fload");
 
 	}
 
@@ -846,13 +846,13 @@ void ExecutionEngine::i_fload(){
 	
 	topPilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_dload(){
+void ExecutionEngine::java_dload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	int16_t index = (int16_t)byte1;
-	//Verifica se i_wide foi chamada
+	//Verifica se java_wide foi chamada
 	if(isWide) {
 		uint16_t byte2 = code[2];
 		index = (byte1 << 8) | byte2;
@@ -867,14 +867,14 @@ void ExecutionEngine::i_dload(){
 
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index + 1){
 
-		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "i_dload");
+		throw new Erro("Tamanho do vetor de variaveis é menor que o index + 1", "ExecutionEngine", "java_dload");
 	
 	}
 
 	Valor valor = toppilha->getValorVariavelLocal(index);
 	if(!(valor.tipo == TipoDado::DOUBLE)){
 
-		throw new Erro("Tipo de dado diferente de DOUBLE ", "ExecutionEngine", "i_dload");
+		throw new Erro("Tipo de dado diferente de DOUBLE ", "ExecutionEngine", "java_dload");
 
 	}
 	
@@ -885,13 +885,13 @@ void ExecutionEngine::i_dload(){
 	toppilha->empilharOperando(pad);
 	toppilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_aload(){
+void ExecutionEngine::java_aload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	uint8_t *code = toppilha->getCode();
 	uint8_t byte1 = code[1];
 	int16_t index = (int16_t)byte1;
-	//Verifica se i_wide foi chamada anteriormente
+	//Verifica se java_wide foi chamada anteriormente
 	if(isWide) {
 		uint16_t byte2 = code[2];
 		index = (byte1 << 8) | byte2;
@@ -904,26 +904,26 @@ void ExecutionEngine::i_aload(){
 
 	if(((int16_t)(toppilha->tamanhoVetorVariaveis())) <= index){
 
-		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "i_aload");
+		throw new Erro("Tamanho do vetor de variaveis é menor que o index", "ExecutionEngine", "java_aload");
 
 	}
 		
 	Valor valor = toppilha->getValorVariavelLocal(index);
 	if(!(valor.tipo == TipoDado::REFERENCIA)){
 
-		throw new Erro("O tipo do dado não é uma referencia", "ExecutionEngine", "i_aload");
+		throw new Erro("O tipo do dado não é uma referencia", "ExecutionEngine", "java_aload");
 	}
 	
 	toppilha->empilharOperando(valor);
 }
-void ExecutionEngine::i_iload_0(){
+void ExecutionEngine::java_iload_0(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(0);
 	if(!(valor.tipo == TipoDado::INTEIRO)){
 		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_0");
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_0");
 
 	}
 		
@@ -931,53 +931,53 @@ void ExecutionEngine::i_iload_0(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iload_1(){
+void ExecutionEngine::java_iload_1(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 		if(!(valor.tipo == TipoDado::INTEIRO)){
 		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_1");
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_1");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iload_2(){
+void ExecutionEngine::java_iload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
 	 if(!(valor.tipo == TipoDado::INTEIRO)){
 		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_2");
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_2");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iload_3(){
+void ExecutionEngine::java_iload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
 	 if(!(valor.tipo == TipoDado::INTEIRO)){
 		
-		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "i_load_3");
+		throw new Erro("O tipo do dado não é um inteiro", "ExecutionEngine", "java_load_3");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lload_0(){
+void ExecutionEngine::java_lload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 	 if(valor.tipo != TipoDado::PREENCHIMENTO){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_0");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_0");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -985,7 +985,7 @@ void ExecutionEngine::i_lload_0(){
 	valor = toppilha->getValorVariavelLocal(0);
 	if(valor.tipo != TipoDado::LONG){
 	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "i_lload_0");
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_0");
 
 	}
 		
@@ -993,13 +993,13 @@ void ExecutionEngine::i_lload_0(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lload_1(){
+void ExecutionEngine::java_lload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_1");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_1");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1007,20 +1007,20 @@ void ExecutionEngine::i_lload_1(){
 	valor = toppilha->getValorVariavelLocal(1);
 	if(!(valor.tipo == TipoDado::LONG)){
 	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "i_lload_1");
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_1");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lload_2(){
+void ExecutionEngine::java_lload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_2");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_2");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1028,20 +1028,20 @@ void ExecutionEngine::i_lload_2(){
 	valor = toppilha->getValorVariavelLocal(2);
 	if(!(valor.tipo == TipoDado::LONG)){
 	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "i_lload_2");
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_2");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lload_3(){
+void ExecutionEngine::java_lload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(4);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_3");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_3");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1049,21 +1049,21 @@ void ExecutionEngine::i_lload_3(){
 	valor = toppilha->getValorVariavelLocal(3);
 	if(!(valor.tipo == TipoDado::LONG)){
 	
-			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "i_lload_3");
+			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_3");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fload_0(){
+void ExecutionEngine::java_fload_0(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(0);
 	 if(!(valor.tipo == TipoDado::FLOAT)){
 		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "i_fload_0");
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_0");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1071,52 +1071,52 @@ void ExecutionEngine::i_fload_0(){
 	runtimeDataArea->topoPilha()->incrementaPC(1)
 ;	
 }
-void ExecutionEngine::i_fload_1(){
+void ExecutionEngine::java_fload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 	 if(!(valor.tipo == TipoDado::FLOAT)){
 		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "i_fload_1");
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_1");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
-void ExecutionEngine::i_fload_2(){
+void ExecutionEngine::java_fload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
 	 if(!(valor.tipo == TipoDado::FLOAT)){
 		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "i_fload_2");
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_2");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);		
 }
-void ExecutionEngine::i_fload_3(){
+void ExecutionEngine::java_fload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
 	 if(!(valor.tipo == TipoDado::FLOAT)){
 		
-		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "i_fload_3");
+		throw new Erro("O tipo do dado não é um float", "ExecutionEngine", "java_fload_3");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
-void ExecutionEngine::i_dload_0(){
+void ExecutionEngine::java_dload_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_dload_0");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_0");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1124,20 +1124,20 @@ void ExecutionEngine::i_dload_0(){
 	valor = toppilha->getValorVariavelLocal(0);
 	 if(!(valor.tipo == TipoDado::DOUBLE)){
 		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "i_dload_0");
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_0");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }	
-void ExecutionEngine::i_dload_1(){
+void ExecutionEngine::java_dload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_dload_1");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_1");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1145,20 +1145,20 @@ void ExecutionEngine::i_dload_1(){
 	valor = toppilha->getValorVariavelLocal(1);
 	 if(!(valor.tipo == TipoDado::DOUBLE)){
 		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "i_dload_1");
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_1");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dload_2(){
+void ExecutionEngine::java_dload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_dload_2");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_dload_2");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1166,20 +1166,20 @@ void ExecutionEngine::i_dload_2(){
 	valor = toppilha->getValorVariavelLocal(2);
 	 if(!(valor.tipo == TipoDado::DOUBLE)){
 		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "i_dload_2");
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_2");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dload_3(){
+void ExecutionEngine::java_dload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(4);
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		
-		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "i_lload_3");
+		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_3");
 
 	}
 	toppilha->empilharOperando(valor);
@@ -1187,14 +1187,14 @@ void ExecutionEngine::i_dload_3(){
 	valor = toppilha->getValorVariavelLocal(3);
 	 if(!(valor.tipo == TipoDado::DOUBLE)){
 		
-		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "i_dload_3");
+		throw new Erro("O tipo do dado não é um double ", "ExecutionEngine", "java_dload_3");
 
 	}
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_aload_0(){
+void ExecutionEngine::java_aload_0(){
 	//usa na mainvazia
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -1202,60 +1202,60 @@ void ExecutionEngine::i_aload_0(){
 	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		string errMsg= "O tipo do dado não é um uma referencia \t tipo: ";
 		errMsg+= ObterStringTipo(valor.tipo);
-		throw new Erro(errMsg, "ExecutionEngine", "i_aload_0");
+		throw new Erro(errMsg, "ExecutionEngine", "java_aload_0");
 
 	}
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_aload_1(){
+void ExecutionEngine::java_aload_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(1);
 	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_1");
+		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_1");
 
 	}
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_aload_2(){
+void ExecutionEngine::java_aload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(2);
 	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_2");
+		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_2");
 
 	}
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_aload_3(){
+void ExecutionEngine::java_aload_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->getValorVariavelLocal(3);
 	 if(!(valor.tipo == TipoDado::REFERENCIA)){
 		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_3");
+		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "java_aload_3");
 
 	}
 
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iaload(){
+void ExecutionEngine::java_iaload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
 	Valor index = toppilha->desempilhaOperando();
 		 if(!(index.tipo == TipoDado::INTEIRO)){
 		
-		throw new Erro("O tipo do dado não é um int", "ExecutionEngine", "i_iload");
+		throw new Erro("O tipo do dado não é um int", "ExecutionEngine", "java_iload");
 
 	}
 	Valor arrayref = toppilha->desempilhaOperando();
@@ -1263,17 +1263,17 @@ void ExecutionEngine::i_iaload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_iaload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_iaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_iaload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_laload(){
+void ExecutionEngine::java_laload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
@@ -1284,12 +1284,12 @@ void ExecutionEngine::i_laload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_laload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_laload");
 	}
 	int64_t num;
 	memcpy(&num, &(index.dado), 8);
 	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_laload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_laload");
 	}
 	
 	Valor padding;
@@ -1300,7 +1300,7 @@ void ExecutionEngine::i_laload(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_faload(){
+void ExecutionEngine::java_faload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
@@ -1311,18 +1311,18 @@ void ExecutionEngine::i_faload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_faload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_faload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_faload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_faload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_daload(){
+void ExecutionEngine::java_daload(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
@@ -1334,12 +1334,12 @@ void ExecutionEngine::i_daload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_daload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_daload");
 	}
 	int64_t num;
 	memcpy(&num, &(index.dado), 8);
 	if (num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_daload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_daload");
 	}
 	
 	Valor padding;
@@ -1352,7 +1352,7 @@ void ExecutionEngine::i_daload(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 
-void ExecutionEngine::i_aaload(){ //Load reference from array 
+void ExecutionEngine::java_aaload(){ //Load reference from array 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
@@ -1363,18 +1363,18 @@ void ExecutionEngine::i_aaload(){ //Load reference from array
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_aaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_aaload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_aaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_aaload");
 	}
 	toppilha->empilharOperando(array->ObterValor(num));
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_baload(){
+void ExecutionEngine::java_baload(){
 
 Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -1386,18 +1386,18 @@ Frame *toppilha = runtimeDataArea->topoPilha();
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_aaload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_aaload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_aaload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_aaload");
 	}
 
 	Valor op = array->ObterValor(index.dado);
 	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
 
-		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "i_baload");
+		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "java_baload");
 		
 	}
 	
@@ -1407,7 +1407,7 @@ Frame *toppilha = runtimeDataArea->topoPilha();
 	toppilha->incrementaPC(1);
 }
 
-void ExecutionEngine::i_caload(){
+void ExecutionEngine::java_caload(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();	
 	ObjetoArray *array;
@@ -1419,18 +1419,18 @@ void ExecutionEngine::i_caload(){
 	array = (ObjetoArray*)(arrayref.dado);
 	
 	if (array == NULL) {
-		throw new Erro("Array esta vazia.", "ExecutionEngine", "i_caload");
+		throw new Erro("Array esta vazia.", "ExecutionEngine", "java_caload");
 	}
 	int32_t num;
 	memcpy(&num, &(index.dado), 4);
 	if ((uint32_t)num > array->ObterTamanho() || num < 0) {
-		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "i_caload");
+		throw new Erro("Index do array esta fora do limite.", "ExecutionEngine", "java_caload");
 	}
 
 	Valor op = array->ObterValor(index.dado);
 	if(!(op.tipo == TipoDado::BOOLEANO || op.tipo == TipoDado::BYTE)){
 
-		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "i_caload");
+		throw new Erro("o operando deve ser BOOLEANO ou BYTE.", "ExecutionEngine", "java_caload");
 		
 	}
 
@@ -1440,7 +1440,7 @@ void ExecutionEngine::i_caload(){
 	toppilha->incrementaPC(1);
 
 }
-void ExecutionEngine::i_saload(){
+void ExecutionEngine::java_saload(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -1448,7 +1448,7 @@ void ExecutionEngine::i_saload(){
 	Valor indice = topo->desempilhaOperando();
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 
-		throw new Erro("o operando deve ser INTEIRO.", "ExecutionEngine", "i_saload");
+		throw new Erro("o operando deve ser INTEIRO.", "ExecutionEngine", "java_saload");
 		
 	}
 
@@ -1456,12 +1456,12 @@ void ExecutionEngine::i_saload(){
 
 	if(!(arrayref.tipo == TipoDado::REFERENCIA)){
 		
-		throw new Erro("o operando deve ser uma referencia.", "ExecutionEngine", "i_saload");
+		throw new Erro("o operando deve ser uma referencia.", "ExecutionEngine", "java_saload");
 		
 	}
 	if(!(((Objeto*)arrayref.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 		
-		throw new Erro("a referencia deve ser para um array.", "ExecutionEngine", "i_saload");
+		throw new Erro("a referencia deve ser para um array.", "ExecutionEngine", "java_saload");
 		
 	}
 
@@ -1485,7 +1485,7 @@ void ExecutionEngine::i_saload(){
 
 
 }
-void ExecutionEngine::i_istore(){
+void ExecutionEngine::java_istore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
 	Valor val;
@@ -1504,25 +1504,25 @@ void ExecutionEngine::i_istore(){
 	else
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_istore" << endl;
+cout << "ExecutionEngine::java_istore" << endl;
 #endif
 		int8_t indice;
 		memcpy(&indice, &(instrucoes[1]), 1);
 		int64_t aux= indice;
 		memcpy(&(val.dado), &aux, 8);
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_istore2 \tval.dado = " << val.dado << endl;
+cout << "ExecutionEngine::java_istore2 \tval.dado = " << val.dado << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
 	return;
 }
-void ExecutionEngine::i_lstore(){
+void ExecutionEngine::java_lstore(){
 
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	#ifdef DEBUG_EE
-	cout << "ExecutionEngine::i_lstore 0 \t  "<< " \tvalor PC=  "<< topoDaPilhaDeFrames->getPC() << endl;
+	cout << "ExecutionEngine::java_lstore 0 \t  "<< " \tvalor PC=  "<< topoDaPilhaDeFrames->getPC() << endl;
 	#endif
 
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
@@ -1536,7 +1536,7 @@ void ExecutionEngine::i_lstore(){
 		indice= InverterEndianess<uint16_t>(indice);
 		val.dado= (int64_t)indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 0 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
+cout << "ExecutionEngine::java_lstore 0 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
@@ -1545,7 +1545,7 @@ cout << "ExecutionEngine::i_lstore 0 \t indice = " << indice << " \ttamanhpilha=
 	else
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 1" << endl;
+cout << "ExecutionEngine::java_lstore 1" << endl;
 #endif
 		//aux para expansao de tipo
 		int8_t aux=0;
@@ -1553,14 +1553,14 @@ cout << "ExecutionEngine::i_lstore 1" << endl;
 		indice= aux;
 		val.dado= indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 2 \tval.dado = " << val.dado << endl;
+cout << "ExecutionEngine::java_lstore 2 \tval.dado = " << val.dado << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
 	}
 	
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 3 " << val.dado << endl;
+cout << "ExecutionEngine::java_lstore 3 " << val.dado << endl;
 #endif
 
 	//como é um long devemos colocar preenchimento
@@ -1568,17 +1568,17 @@ cout << "ExecutionEngine::i_lstore 3 " << val.dado << endl;
 	val2.tipo= TipoDado::PREENCHIMENTO;
 	val2.dado= (val.dado)+1;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 3,5 valdado:" << val2.dado << endl;
+cout << "ExecutionEngine::java_lstore 3,5 valdado:" << val2.dado << endl;
 #endif
 	StoreValor(val2);
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_lstore 4 " << val2.dado << endl;
+cout << "ExecutionEngine::java_lstore 4 " << val2.dado << endl;
 #endif
 
 
 	return;
 }
-void ExecutionEngine::i_fstore(){
+void ExecutionEngine::java_fstore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
 	uint16_t indice;
@@ -1597,14 +1597,14 @@ void ExecutionEngine::i_fstore(){
 	else
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_fstore" << endl;
+cout << "ExecutionEngine::java_fstore" << endl;
 #endif
 		int8_t aux;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
 		val.dado= indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_fstore \tval.dado = " << val.dado << endl;
+cout << "ExecutionEngine::java_fstore \tval.dado = " << val.dado << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
@@ -1613,7 +1613,7 @@ cout << "ExecutionEngine::i_fstore \tval.dado = " << val.dado << endl;
 	return;
 
 }
-void ExecutionEngine::i_dstore(){
+void ExecutionEngine::java_dstore(){
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
 	uint16_t indice;
@@ -1632,14 +1632,14 @@ void ExecutionEngine::i_dstore(){
 	else
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_dstore" << endl;
+cout << "ExecutionEngine::java_dstore" << endl;
 #endif
 		uint8_t aux;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
 		val.dado= indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_dstore \tval.dado = " << val.dado << endl;
+cout << "ExecutionEngine::java_dstore \tval.dado = " << val.dado << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(2);
@@ -1651,7 +1651,7 @@ cout << "ExecutionEngine::i_dstore \tval.dado = " << val.dado << endl;
 	return;
 }
 
-void ExecutionEngine::i_astore(){
+void ExecutionEngine::java_astore(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -1677,7 +1677,7 @@ void ExecutionEngine::i_astore(){
 
 	toppilha->mudarVariavelLocal(valor, index);
 }
-void ExecutionEngine::i_istore_0(){
+void ExecutionEngine::java_istore_0(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -1687,7 +1687,7 @@ void ExecutionEngine::i_istore_0(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_istore_1(){
+void ExecutionEngine::java_istore_1(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -1697,7 +1697,7 @@ void ExecutionEngine::i_istore_1(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_istore_2(){
+void ExecutionEngine::java_istore_2(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -1707,7 +1707,7 @@ void ExecutionEngine::i_istore_2(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_istore_3(){
+void ExecutionEngine::java_istore_3(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -1716,7 +1716,7 @@ void ExecutionEngine::i_istore_3(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lstore_0(){
+void ExecutionEngine::java_lstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1728,7 +1728,7 @@ void ExecutionEngine::i_lstore_0(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lstore_1(){
+void ExecutionEngine::java_lstore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1740,7 +1740,7 @@ void ExecutionEngine::i_lstore_1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lstore_2(){
+void ExecutionEngine::java_lstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1753,7 +1753,7 @@ void ExecutionEngine::i_lstore_2(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lstore_3(){
+void ExecutionEngine::java_lstore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1765,7 +1765,7 @@ void ExecutionEngine::i_lstore_3(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fstore_0(){
+void ExecutionEngine::java_fstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1773,7 +1773,7 @@ void ExecutionEngine::i_fstore_0(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fstore_1(){
+void ExecutionEngine::java_fstore_1(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1781,7 +1781,7 @@ void ExecutionEngine::i_fstore_1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fstore_2(){
+void ExecutionEngine::java_fstore_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1789,7 +1789,7 @@ void ExecutionEngine::i_fstore_2(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fstore_3(){
+void ExecutionEngine::java_fstore_3(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1797,7 +1797,7 @@ void ExecutionEngine::i_fstore_3(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dstore_0(){
+void ExecutionEngine::java_dstore_0(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor = toppilha->desempilhaOperando();
@@ -1810,7 +1810,7 @@ void ExecutionEngine::i_dstore_0(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 
-void ExecutionEngine::i_dstore_1(){
+void ExecutionEngine::java_dstore_1(){
 	Valor val;
 	val.tipo = DOUBLE;
 	val.dado= 1;
@@ -1822,7 +1822,7 @@ void ExecutionEngine::i_dstore_1(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dstore_2(){
+void ExecutionEngine::java_dstore_2(){
 	Valor val;
 	val.tipo = DOUBLE;
 	val.dado= 2;
@@ -1834,7 +1834,7 @@ void ExecutionEngine::i_dstore_2(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dstore_3(){
+void ExecutionEngine::java_dstore_3(){
 	Valor val;
 	val.tipo = DOUBLE;
 	val.dado= 3;
@@ -1846,7 +1846,7 @@ void ExecutionEngine::i_dstore_3(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_astore_0(){
+void ExecutionEngine::java_astore_0(){
 	Valor val;
 	val.tipo = REFERENCIA;
 	val.dado= 0;
@@ -1854,7 +1854,7 @@ void ExecutionEngine::i_astore_0(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_astore_1(){
+void ExecutionEngine::java_astore_1(){
 	Valor val;
 	val.tipo = REFERENCIA;
 	val.dado= 1;
@@ -1862,7 +1862,7 @@ void ExecutionEngine::i_astore_1(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_astore_2(){
+void ExecutionEngine::java_astore_2(){
 	Valor val;
 	val.tipo = REFERENCIA;
 	val.dado= 2;
@@ -1870,7 +1870,7 @@ void ExecutionEngine::i_astore_2(){
 	
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_astore_3(){
+void ExecutionEngine::java_astore_3(){
 	Valor val;
 	val.tipo = REFERENCIA;
 	val.dado= 3;
@@ -1879,7 +1879,7 @@ void ExecutionEngine::i_astore_3(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 
-void ExecutionEngine::i_iastore(){
+void ExecutionEngine::java_iastore(){
 	
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -1887,19 +1887,19 @@ void ExecutionEngine::i_iastore(){
 	Valor op = topo->desempilhaOperando();
 	if(!(op.tipo == TipoDado::INTEIRO)){
 
-		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
+		throw new Erro("Valor não é um int", "ExecutionEngine", "java_iastore");
 
 	}
 	Valor indice = topo->desempilhaOperando();
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 
-		throw new Erro("Valor não é um int", "ExecutionEngine", "i_iastore");
+		throw new Erro("Valor não é um int", "ExecutionEngine", "java_iastore");
 
 	}
 	Valor referArr = topo->desempilhaOperando();
 	if(referArr.tipo != TipoDado::REFERENCIA){
 
-		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
+		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_iastore");
 		
 	} 
     else {
@@ -1907,7 +1907,7 @@ void ExecutionEngine::i_iastore(){
 	}
 	if(!(((Objeto*)referArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 
-		throw new Erro("objeto não é um array", "ExecutionEngine", "i_iastore");
+		throw new Erro("objeto não é um array", "ExecutionEngine", "java_iastore");
 
 	}
 
@@ -1915,19 +1915,19 @@ void ExecutionEngine::i_iastore(){
 
 	if (array == NULL) {
 
-		throw new Erro("NullPointerException", "ExecutionEngine", "i_iastore");
+		throw new Erro("NullPointerException", "ExecutionEngine", "java_iastore");
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
 
-		throw new Erro("ArrayIndesxOutOfBoundException", "ExecutionEngine", "i_iastore");
+		throw new Erro("ArrayIndesxOutOfBoundException", "ExecutionEngine", "java_iastore");
 
 	}
 	
 	if(op.tipo != array->TipoElementosDoArray()){
 
-		throw new Erro("Operando não é do tipo dos elementos do array", "ExecutionEngine", "i_iastore");
+		throw new Erro("Operando não é do tipo dos elementos do array", "ExecutionEngine", "java_iastore");
 
 	}	
 	
@@ -1937,37 +1937,37 @@ void ExecutionEngine::i_iastore(){
 
 }
 
-void ExecutionEngine::i_lastore(){
+void ExecutionEngine::java_lastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::LONG)){
 							
-		throw new Erro("Valor não é um long", "ExecutionEngine", "i_lastore");
+		throw new Erro("Valor não é um long", "ExecutionEngine", "java_lastore");
 						
 	}
 	Valor pad = topo->desempilhaOperando();
 	if(!(pad.tipo == TipoDado::PREENCHIMENTO)){
 							
-		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_lastore");
+		throw new Erro("Valor não é um pad", "ExecutionEngine", "java_lastore");
 						
 	}
 	Valor indice = topo->desempilhaOperando();
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-		throw new Erro("Valor não é um int", "ExecutionEngine", "i_lastore");
+		throw new Erro("Valor não é um int", "ExecutionEngine", "java_lastore");
 						
 	}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_lastore");
+		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_lastore");
 						
 	}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_lastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_lastore");
 						
 		}
 
@@ -1986,7 +1986,7 @@ void ExecutionEngine::i_lastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("tipo errado", "ExecutionEngine", "i_lastore");
+			throw new Erro("tipo errado", "ExecutionEngine", "java_lastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
@@ -1995,7 +1995,7 @@ void ExecutionEngine::i_lastore(){
 
 }
 
-void ExecutionEngine::i_fastore(){
+void ExecutionEngine::java_fastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -2003,7 +2003,7 @@ void ExecutionEngine::i_fastore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::FLOAT)){
 							
-			throw new Erro("Valor não é um float", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é um float", "ExecutionEngine", "java_fastore");
 						
 		}
 
@@ -2011,18 +2011,18 @@ void ExecutionEngine::i_fastore(){
 
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um int", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é um int", "ExecutionEngine", "java_fastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_fastore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_fastore");
 						
 		}
 
@@ -2042,7 +2042,7 @@ void ExecutionEngine::i_fastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_fastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "java_fastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
@@ -2050,7 +2050,7 @@ void ExecutionEngine::i_fastore(){
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_dastore(){
+void ExecutionEngine::java_dastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -2058,14 +2058,14 @@ void ExecutionEngine::i_dastore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::DOUBLE)){
 							
-			throw new Erro("Valor não é um DOUBLE", "ExecutionEngine", "i_dastore");
+			throw new Erro("Valor não é um DOUBLE", "ExecutionEngine", "java_dastore");
 						
 		}
 
 	Valor pad = topo->desempilhaOperando();
 	if(!(pad.tipo == TipoDado::PREENCHIMENTO)){
 							
-		throw new Erro("Valor não é um pad", "ExecutionEngine", "i_dastore");
+		throw new Erro("Valor não é um pad", "ExecutionEngine", "java_dastore");
 						
 	}
 	
@@ -2073,20 +2073,20 @@ void ExecutionEngine::i_dastore(){
 
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um inteiro", "ExecutionEngine", "i_dastore");
+			throw new Erro("Valor não é um inteiro", "ExecutionEngine", "java_dastore");
 						
 		}
 
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_dastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_dastore");
 						
 		}
 
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_dastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_dastore");
 						
 		}
 
@@ -2106,7 +2106,7 @@ void ExecutionEngine::i_dastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_dastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "java_dastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
@@ -2114,7 +2114,7 @@ void ExecutionEngine::i_dastore(){
 	topo->incrementaPC(1);
 }
 
-void ExecutionEngine::i_aastore(){
+void ExecutionEngine::java_aastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -2122,7 +2122,7 @@ void ExecutionEngine::i_aastore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_aastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_aastore");
 						
 		}
 
@@ -2130,18 +2130,18 @@ void ExecutionEngine::i_aastore(){
 
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um int", "ExecutionEngine", "i_aastore");
+			throw new Erro("Valor não é um int", "ExecutionEngine", "java_aastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_aastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_aastore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_aastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_aastore");
 						
 		}
 
@@ -2161,14 +2161,14 @@ void ExecutionEngine::i_aastore(){
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
 							
-			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "i_aastore");
+			throw new Erro("Valor não é do tipo dos elementos do array", "ExecutionEngine", "java_aastore");
 						
 		}
 	array->AlterarElementoDaPosicao(indice.dado, valor);
 	
 	topo->incrementaPC(1);
 }
-void ExecutionEngine::i_bastore(){
+void ExecutionEngine::java_bastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -2176,7 +2176,7 @@ void ExecutionEngine::i_bastore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "java_bastore");
 						
 		}
 
@@ -2184,18 +2184,18 @@ void ExecutionEngine::i_bastore(){
 
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_bastore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "java_bastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_bastore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_bastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_bastore");
 						
 		}
 
@@ -2231,7 +2231,7 @@ void ExecutionEngine::i_bastore(){
 
 }
 
-void ExecutionEngine::i_castore(){
+void ExecutionEngine::java_castore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -2239,7 +2239,7 @@ void ExecutionEngine::i_castore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "i_castore");
+			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "java_castore");
 						
 		}
 
@@ -2247,18 +2247,18 @@ void ExecutionEngine::i_castore(){
 
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_castore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "java_castore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_castore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_castore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_castore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_castore");
 						
 		}
 
@@ -2282,7 +2282,7 @@ void ExecutionEngine::i_castore(){
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_sastore(){
+void ExecutionEngine::java_sastore(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
@@ -2290,7 +2290,7 @@ void ExecutionEngine::i_sastore(){
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "i_sastore");
+			throw new Erro("Valor não é um INTEIRO", "ExecutionEngine", "java_sastore");
 						
 		}
 
@@ -2298,18 +2298,18 @@ void ExecutionEngine::i_sastore(){
 
 	if(!(indice.tipo == TipoDado::INTEIRO)){
 							
-			throw new Erro("indice não é um int", "ExecutionEngine", "i_sastore");
+			throw new Erro("indice não é um int", "ExecutionEngine", "java_sastore");
 						
 		}
 	Valor referenciaArr = topo->desempilhaOperando();
 	if(!(referenciaArr.tipo == TipoDado::REFERENCIA)){
 							
-			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_sastore");
+			throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_sastore");
 						
 		}
 	if(!(((Objeto*)referenciaArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 							
-			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "i_sastore");
+			throw new Erro("Valor não é uma referencia para array", "ExecutionEngine", "java_sastore");
 						
 		}
 
@@ -2334,25 +2334,25 @@ void ExecutionEngine::i_sastore(){
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_pop(){
+void ExecutionEngine::java_pop(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	Valor valor = topo->desempilhaOperando();
 	if(!(valor.tipo != TipoDado::LONG)){
 							
-			throw new Erro("Valor nao pode ser um long", "ExecutionEngine", "i_pop");
+			throw new Erro("Valor nao pode ser um long", "ExecutionEngine", "java_pop");
 						
 		}
 
 	if(!(valor.tipo != TipoDado::DOUBLE)){
 							
-			throw new Erro("Valor nçao pode ser double", "ExecutionEngine", "i_pop");
+			throw new Erro("Valor nçao pode ser double", "ExecutionEngine", "java_pop");
 						
 		}
 
 	topo->incrementaPC(1);
 }
-void ExecutionEngine::i_pop2(){
+void ExecutionEngine::java_pop2(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	topo->desempilhaOperando();
@@ -2361,30 +2361,30 @@ void ExecutionEngine::i_pop2(){
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_dup(){
+void ExecutionEngine::java_dup(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
 
 	Valor valor = topoDoFrame->desempilhaOperando();
 	if ((valor.tipo == TipoDado::LONG) || (valor.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup", "ExecutionEngine", "i_dup");
+		throw new Erro("Esperado tipo diferente de long ou double em dup", "ExecutionEngine", "java_dup");
 
 	topoDoFrame->empilharOperando(valor);
 	topoDoFrame->empilharOperando(valor);
 
 	topoDoFrame->incrementaPC(1);
 }
-void ExecutionEngine::i_dup_x1(){
+void ExecutionEngine::java_dup_x1(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
 
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x1","ExecutionEngine", "i_dup_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1","ExecutionEngine", "java_dup_x1");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x1", "ExecutionEngine", "i_dup_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x1", "ExecutionEngine", "java_dup_x1");
 
 	topoDoFrame->empilharOperando(valor_1);
 	topoDoFrame->empilharOperando(valor_2);
@@ -2392,20 +2392,20 @@ void ExecutionEngine::i_dup_x1(){
 
 	topoDoFrame->incrementaPC(1);
 }
-void ExecutionEngine::i_dup_x2(){
+void ExecutionEngine::java_dup_x2(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
 
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "i_dup_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "java_dup_x2");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 
 	Valor valor_3 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "i_dup_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup_x2","ExecutionEngine", "java_dup_x2");
 
 
 	topoDoFrame->empilharOperando(valor_1);
@@ -2415,18 +2415,18 @@ void ExecutionEngine::i_dup_x2(){
 
 	topoDoFrame->incrementaPC(1);
 }
-void ExecutionEngine::i_dup2(){
+void ExecutionEngine::java_dup2(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
 
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_1.tipo == TipoDado::LONG) || (valor_1.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "i_dup2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "java_dup2");
 
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "i_dup2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2","ExecutionEngine", "java_dup2");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2435,20 +2435,20 @@ void ExecutionEngine::i_dup2(){
 
 	topoDoFrame->incrementaPC(1);
 }
-void ExecutionEngine::i_dup2_x1(){
+void ExecutionEngine::java_dup2_x1(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
 
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
 	Valor valor_2 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1","ExecutionEngine", "i_dup2_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1","ExecutionEngine", "java_dup2_x1");
 
 
 	Valor valor_3 = topoDoFrame->desempilhaOperando();
 	
 	if ((valor_3.tipo == TipoDado::LONG) || (valor_3.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1", "ExecutionEngine", "i_dup2_x1");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x1", "ExecutionEngine", "java_dup2_x1");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2458,7 +2458,7 @@ void ExecutionEngine::i_dup2_x1(){
 
 	topoDoFrame->incrementaPC(1);
 }
-void ExecutionEngine::i_dup2_x2(){
+void ExecutionEngine::java_dup2_x2(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
 
 	Valor valor_1 = topoDoFrame->desempilhaOperando();
@@ -2467,10 +2467,10 @@ void ExecutionEngine::i_dup2_x2(){
 	Valor valor_4 = topoDoFrame->desempilhaOperando();
 
 	if ((valor_2.tipo == TipoDado::LONG) || (valor_2.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "i_dup2_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "java_dup2_x2");
 
 	if ((valor_4.tipo == TipoDado::LONG) || (valor_4.tipo == TipoDado::DOUBLE))
-		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "i_dup2_x2");
+		throw new Erro("Esperado tipo diferente de long ou double em dup2_x2", "ExecutionEngine", "java_dup2_x2");
 
 	topoDoFrame->empilharOperando(valor_2);
 	topoDoFrame->empilharOperando(valor_1);
@@ -2482,7 +2482,7 @@ void ExecutionEngine::i_dup2_x2(){
 	topoDoFrame->incrementaPC(1);
 
 }
-void ExecutionEngine::i_swap(){
+void ExecutionEngine::java_swap(){
     
     Frame *topo = runtimeDataArea->topoPilha();
 
@@ -2491,12 +2491,12 @@ void ExecutionEngine::i_swap(){
 
 	if(op_1.tipo == TipoDado::LONG || op_1.tipo == TipoDado::DOUBLE){
 
-		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
+		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "java_swap");
 						
 		}
     if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
 
-		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
+		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "java_swap");
 						
 		}
 
@@ -2505,7 +2505,7 @@ void ExecutionEngine::i_swap(){
 
 	topo->incrementaPC(1);
 }
-void ExecutionEngine::i_iadd(){
+void ExecutionEngine::java_iadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2521,7 +2521,7 @@ void ExecutionEngine::i_iadd(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ladd(){
+void ExecutionEngine::java_ladd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2538,7 +2538,7 @@ void ExecutionEngine::i_ladd(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
-void ExecutionEngine::i_fadd(){
+void ExecutionEngine::java_fadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2554,7 +2554,7 @@ void ExecutionEngine::i_fadd(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dadd(){
+void ExecutionEngine::java_dadd(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2571,7 +2571,7 @@ void ExecutionEngine::i_dadd(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
-void ExecutionEngine::i_isub(){
+void ExecutionEngine::java_isub(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2587,7 +2587,7 @@ void ExecutionEngine::i_isub(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lsub(){
+void ExecutionEngine::java_lsub(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2604,7 +2604,7 @@ void ExecutionEngine::i_lsub(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
-void ExecutionEngine::i_fsub(){
+void ExecutionEngine::java_fsub(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2620,7 +2620,7 @@ void ExecutionEngine::i_fsub(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dsub(){
+void ExecutionEngine::java_dsub(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2637,7 +2637,7 @@ void ExecutionEngine::i_dsub(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);	
 }
-void ExecutionEngine::i_imul(){
+void ExecutionEngine::java_imul(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2653,7 +2653,7 @@ void ExecutionEngine::i_imul(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lmul(){
+void ExecutionEngine::java_lmul(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2670,7 +2670,7 @@ void ExecutionEngine::i_lmul(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fmul(){
+void ExecutionEngine::java_fmul(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2686,7 +2686,7 @@ void ExecutionEngine::i_fmul(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dmul(){
+void ExecutionEngine::java_dmul(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2703,7 +2703,7 @@ void ExecutionEngine::i_dmul(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_idiv(){
+void ExecutionEngine::java_idiv(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2714,7 +2714,7 @@ void ExecutionEngine::i_idiv(){
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_idiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_idiv");
 	}
 	
 	num1 = num1 / num2;
@@ -2723,7 +2723,7 @@ void ExecutionEngine::i_idiv(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ldiv(){
+void ExecutionEngine::java_ldiv(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2731,7 +2731,7 @@ void ExecutionEngine::i_ldiv(){
 	Valor valor1 = toppilha->desempilhaOperando();
 
 	if(!((valor2.tipo == TipoDado::LONG) || (valor1.tipo == TipoDado::LONG))){
-		throw new Erro("Os operandos devem ser um long","ExecutionEngine","i_ldiv");
+		throw new Erro("Os operandos devem ser um long","ExecutionEngine","java_ldiv");
 	}
 
 	int64_t num1, num2;
@@ -2739,7 +2739,7 @@ void ExecutionEngine::i_ldiv(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_ldiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_ldiv");
 	}
 	
 	num1 = num1 / num2;
@@ -2748,7 +2748,7 @@ void ExecutionEngine::i_ldiv(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fdiv(){
+void ExecutionEngine::java_fdiv(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2759,7 +2759,7 @@ void ExecutionEngine::i_fdiv(){
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_fdiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_fdiv");
 	}
 	
 	num1 = num1 / num2;
@@ -2768,7 +2768,7 @@ void ExecutionEngine::i_fdiv(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ddiv(){
+void ExecutionEngine::java_ddiv(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2780,7 +2780,7 @@ void ExecutionEngine::i_ddiv(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_ddiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_ddiv");
 	}
 	
 	num1 = num1 / num2;
@@ -2789,7 +2789,7 @@ void ExecutionEngine::i_ddiv(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_irem(){
+void ExecutionEngine::java_irem(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2800,7 +2800,7 @@ void ExecutionEngine::i_irem(){
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_idiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_idiv");
 	}
 	
 	num1 = num1 - ((num1 / num2) * num2);
@@ -2809,7 +2809,7 @@ void ExecutionEngine::i_irem(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lrem(){
+void ExecutionEngine::java_lrem(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2821,7 +2821,7 @@ void ExecutionEngine::i_lrem(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_ldiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_ldiv");
 	}
 	
 	num1 = num1 - ((num1 / num2) * num2);
@@ -2830,7 +2830,7 @@ void ExecutionEngine::i_lrem(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_frem(){
+void ExecutionEngine::java_frem(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2841,7 +2841,7 @@ void ExecutionEngine::i_frem(){
 	memcpy(&num2,&valor2.dado,4);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_fdiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_fdiv");
 	}
 	
 	num1 = num1 - ((num1 / num2) * num2);
@@ -2850,7 +2850,7 @@ void ExecutionEngine::i_frem(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_drem(){
+void ExecutionEngine::java_drem(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2862,7 +2862,7 @@ void ExecutionEngine::i_drem(){
 	memcpy(&num2,&valor2.dado,8);
 	
 	if (num2 == 0) {
-		throw new Erro("Divisao por zero.","ExecutionEngine","i_ddiv");
+		throw new Erro("Divisao por zero.","ExecutionEngine","java_ddiv");
 	}
 	
 	num1 = num1 - ((num1 / num2) * num2);
@@ -2871,7 +2871,7 @@ void ExecutionEngine::i_drem(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ineg(){
+void ExecutionEngine::java_ineg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -2885,7 +2885,7 @@ void ExecutionEngine::i_ineg(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lneg(){
+void ExecutionEngine::java_lneg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -2899,7 +2899,7 @@ void ExecutionEngine::i_lneg(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fneg(){
+void ExecutionEngine::java_fneg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -2913,7 +2913,7 @@ void ExecutionEngine::i_fneg(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dneg(){
+void ExecutionEngine::java_dneg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -2927,7 +2927,7 @@ void ExecutionEngine::i_dneg(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ishl(){
+void ExecutionEngine::java_ishl(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2945,7 +2945,7 @@ void ExecutionEngine::i_ishl(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 //shiftleft long
-void ExecutionEngine::i_lshl(){
+void ExecutionEngine::java_lshl(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	//valor 1 deve ser long e valor 2 deve ser int
@@ -2954,12 +2954,12 @@ void ExecutionEngine::i_lshl(){
 	
 	if(!(valor2.tipo == TipoDado::INTEIRO)){
 
-		throw new Erro("O segundo operando deve ser um inteiro.","ExecutionEngine","i_ldiv");
+		throw new Erro("O segundo operando deve ser um inteiro.","ExecutionEngine","java_ldiv");
 
 	}
 	if(!(valor1.tipo == TipoDado::LONG)){
 
-		throw new Erro("O segundo operando deve ser um LONG.","ExecutionEngine","i_ldiv");
+		throw new Erro("O segundo operando deve ser um LONG.","ExecutionEngine","java_ldiv");
 
 	}
 	int64_t num1, num2;
@@ -2974,7 +2974,7 @@ void ExecutionEngine::i_lshl(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ishr(){
+void ExecutionEngine::java_ishr(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -2991,7 +2991,7 @@ void ExecutionEngine::i_ishr(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lshr(){
+void ExecutionEngine::java_lshr(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3008,7 +3008,7 @@ void ExecutionEngine::i_lshr(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iushr(){
+void ExecutionEngine::java_iushr(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3030,7 +3030,7 @@ void ExecutionEngine::i_iushr(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lushr(){
+void ExecutionEngine::java_lushr(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3052,7 +3052,7 @@ void ExecutionEngine::i_lushr(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iand(){
+void ExecutionEngine::java_iand(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3068,7 +3068,7 @@ void ExecutionEngine::i_iand(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_land(){
+void ExecutionEngine::java_land(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3085,7 +3085,7 @@ void ExecutionEngine::i_land(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ior(){
+void ExecutionEngine::java_ior(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3101,7 +3101,7 @@ void ExecutionEngine::i_ior(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lor(){
+void ExecutionEngine::java_lor(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3118,7 +3118,7 @@ void ExecutionEngine::i_lor(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ixor(){
+void ExecutionEngine::java_ixor(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3134,7 +3134,7 @@ void ExecutionEngine::i_ixor(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lxor(){
+void ExecutionEngine::java_lxor(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3151,7 +3151,7 @@ void ExecutionEngine::i_lxor(){
 	toppilha->empilharOperando(valor1);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iinc(){ //testar
+void ExecutionEngine::java_iinc(){ //testar
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	uint8_t *code = toppilha->getCode();
@@ -3185,7 +3185,7 @@ void ExecutionEngine::i_iinc(){ //testar
 	isWide = false;	
 
 }
-void ExecutionEngine::i_i2l(){
+void ExecutionEngine::java_i2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 #ifdef DEBUG_EE
 	puts("Olar, i2l 0");
@@ -3209,7 +3209,7 @@ void ExecutionEngine::i_i2l(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 //converte de int para float
-void ExecutionEngine::i_i2f(){
+void ExecutionEngine::java_i2f(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3226,7 +3226,7 @@ void ExecutionEngine::i_i2f(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_i2d(){
+void ExecutionEngine::java_i2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3247,7 +3247,7 @@ void ExecutionEngine::i_i2d(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_l2i(){
+void ExecutionEngine::java_l2i(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3266,7 +3266,7 @@ void ExecutionEngine::i_l2i(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_l2f(){
+void ExecutionEngine::java_l2f(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3285,7 +3285,7 @@ void ExecutionEngine::i_l2f(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_l2d(){
+void ExecutionEngine::java_l2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3303,7 +3303,7 @@ void ExecutionEngine::i_l2d(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_f2i(){
+void ExecutionEngine::java_f2i(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3321,7 +3321,7 @@ void ExecutionEngine::i_f2i(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_f2l(){
+void ExecutionEngine::java_f2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3342,7 +3342,7 @@ void ExecutionEngine::i_f2l(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_f2d(){
+void ExecutionEngine::java_f2d(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3363,7 +3363,7 @@ void ExecutionEngine::i_f2d(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_d2i(){
+void ExecutionEngine::java_d2i(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3382,7 +3382,7 @@ void ExecutionEngine::i_d2i(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_d2l(){
+void ExecutionEngine::java_d2l(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3399,7 +3399,7 @@ void ExecutionEngine::i_d2l(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_d2f(){
+void ExecutionEngine::java_d2f(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3419,7 +3419,7 @@ void ExecutionEngine::i_d2f(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 //converte de inteiro para byte
-void ExecutionEngine::i_i2b(){
+void ExecutionEngine::java_i2b(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3437,7 +3437,7 @@ void ExecutionEngine::i_i2b(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_i2c(){ //da segfault
+void ExecutionEngine::java_i2c(){ //da segfault
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -3452,7 +3452,7 @@ void ExecutionEngine::i_i2c(){ //da segfault
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 //converte de int para short
-void ExecutionEngine::i_i2s(){ 
+void ExecutionEngine::java_i2s(){ 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor1 = toppilha->desempilhaOperando();
@@ -3470,7 +3470,7 @@ void ExecutionEngine::i_i2s(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lcmp(){
+void ExecutionEngine::java_lcmp(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3498,7 +3498,7 @@ void ExecutionEngine::i_lcmp(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fcmpl(){
+void ExecutionEngine::java_fcmpl(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3529,7 +3529,7 @@ void ExecutionEngine::i_fcmpl(){
 	toppilha->empilharOperando(resultado);
 	toppilha->incrementaPC(1);
 }
-void ExecutionEngine::i_fcmpg(){
+void ExecutionEngine::java_fcmpg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3557,7 +3557,7 @@ void ExecutionEngine::i_fcmpg(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dcmpl(){
+void ExecutionEngine::java_dcmpl(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3590,7 +3590,7 @@ void ExecutionEngine::i_dcmpl(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dcmpg(){
+void ExecutionEngine::java_dcmpg(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3624,7 +3624,7 @@ void ExecutionEngine::i_dcmpg(){
 	toppilha->empilharOperando(resultado);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_ifeq(){
+void ExecutionEngine::java_ifeq(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -3645,7 +3645,7 @@ void ExecutionEngine::i_ifeq(){
 
 	}
 }
-void ExecutionEngine::i_ifne(){
+void ExecutionEngine::java_ifne(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -3669,7 +3669,7 @@ void ExecutionEngine::i_ifne(){
 
 	}
 }
-void ExecutionEngine::i_iflt(){
+void ExecutionEngine::java_iflt(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -3692,7 +3692,7 @@ void ExecutionEngine::i_iflt(){
 
 	}
 }
-void ExecutionEngine::i_ifge(){
+void ExecutionEngine::java_ifge(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -3714,7 +3714,7 @@ void ExecutionEngine::i_ifge(){
 
 	}
 }
-void ExecutionEngine::i_ifgt(){
+void ExecutionEngine::java_ifgt(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor = toppilha->desempilhaOperando();
@@ -3738,7 +3738,7 @@ void ExecutionEngine::i_ifgt(){
 	}
 }
 
-void ExecutionEngine::i_ifle(){
+void ExecutionEngine::java_ifle(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -3762,7 +3762,7 @@ void ExecutionEngine::i_ifle(){
 
 	}
 }
-void ExecutionEngine::i_if_icmpeq(){
+void ExecutionEngine::java_if_icmpeq(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3787,7 +3787,7 @@ void ExecutionEngine::i_if_icmpeq(){
 
 	}
 }
-void ExecutionEngine::i_if_icmpne(){
+void ExecutionEngine::java_if_icmpne(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3810,7 +3810,7 @@ void ExecutionEngine::i_if_icmpne(){
 
 	}
 }
-void ExecutionEngine::i_if_icmplt(){
+void ExecutionEngine::java_if_icmplt(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3835,7 +3835,7 @@ void ExecutionEngine::i_if_icmplt(){
 
 	}
 }
-void ExecutionEngine::i_if_icmpge(){
+void ExecutionEngine::java_if_icmpge(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3855,7 +3855,7 @@ void ExecutionEngine::i_if_icmpge(){
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 	}
 }
-void ExecutionEngine::i_if_icmpgt(){
+void ExecutionEngine::java_if_icmpgt(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3880,7 +3880,7 @@ void ExecutionEngine::i_if_icmpgt(){
 
 	}
 }
-void ExecutionEngine::i_if_icmple(){
+void ExecutionEngine::java_if_icmple(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3900,7 +3900,7 @@ void ExecutionEngine::i_if_icmple(){
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 	}
 }
-void ExecutionEngine::i_if_acmpeq(){
+void ExecutionEngine::java_if_acmpeq(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3920,7 +3920,7 @@ void ExecutionEngine::i_if_acmpeq(){
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 	}
 }
-void ExecutionEngine::i_if_acmpne(){
+void ExecutionEngine::java_if_acmpne(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	Valor valor2 = toppilha->desempilhaOperando();
@@ -3940,7 +3940,7 @@ void ExecutionEngine::i_if_acmpne(){
 		runtimeDataArea->topoPilha()->incrementaPC(3);
 	}
 }
-void ExecutionEngine::i_goto(){
+void ExecutionEngine::java_goto(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	uint8_t *code = toppilha->getCode();
@@ -3949,7 +3949,7 @@ void ExecutionEngine::i_goto(){
 	int16_t offsetPC = (byte1 << 8) | byte2;
 	runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 }
-void ExecutionEngine::i_jsr(){
+void ExecutionEngine::java_jsr(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	uint8_t *code = toppilha->getCode();
@@ -3966,7 +3966,7 @@ void ExecutionEngine::i_jsr(){
 	toppilha->empilharOperando(enderecoRetorno);
 	runtimeDataArea->topoPilha()->incrementaPC(offsetPC);
 }
-void ExecutionEngine::i_ret(){
+void ExecutionEngine::java_ret(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha(); 
 	
 	uint8_t *code = topoDaFrame->getCode();
@@ -3979,13 +3979,13 @@ void ExecutionEngine::i_ret(){
 		index = (byte_1 << 8) | byte_2;
 	}
 	if( !((int16_t)(topoDaFrame->tamanhoVetorVariaveis()) > index) ) //size of Local Variable
-		throw new Erro("Nao eh maior que o indice","ExecutionEngine","i_ret");
+		throw new Erro("Nao eh maior que o indice","ExecutionEngine","java_ret");
 
 	Valor valor = topoDaFrame->getValorVariavelLocal(index);
 
 
 	if(valor.tipo != TipoDado::ENDERECO_DE_RETORNO)
-		throw new Erro("valor nao é endereco de retorno","ExecutionEngine","i_ret");
+		throw new Erro("valor nao é endereco de retorno","ExecutionEngine","java_ret");
 
 
 	topoDaFrame->mudarVariavelLocal(valor, index);
@@ -3994,7 +3994,7 @@ void ExecutionEngine::i_ret(){
 	isWide = false;
 	return;
 }
-void ExecutionEngine::i_tableswitch()
+void ExecutionEngine::java_tableswitch()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
@@ -4015,7 +4015,7 @@ void ExecutionEngine::i_tableswitch()
 	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
 	if(valorChave.tipo != INTEIRO)
 	{
-		throw new Erro("Esperado valor do tipo INTEIRO", "ExecutionEngine", "i_tableswitch");
+		throw new Erro("Esperado valor do tipo INTEIRO", "ExecutionEngine", "java_tableswitch");
 	}
 	uint32_t indiceDeBase= preenchimento+13;
 	int32_t chave, deslocamentos= high - low +1;
@@ -4039,7 +4039,7 @@ void ExecutionEngine::i_tableswitch()
 		topoDaPilhaDeFrames->incrementaPC(defaulti);
 	}
 }
-void ExecutionEngine::i_lookupswitch()
+void ExecutionEngine::java_lookupswitch()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
@@ -4059,7 +4059,7 @@ void ExecutionEngine::i_lookupswitch()
 	Valor valorChave= topoDaPilhaDeFrames->desempilhaOperando();
 	if(valorChave.tipo != INTEIRO)
 	{
-		throw new Erro("Esperado valor do tipo INTEIRO", "ExecutionEngine", "i_lookupswitch");
+		throw new Erro("Esperado valor do tipo INTEIRO", "ExecutionEngine", "java_lookupswitch");
 	}
 	
 	uint32_t indiceDeBase= preenchimento+9;
@@ -4086,7 +4086,7 @@ void ExecutionEngine::i_lookupswitch()
 	}
 }
 //aceita byte, bool e short
-void ExecutionEngine::i_ireturn(){
+void ExecutionEngine::java_ireturn(){
 	//desempinha a funcao e empilha o valor de retorno na nova frame
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser inteiro
@@ -4103,13 +4103,13 @@ void ExecutionEngine::i_ireturn(){
 	novoTopDoFrame->empilharOperando(returnValor);
 
 }
-void ExecutionEngine::i_lreturn(){
+void ExecutionEngine::java_lreturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser long
 	Valor returnValor = topoDaFrame->desempilhaOperando();
 	
 	if (returnValor.tipo != TipoDado::LONG)
-		throw new Erro("Esperado tipo inteiro em i_lreturn");
+		throw new Erro("Esperado tipo inteiro em java_lreturn");
 
 	
 	runtimeDataArea->desempilharFrame();
@@ -4122,7 +4122,7 @@ void ExecutionEngine::i_lreturn(){
 	novoTopDoFrame->empilharOperando(returnValor);
 
 }
-void ExecutionEngine::i_freturn(){
+void ExecutionEngine::java_freturn(){
 
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser float
@@ -4136,7 +4136,7 @@ void ExecutionEngine::i_freturn(){
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
 }
-void ExecutionEngine::i_dreturn(){
+void ExecutionEngine::java_dreturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser double
 	Valor returnValor = topoDaFrame->desempilhaOperando();
@@ -4154,7 +4154,7 @@ void ExecutionEngine::i_dreturn(){
 	novoTopDoFrame->empilharOperando(padd);
 	novoTopDoFrame->empilharOperando(returnValor);
 }
-void ExecutionEngine::i_areturn(){
+void ExecutionEngine::java_areturn(){
 	Frame *topoDaFrame = runtimeDataArea->topoPilha();
 	//valor deve ser reference
 	Valor returnValor = topoDaFrame->desempilhaOperando();
@@ -4167,7 +4167,7 @@ void ExecutionEngine::i_areturn(){
 	Frame *novoTopDoFrame = runtimeDataArea->topoPilha();
 	novoTopDoFrame->empilharOperando(returnValor);
 }
-void ExecutionEngine::i_return(){
+void ExecutionEngine::java_return(){
 	//usa no mainvazia
 	runtimeDataArea->desempilharFrame();
 
@@ -4178,17 +4178,17 @@ get a static field value of a class, where the 		*
 field is identified by field reference in the 		*
 constant pool index (indexbyte1 << 8 + indexbyte2)	*
 *	*	*	*	*	*	*	*	*	*	*	*	*	*/
-void ExecutionEngine::i_getstatic() {
+void ExecutionEngine::java_getstatic() {
 	//usa no helloworld
 	
 	#ifdef DEBUG_EE
-	cout<< "ExecutionEngine::i_getstatic" << endl;
+	cout<< "ExecutionEngine::java_getstatic" << endl;
 	#endif
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic1" << endl;
+	cout<< "ExecutionEngine::java_getstatic1" << endl;
 	#endif
 	
 	vector<cp_info*> constantPool;
@@ -4199,13 +4199,13 @@ void ExecutionEngine::i_getstatic() {
 	constantPool = classe->getConstantPool();
 	
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic2" << endl;
+	cout<< "ExecutionEngine::java_getstatic2" << endl;
 	#endif
 	
 	uint8_t *code = toppilha->getCode();
 	
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic3" << endl;
+	cout<< "ExecutionEngine::java_getstatic3" << endl;
 	#endif
 
 	//argumentos da instrucao
@@ -4215,33 +4215,33 @@ void ExecutionEngine::i_getstatic() {
 	uint16_t campoIndex = (byte1 << 8) | byte2;
 	
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic4" << endl;
+	cout<< "ExecutionEngine::java_getstatic4" << endl;
 	#endif
 
 	//consulta a field. percorre os fields do java
 	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
 
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic5" << endl;
+	cout<< "ExecutionEngine::java_getstatic5" << endl;
 	#endif
 	
 	string className = classe->getUTF8(fieldRef->GetClassIndex());
 	
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic6" << endl;
+	cout<< "ExecutionEngine::java_getstatic6" << endl;
 	#endif
 	
 	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
 	
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic7" << endl;
+	cout<< "ExecutionEngine::java_getstatic7" << endl;
 	#endif
 	
 	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex()); //pega o nome da field ou campo
 	string campoDescricao = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex()); //pega o field descriptor
 
 	#ifdef DEBUG_EE_GET_STATIC
-	cout<< "ExecutionEngine::i_getstatic8" << endl;
+	cout<< "ExecutionEngine::java_getstatic8" << endl;
 	#endif
 	
 	if (campoDescricao == "Ljava/io/PrintStream;" && className == "java/lang/System" ) {
@@ -4312,7 +4312,7 @@ void ExecutionEngine::i_getstatic() {
 
 }
 
-void ExecutionEngine::i_putstatic()
+void ExecutionEngine::java_putstatic()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
@@ -4324,14 +4324,14 @@ void ExecutionEngine::i_putstatic()
 	//verificando se estou acessando um elemento do tipo esperado na constant pool
 	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
 	{
-		throw new Erro("Esperado CONSTANT_Fieldref na constant pool", "ExecutionEngine", "i_putstatic");
+		throw new Erro("Esperado CONSTANT_Fieldref na constant pool", "ExecutionEngine", "java_putstatic");
 	}
 	//sendo válido, acesso o mesmo
 	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool()[indiceDoField-1];
 	//verificando se estou acessando um elemento do tipo esperado na constant pool
 	if(classe->getConstantPool()[cpCampo->GetNameAndTypeIndex()-1]->GetTag() != CONSTANT_NameAndType)
 	{
-		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "i_putstatic");
+		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "java_putstatic");
 	}
 	//sendo válido, acesso o mesmo
 	CONSTANT_NameAndType_info *assinaturaDoCampo= (CONSTANT_NameAndType_info*)classe->getConstantPool()[cpCampo->GetNameAndTypeIndex()-1];
@@ -4405,7 +4405,7 @@ void ExecutionEngine::i_putstatic()
 	classeAlvo->ColocarValorNoField(nomeDoField, campo);
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_getfield()
+void ExecutionEngine::java_getfield()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
@@ -4417,12 +4417,12 @@ void ExecutionEngine::i_getfield()
 	
 	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
 	{
-		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "i_getfield");
+		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "java_getfield");
 	}
 	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool().at(indiceDoField-1);
 	if(classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
 	{
-		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "i_getfield");
+		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "java_getfield");
 	}
 	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*)classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1);
 	
@@ -4433,11 +4433,11 @@ void ExecutionEngine::i_getfield()
 	Valor valorInstancia = topoDaPilhaDeFrames->desempilhaOperando();
 	if(valorInstancia.tipo != REFERENCIA)
 	{
-		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_getfield");
+		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "java_getfield");
 	}
 	if(((Objeto*)valorInstancia.dado)->ObterTipoObjeto() != INSTANCIA)
 	{
-		throw new Erro("Esperado instancia", "ExecutionEngine", "i_getfield");
+		throw new Erro("Esperado instancia", "ExecutionEngine", "java_getfield");
 	}
 	
 	ObjetoInstancia *instancia= (ObjetoInstancia*)valorInstancia.dado;
@@ -4462,7 +4462,7 @@ void ExecutionEngine::i_getfield()
 	topoDaPilhaDeFrames-> incrementaPC(3);
 }
 
-void ExecutionEngine::i_putfield()
+void ExecutionEngine::java_putfield()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	JavaClass *classe= topoDaPilhaDeFrames->ObterJavaClass();
@@ -4474,12 +4474,12 @@ void ExecutionEngine::i_putfield()
 	
 	if(classe->getConstantPool()[indiceDoField-1]->GetTag() != CONSTANT_Fieldref)
 	{
-		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "i_putfield");
+		throw new Erro("Esperado CONSTANT_Fieldref", "ExecutionEngine", "java_putfield");
 	}
 	CONSTANT_Fieldref_info *cpCampo= (CONSTANT_Fieldref_info*)classe->getConstantPool().at(indiceDoField-1);
 	if(classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
 	{
-		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "i_putfield");
+		throw new Erro("Esperado CONSTANT_NameAndType", "ExecutionEngine", "java_putfield");
 	}
 	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*)classe->getConstantPool().at(cpCampo->GetNameAndTypeIndex()-1);
 	
@@ -4496,11 +4496,11 @@ void ExecutionEngine::i_putfield()
 	Valor valorInstancia= topoDaPilhaDeFrames->desempilhaOperando();
 	if(valorInstancia.tipo != REFERENCIA)
 	{
-		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "i_putfield");
+		throw new Erro("Esperado valor do tipo referencia", "ExecutionEngine", "java_putfield");
 	}
 	if(((Objeto*)valorInstancia.dado)->ObterTipoObjeto() != INSTANCIA)
 	{
-		throw new Erro("Esperado instancia", "ExecutionEngine", "i_putfield");
+		throw new Erro("Esperado instancia", "ExecutionEngine", "java_putfield");
 	}
 	ObjetoInstancia *instancia= (ObjetoInstancia*)valorInstancia.dado;
 
@@ -4523,51 +4523,51 @@ void ExecutionEngine::i_putfield()
 
 }//fim metodo
 
-void ExecutionEngine::i_invokevirtual()
+void ExecutionEngine::java_invokevirtual()
 {
 	#ifdef DEBUG_EE_INVOKEVIRTUAL
-		cout<< "ExecutionEngine::i_invokevirtual()" << endl;
+		cout<< "ExecutionEngine::java_invokevirtual()" << endl;
 	#endif
 		Frame *topoDaPilha= runtimeDataArea->topoPilha();
 	#ifdef DEBUG_EE_INVOKEVIRTUAL
-		cout<< "ExecutionEngine::i_invokevirtual()1" << endl;
+		cout<< "ExecutionEngine::java_invokevirtual()1" << endl;
 	#endif
 		stack<Valor> pilhaDeOperandosDeReserva= topoDaPilha->retornaPilhaOperandos();
 	#ifdef DEBUG_EE_INVOKEVIRTUAL
-		cout<< "ExecutionEngine::i_invokevirtual()2" << endl;
+		cout<< "ExecutionEngine::java_invokevirtual()2" << endl;
 	#endif
 		uint8_t *instrucoes=topoDaPilha->getCode();
 	#ifdef DEBUG_EE_INVOKEVIRTUAL
-		cout<< "ExecutionEngine::i_invokevirtual()3" << endl;
+		cout<< "ExecutionEngine::java_invokevirtual()3" << endl;
 	#endif
 	uint16_t indiceMetodo;
 	memcpy(&indiceMetodo, &(instrucoes[1]), 2);
 	indiceMetodo= InverterEndianess<uint16_t>(indiceMetodo);
 	JavaClass *javaClass= topoDaPilha->ObterJavaClass();
 	#ifdef DEBUG_EE_INVOKEVIRTUAL
-		cout<< "ExecutionEngine::i_invokevirtual()4" << endl;
+		cout<< "ExecutionEngine::java_invokevirtual()4" << endl;
 	#endif
 	if(javaClass->getConstantPool().at(indiceMetodo-1)->GetTag() != CONSTANT_Methodref)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokevirtual");
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "java_invokevirtual");
 	}
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()5" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()5" << endl;
 #endif
 	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)javaClass->getConstantPool().at(indiceMetodo-1);
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()6" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()6" << endl;
 #endif
 	string nomeDaClasse= javaClass->getUTF8(metodo->GetClassIndex());
 	if(javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "i_invokevirtual");
+		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "java_invokevirtual");
 	}
 	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) javaClass->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
 	string nomeDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetNameIndex());
 	string descritorDoMetodo= javaClass->getUTF8(assinaturaDoMetodo->GetDescriptorIndex());
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()7" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()7" << endl;
 #endif
 	
 	if(nomeDaClasse.find("java/") != string::npos)
@@ -4577,11 +4577,11 @@ void ExecutionEngine::i_invokevirtual()
 			if(descritorDoMetodo != "()V")
 			{
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()8" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()8" << endl;
 #endif
 				Valor valorQueSeraImpresso= topoDaPilha->desempilhaOperando();
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()9" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()9" << endl;
 #endif
 				switch(valorQueSeraImpresso.tipo)
 				{
@@ -4641,22 +4641,22 @@ void ExecutionEngine::i_invokevirtual()
 					case(REFERENCIA):
 					{
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()10" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()10" << endl;
 #endif
 						if(((Objeto*)valorQueSeraImpresso.dado)->ObterTipoObjeto() != TipoObjeto::STRING)
 						{
 							throw new Erro("String esperado quando deve imprimir referencias", "ExecutionEngine", "invokevirtual");
 						}
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()11" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()11" << endl;
 #endif
 						ObjetoString *stringPtr;
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()12" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()12" << endl;
 #endif
 						memcpy(&stringPtr, &(valorQueSeraImpresso.dado), sizeof(ObjetoString *));
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()13" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()13" << endl;
 #endif
 						printf("%s", stringPtr->ObterString().c_str());
 						break;
@@ -4676,7 +4676,7 @@ void ExecutionEngine::i_invokevirtual()
 					}
 				}
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()14" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()14" << endl;
 #endif
 
 			}
@@ -4691,11 +4691,11 @@ void ExecutionEngine::i_invokevirtual()
 					Valor string1= topoDaPilha->desempilhaOperando();
 					if(string1.tipo != REFERENCIA)
 					{
-						throw new Erro("Esperado valor do tipo referencia para pegar comprimento da string", "ExecutionEngine", "i_invokevirtual");
+						throw new Erro("Esperado valor do tipo referencia para pegar comprimento da string", "ExecutionEngine", "java_invokevirtual");
 					}
 					if(((Objeto*)string1.dado)->ObterTipoObjeto() == STRING)
 					{
-						throw new Erro("Esperado objeto do tipo string para calcular", "ExecutionEngine", "i_invokevirtual");
+						throw new Erro("Esperado objeto do tipo string para calcular", "ExecutionEngine", "java_invokevirtual");
 					}
 					ObjetoString *stringObj= (ObjetoString *)string1.dado;
 					Valor tamanhoDaString;
@@ -4708,20 +4708,20 @@ void ExecutionEngine::i_invokevirtual()
 					Valor string1 = topoDaPilha->desempilhaOperando();
 					if(string1.tipo != REFERENCIA)
 					{
-						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
+						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "java_invokevirtual");
 					}
 					if(((Objeto*)string1.dado)->ObterTipoObjeto() == STRING)
 					{
-						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "i_invokevirtual");
+						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na primeira string)", "ExecutionEngine", "java_invokevirtual");
 					}
 					Valor string2 = topoDaPilha->desempilhaOperando();
 					if(string2.tipo != REFERENCIA)
 					{
-						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na  string)", "ExecutionEngine", "i_invokevirtual");
+						throw new Erro("Esperado valor do tipo referencia para analisar igualdade de strings(erro na  string)", "ExecutionEngine", "java_invokevirtual");
 					}
 					if(((Objeto*)string2.dado)->ObterTipoObjeto() == STRING)
 					{
-						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na segunda string string)", "ExecutionEngine", "i_invokevirtual");
+						throw new Erro("Esperado objeto do tipo string  para analisar igualdade de strings(erro na segunda string string)", "ExecutionEngine", "java_invokevirtual");
 					}
 					//se chegou ate aqui é pq os operandos são válidos
 					string stringReal1= ((ObjetoString*)string1.dado)->ObterString();
@@ -4754,7 +4754,7 @@ void ExecutionEngine::i_invokevirtual()
 	else
 	{
 #ifdef DEBUG_EE_INVOKEVIRTUAL
-	cout<< "ExecutionEngine::i_invokevirtual()15" << endl;
+	cout<< "ExecutionEngine::java_invokevirtual()15" << endl;
 #endif
 		uint16_t numeroDeargumentos=0;
 		for(int cont =1; descritorDoMetodo[cont] != ')'; cont++)//pula o abre parenteses
@@ -4823,7 +4823,7 @@ void ExecutionEngine::i_invokevirtual()
 	topoDaPilha->incrementaPC(3);
 }
 
-void ExecutionEngine::i_invokespecial(){ 
+void ExecutionEngine::java_invokespecial(){ 
 	//usa no mainvazia
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	
@@ -4939,7 +4939,7 @@ void ExecutionEngine::i_invokespecial(){
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
 
-void ExecutionEngine::i_invokestatic(){
+void ExecutionEngine::java_invokestatic(){
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 
 	stack<Valor> pilhaDeOperandosDeBackUp= topoDaPilhaDeFrames->retornaPilhaOperandos();
@@ -4952,7 +4952,7 @@ void ExecutionEngine::i_invokestatic(){
 	
 	if(classe->getConstantPool()[indiceDoMetodo-1]->GetTag() != CONSTANT_Methodref)
 	{
-		throw new Erro("Esperado CONSTANT_Methodref na constant pool", "ExecutionEngine", "i_invokestatic");
+		throw new Erro("Esperado CONSTANT_Methodref na constant pool", "ExecutionEngine", "java_invokestatic");
 	}
 	
 	CONSTANT_Methodref_info* cpMetodo= (CONSTANT_Methodref_info*)classe->getConstantPool()[indiceDoMetodo-1];
@@ -4960,7 +4960,7 @@ void ExecutionEngine::i_invokestatic(){
 	
 	if(classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()-1]->GetTag() != CONSTANT_NameAndType)
 	{
-		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "i_invokestatic");
+		throw new Erro("Esperado CONSTANT_NameAndType na constant pool", "ExecutionEngine", "java_invokestatic");
 	}
 	
 	CONSTANT_NameAndType_info *cpAssinatura= (CONSTANT_NameAndType_info*) classe->getConstantPool()[cpMetodo->GetNameAndTypeIndex()-1];
@@ -5037,7 +5037,7 @@ void ExecutionEngine::i_invokestatic(){
 	}
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_invokeinterface()
+void ExecutionEngine::java_invokeinterface()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 
@@ -5051,19 +5051,19 @@ void ExecutionEngine::i_invokeinterface()
 	
 	if(classe->getConstantPool().at(indiceDoMetodo-1)->GetTag() != CONSTANT_Methodref)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_invokeinterface");
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "java_invokeinterface");
 	}
 #ifdef DEBUG_EE
-	cout<< "ExecutionEngine::i_invokeinterface()5" << endl;
+	cout<< "ExecutionEngine::java_invokeinterface()5" << endl;
 #endif
 	CONSTANT_Methodref_info *metodo= (CONSTANT_Methodref_info *)classe->getConstantPool().at(indiceDoMetodo-1);
 #ifdef DEBUG_EE
-	cout<< "ExecutionEngine::i_invokeinterface()6" << endl;
+	cout<< "ExecutionEngine::java_invokeinterface()6" << endl;
 #endif
 	string nomeDaClasse= classe->getUTF8(metodo->GetClassIndex());
 	if(classe->getConstantPool().at(metodo->GetNameAndTypeIndex()-1)->GetTag() != CONSTANT_NameAndType)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "i_invokeinterface");
+		throw new Erro("Esperado encontrar um CONSTANT_NameAndType", "ExecutionEngine", "java_invokeinterface");
 	}
 	CONSTANT_NameAndType_info *assinaturaDoMetodo= (CONSTANT_NameAndType_info*) classe->getConstantPool().at(metodo->GetNameAndTypeIndex()-1);
 	string nomeDoMetodo= classe->getUTF8(assinaturaDoMetodo->GetNameIndex());
@@ -5116,13 +5116,13 @@ void ExecutionEngine::i_invokeinterface()
 		Valor valorQueArmazenaObjeto= topoDaPilhaDeFrames->desempilhaOperando();
 		if(valorQueArmazenaObjeto.tipo != REFERENCIA)
 		{
-			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "i_invokeinterface");
+			throw new Erro("Esperava um valor do tipo referencia", "EnxecutionEngine", "java_invokeinterface");
 		}
 		argumentos.insert(argumentos.begin(), valorQueArmazenaObjeto);
 		Objeto *obj= (Objeto*) valorQueArmazenaObjeto.dado;
 		if(obj->ObterTipoObjeto() != INSTANCIA)
 		{
-			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "i_invokeinterface");
+			throw new Erro("Esperava-se um objeto do tipo instancia", "ExecutionEngine", "java_invokeinterface");
 		}
 		ObjetoInstancia *instancia= (ObjetoInstancia*) valorQueArmazenaObjeto.dado;
 		JavaClass *classeAlvo= runtimeDataArea->CarregarClasse(nomeDaClasse);
@@ -5144,12 +5144,12 @@ void ExecutionEngine::i_invokeinterface()
 	}
 	else
 	{
-		throw new Erro("Tentaram chamar um metodo de interface nao implementado", "ExecutionEngine", "i_invokeinterface");
+		throw new Erro("Tentaram chamar um metodo de interface nao implementado", "ExecutionEngine", "java_invokeinterface");
 	}
 	topoDaPilhaDeFrames->incrementaPC(5);
 
 }
-void ExecutionEngine::i_new(){
+void ExecutionEngine::java_new(){
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	JavaClass *classe = topoDaPilhaDeFrames->ObterJavaClass();
 	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
@@ -5160,7 +5160,7 @@ void ExecutionEngine::i_new(){
 	
 	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "i_new");
+		throw new Erro("Esperado encontrar um CONSTANT_Methodref", "ExecutionEngine", "java_new");
 	}
 	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
 	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
@@ -5182,7 +5182,7 @@ void ExecutionEngine::i_new(){
 	topoDaPilhaDeFrames->empilharOperando(referenciaProObjeto);
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
-void ExecutionEngine::i_newarray()
+void ExecutionEngine::java_newarray()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
@@ -5190,7 +5190,7 @@ void ExecutionEngine::i_newarray()
 	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
 	if(tamanhoDoFuturoArray.tipo != INTEIRO)
 	{
-		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_newarray");
+		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "java_newarray");
 	}
 	ObjetoArray *arrayQueSeraCriado;
 	int32_t temp;
@@ -5267,7 +5267,7 @@ void ExecutionEngine::i_newarray()
 	topoDaPilhaDeFrames->empilharOperando(referenciaProArray);
 	topoDaPilhaDeFrames->incrementaPC(2);
 }
-void ExecutionEngine::i_anewarray()
+void ExecutionEngine::java_anewarray()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
@@ -5276,7 +5276,7 @@ void ExecutionEngine::i_anewarray()
 	Valor tamanhoDoFuturoArray= topoDaPilhaDeFrames->desempilhaOperando();
 	if(tamanhoDoFuturoArray.tipo != INTEIRO)
 	{
-		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "i_anewarray");
+		throw new Erro("Esperado encontrar um valor do tipo int", "ExecutionEngine", "java_anewarray");
 	}
 	if(tamanhoDoFuturoArray.dado < 0)
 	{
@@ -5289,7 +5289,7 @@ void ExecutionEngine::i_anewarray()
 	
 	if(classe->getConstantPool().at(indiceDaClasse-1)->GetTag() != CONSTANT_Class)
 	{
-		throw new Erro("Esperado encontrar um CONSTANT_Class", "ExecutionEngine", "i_anewarray");
+		throw new Erro("Esperado encontrar um CONSTANT_Class", "ExecutionEngine", "java_anewarray");
 	}
 	CONSTANT_Class_info *cpClasse= (CONSTANT_Class_info*)classe->getConstantPool().at(indiceDaClasse-1);
 	string nomeDaClasse= classe->getUTF8(cpClasse->GetNameIndex());
@@ -5329,7 +5329,7 @@ void ExecutionEngine::i_anewarray()
 	
 }
 
-void ExecutionEngine::i_arraylength(){
+void ExecutionEngine::java_arraylength(){
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -5347,10 +5347,10 @@ void ExecutionEngine::i_arraylength(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_athrow(){
+void ExecutionEngine::java_athrow(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_checkcast()
+void ExecutionEngine::java_checkcast()
 {
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 	uint8_t *instrucoes= topoDaPilhaDeFrames->getCode();
@@ -5362,7 +5362,7 @@ void ExecutionEngine::i_checkcast()
 	
 	if(classe->getConstantPool().at(indiceDaCp-1)->GetTag() != CONSTANT_Class)
 	{
-		throw new Erro("Esperado CONSTANT_Class", "ExecutionEngine", "i_checkcast");
+		throw new Erro("Esperado CONSTANT_Class", "ExecutionEngine", "java_checkcast");
 	}
 	
 	string nomeDaClasse= classe->getUTF8(indiceDaCp);
@@ -5401,7 +5401,7 @@ void ExecutionEngine::i_checkcast()
 				{//se tiver dando dau(entrando em loop) troque essa linha
 					string nomeDaSuperClasse= classeTemp->getUTF8(classeTemp->ObterEstaClasse());
 #ifdef MINI_DEBUG
-cout<< "se estiver entrando em loop aqui no i_checkcast faça a substituicao"<< endl;
+cout<< "se estiver entrando em loop aqui no java_checkcast faça a substituicao"<< endl;
 #endif
 					//por essa
 //					string nomeDaSuperClasse= classeTemp->getUTF8(classeTemp->ObterSuperClasse());
@@ -5442,7 +5442,7 @@ cout<< "se estiver entrando em loop aqui no i_checkcast faça a substituicao"<< 
 	topoDaPilhaDeFrames->incrementaPC(3);
 }
 
-void ExecutionEngine::i_instanceof(){
+void ExecutionEngine::java_instanceof(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 
@@ -5511,19 +5511,19 @@ void ExecutionEngine::i_instanceof(){
 
 }
 
-void ExecutionEngine::i_monitorenter(){
+void ExecutionEngine::java_monitorenter(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_monitorexit(){
+void ExecutionEngine::java_monitorexit(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	topo->incrementaPC(1);
 
 }
-void ExecutionEngine::i_wide(){
+void ExecutionEngine::java_wide(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 	isWide = true;
@@ -5531,9 +5531,9 @@ void ExecutionEngine::i_wide(){
 
 }
 
-void ExecutionEngine::i_multianewarray(){
+void ExecutionEngine::java_multianewarray(){
 
-	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
+	cout<<"Consertar ExecutionEngine::java_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = topo->ObterJavaClass()->getConstantPool();
 
@@ -5610,7 +5610,7 @@ void ExecutionEngine::i_multianewarray(){
 
 }
  
-void ExecutionEngine::i_ifnull(){
+void ExecutionEngine::java_ifnull(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 
@@ -5632,7 +5632,7 @@ void ExecutionEngine::i_ifnull(){
 	}
 }
 
-void ExecutionEngine::i_ifnonnull(){
+void ExecutionEngine::java_ifnonnull(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 
@@ -5653,7 +5653,7 @@ void ExecutionEngine::i_ifnonnull(){
 
 }
 
-void ExecutionEngine::i_goto_w(){
+void ExecutionEngine::java_goto_w(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 
@@ -5668,7 +5668,7 @@ void ExecutionEngine::i_goto_w(){
 
 }
 
-void ExecutionEngine::i_jsr_w(){
+void ExecutionEngine::java_jsr_w(){
 
 	Frame *topo = runtimeDataArea->topoPilha();
 
@@ -5695,45 +5695,45 @@ void ExecutionEngine::StoreValor(Valor val)
 
 	Frame *topoDaPilhaDeFrames= runtimeDataArea->topoPilha();
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 0 \t indice = " << val.dado << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
+cout << "ExecutionEngine::java_StoreValor 0 \t indice = " << val.dado << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
 	Valor valorDaPilha= topoDaPilhaDeFrames->desempilhaOperando();
 #ifdef DEBUG_EE_STORE_VALOR
-cout << "ExecutionEngine::i_StoreValor 1" << endl;
+cout << "ExecutionEngine::java_StoreValor 1" << endl;
 cout << ObterStringTipo(valorDaPilha.tipo) << endl;
 #endif
 
 	if(valorDaPilha.tipo != val.tipo)
 	{
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 2" << endl;
+cout << "ExecutionEngine::java_StoreValor 2" << endl;
 #endif
 		string errMsg= "Tentativa de store de um valor com tipo incorreto.\t";
 		errMsg+= "Esperado: ";
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 3" << endl;
+cout << "ExecutionEngine::java_StoreValor 3" << endl;
 #endif
 		errMsg+= ObterStringTipo(val.tipo);
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 4" << endl;
+cout << "ExecutionEngine::java_StoreValor 4" << endl;
 #endif
 		errMsg+= "\tFornecido: ";
 		errMsg+= ObterStringTipo(valorDaPilha.tipo);
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 5" << endl;
+cout << "ExecutionEngine::java_StoreValor 5" << endl;
 #endif
 //		cerr<< errMsg;
 		throw new Erro(errMsg, "ExecutionEngine", "StoreValor");
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 6" << endl;
+cout << "ExecutionEngine::java_StoreValor 6" << endl;
 #endif
 	}
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 7" << endl;
+cout << "ExecutionEngine::java_StoreValor 7" << endl;
 #endif
 	topoDaPilhaDeFrames->mudarVariavelLocal(valorDaPilha, val.dado);
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::i_StoreValor 8" << endl;
+cout << "ExecutionEngine::java_StoreValor 8" << endl;
 #endif
 
 }
