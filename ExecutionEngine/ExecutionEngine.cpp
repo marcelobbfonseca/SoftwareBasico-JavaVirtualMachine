@@ -4273,29 +4273,6 @@ void ExecutionEngine::java_getstatic() {
 
 	Valor valorStatico = classRuntime->getValorDoField(campoName);
 	
-	//bolean, byte, short e int sao empilhados como int. long e double empilham o padding antes
-/*	switch (valorStatico.tipo) {
-		case TipoDado::BOOLEANO:
-		case TipoDado::BYTE:
-		case TipoDado::SHORT:
-		case TipoDado::INTEIRO:
-
-			valorStatico.tipo = TipoDado::INTEIRO;
-			break;
-
-		case TipoDado::DOUBLE:
-		case TipoDado::LONG:
-
-			Valor preenchimento;
-			preenchimento.tipo = PREENCHIMENTO;
-			toppilha->empilharOperando(preenchimento);
-			break;
-
-		default://se for reference?
-			cerr << "deu ruim" << endl;
-			exit(0);
-	}//fim switch valor estatico
-*/
 
 	if(valorStatico.tipo == DOUBLE || valorStatico.tipo == LONG)
 	{
@@ -4586,6 +4563,7 @@ void ExecutionEngine::java_invokevirtual()
 						printf("%s", valorQueSeraImpresso.dado != 0 ? "true" : "true");
 						break;
 					}
+					case(CHAR):
 					case(BYTE):
 					{
 						int8_t aux;
