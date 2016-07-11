@@ -28,6 +28,7 @@
 	#endif
 #endif
 
+#define DEBUG_LLOAD_2
 #define DEBUG_EE
 //#define DEBUG_EE_GET_STATIC
 //#define DEBUG_EE_PLAY
@@ -1017,20 +1018,32 @@ void ExecutionEngine::java_lload_1(){
 void ExecutionEngine::java_lload_2(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
-	Valor valor = toppilha->getValorVariavelLocal(1);
+	Valor valor = toppilha->getValorVariavelLocal(3);
+#ifdef DEBUG_LLOAD_2
+	cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
+#endif
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
 		cout << "Valor recebido: " << ObterStringTipo(valor.tipo) << endl;
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_2");
 
 	}
+#ifdef DEBUG_LLOAD_2
+	cout<< "Empilhando " << ObterStringTipo(valor.tipo) << endl;
+#endif
 	toppilha->empilharOperando(valor);
 
 	valor = toppilha->getValorVariavelLocal(2);
+#ifdef DEBUG_LLOAD_2
+	cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
+#endif
 	if(!(valor.tipo == TipoDado::LONG)){
 	
 			throw new Erro("O tipo do dado não é um LONG", "ExecutionEngine", "java_lload_2");
 
 	}
+#ifdef DEBUG_LLOAD_2
+	cout<< "Empilhando " << ObterStringTipo(valor.tipo) << endl;
+#endif
 	toppilha->empilharOperando(valor);
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
@@ -1522,11 +1535,11 @@ void ExecutionEngine::java_lstore(){
 
 	Frame *topoDaPilhaDeFrames = runtimeDataArea->topoPilha();
 	#ifdef DEBUG_EE
-	cout << "ExecutionEngine::java_lstore 0 \t  "<< " \tvalor PC=  "<< topoDaPilhaDeFrames->getPC() << endl;
+	cout << "ExecutionEngine::java_lstore \t  "<< " \tvalor PC=  "<< topoDaPilhaDeFrames->getPC() << endl;
 	#endif
 
 	uint8_t *instrucoes = topoDaPilhaDeFrames->getCode();
-	int16_t indice;
+	uint16_t indice;
 	Valor val;
 	val.tipo = TipoDado::LONG;
 	topoDaPilhaDeFrames->getCode();//dando pop do preenchimento
@@ -1534,9 +1547,9 @@ void ExecutionEngine::java_lstore(){
 	{
 		memcpy(&indice, &(instrucoes[1]), 2);
 		indice= InverterEndianess<uint16_t>(indice);
-		val.dado= (int64_t)indice;
+		val.dado= (uint64_t)indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 0 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
+cout << "ExecutionEngine::java_lstore 1 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
@@ -1548,10 +1561,10 @@ cout << "ExecutionEngine::java_lstore 0 \t indice = " << indice << " \ttamanhpil
 cout << "ExecutionEngine::java_lstore 1" << endl;
 #endif
 		//aux para expansao de tipo
-		int8_t aux=0;
+		uint8_t aux=0;
 		memcpy(&aux, &(instrucoes[1]), 1);
 		indice= aux;
-		val.dado= indice;
+		val.dado= (uint64_t)indice;
 #ifdef DEBUG_EE
 cout << "ExecutionEngine::java_lstore 2 \tval.dado = " << val.dado << endl;
 #endif
@@ -5683,7 +5696,7 @@ cout << "ExecutionEngine::java_StoreValor 0 \t indice = " << val.dado << " \ttam
 	Valor valorDaPilha= topoDaPilhaDeFrames->desempilhaOperando();
 #ifdef DEBUG_EE_STORE_VALOR
 cout << "ExecutionEngine::java_StoreValor 1" << endl;
-cout << ObterStringTipo(valorDaPilha.tipo) << endl;
+cout << "Desempilhando " << ObterStringTipo(valorDaPilha.tipo) << endl;
 #endif
 
 	if(valorDaPilha.tipo != val.tipo)
