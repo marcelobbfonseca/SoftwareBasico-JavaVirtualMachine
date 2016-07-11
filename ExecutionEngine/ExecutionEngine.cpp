@@ -105,6 +105,7 @@ void ExecutionEngine::Play(string classComMain)
 #endif
 
 	do
+	
 	{
 #ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->ObterTamanhoDaPilhaDeFrames() << endl;
@@ -357,7 +358,7 @@ void ExecutionEngine::i_nop(){
 	
 }
 
-void ExecutionEngine::i_aconst_null(){
+void ExecutionEngine::i_aconst_null(){ //Push the null object reference onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	Valor valor;
 	valor.tipo = TipoDado::REFERENCE;
@@ -365,7 +366,7 @@ void ExecutionEngine::i_aconst_null(){
 	toppilha->empilharOperando(valor);
 }
 
-void ExecutionEngine::i_iconst_m1(){
+void ExecutionEngine::i_iconst_m1(){ // Push the int constant i onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -380,7 +381,7 @@ void ExecutionEngine::i_iconst_m1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_0(){
+void ExecutionEngine::i_iconst_0(){ //Push the int constant 0 onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -391,7 +392,7 @@ void ExecutionEngine::i_iconst_0(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_1(){
+void ExecutionEngine::i_iconst_1(){  //Push the int constant 1 onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -403,7 +404,7 @@ void ExecutionEngine::i_iconst_1(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_iconst_2(){
+void ExecutionEngine::i_iconst_2(){ //Push the int constant 2 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -413,7 +414,7 @@ void ExecutionEngine::i_iconst_2(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_3(){
+void ExecutionEngine::i_iconst_3(){ //Push the int constant 3 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -423,7 +424,7 @@ void ExecutionEngine::i_iconst_3(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_4(){
+void ExecutionEngine::i_iconst_4(){ //Push the int constant 4 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -434,7 +435,7 @@ void ExecutionEngine::i_iconst_4(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_iconst_5(){
+void ExecutionEngine::i_iconst_5(){//Push the int constant 5 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -444,7 +445,7 @@ void ExecutionEngine::i_iconst_5(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lconst_0(){
+void ExecutionEngine::i_lconst_0(){ //Push the long constant 0 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -461,7 +462,7 @@ void ExecutionEngine::i_lconst_0(){
 
 
 }
-void ExecutionEngine::i_lconst_1(){
+void ExecutionEngine::i_lconst_1(){//Push the long constant 1 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -477,7 +478,7 @@ void ExecutionEngine::i_lconst_1(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_0(){
+void ExecutionEngine::i_fconst_0(){//Push the float constant 0 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -488,7 +489,7 @@ void ExecutionEngine::i_fconst_0(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_1(){
+void ExecutionEngine::i_fconst_1(){//Push the float constant 1 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -513,7 +514,7 @@ void ExecutionEngine::i_fconst_2(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_0(){
+void ExecutionEngine::i_dconst_0(){//Push the double constant 0 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -531,7 +532,7 @@ void ExecutionEngine::i_dconst_0(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_1(){
+void ExecutionEngine::i_dconst_1(){//Push the double constant 1 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -1351,7 +1352,7 @@ void ExecutionEngine::i_daload(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
 
-void ExecutionEngine::i_aaload(){
+void ExecutionEngine::i_aaload(){ //Load reference from array 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	ObjetoArray *array;
 	
@@ -1899,7 +1900,10 @@ void ExecutionEngine::i_iastore(){
 	if(referArr.tipo != TipoDado::REFERENCE){
 
 		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
-
+		
+	} 
+    else {
+		topo->incrementaPC(2);
 	}
 	if(!(((Objeto*)referArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 
@@ -2215,7 +2219,7 @@ void ExecutionEngine::i_bastore(){
 		valor.tipo = TipoDado::BOOLEAN;
 
 	} 
-	else {
+    else {
 
 		valor.dado = (uint8_t) valor.dado;
 		valor.tipo = TipoDado::BYTE;
@@ -2479,8 +2483,8 @@ void ExecutionEngine::i_dup2_x2(){
 
 }
 void ExecutionEngine::i_swap(){
-	
-	Frame *topo = runtimeDataArea->topoPilha();
+    
+    Frame *topo = runtimeDataArea->topoPilha();
 
 	Valor op_1 = topo->desempilhaOperando();
 	Valor op_2 = topo->desempilhaOperando();
@@ -2490,7 +2494,7 @@ void ExecutionEngine::i_swap(){
 		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
 						
 		}
-	if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
+    if(op_2.tipo == TipoDado::LONG || op_2.tipo == TipoDado::DOUBLE){
 
 		throw new Erro("o operador 1 não pode ser um long nem double", "ExecutionEngine", "i_swap");
 						
@@ -3156,20 +3160,20 @@ void ExecutionEngine::i_iinc(){ //testar
 	if (isWide) {
 		index = (code[1] << 8) | code[2];
 	} 
-	else {
+    else {
 		index = index + code[1];
 	}
 
 	Valor variavelLocal = toppilha->getValorVariavelLocal(index);
 
 	int32_t i;
-	if (isWide) {
-		uint16_t incremento = (code[3] << 8) | code[4];
-		i = (int32_t) (int16_t) incremento;
-	} else {
-		i = (int32_t) (int8_t) code[2];
-	}
-	variavelLocal.dado = variavelLocal.dado + i; 
+    if (isWide) {
+        uint16_t incremento = (code[3] << 8) | code[4];
+        i = (int32_t) (int16_t) incremento;
+    } else {
+        i = (int32_t) (int8_t) code[2];
+    }
+    variavelLocal.dado = variavelLocal.dado + i; 
 
 	toppilha->mudarVariavelLocal(variavelLocal, index);
 	
@@ -3414,6 +3418,7 @@ void ExecutionEngine::i_d2f(){
 	toppilha->empilharOperando(valor2);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
+//converte de inteiro para byte
 void ExecutionEngine::i_i2b(){
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
@@ -5517,8 +5522,8 @@ void ExecutionEngine::i_wide(){
 
 }
 
-void ExecutionEngine::i_multianewarray()
-{
+void ExecutionEngine::i_multianewarray(){
+
 	cout<<"Consertar ExecutionEngine::i_multianewarray" << endl;
 	Frame *topo = runtimeDataArea->topoPilha();
 	vector<cp_info*> constantPool = topo->ObterJavaClass()->getConstantPool();
