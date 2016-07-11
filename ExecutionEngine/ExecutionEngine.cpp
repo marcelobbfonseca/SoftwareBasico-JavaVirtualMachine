@@ -1902,9 +1902,6 @@ void ExecutionEngine::java_iastore(){
 		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "java_iastore");
 		
 	} 
-    else {
-		topo->incrementaPC(2);
-	}
 	if(!(((Objeto*)referArr.dado)->ObterTipoObjeto() == TipoObjeto::ARRAY)){
 
 		throw new Erro("objeto não é um array", "ExecutionEngine", "java_iastore");
@@ -2363,7 +2360,6 @@ void ExecutionEngine::java_pop2(){
 }
 void ExecutionEngine::java_dup(){
 	Frame *topoDoFrame = runtimeDataArea->topoPilha();
-
 	Valor valor = topoDoFrame->desempilhaOperando();
 	if ((valor.tipo == TipoDado::LONG) || (valor.tipo == TipoDado::DOUBLE))
 		throw new Erro("Esperado tipo diferente de long ou double em dup", "ExecutionEngine", "java_dup");
