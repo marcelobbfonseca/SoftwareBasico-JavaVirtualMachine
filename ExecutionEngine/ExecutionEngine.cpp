@@ -1536,7 +1536,7 @@ void ExecutionEngine::java_lstore(){
 		indice= InverterEndianess<uint16_t>(indice);
 		val.dado= (int64_t)indice;
 #ifdef DEBUG_EE
-cout << "ExecutionEngine::java_lstore 0 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
+cout << "ExecutionEngine::java_lstore 1 \t indice = " << indice << " \ttamanhpilha=  "<< topoDaPilhaDeFrames->tamanhoVetorVariaveis() << endl;
 #endif
 		StoreValor(val);
 		topoDaPilhaDeFrames->incrementaPC(3);
