@@ -1023,7 +1023,6 @@ void ExecutionEngine::java_lload_2(){
 	cout<< "Foi retirado do vetor de variaveis locais um" << ObterStringTipo(valor.tipo) << endl;
 #endif
 	 if(!(valor.tipo == TipoDado::PREENCHIMENTO)){
-		cout << "Valor recebido: " << ObterStringTipo(valor.tipo) << endl;
 		throw new Erro("O tipo do dado não é um pad", "ExecutionEngine", "java_lload_2");
 
 	}

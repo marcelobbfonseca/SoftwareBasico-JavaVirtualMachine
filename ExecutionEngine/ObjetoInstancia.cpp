@@ -1,5 +1,6 @@
 #include "ObjetoInstancia.hpp"
 #include <vector>
+#include <string.h>
 
 TipoObjeto ObjetoInstancia::ObterTipoObjeto(void)
 {
