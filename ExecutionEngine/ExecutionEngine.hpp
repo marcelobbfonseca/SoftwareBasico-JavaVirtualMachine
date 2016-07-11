@@ -166,16 +166,16 @@ class ExecutionEngine
 		void java_anewarray();
 		void java_arraylength();
 		void java_athrow();
-		void java_checkcast();
-		void java_instanceof();
-		void java_monitorenter();
-		void java_monitorexit();
-		void java_wide();
-		void java_multianewarray();
-		void java_ifnull();
-		void java_ifnonnull();
-		void java_goto_w();
-		void java_jsr_w();
+		void java_checkcast();//Checa se o objeto é do tipo informado
+		void java_instanceof();//Determina se um objeto é do tipo informado
+		void java_monitorenter();//na nossa implementação apenas incrementa pc
+		void java_monitorexit();//na nossa implementação apenas incrementa pc
+		void java_wide();//Retorna void de um método
+		void java_multianewarray();//Cria um array multidimensional
+		void java_ifnull();//Salta se o endereço é nulo
+		void java_ifnonnull();//Salta se o endereço é não nulo
+		void java_goto_w();//salta para endereço(sempre)
+		void java_jsr_w();//Salta para subrotina
 
 		//consts
 		void java_aconst_null();

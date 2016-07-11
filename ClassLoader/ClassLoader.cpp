@@ -14,7 +14,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 				caminho= caminho.substr(0, caminho.length()-1);
 			}
 		}
-		cout<<"-----------Caminho: " << caminho << "--------------------"<< endl;
+//		cout<<"-----------Caminho: " << caminho << "--------------------"<< endl;
 		primeiraVezQueCarrega= false;
 	}
 	else
@@ -27,7 +27,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	JavaClass *retorno;
 	try
 	{
-		cout<<"Arquivo que tentaremos abrir: " << nomeQueSeraUsado << endl;
+//		cout<<"Arquivo que tentaremos abrir: " << nomeQueSeraUsado << endl;
 		retorno= new JavaClass(nomeQueSeraUsado);
 		cout<<"Terminour de ler o arquivo!" << endl;
 		return retorno;
@@ -36,7 +36,7 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 	{
 		try
 		{
-		cout<<"Arquivo que tentaremos abrir: " << nomeClasse << endl;
+//		cout<<"Arquivo que tentaremos abrir: " << nomeClasse << endl;
 			retorno= new JavaClass(nomeClasse);
 			return retorno;
 		}

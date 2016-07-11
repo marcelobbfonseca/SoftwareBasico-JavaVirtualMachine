@@ -6,7 +6,7 @@
 #include<math.h>
 #include<stdio.h>
 
-#define DEBUG_CP_INFO
+//#define DEBUG_CP_INFO
 
 CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 {

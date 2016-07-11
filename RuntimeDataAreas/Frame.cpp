@@ -3,52 +3,6 @@
 
 //#define DEBUG
 //Construtor para métodos estáticos
-/*
-Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
-{
-#ifdef DEBUG
-	cout<< "Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)"<< endl;
-#endif
-	pc=0;
-	this->javaClass= javaClass;
-#ifdef DEBUG
-	cout<< "\t1"<< endl;
-#endif
-	objeto=NULL;
-#ifdef DEBUG
-	cout<< "\t2"<< endl;
-#endif
-	method_info *metodoAux = BuscarMetodo(javaClass, nomeMetodo, descritor, runtimeDataArea);
-#ifdef DEBUG
-	cout<< "\t3"<< endl;
-#endif
-	assert(metodoAux != NULL);
-#ifdef DEBUG
-	cout<< "\t4"<< endl;
-#endif
-	metodo= metodoAux;
-#ifdef DEBUG
-	cout<< "\t5"<< endl;
-#endif
-	if(!metodo->FlagAtivada(METHOD_STATIC))
-	{
-		string errMsg= "Tentado invocar método não estático \tclasse: ";
-		errMsg+= javaClass->getUTF8(javaClass->ObterEstaClasse());
-		errMsg+=  "\tmetodo: ";
-		errMsg+= nomeMetodo;
-		errMsg += " \tdescritor: ";
-		errMsg+= descritor;
-		throw new Erro(errMsg, "Frame", "Frame(JavaClass*, string, string, RuntimeDataArea*)");
-	}
-#ifdef DEBUG
-	cout<< "\t6"<< endl;
-#endif
-	pegarAtributos(javaClass);
-#ifdef DEBUG
-	cout<< "Retornando"<< endl;
-#endif
-}
-*/
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
 {
 #ifdef DEBUG
