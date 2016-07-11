@@ -48,7 +48,8 @@ JavaClass *RuntimeDataArea::CarregarClasse(const string &nomeDaClasse)
 			//pseudocodigo:
 			string clinit= "<clinit>";
 			string V= "()V";
-			Frame *novoFrame= new Frame(classes[nomeSemExtensao], clinit, V, this);
+			vector<Valor> argumentos;
+			Frame *novoFrame= new Frame(classes[nomeSemExtensao], clinit, V, argumentos, this);
 			empilharFrame(novoFrame);
 		}
 	}

@@ -2,26 +2,18 @@
 
 JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 {
-/*	//ler a porra toda e mandar pro DataArea
-	if(classesCarregadas.find(nomeClasse) == classesCarregadas.end()){
-
-		classesCarregadas[nomeClasse] = (new JavaClass(nomeClasse));
-
-	}
-	//gerar dados da classe retornar o DadosDaClasse
-	return classesCarregadas[nomeClasse];
-*/
 	static bool primeiraVezQueCarrega= true;
 	if(primeiraVezQueCarrega)
 	{
 		if(nomeClasse.find('\\') != string::npos || nomeClasse.find('/') != string::npos)
 		{
 			caminho= nomeClasse;
-			while(caminho[caminho.length()-1] == '/' || caminho[caminho.length()-1] == '\\')
+			while(caminho[caminho.length()-1] != '/' && caminho[caminho.length()-1] != '\\')
 			{
 				caminho= caminho.substr(0, caminho.length()-1);
 			}
 		}
+		cout<<"-----------Caminho: " << caminho << "--------------------"<< endl;
 		primeiraVezQueCarrega= false;
 	}
 	else

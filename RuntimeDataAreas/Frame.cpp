@@ -3,6 +3,7 @@
 
 //#define DEBUG
 //Construtor para métodos estáticos
+/*
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeDataArea *runtimeDataArea)
 {
 #ifdef DEBUG
@@ -47,7 +48,7 @@ Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, RuntimeD
 	cout<< "Retornando"<< endl;
 #endif
 }
-
+*/
 Frame::Frame(JavaClass *javaClass, string nomeMetodo, string descritor, vector<Valor> argumentos, RuntimeDataArea *runtimeDataArea)
 {
 #ifdef DEBUG

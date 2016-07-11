@@ -29,6 +29,8 @@
 #endif
 
 #define DEBUG_EE
+//#define DEBUG_EE_GET_STATIC
+//#define DEBUG_EE_PLAY
 //#define DEBUG_EE_INVOKEVIRTUAL
 #define DEBUG_EE_EMPILHAR_FRAME
 #define DEBUG_EE_STORE_VALOR
@@ -64,38 +66,51 @@ void ExecutionEngine::Play(string classComMain)
 		throw new Erro("RuntimeDataArea nao instanciado!", "ExecutionEngine", "Play");
 	}
 	JavaClass *javaClass= runtimeDataArea->CarregarClasse(classComMain);
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play2" << endl;
+#endif
+#ifdef DEBUG_EE
+	cout<< "Empilhando Main" << endl;
 #endif
 	if(javaClass->getMetodo("main","([Ljava/lang/String;)V") == NULL)
 	{
 		throw new Erro("Classe informada não contém main");
 	}
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play3" << endl;
 #endif
-	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", runtimeDataArea));
-#ifdef DEBUG_EE
+	vector<Valor>argumentos;
+	Valor argumentosDaLinhaDeComando;
+	argumentosDaLinhaDeComando.tipo= REFERENCE;
+	ObjetoArray *obj= new ObjetoArray(REFERENCE);
+	memcpy(&(argumentosDaLinhaDeComando.dado), &obj, sizeof(void*));
+	argumentos.push_back(argumentosDaLinhaDeComando);
+	
+	runtimeDataArea->empilharFrame(new Frame(javaClass, "main", "([Ljava/lang/String;)V", argumentos, runtimeDataArea));
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play4" << endl;
+#endif
+#ifdef DEBUG_EE
+	cout<< "Empilhando clinit da main" << endl;
 #endif
 	if(javaClass->getMetodo("<clinit>","()V") != NULL)
 	{
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play5" << endl;
 #endif
-		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", runtimeDataArea));
+		runtimeDataArea->empilharFrame(new Frame(javaClass, "<clinit>","()V", argumentos, runtimeDataArea));
 	}
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play6" << endl;
 #endif
 
 	do
 	{
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play7\tTamanho da pilha: " << runtimeDataArea->ObterTamanhoDaPilhaDeFrames() << endl;
 #endif
 		instrucao = *(runtimeDataArea->topoPilha()->getCode());
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play8\t" << OpCode::GetReferencia()->GetMinemonico(instrucao) << " \t PC= " << runtimeDataArea->topoPilha()->getPC() << endl;
 #endif
 #ifdef MINI_DEBUG
@@ -104,16 +119,18 @@ void ExecutionEngine::Play(string classComMain)
 
 		(this->*vetorDePonteirosParaFuncao[instrucao])();
 
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 
 	cout<< "ExecutionEngine::Play9" << endl;
 #endif
 
 	}
 	while(runtimeDataArea->ObterTamanhoDaPilhaDeFrames() > 0);
-#ifdef DEBUG_EE
+#ifdef DEBUG_EE_PLAY
 	cout<< "ExecutionEngine::Play10" << endl;
 #endif
+	cout<<"****************************************************" << endl;
+	cout<<"programa terminado com sucesso!" << endl;
 }
 
 void ExecutionEngine::inicializaInstrucoes() {
@@ -1182,8 +1199,9 @@ void ExecutionEngine::i_aload_0(){
 
 	Valor valor = toppilha->getValorVariavelLocal(0);
 	 if(!(valor.tipo == TipoDado::REFERENCE)){
-		
-		throw new Erro("O tipo do dado não é um uma referencia", "ExecutionEngine", "i_aload_0");
+		string errMsg= "O tipo do dado não é um uma referencia \t tipo: ";
+		errMsg+= ObterStringTipo(valor.tipo);
+		throw new Erro(errMsg, "ExecutionEngine", "i_aload_0");
 
 	}
 
@@ -4164,7 +4182,7 @@ void ExecutionEngine::i_getstatic() {
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic1" << endl;
 	#endif
 	
@@ -4175,13 +4193,13 @@ void ExecutionEngine::i_getstatic() {
 
 	constantPool = classe->getConstantPool();
 	
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic2" << endl;
 	#endif
 	
 	uint8_t *code = toppilha->getCode();
 	
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic3" << endl;
 	#endif
 
@@ -4191,33 +4209,33 @@ void ExecutionEngine::i_getstatic() {
 	
 	uint16_t campoIndex = (byte1 << 8) | byte2;
 	
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic4" << endl;
 	#endif
 
 	//consulta a field. percorre os fields do java
 	CONSTANT_Fieldref_info *fieldRef = (CONSTANT_Fieldref_info*) constantPool[campoIndex-1];
 
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic5" << endl;
 	#endif
 	
 	string className = classe->getUTF8(fieldRef->GetClassIndex());
 	
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic6" << endl;
 	#endif
 	
 	CONSTANT_NameAndType_info *campoNameAndtipoCP = (CONSTANT_NameAndType_info *)constantPool[fieldRef->GetNameAndTypeIndex()-1];
 	
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic7" << endl;
 	#endif
 	
 	string campoName = classe->getUTF8(campoNameAndtipoCP->GetNameIndex()); //pega o nome da field ou campo
 	string campoDescricao = classe->getUTF8(campoNameAndtipoCP->GetDescriptorIndex()); //pega o field descriptor
 
-	#ifdef DEBUG_EE
+	#ifdef DEBUG_EE_GET_STATIC
 	cout<< "ExecutionEngine::i_getstatic8" << endl;
 	#endif
 	
