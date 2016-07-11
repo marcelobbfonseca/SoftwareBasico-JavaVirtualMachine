@@ -96,7 +96,7 @@ void ObjetoArray::popularSubArray(TipoDado tipoDado, stack<int> count){
 	int currCount = count.top();
 	count.pop();
 
-	TipoDado tipoArr = (count.size() > 1) ? TipoDado::REFERENCE : tipoDado;
+	TipoDado tipoArr = (count.size() > 1) ? TipoDado::REFERENCIA : tipoDado;
 
 	if (count.size() == 0) {
 		for (int i = 0; i < currCount; i++) {
@@ -115,7 +115,7 @@ void ObjetoArray::popularSubArray(TipoDado tipoDado, stack<int> count){
 			subarray->popularSubArray(tipoDado, count);
 
 			Valor ValorSubArr;
-			ValorSubArr.tipo = TipoDado::REFERENCE;
+			ValorSubArr.tipo = TipoDado::REFERENCIA;
 			ValorSubArr.dado = (uint64_t)subarray;
 			this->empilhaValor(ValorSubArr);
 		}

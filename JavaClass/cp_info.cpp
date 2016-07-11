@@ -6,7 +6,7 @@
 #include<math.h>
 #include<stdio.h>
 
-//#define DEBUG
+#define DEBUG_CP_INFO
 
 CONSTANT_Class_info::CONSTANT_Class_info(uint16_t nameIndex)
 {
@@ -111,6 +111,9 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 
 	uint8_t tag;
 	LerAtributo(&tag, 1, arq);
+#ifdef DEBUG_CP_INFO
+cout << "TAG= " << (int)tag << endl;
+#endif
 	switch(tag)
 	{
 		case (CONSTANT_Class):
@@ -193,9 +196,15 @@ cp_info* cp_info::LerCpInfo(FILE *arq)
 		{
 			uint16_t comprimento;
 			LerAtributo(&comprimento, 2, arq);
+			#ifdef DEBUG_CP_INFO
+			cout << "Tentarei ler uma string de tamanho " << comprimento << endl;
+			#endif
 			uint8_t *bytes= new uint8_t[comprimento+1];
 //			uint8_t *bytes= (uint8_t*) operator new (comprimento+1);
-			LerAtributo(bytes, comprimento, arq, IGNORAR_ENDIAN);
+			if(comprimento > 0)
+			{
+				LerAtributo(bytes, comprimento, arq, IGNORAR_ENDIAN);
+			}
 			bytes[comprimento] = '\0';
 			return new CONSTANT_Utf8_info(comprimento, bytes);
 		}
