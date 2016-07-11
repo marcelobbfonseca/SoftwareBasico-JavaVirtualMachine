@@ -187,7 +187,7 @@ cout << "Attributes count = " << attributes_count << endl;
 				}
 				case('I'):
 				{
-					valor.tipo= TipoDado::INT;
+					valor.tipo= TipoDado::INTEIRO;
 					valor.dado= 0;
 					break;
 				}
@@ -205,13 +205,13 @@ cout << "Attributes count = " << attributes_count << endl;
 				}
 				case('Z'):
 				{
-					valor.tipo= TipoDado::BOOLEAN;
+					valor.tipo= TipoDado::BOOLEANO;
 					valor.dado= 0;
 					break;
 				}
 				default:
 				{
-					valor.tipo= TipoDado::REFERENCE;
+					valor.tipo= TipoDado::REFERENCIA;
 					void *aux= NULL;
 					memcpy(&(valor.dado), &aux, sizeof(void*));
 				}

@@ -53,7 +53,7 @@ ObjetoInstancia::ObjetoInstancia(JavaClass *classe)
 				}
 				case('I'):
 				{
-					valor.tipo= TipoDado::INT;
+					valor.tipo= TipoDado::INTEIRO;
 					valor.dado= 0;
 					break;
 				}
@@ -71,13 +71,13 @@ ObjetoInstancia::ObjetoInstancia(JavaClass *classe)
 				}
 				case('Z'):
 				{
-					valor.tipo= TipoDado::BOOLEAN;
+					valor.tipo= TipoDado::BOOLEANO;
 					valor.dado= 0;
 					break;
 				}
 				default:
 				{
-					valor.tipo= TipoDado::REFERENCE;
+					valor.tipo= TipoDado::REFERENCIA;
 					void *aux= NULL;
 					memcpy(&(valor.dado), &aux, sizeof(void*));
 				}
