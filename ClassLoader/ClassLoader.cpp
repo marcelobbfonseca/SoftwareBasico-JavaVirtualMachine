@@ -14,7 +14,6 @@ JavaClass* ClassLoader::CarregarClasse(string nomeClasse)
 				caminho= caminho.substr(0, caminho.length()-1);
 			}
 		}
-		cout<<"-----------Caminho: " << caminho << "--------------------"<< endl;
 		primeiraVezQueCarrega= false;
 	}
 	else
