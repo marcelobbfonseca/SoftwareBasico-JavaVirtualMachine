@@ -340,7 +340,7 @@ void ExecutionEngine::i_nop(){
 	
 }
 
-void ExecutionEngine::i_aconst_null(){
+void ExecutionEngine::i_aconst_null(){ //Push the null object reference onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 	Valor valor;
 	valor.tipo = TipoDado::REFERENCE;
@@ -348,7 +348,7 @@ void ExecutionEngine::i_aconst_null(){
 	toppilha->empilharOperando(valor);
 }
 
-void ExecutionEngine::i_iconst_m1(){
+void ExecutionEngine::i_iconst_m1(){ // Push the int constant i onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -363,7 +363,7 @@ void ExecutionEngine::i_iconst_m1(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_0(){
+void ExecutionEngine::i_iconst_0(){ //Push the int constant 0 onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -374,7 +374,7 @@ void ExecutionEngine::i_iconst_0(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_1(){
+void ExecutionEngine::i_iconst_1(){  //Push the int constant 1 onto the operand stack. 
 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -386,7 +386,7 @@ void ExecutionEngine::i_iconst_1(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_iconst_2(){
+void ExecutionEngine::i_iconst_2(){ //Push the int constant 2 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -396,7 +396,7 @@ void ExecutionEngine::i_iconst_2(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_3(){
+void ExecutionEngine::i_iconst_3(){ //Push the int constant 3 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -406,7 +406,7 @@ void ExecutionEngine::i_iconst_3(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_iconst_4(){
+void ExecutionEngine::i_iconst_4(){ //Push the int constant 4 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -417,7 +417,7 @@ void ExecutionEngine::i_iconst_4(){
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 
 }
-void ExecutionEngine::i_iconst_5(){
+void ExecutionEngine::i_iconst_5(){//Push the int constant 5 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor valor;
@@ -427,7 +427,7 @@ void ExecutionEngine::i_iconst_5(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_lconst_0(){
+void ExecutionEngine::i_lconst_0(){ //Push the long constant 0 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -444,7 +444,7 @@ void ExecutionEngine::i_lconst_0(){
 
 
 }
-void ExecutionEngine::i_lconst_1(){
+void ExecutionEngine::i_lconst_1(){//Push the long constant 1 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -460,7 +460,7 @@ void ExecutionEngine::i_lconst_1(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_0(){
+void ExecutionEngine::i_fconst_0(){//Push the float constant 0 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -471,7 +471,7 @@ void ExecutionEngine::i_fconst_0(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_fconst_1(){
+void ExecutionEngine::i_fconst_1(){//Push the float constant 1 onto the operand stack. 
 	
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
@@ -496,7 +496,7 @@ void ExecutionEngine::i_fconst_2(){
 	toppilha->empilharOperando(valor);
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_0(){
+void ExecutionEngine::i_dconst_0(){//Push the double constant 0 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
@@ -514,7 +514,7 @@ void ExecutionEngine::i_dconst_0(){
 
 	runtimeDataArea->topoPilha()->incrementaPC(1);
 }
-void ExecutionEngine::i_dconst_1(){
+void ExecutionEngine::i_dconst_1(){//Push the double constant 1 onto the operand stack. 
 	Frame *toppilha = runtimeDataArea->topoPilha();
 
 	Valor pad;
