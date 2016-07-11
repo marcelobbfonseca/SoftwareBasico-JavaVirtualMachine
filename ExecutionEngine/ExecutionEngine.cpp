@@ -1882,11 +1882,6 @@ void ExecutionEngine::i_iastore(){
 	if(referArr.tipo != TipoDado::REFERENCE){
 
 		throw new Erro("Valor não é uma referencia", "ExecutionEngine", "i_iastore");
-
-		isWide = false;		
-		uint8_t byte2 = code[2];
-		indice = (byte1 << 8) | byte2;
-		topo->incrementaPC(3);
 		
 	} 
     else {
