@@ -1481,13 +1481,15 @@ void ExecutionEngine::java_saload(){
 	array = (ObjetoArray *) arrayref.dado;
 
 	if (array == NULL) {
-		cerr << "NullPointerException" << endl;
-		exit(1);
+
+		throw new Erro("NullPointerException");
+
 	}
 
 	if (indice.dado > array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+		throw new Erro("ArrayIndexOutOfBoundsException");
+
 	}
 	
 	Valor shortOp = array->ObterValor(indice.dado);
@@ -1994,13 +1996,15 @@ void ExecutionEngine::java_lastore(){
 	array = (ObjetoArray *) referenciaArr.dado;
 
 	if (array == NULL) {
-		cerr << "NullPointerException" << endl;
-		exit(1);
+
+			throw new Erro("NullPointerException");
+
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+		throw new Erro ("ArrayIndexOutOfBoundsException");
+
 	}
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
@@ -2049,14 +2053,14 @@ void ExecutionEngine::java_fastore(){
 
 	if (array == NULL) {
 
-		cerr << "NullPointerException" << endl;
-		exit(1);
+			throw new Erro("NullPointerException");
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+			throw new Erro("ArrayIndexOutOfBoundsException");
+
 	}
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
@@ -2113,14 +2117,12 @@ void ExecutionEngine::java_dastore(){
 
 	if (array == NULL) {
 
-		cerr << "NullPointerException" << endl;
-		exit(1);
+		throw new Erro("ArrayIndexOutOfBoundsException");
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+		throw new Erro ("ArrayIndexOutOfBoundsException"); 
 	}
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
@@ -2168,14 +2170,15 @@ void ExecutionEngine::java_aastore(){
 
 	if (array == NULL) {
 
-		cerr << "NullPointerException" << endl;
-		exit(1);
+		throw new Erro("NullPointerException");
+
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+		throw new Erro("ArrayIndexOutOfBoundsException");
+
 	}
 
 	if(!(valor.tipo == array->TipoElementosDoArray())){
@@ -2219,17 +2222,18 @@ void ExecutionEngine::java_bastore(){
 		}
 
 	array = (ObjetoArray *) referenciaArr.dado;
-
+	
 	if (array == NULL) {
 
-		cerr << "NullPointerException" << endl;
-		exit(1);
+		throw new Erro("NullPointerException");
+
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+		throw new Erro("ArrayIndexOutOfBoundsException");
+
 	}
 
 	if (array->TipoElementosDoArray() == TipoDado::BOOLEANO) {
@@ -2285,14 +2289,15 @@ void ExecutionEngine::java_castore(){
 
 	if (array == NULL) {
 
-		cerr << "NullPointerException" << endl;
-		exit(1);
+		throw new Erro("NullPointerException");
+
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+		throw new Erro("ArrayIndexOutOfBoundsException");
+
 	}
 	valor.dado = (uint8_t) valor.dado;
 	valor.tipo = TipoDado::CHAR;
@@ -2336,14 +2341,15 @@ void ExecutionEngine::java_sastore(){
 
 	if (array == NULL) {
 
-		cerr << "NullPointerException" << endl;
-		exit(1);
+		throw new Erro("NullPointerException");
+
 
 	}
 
 	if (indice.dado >= array->ObterTamanho() || indice.dado < 0) {
-		cerr << "ArrayIndexOutOfBoundsException" << endl;
-		exit(2);
+
+		throw new Erro("ArrayIndexOutOfBoundsException");
+
 	}
 
 	valor.dado = (int16_t) valor.dado;
@@ -4287,9 +4293,11 @@ void ExecutionEngine::java_getstatic() {
 	}// fim while classRuntime   
 	
 	if (classRuntime == NULL) {
-		cerr << "NoSuchFieldError" << endl;
-		exit(1);
+
+		throw new Erro("NoSuchFieldError");
+
 	}
+
 	if (runtimeDataArea->topoPilha() != toppilha)
 		return;
 
@@ -5332,8 +5340,9 @@ void ExecutionEngine::java_arraylength(){
 	Valor arrayref = toppilha->desempilhaOperando();
 
 	if ((Objeto*)arrayref.dado == NULL) {
-		cerr << "NullPointerException" << endl;
-		exit(1);
+
+		throw new Erro("NullPointerException");
+
 	} 
 	
 	Valor length;
@@ -5583,8 +5592,8 @@ void ExecutionEngine::java_multianewarray(){
 			tipoDado = TipoDado::BOOLEANO;
 			break;
 		default:
-			cerr << "Descritor invalido em multianewarray" << endl;
-			exit(1);
+			throw new Erro("Descritor invalido em multianewarray");
+			
 	}
 
 	stack<int> count;
